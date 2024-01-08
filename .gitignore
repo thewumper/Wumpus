@@ -25,7 +25,8 @@
 
 # Visual Studio cache directory
 .vs/
-
+# The best code editor's directory
+.idea
 # Gradle cache directory
 .gradle/
 
