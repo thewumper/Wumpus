@@ -1,4 +1,5 @@
-﻿namespace WumpusCore
+﻿
+namespace WumpusCore
 {
     public class TestCore
     {
@@ -6,5 +7,6 @@
         {
             return "YES!";
         }
+        
     }
 }
