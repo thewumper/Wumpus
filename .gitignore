@@ -73,4 +73,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Ignoring all of Rider's stuff so mctavish is happy
-.Idea/
+.idea/
