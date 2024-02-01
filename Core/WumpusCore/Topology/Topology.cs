@@ -13,7 +13,7 @@
         /// <param name="filePath">path</param>
         public Topology(string filePath)
         {
-
+            
         }
         /// <summary>
         /// Creates topology from a folder containing maps and the id of the map
