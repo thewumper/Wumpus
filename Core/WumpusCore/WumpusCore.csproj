@@ -47,6 +47,7 @@
         <Compile Include="Topology\IRoom.cs" />
         <Compile Include="Topology\ITopology.cs" />
         <Compile Include="Topology\Topology.cs" />
+		<Compile Include="Player\Player.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
