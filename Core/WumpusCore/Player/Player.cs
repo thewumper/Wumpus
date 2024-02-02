@@ -12,7 +12,7 @@ namespace WumpusCore.Player
         /// <summary>
         /// The path of the player's sprite.
         /// </summary>
-        private string spritePath = "";
+        public string spritePath { get; private set; }
 
         /// <summary>
         /// The amount of coins the player currently has.
@@ -27,6 +27,8 @@ namespace WumpusCore.Player
         {
             coins = 0;
             arrows = 0;
+
+            spritePath = "";
 
             if (!File.Exists(spritePath))
             {
