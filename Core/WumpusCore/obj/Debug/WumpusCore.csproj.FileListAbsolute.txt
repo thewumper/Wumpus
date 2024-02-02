@@ -6,3 +6,9 @@ C:\Users\1098348\Documents\GitHub\Wumpus\Wumpus\Core\WumpusCore\obj\Debug\Wumpus
 C:\Users\1098348\Documents\GitHub\Wumpus\Wumpus\Core\WumpusCore\obj\Debug\WumpusCore.pdb
 C:\Users\1098348\Documents\GitHub\Wumpus\Wumpus\Assets\DLL\WumpusCore.dll
 C:\Users\1098348\Documents\GitHub\Wumpus\Wumpus\Assets\DLL\WumpusCore.pdb
+C:\Users\1059758\Documents\GitHub\Wumper\Assets\DLL\WumpusCore.dll
+C:\Users\1059758\Documents\GitHub\Wumper\Assets\DLL\WumpusCore.pdb
+C:\Users\1059758\Documents\GitHub\Wumper\Core\WumpusCore\obj\Debug\WumpusCore.csproj.AssemblyReference.cache
+C:\Users\1059758\Documents\GitHub\Wumper\Core\WumpusCore\obj\Debug\WumpusCore.csproj.CoreCompileInputs.cache
+C:\Users\1059758\Documents\GitHub\Wumper\Core\WumpusCore\obj\Debug\WumpusCore.dll
+C:\Users\1059758\Documents\GitHub\Wumper\Core\WumpusCore\obj\Debug\WumpusCore.pdb
