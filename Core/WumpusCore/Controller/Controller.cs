@@ -13,7 +13,7 @@ namespace WumpusCore.Controller
 
         public IRoom getRoom(ushort roomNumber)
         {
-            return getRoom(roomNumber);
+            return topology.GetRoom(roomNumber);
         }
 
         public ControllerState getState()
