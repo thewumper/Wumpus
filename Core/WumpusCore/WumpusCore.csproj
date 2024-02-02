@@ -48,6 +48,9 @@
         <Compile Include="Topology\ITopology.cs" />
         <Compile Include="Topology\Topology.cs" />
 		<Compile Include="Player\Player.cs" />
+        <Compile Include="Trivia\Question.cs" />
+        <Compile Include="Trivia\Questions.cs" />
+        <Compile Include="Trivia\Trivia.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
