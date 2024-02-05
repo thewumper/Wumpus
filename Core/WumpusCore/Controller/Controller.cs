@@ -6,7 +6,7 @@ namespace WumpusCore.Controller
 {
     public class Controller
     {
-        public Random Random = new Random();
+        public static Random Random = new Random();
 
         private ControllerState state;
 
