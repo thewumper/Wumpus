@@ -42,6 +42,7 @@
     <ItemGroup>
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
+        <Compile Include="LuckyCat\Cat.cs" />
         <Compile Include="MinigameController\MinigameController.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TestCore.cs" />
