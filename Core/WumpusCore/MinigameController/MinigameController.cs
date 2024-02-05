@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WumpusCore
+namespace WumpusCore.MinigameController
 {
     public class MinigameController
     {
