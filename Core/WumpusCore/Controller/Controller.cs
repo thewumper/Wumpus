@@ -1,16 +1,18 @@
 using System;
 using WumpusCore.Topology;
+using WumpusCore.MinigameController;
 
 namespace WumpusCore.Controller
 {
     public class Controller
     {
-        public Random Random = new Random();
+        public static Random Random = new Random();
 
         private ControllerState state;
 
         private Player.Player player;
         private ITopology topology;
+        private MinigameController.MinigameController minigameController;
 
         public Controller()
         {
@@ -20,12 +22,12 @@ namespace WumpusCore.Controller
 
         }
 
-        public IRoom getRoom(ushort roomNumber)
+        public IRoom GetRoom(ushort roomNumber)
         {
             return topology.GetRoom(roomNumber);
         }
 
-        public ControllerState getState()
+        public ControllerState GetState()
         {
             return state;
         }
@@ -35,14 +37,24 @@ namespace WumpusCore.Controller
             throw new NotImplementedException();
         }
 
-        public int getCoins()
+        public int GetCoins()
         {
             throw new NotImplementedException();
         }
 
-        public int getArrowCount()
+        public int GetArrowCount()
         {
             throw new NotImplementedException();
+        }
+
+        public bool SubmitTriviaAnswer(int guess)
+        {
+            return minigameController.SubmitTriviaAnswer(guess);
+        }
+
+        public string GetTriviaQuestion()
+        {
+            return minigameController.GetTriviaQuestion();
         }
     }
 
