@@ -23,7 +23,7 @@ namespace WumpusCore.LuckyCat
         /// Figure out how many coins it will take to tame the cat
         /// </summary>
         /// <returns>The number of coint to tame the cat</returns>
-        public int tame()
+        public int Tame()
         {
             throw new NotImplementedException();
         }
@@ -31,7 +31,7 @@ namespace WumpusCore.LuckyCat
         /// <summary>
         /// Pets the cat
         /// </summary>
-        public int pet()
+        public int Pet()
         {
             throw new NotImplementedException();
         }
