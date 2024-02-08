@@ -12,29 +12,22 @@ namespace WumpusCore.Wumpus
         /// <summary>
         /// Current Room Wumpus is in
         /// </summary>
-        public int Position { get; private set; }
+        public ushort Position { get; private set; }
         /// <summary>
-        /// Current state Wumpus is in
+        /// rather the wumpus was killed
         /// </summary>
-        /*
-        0: sleep
-        1: moving
-        2: combat
-        3: dead
-         */
-        public int State { get; private set; }
+        public bool isDead { get; private set; }
         public Wumpus()
         {
             Position = 0;
-            State = 0;
+            isDead = false;
         }
         /// <summary>
         /// Moves the wumpus randomly
         /// </summary>
-        public void move(int maxMove)
+        public void move(int maxMove, Random rand)
         {
             throw new NotImplementedException();
-
         }
         /// <summary>
         /// mods state and starts a battle changing state stuff
