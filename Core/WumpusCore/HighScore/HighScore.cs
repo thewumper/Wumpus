@@ -42,6 +42,12 @@ namespace WumpusCore.HighScore
         private int mapUsed;
 
         /// <summary>
+        /// the greatest elevation of all
+        /// the scores
+        /// </summary>
+        private int currentHighScore;
+
+        /// <summary>
         /// The list of storedHighScore structs for the 10 highest scores
         /// </summary>
         private StoredHighScore[] top10HighScores;
@@ -58,7 +64,14 @@ namespace WumpusCore.HighScore
         /// <param name="mapUsed"></param>
         public HighScore(string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
         {
-            // store parameters into the fields for future use
+            this.playerName = playerName;
+            this.numTurns = numTurns;
+            this.goldLeft = goldLeft;
+            this.arrowsLeft = arrowsLeft;
+            this.isWumpusDead = isWumpusDead;
+            this.mapUsed = mapUsed;
+
+            this.score = calculateScore();
         }
 
         /// <summary>
@@ -69,7 +82,13 @@ namespace WumpusCore.HighScore
         /// <exception cref="NotImplementedException"></exception>
         private int calculateScore()
         {
-            throw new NotImplementedException();
+            int calculatedScore = 
+                (100
+                - this.numTurns
+                + this.goldLeft
+                + (5 * this.arrowsLeft)
+                + (translateWumpusLife() * 50));
+            return calculatedScore;
         }
 
         /// <summary>
@@ -79,9 +98,18 @@ namespace WumpusCore.HighScore
         /// </summary>
         /// <param name="isWumpusDead"></param>
         /// <returns></returns>
-        private int translateWumpusLife(bool isWumpusDead)
+        private int translateWumpusLife()
         {
+            if (this.isWumpusDead)
+            {
+                return 1;
+            }
             return 0;
+        }
+
+        private void compareHighScore()
+        {
+            this.currentHighScore = Math.Max(this.score, currentHighScore);
         }
 
         /// <summary>
