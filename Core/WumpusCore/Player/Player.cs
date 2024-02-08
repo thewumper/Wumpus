@@ -17,11 +17,11 @@ namespace WumpusCore.Player
         /// <summary>
         /// The amount of coins the player currently has.
         /// </summary>
-        public int coins { get; set; }
+        public uint coins { get; set; }
         /// <summary>
         /// The amount of arrows the player currently has.
         /// </summary>
-        public int arrows { get; set; }
+        public uint arrows { get; set; }
 
         public Player()
         {
