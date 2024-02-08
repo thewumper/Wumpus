@@ -60,6 +60,8 @@ namespace WumpusCore.Trivia
                 throw new ArgumentOutOfRangeException("Not a valid answer index");
             }
             
+            nextQuestion();
+            
             questionsAnswered++;
             if (choice == currentQuestion.answer)
             {
@@ -73,7 +75,7 @@ namespace WumpusCore.Trivia
         // Sets the next question
         private void nextQuestion()
         {
-            throw new NotImplementedException();
+            currentQuestion = questions.GetQuestion();
         }
 
         /// <summary>
