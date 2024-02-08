@@ -55,6 +55,7 @@
         <Compile Include="Trivia\Trivia.cs" />
         <Compile Include="HighScore\HighScore.cs" />
         <Compile Include="HighScore\StoredHighScore.cs" />
+        <Compile Include="GameLocations\GameLocations.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
