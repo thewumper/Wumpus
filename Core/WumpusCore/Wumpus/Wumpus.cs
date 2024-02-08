@@ -6,7 +6,7 @@
         /// Current Room Wumpus is in.  
         /// Better description coming soon
         /// </summary>
-        public int Position { get; private set; }
+        public ushort Position { get; private set; }
         /// <summary>
         /// state of wumpus.  
         /// Better description coming soon
