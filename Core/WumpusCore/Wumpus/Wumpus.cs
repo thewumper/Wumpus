@@ -26,7 +26,7 @@ namespace WumpusCore.Wumpus
         /// Moves the wumpus randomly
         /// </summary>
         public void move(int maxMove, Random rand)
-        {
+        { 
             throw new NotImplementedException();
         }
         /// <summary>
