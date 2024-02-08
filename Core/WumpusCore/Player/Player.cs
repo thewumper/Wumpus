@@ -7,7 +7,7 @@ namespace WumpusCore.Player
         /// <summary>
         /// The room the player is currently in.
         /// </summary>
-        public int position { get; private set; }
+        public uint position { get; private set; }
 
         /// <summary>
         /// The path of the player's sprite.
