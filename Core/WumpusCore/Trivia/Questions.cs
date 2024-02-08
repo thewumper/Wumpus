@@ -22,7 +22,7 @@ namespace WumpusCore.Trivia
         /// <exception cref="NotImplementedException"></exception>
         public Questions(string filePath)
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException("Need to import Newtonsoft.Json first!"); 
         } 
         
         // Gets the index of a random question that has not yet been answered.
