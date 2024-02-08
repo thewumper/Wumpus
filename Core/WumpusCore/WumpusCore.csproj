@@ -44,7 +44,8 @@
     <ItemGroup>
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
-        <Compile Include="Entity\Entity.cs" />
+        <Compile Include="HighScore\SaveFile.cs" />
+		<Compile Include="Entity\Entity.cs" />
         <Compile Include="Minigame.cs" />
         <Compile Include="LuckyCat\Cat.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
