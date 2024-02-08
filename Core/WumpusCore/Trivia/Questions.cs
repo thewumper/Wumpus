@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 
 namespace WumpusCore.Trivia
 {
@@ -9,7 +11,7 @@ namespace WumpusCore.Trivia
     public class Questions
     {
         // All questions that could still be asked of the player
-        private LinkedList<Question> remainingQuestions;
+        private LinkedList<AnsweredQuestion> remainingQuestions;
 
         /// <summary>
         /// Pulls all questions from a specified file and overwrites the question list with the new questions.
@@ -18,37 +20,38 @@ namespace WumpusCore.Trivia
         /// </summary>
         /// <param name="filePath">The path to the file to read questions from</param>
         /// <exception cref="NotImplementedException"></exception>
-        public void InitializeQuestions(string filePath)
+        public Questions(string filePath)
         {
-            throw new NotImplementedException();
-        }
+            throw new NotImplementedException(); 
+        } 
         
         // Gets the index of a random question that has not yet been answered.
-        private Question getRandomQuestionIndex()
+        private int getRandomQuestionIndex()
         {
-            throw new NotImplementedException();
+            return Controller.Controller.Random.Next(remainingQuestions.Count);
         }
         
         /// <summary>
         /// Returns a random question that hasn't been read yet.
         /// Leaves the question in queue.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Question peekRandomQuestion()
+        /// <returns>A question that hasn't yet been used</returns>
+        public AnsweredQuestion PeekRandomQuestion()
         {
-            throw new NotImplementedException();
+            return remainingQuestions.ElementAt(getRandomQuestionIndex());
         }
 
         /// <summary>
         /// Returns a random question that hasn't been read yet.
         /// Removes the question from queue.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Question getQuestion()
+        /// <returns>A question that hasn't yet been used</returns>
+        public AnsweredQuestion GetQuestion()
         {
-            throw new NotImplementedException();
+            int index = getRandomQuestionIndex();
+            AnsweredQuestion question = remainingQuestions.ElementAt(index);
+            remainingQuestions.Remove(question);
+            return question;
         }
     }
 }
