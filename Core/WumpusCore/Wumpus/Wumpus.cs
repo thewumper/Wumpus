@@ -25,6 +25,7 @@
         /// Constructs the Wumpus.  
         /// Better description coming soon
         /// </summary>
+        public bool isDead { get; private set; }
         public Wumpus()
         {
             Position = 0;
