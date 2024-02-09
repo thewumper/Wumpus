@@ -1,6 +1,6 @@
 using System;
 using WumpusCore.Topology;
-using WumpusCore.MinigameController;
+using WumpusCore.GameLocations;
 
 namespace WumpusCore.Controller
 {
@@ -13,6 +13,7 @@ namespace WumpusCore.Controller
         private Player.Player player;
         private ITopology topology;
         private MinigameController.MinigameController minigameController;
+        private GameLocations.GameLocations gameLocations;
 
         public Controller()
         {
@@ -25,6 +26,11 @@ namespace WumpusCore.Controller
         public IRoom GetRoom(ushort roomNumber)
         {
             return topology.GetRoom(roomNumber);
+        }
+
+        public GameLocations.GameLocations.RoomTypes getRoomType(ushort roomNumber)
+        {
+            return gameLocations.GetRoomAt(roomNumber);
         }
 
         public ControllerState GetState()
