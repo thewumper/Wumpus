@@ -55,7 +55,7 @@ namespace WumpusCore.GameLocations
         /// </summary>
         /// <param name="type">The type of room to add.</param>
         /// <param name="pos">The position of the room to add.</param>
-        public void AddRoom(RoomTypes type, int pos)
+        public void AddRoom(RoomTypes type, uint pos)
         {
             rooms.Add(new Room(type, pos));
         }
@@ -84,9 +84,9 @@ namespace WumpusCore.GameLocations
         private struct Room
         {
             public RoomTypes type { get; private set; }
-            public int pos { get; private set; }
+            public uint pos { get; private set; }
 
-            public Room(RoomTypes type, int pos)
+            public Room(RoomTypes type, uint pos)
             {
                 this.type = type;
                 this.pos = pos;
