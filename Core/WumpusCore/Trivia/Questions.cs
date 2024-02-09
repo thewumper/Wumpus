@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace WumpusCore.Trivia
@@ -19,10 +23,20 @@ namespace WumpusCore.Trivia
         /// An array of objects in the format {"questions":"", "choices":["","",""...], "correct":0}
         /// </summary>
         /// <param name="filePath">The path to the file to read questions from</param>
-        /// <exception cref="NotImplementedException"></exception>
         public Questions(string filePath)
         {
-            throw new NotImplementedException("Need to import Newtonsoft.Json first!"); 
+            JArray questionsArray = JArray.Parse(File.ReadAllText(filePath));
+
+            for (int i = 0; i < questionsArray.Count; i++)
+            {
+                JToken question = questionsArray[i];
+
+                string text = question.SelectToken("text").Value<string>();
+                string[] choices = question.SelectToken("choices").Value<string[]>();
+                int answer = question.SelectToken("answer").Value<int>();
+                
+                remainingQuestions.Append(new AnsweredQuestion(text, choices, answer));
+            }
         } 
         
         // Gets the index of a random question that has not yet been answered.
