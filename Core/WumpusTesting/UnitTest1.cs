@@ -1,4 +1,7 @@
-namespace Testing
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+
+namespace WumpusTesting
 {
     [TestClass]
     public class UnitTest1
