@@ -1,4 +1,4 @@
-﻿# Remove Rider stuff
+# Remove Rider stuff
 .idea/
 
 ## Ignore Visual Studio temporary files, build results, and
