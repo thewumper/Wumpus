@@ -1,4 +1,4 @@
-﻿namespace WumpusCore.HighScore
+﻿namespace WumpusCore.HighScoreNS
 {
     internal class SaveFile
     {

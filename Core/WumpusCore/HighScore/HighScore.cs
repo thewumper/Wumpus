@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using WumpusCore.Topology;
 
-namespace WumpusCore.HighScore
+namespace WumpusCore.HighScoreNS
 {
     internal class HighScore
     {
@@ -117,7 +117,7 @@ namespace WumpusCore.HighScore
         /// </summary>
         private void storeScoreToFile()
         {
-            
+            // file things
         }
 
         /// <summary>
@@ -126,7 +126,8 @@ namespace WumpusCore.HighScore
         /// </summary>
         private void storeTopTenToFile()
         {
-
+            // multiple file things
+            // call storeScoreToFile() probably
         }
 
         /// <summary>
