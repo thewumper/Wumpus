@@ -12,20 +12,29 @@ namespace WumpusCore.Wumpus
         /// <summary>
         /// Current Room Wumpus is in
         /// </summary>
-        public ushort Position { get; private set; }
+        public int Position { get; private set; }
         /// <summary>
-        /// rather the wumpus was killed
+        /// state of wumups
         /// </summary>
-        public bool isDead { get; private set; }
+        public enum State
+        {
+            Sleeping,
+            Wake,
+            Wandering,
+            Combat,
+            FleeingArrow,
+            FleeingCombat,
+            Dead
+        }
         public Wumpus()
         {
             Position = 0;
-            isDead = false;
+            State currentState = State.Sleeping;
         }
         /// <summary>
         /// Moves the wumpus randomly
         /// </summary>
-        public void move(int maxMove, Random rand)
+        public void move(Random rand)
         { 
             throw new NotImplementedException();
         }
