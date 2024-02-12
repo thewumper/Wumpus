@@ -13,21 +13,21 @@ jobs:
       matrix:
         dotnet-version: [ '4.8.x' ]
     steps:
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup dotnet
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Install dependencies
-      run: dotnet restore
-      path: .\Core\WumpusCore
+        run: dotnet restore
+        working-directory: .\Core\WumpusCore
 
       - name: Build
-      run: dotnet build .\Core\WumpusCore
-      path: .\Core\WumpusCore
+        run: dotnet build .\Core\WumpusCore
+        working-directory: .\Core\WumpusCore
 
       - name: Test
-      run: dotnet test
-      path: .\Core\WumpusTesting
+        run: dotnet test
+        working-directory: .\Core\WumpusTesting
