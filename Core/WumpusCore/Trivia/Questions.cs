@@ -15,10 +15,10 @@ namespace WumpusCore.Trivia
     public class Questions
     {
         // All questions that could still be asked of the player
-        private LinkedList<AnsweredQuestion> remainingQuestions;
+        private Stack<AnsweredQuestion> remainingQuestions;
 
         /// <summary>
-        /// Pulls all questions from a specified file and overwrites the question list with the new questions.
+        /// Pulls all questions from a specified file and overwrites the question list with the new questions, randomly ordered.
         /// Questions should be stored in JSON format.
         /// An array of objects in the format {"questions":"", "choices":["","",""...], "correct":0}
         /// </summary>
@@ -27,15 +27,18 @@ namespace WumpusCore.Trivia
         {
             JArray questionsArray = JArray.Parse(File.ReadAllText(filePath));
 
-            for (int i = 0; i < questionsArray.Count; i++)
+            for (int i = questionsArray.Count - 1; i >= 0; i--)
             {
-                JToken question = questionsArray[i];
+                int index = Controller.Controller.Random.Next(i);
+                
+                JToken question = questionsArray[index];
 
                 string text = question.SelectToken("text").Value<string>();
                 string[] choices = question.SelectToken("choices").Value<string[]>();
                 int answer = question.SelectToken("answer").Value<int>();
                 
                 remainingQuestions.Append(new AnsweredQuestion(text, choices, answer));
+                questionsArray.RemoveAt(index);
             }
         } 
         
@@ -47,7 +50,7 @@ namespace WumpusCore.Trivia
         
         /// <summary>
         /// Returns a random question that hasn't been read yet.
-        /// Leaves the question in queue.
+        /// Leaves the question in the stack.
         /// </summary>
         /// <returns>A question that hasn't yet been used</returns>
         public AnsweredQuestion PeekRandomQuestion()
@@ -56,15 +59,13 @@ namespace WumpusCore.Trivia
         }
 
         /// <summary>
-        /// Returns a random question that hasn't been read yet.
+        /// Returns the next question on the question stack.
         /// Removes the question from queue.
         /// </summary>
         /// <returns>A question that hasn't yet been used</returns>
         public AnsweredQuestion GetQuestion()
         {
-            int index = getRandomQuestionIndex();
-            AnsweredQuestion question = remainingQuestions.ElementAt(index);
-            remainingQuestions.Remove(question);
+            AnsweredQuestion question = remainingQuestions.Pop();
             return question;
         }
     }
