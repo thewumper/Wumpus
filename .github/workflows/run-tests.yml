@@ -1,0 +1,33 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ "main", "github-actions" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        dotnet-version: [ '4.8.x' ]
+    steps:
+      uses: actions/checkout@v4
+
+      - name: Setup dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install dependencies
+      run: dotnet restore
+      path: .\Core\WumpusCore
+
+      - name: Build
+      run: dotnet build .\Core\WumpusCore
+      path: .\Core\WumpusCore
+
+      - name: Test
+      run: dotnet test
+      path: .\Core\WumpusTesting
