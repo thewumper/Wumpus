@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusCore", "WumpusCore.csproj", "{20024C3F-3BAA-43EA-81CD-BD1137931B9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusCore", "WumpusCore\WumpusCore.csproj", "{20024C3F-3BAA-43EA-81CD-BD1137931B9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusTesting", "..\WumpusTesting\WumpusTesting.csproj", "{6F2E14B0-65E6-4C3C-8C13-D29D1715749E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusTesting", "WumpusTesting\WumpusTesting.csproj", "{6F2E14B0-65E6-4C3C-8C13-D29D1715749E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
