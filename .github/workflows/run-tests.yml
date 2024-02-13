@@ -9,25 +9,20 @@ on:
 jobs:
   build:
     runs-on: windows-2019
-    strategy:
-      matrix:
-        dotnet-version: [ '4.8.x' ]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-      - name: Install dependencies
-        run: dotnet restore
-        working-directory: .\Core\WumpusCore
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+        
+      - name: Restore Packages
+        run: nuget restore ./Core/WumpusCore.sln
 
-      - name: Build
-        run: dotnet build .\Core\WumpusCore
-        working-directory: .\Core\WumpusCore
+      - name: Build Solution
+        run: msbuild ./Core/WumpusCore.sln -t:rebuild -property:Configuration=Release
 
-      - name: Test
-        run: dotnet test
-        working-directory: .\Core\WumpusTesting
+      - name: Run Tests
+        run: msbuild ./Core/WumpusTesting/WumpusTesting.csproj
