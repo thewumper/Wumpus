@@ -19,13 +19,10 @@ jobs:
         uses: NuGet/setup-nuget@v2
         
       - name: Restore Packages
-        working-directory: ./Core
-        run: nuget restore WumpusCore.sln
+        run: nuget restore Core/WumpusCore.sln
 
       - name: Build Solution
-        working-directory: ./Core
-        run: msbuild WumpusCore.sln -t:rebuild -property:Configuration=Release
+        run: msbuild Core/WumpusCore.sln -t:rebuild -property:Configuration=Release
         
       - name: Run Tests
-        working-directory: ./Core
-        run: msbuild ./WumpusTesting/WumpusTesting.csproj
+        run: msbuild Core/WumpusTesting/WumpusTesting.csproj
