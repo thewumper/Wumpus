@@ -22,7 +22,7 @@ jobs:
         run: nuget restore Core/WumpusCore.sln
 
       - name: Build Solution
-        run: msbuild Core/WumpusCore.sln -t:rebuild -property:Configuration=Release
+        run: msbuild Core/WumpusCore.sln -t:rebuild
         
       - name: Run Tests
-        run: msbuild Core/WumpusTesting/WumpusTesting.csproj
+        run: '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" Core/WumpusTesting/WumpusTesting.csproj'
