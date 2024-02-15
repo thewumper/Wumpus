@@ -10,7 +10,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>WumpusCore</RootNamespace>
         <AssemblyName>WumpusCore</AssemblyName>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFrameworkVersion>4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
