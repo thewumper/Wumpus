@@ -34,9 +34,21 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
+        /// Initializes the <c>rooms</c> list with empty rooms.
+        /// </summary>
+        /// <param name="numRooms">The total amount of rooms.</param>
+        public void InitRooms(uint numRooms)
+        {
+            for (uint i  = 0; i < numRooms; i++)
+            {
+                AddRoom(RoomTypes.Flats, i+1);
+            }
+        }
+
+        /// <summary>
         /// Gets a random empty room.
         /// </summary>
-        /// <returns>A random empty room.</returns>
+        /// <returns>A random empty room from the <c>rooms</c> list.</returns>
         public int GetEmptyRoom()
         {
             List<int> positions = new List<int>();
@@ -51,26 +63,45 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// Adds a room to the List.
+        /// Adds a room to the <c>rooms</c> list.
         /// </summary>
-        /// <param name="type">The type of room to add.</param>
+        /// <param name="type">The <c>RoomType</c> type of room to add.</param>
         /// <param name="pos">The position of the room to add.</param>
+        /// <exception cref="ArgumentException"></exception>
         public void AddRoom(RoomTypes type, uint pos)
         {
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                if (pos == rooms[i].pos && rooms[i].type != RoomTypes.Flats)
+                {
+                    throw new ArgumentException();
+                }
+            }
             rooms.Add(new Room(type, pos));
         }
 
         /// <summary>
-        /// Gets the type of room at a certain position.
+        /// Sets the room at <c>index</c> to another <c>RoomType</c>.
         /// </summary>
-        /// <param name="pos">The position to check the type of.</param>
-        /// <returns>The type of room at the given location.</returns>
+        /// <param name="type">The <c>RoomType</c> type to set the room to.</param>
+        /// <param name="index">The index of the room on the <c>rooms</c> list to change the <c>RoomType</c> type of.</param>
+        public void SetRoom(RoomTypes type, uint index)
+        {
+            rooms.RemoveAt((int)index);
+            rooms.Insert((int)index, new Room(type, index+1));
+        }
+
+        /// <summary>
+        /// Gets the <c>RoomType</c> type of a room at a certain index in the <c>rooms</c> list.
+        /// </summary>
+        /// <param name="index">The index of the room on the <c>rooms</c> list to check the type of.</param>
+        /// <returns>The <c>RoomType</c> type of room at the given location.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public RoomTypes GetRoomAt(int pos)
+        public RoomTypes GetRoomAt(int index)
         {
             for (int i = 0; i < rooms.Count; i++)
             {
-                if (rooms[i].pos == pos)
+                if (rooms[i].pos == index)
                 {
                     return rooms[i].type;
                 }
