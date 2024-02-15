@@ -17,7 +17,10 @@ namespace WumpusCore.Topology
         /// <param name="filePath">path</param>
         public Topology(string filePath)
         {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException($"Could not find map data @{filePath}");
             FileStream stream = File.Open(filePath, FileMode.Open);
+            
 
             List<Directions>[] roomExits = new List<Directions>[30];
 
