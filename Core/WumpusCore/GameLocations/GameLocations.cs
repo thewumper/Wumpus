@@ -34,7 +34,7 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// Initializes the <c>rooms</c> list with empty rooms.
+        /// Initializes the <c>rooms</c> list with rooms of <c>RoomType</c> type <c>Flats</c>.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
         public void InitRooms(uint numRooms)
@@ -48,7 +48,7 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// Gets a random empty room.
         /// </summary>
-        /// <returns>A random empty room from the <c>rooms</c> list.</returns>
+        /// <returns>A random room of <c>RoomType</c> type <c>Flats</c> from the <c>rooms</c> list.</returns>
         public int GetEmptyRoom()
         {
             List<int> positions = new List<int>();
@@ -81,7 +81,7 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// Sets the room at <c>index</c> to another <c>RoomType</c>.
+        /// Sets the room at <c>index</c> to another <c>RoomType</c> type.
         /// </summary>
         /// <param name="type">The <c>RoomType</c> type to set the room to.</param>
         /// <param name="index">The index of the room on the <c>rooms</c> list to change the <c>RoomType</c> type of.</param>
@@ -92,7 +92,7 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// Gets the <c>RoomType</c> type of a room at a certain index in the <c>rooms</c> list.
+        /// Gets the <c>RoomType</c> type of a room at <c>index</c> in the <c>rooms</c> list.
         /// </summary>
         /// <param name="index">The index of the room on the <c>rooms</c> list to check the type of.</param>
         /// <returns>The <c>RoomType</c> type of room at the given location.</returns>
