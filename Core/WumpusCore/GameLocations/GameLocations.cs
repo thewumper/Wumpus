@@ -25,7 +25,7 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// The random object from the controller class.
         /// </summary>
-        Random random;
+        private Random random;
 
         public GameLocations()
         {
