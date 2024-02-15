@@ -20,12 +20,12 @@ namespace WumpusCore.Topology
             FileStream stream = File.Open(filePath, FileMode.Open);
 
             List<Directions>[] roomExits = new List<Directions>[30];
-            
-            
+
+            rooms = new Room[30];
             using (StreamReader mapData = new StreamReader(stream))
             {
                 string line;
-                int room = 0;
+                ushort room = 0;
                 while ((line = mapData.ReadLine()) != null)
                 {
                     string[] tokens = line.Split(',');
@@ -34,17 +34,10 @@ namespace WumpusCore.Topology
                     {
                         directions[i] = DirectionHelper.GetDirectionFromShortName(tokens[i]);
                     }
+                    rooms[room] = new Room(directions,room);
+                    rooms[room].InitializeConnections(this);
                     room++;
                 }
-            }
-            
-            
-            rooms = new Room[30];
-            
-            
-            foreach (Room room in rooms)
-            {
-                room.InitializeConnections(this);
             }
         }
         /// <summary>
@@ -107,7 +100,7 @@ namespace WumpusCore.Topology
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Invalid Direction");
             }
             
-            return rooms[result];
+            return rooms[(result - 1) % 30];
         }
         
         
@@ -117,7 +110,7 @@ namespace WumpusCore.Topology
         /// </summary>
         private class Room : IRoom
         {
-            Room(Directions[] exitDirections, ushort id)
+            public Room(Directions[] exitDirections, ushort id)
             {
                 ExitDirections = exitDirections;
                 Id = id;
