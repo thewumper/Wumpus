@@ -37,11 +37,11 @@ namespace WumpusCore.GameLocations
         /// Initializes the <c>rooms</c> list with rooms of <c>RoomTypes</c> type <c>Flats</c>.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
-        public void InitRooms(uint numRooms)
+        public void InitRooms(ushort numRooms)
         {
-            for (uint i  = 0; i < numRooms; i++)
+            for (ushort i  = 0; i < numRooms; i++)
             {
-                AddRoom(RoomTypes.Flats, i+1);
+                AddRoom(RoomTypes.Flats, (ushort)(i+1));
             }
         }
 
@@ -49,10 +49,10 @@ namespace WumpusCore.GameLocations
         /// Gets a random empty room.
         /// </summary>
         /// <returns>A random room of <c>RoomTypes</c> type <c>Flats</c> from the <c>rooms</c> list.</returns>
-        public int GetEmptyRoom()
+        public ushort GetEmptyRoom()
         {
-            List<int> positions = new List<int>();
-            for (int i = 0; i < rooms.Count; i++)
+            List<ushort> positions = new List<ushort>();
+            for (ushort i = 0; i < rooms.Count; i++)
             {
                 if (rooms[i].type == RoomTypes.Flats)
                 {
@@ -68,7 +68,7 @@ namespace WumpusCore.GameLocations
         /// <param name="type">The <c>RoomTypes</c> type of room to add.</param>
         /// <param name="pos">The position of the room to add.</param>
         /// <exception cref="ArgumentException"></exception>
-        public void AddRoom(RoomTypes type, uint pos)
+        public void AddRoom(RoomTypes type, ushort pos)
         {
             for (int i = 0; i < rooms.Count; i++)
             {
@@ -85,10 +85,10 @@ namespace WumpusCore.GameLocations
         /// </summary>
         /// <param name="type">The <c>RoomTypes</c> type to set the room to.</param>
         /// <param name="index">The index of the room on the <c>rooms</c> list to change the <c>RoomType</c> type of.</param>
-        public void SetRoom(RoomTypes type, uint index)
+        public void SetRoom(RoomTypes type, ushort index)
         {
-            rooms.RemoveAt((int)index);
-            rooms.Insert((int)index, new Room(type, index+1));
+            rooms.RemoveAt(index);
+            rooms.Insert(index, new Room(type, (ushort)(index+1)));
         }
 
         /// <summary>
@@ -115,9 +115,9 @@ namespace WumpusCore.GameLocations
         private struct Room
         {
             public RoomTypes type { get; private set; }
-            public uint pos { get; private set; }
+            public ushort pos { get; private set; }
 
-            public Room(RoomTypes type, uint pos)
+            public Room(RoomTypes type, ushort pos)
             {
                 this.type = type;
                 this.pos = pos;
