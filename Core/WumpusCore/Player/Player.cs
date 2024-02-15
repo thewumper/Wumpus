@@ -7,7 +7,7 @@ namespace WumpusCore.Player
         /// <summary>
         /// The room the player is currently in.
         /// </summary>
-        public uint position { get; private set; }
+        public ushort position { get; private set; }
 
         /// <summary>
         /// The path of the player's sprite.
@@ -17,11 +17,11 @@ namespace WumpusCore.Player
         /// <summary>
         /// The amount of coins the player currently has.
         /// </summary>
-        public uint coins { get; set; }
+        public ushort coins;
         /// <summary>
         /// The amount of arrows the player currently has.
         /// </summary>
-        public uint arrows { get; set; }
+        public ushort arrows;
 
         public Player()
         {
