@@ -72,6 +72,9 @@ namespace WumpusCore.HighScoreNS
             this.mapUsed = mapUsed;
 
             this.score = calculateScore();
+
+            StoredHighScore test = new StoredHighScore();
+            test.
         }
 
         /// <summary>
@@ -79,7 +82,6 @@ namespace WumpusCore.HighScoreNS
         /// in the score field
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         private int calculateScore()
         {
             int calculatedScore = 
@@ -106,6 +108,14 @@ namespace WumpusCore.HighScoreNS
             }
             return 0;
         }
+
+        /// <summary>
+        /// returns the score field that has been
+        /// calculated from the other variables passed
+        /// for the object
+        /// </summary>
+        /// <returns></returns>
+        public int getScore() { return this.score; }
 
         private void compareHighScore()
         {
@@ -138,13 +148,19 @@ namespace WumpusCore.HighScoreNS
         /// </summary>
         struct StoredHighScore
         {
-            readonly int score;
-            readonly string playerName;
-            readonly int numTurns;
-            readonly int goldLeft;
-            readonly int arrowsLeft;
-            readonly bool isWumpusDead;
-            readonly int mapUsed;
+            public int score;
+            public string playerName;
+            public int numTurns;
+            public int goldLeft;
+            public int arrowsLeft;
+            public bool isWumpusDead;
+            public int mapUsed;
+
+            public StoredHighScore(string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
+            {
+                
+            }
+            
         }
     }
 }
