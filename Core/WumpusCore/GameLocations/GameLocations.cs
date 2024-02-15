@@ -115,10 +115,9 @@ namespace WumpusCore.GameLocations
         private struct Room
         {
             public RoomTypes type { get; private set; }
-
             public ushort pos { get; private set; }
 
-            public Room(RoomTypes type, uint pos)
+            public Room(RoomTypes type, ushort pos)
             {
                 this.type = type;
                 this.pos = pos;
