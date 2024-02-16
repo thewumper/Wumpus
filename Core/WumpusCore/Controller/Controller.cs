@@ -28,7 +28,7 @@ namespace WumpusCore.Controller
             return topology.GetRoom(roomNumber);
         }
 
-        public GameLocations.GameLocations.RoomTypes getRoomType(ushort roomNumber)
+        public GameLocations.GameLocations.RoomType getRoomType(ushort roomNumber)
         {
             return gameLocations.GetRoomAt(roomNumber);
         }
