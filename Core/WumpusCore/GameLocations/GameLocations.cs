@@ -22,15 +22,9 @@ namespace WumpusCore.GameLocations
         /// </summary>
         private List<Room> rooms;
 
-        /// <summary>
-        /// The random object from the controller class.
-        /// </summary>
-        private Random random;
-
         public GameLocations()
         {
             rooms = new List<Room>();
-            random = Controller.Controller.Random;
         }
 
         /// <summary>
@@ -49,6 +43,7 @@ namespace WumpusCore.GameLocations
         /// Gets a random empty room.
         /// </summary>
         /// <returns>A random room of <c>RoomTypes</c> type <c>Flats</c> from the <c>rooms</c> list.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public ushort GetEmptyRoom()
         {
             List<ushort> positions = new List<ushort>();
@@ -59,7 +54,11 @@ namespace WumpusCore.GameLocations
                     positions.Add(i);
                 }
             }
-            return positions[random.Next(0, positions.Count + 1)];
+            if (positions.Count <= 0)
+            {
+                throw new InvalidOperationException("There are no empty rooms.");
+            }
+            return positions[Controller.Controller.Random.Next(0, positions.Count + 1)];
         }
 
         /// <summary>
@@ -72,9 +71,9 @@ namespace WumpusCore.GameLocations
         {
             for (int i = 0; i < rooms.Count; i++)
             {
-                if (pos == rooms[i].pos && rooms[i].type != RoomTypes.Flats)
+                if (pos == rooms[i].pos)
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException("A room already exists at that position.");
                 }
             }
             rooms.Add(new Room(type, pos));
