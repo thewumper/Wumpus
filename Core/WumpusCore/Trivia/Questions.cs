@@ -16,7 +16,16 @@ namespace WumpusCore.Trivia
     {
         // All questions that could still be asked of the player
         private Stack<AnsweredQuestion> remainingQuestions;
+        
+        public int Count { get { return remainingQuestions.Count; } }
 
+        private struct questionClass
+        {
+            public string question;
+            public string[] choices;
+            public int answer;
+        }
+        
         /// <summary>
         /// Pulls all questions from a specified file and overwrites the question list with the new questions, randomly ordered.
         /// Questions should be stored in JSON format.
@@ -25,6 +34,8 @@ namespace WumpusCore.Trivia
         /// <param name="filePath">The path to the file to read questions from</param>
         public Questions(string filePath)
         {
+            remainingQuestions = new Stack<AnsweredQuestion>();
+            
             JArray questionsArray = JArray.Parse(File.ReadAllText(filePath));
 
             for (int i = questionsArray.Count - 1; i >= 0; i--)
@@ -33,11 +44,9 @@ namespace WumpusCore.Trivia
                 
                 JToken question = questionsArray[index];
 
-                string text = question.SelectToken("text").Value<string>();
-                string[] choices = question.SelectToken("choices").Value<string[]>();
-                int answer = question.SelectToken("answer").Value<int>();
+                questionClass tempQuestion = JsonConvert.DeserializeObject<questionClass>(question.ToString());
                 
-                remainingQuestions.Append(new AnsweredQuestion(text, choices, answer));
+                remainingQuestions.Append(new AnsweredQuestion(tempQuestion.question, tempQuestion.choices, tempQuestion.answer));
                 questionsArray.RemoveAt(index);
             }
         } 
@@ -55,6 +64,11 @@ namespace WumpusCore.Trivia
         /// <returns>A question that hasn't yet been used</returns>
         public AnsweredQuestion PeekRandomQuestion()
         {
+            if (remainingQuestions.Count == 0)
+            {
+                throw new InvalidOperationException("No questions to peek.");
+            }
+            
             return remainingQuestions.ElementAt(getRandomQuestionIndex());
         }
 
