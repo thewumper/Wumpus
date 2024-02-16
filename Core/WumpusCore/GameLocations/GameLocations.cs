@@ -20,23 +20,11 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// The list of rooms and their positions.
         /// </summary>
-        private List<Room> rooms;
+        private Room[] rooms;
 
-        public GameLocations()
+        public GameLocations(int numRooms)
         {
-            rooms = new List<Room>();
-        }
-
-        /// <summary>
-        /// Initializes the <c>rooms</c> list with rooms of <c>RoomType</c> type <c>Flats</c>.
-        /// </summary>
-        /// <param name="numRooms">The total amount of rooms.</param>
-        public void InitRooms(ushort numRooms)
-        {
-            for (ushort i  = 0; i < numRooms; i++)
-            {
-                AddRoom(RoomType.Flats, (ushort)(i+1));
-            }
+            rooms = new Room[numRooms];
         }
 
         /// <summary>
@@ -47,7 +35,7 @@ namespace WumpusCore.GameLocations
         public ushort GetEmptyRoom()
         {
             List<ushort> positions = new List<ushort>();
-            for (ushort i = 0; i < rooms.Count; i++)
+            for (ushort i = 0; i < rooms.Length; i++)
             {
                 if (rooms[i].type == RoomType.Flats)
                 {
@@ -69,7 +57,7 @@ namespace WumpusCore.GameLocations
         /// <exception cref="ArgumentException"></exception>
         public void AddRoom(RoomType type, ushort pos)
         {
-            for (int i = 0; i < rooms.Count; i++)
+            for (int i = 0; i < rooms.Length; i++)
             {
                 if (pos == rooms[i].pos)
                 {
@@ -86,8 +74,7 @@ namespace WumpusCore.GameLocations
         /// <param name="index">The index of the room on the <c>rooms</c> list to change the <c>RoomType</c> type of.</param>
         public void SetRoom(RoomType type, ushort index)
         {
-            rooms.RemoveAt(index);
-            rooms.Insert(index, new Room(type, (ushort)(index+1)));
+            rooms[index] = new Room(type, index);
         }
 
         /// <summary>
@@ -99,6 +86,28 @@ namespace WumpusCore.GameLocations
         public RoomType GetRoomAt(int index)
         {
             return rooms[index].type;
+        }
+
+        public RoomType GetRoomAtPos(int pos)
+        {
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                if (rooms[i].pos == pos)
+                {
+                    return rooms[i].type;
+                }
+            }
+            throw new ArgumentException("There is no room with that position.");
+        }
+
+        public int GetIndexFromPos(int pos)
+        {
+
+        }
+
+        public int GetPosFromIndex()
+        {
+
         }
 
         /// <summary>
