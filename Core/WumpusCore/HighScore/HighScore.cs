@@ -7,89 +7,42 @@ namespace WumpusCore.HighScoreNS
     internal class HighScore
     {
         /// <summary>
-        /// name of the player inputted at game beginning or end
-        /// </summary>
-        private string playerName;
-
-        /// <summary>
-        /// once the score is calculated it is stored here
-        /// </summary>
-        private int score;
-
-        /// <summary>
-        /// the number of turns the player took to win
-        /// </summary>
-        private int numTurns;
-
-        /// <summary>
-        /// Gold coins still in player's inventory
-        /// </summary>
-        private int goldLeft;
-
-        /// <summary>
-        /// Arrows still in player's inventory
-        /// </summary>
-        private int arrowsLeft;
-
-        /// <summary>
-        /// Did wumpus get deaded
-        /// </summary>
-        private bool isWumpusDead;
-
-        /// <summary>
-        /// The map that was played from the round
-        /// </summary>
-        private int mapUsed;
-
-        /// <summary>
-        /// the greatest elevation of all
-        /// the scores
-        /// </summary>
-        private int currentHighScore;
-
-        /// <summary>
         /// The list of storedHighScore structs for the 10 highest scores
         /// </summary>
         private StoredHighScore[] top10HighScores;
-        
+
         /// <summary>
-        /// HighScore object is how the score of the game
-        /// is calculated and stored to files
+        /// HighScore object is how the score of the game is calculated and stored to files
         /// </summary>
-        /// <param name="playerName"></param>
-        /// <param name="numTurns"></param>
-        /// <param name="goldLeft"></param>
-        /// <param name="arrowsLeft"></param>
-        /// <param name="isWumpusDead"></param>
-        /// <param name="mapUsed"></param>
+        /// <param name="playerName"> Name of player who owns the score </param>
+        /// <param name="numTurns"> How long it took for game to end in turns </param>
+        /// <param name="goldLeft"> Number of gold remaining when game ends </param>
+        /// <param name="arrowsLeft"> Number of arrows remaining when game ends </param>
+        /// <param name="isWumpusDead"> Was the wumpus killed when the game ended </param>
+        /// <param name="mapUsed"> Number code of the map generation from the game </param>
         public HighScore(string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
         {
-            this.playerName = playerName;
-            this.numTurns = numTurns;
-            this.goldLeft = goldLeft;
-            this.arrowsLeft = arrowsLeft;
-            this.isWumpusDead = isWumpusDead;
-            this.mapUsed = mapUsed;
-
-            this.score = calculateScore();
-
-            StoredHighScore test = new StoredHighScore();
-            test.
+            StoredHighScore compactScore = new StoredHighScore(
+                this.calculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
+                playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
         }
 
         /// <summary>
-        /// Score is calculated from the game variables, then stored
-        /// in the score field
+        /// Score is calculated from the game variables, then stored in the score field
         /// </summary>
-        /// <returns></returns>
-        private int calculateScore()
+        /// <param name="numTurns"> Length of game in turns </param>
+        /// <param name="goldLeft"> Gold at game end </param>
+        /// <param name="arrowsLeft"> Arrows at game end </param>
+        /// <param name="isWumpusDead"> Wumpus was killed at game end </param>
+        /// <returns> The score of the game based on the parameters </returns>
+        private int calculateScore(int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead)
         {
             int calculatedScore = 
                 (100
-                - this.numTurns
-                + this.goldLeft
-                + (5 * this.arrowsLeft)
-                + (translateWumpusLife() * 50));
+                - numTurns
+                + goldLeft
+                + (5 * arrowsLeft)
+                + (translateWumpusLife(isWumpusDead) * 50));
             return calculatedScore;
         }
 
@@ -98,28 +51,15 @@ namespace WumpusCore.HighScoreNS
         /// an int so the score can be calculated
         /// using the translated 1 or 0
         /// </summary>
-        /// <param name="isWumpusDead"></param>
-        /// <returns></returns>
-        private int translateWumpusLife()
+        /// <param name="isWumpusDead"> Was the wumpus killed </param>
+        /// <returns> Translated bool into 1 or 0 for calculateScore() </returns>
+        private int translateWumpusLife(bool isWumpusDead)
         {
-            if (this.isWumpusDead)
+            if (isWumpusDead)
             {
                 return 1;
             }
             return 0;
-        }
-
-        /// <summary>
-        /// returns the score field that has been
-        /// calculated from the other variables passed
-        /// for the object
-        /// </summary>
-        /// <returns></returns>
-        public int getScore() { return this.score; }
-
-        private void compareHighScore()
-        {
-            this.currentHighScore = Math.Max(this.score, currentHighScore);
         }
 
         /// <summary>
@@ -146,19 +86,26 @@ namespace WumpusCore.HighScoreNS
         /// variables that allowed the score to
         /// be achieved
         /// </summary>
-        struct StoredHighScore
+        public struct StoredHighScore
         {
-            public int score;
-            public string playerName;
-            public int numTurns;
-            public int goldLeft;
-            public int arrowsLeft;
-            public bool isWumpusDead;
-            public int mapUsed;
+            public readonly int score;
+            public readonly string playerName;
+            public readonly int numTurns;
+            public readonly int goldLeft;
+            public readonly int arrowsLeft;
+            public readonly bool isWumpusDead;
+            public readonly int mapUsed;
 
-            public StoredHighScore(string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
+            public StoredHighScore(int score, string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
             {
-                
+                this.playerName = playerName;
+                this.numTurns = numTurns;
+                this.goldLeft = goldLeft;
+                this.arrowsLeft = arrowsLeft;
+                this.isWumpusDead = isWumpusDead;
+                this.mapUsed = mapUsed;
+
+                this.score = score;
             }
             
         }
