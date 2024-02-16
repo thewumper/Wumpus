@@ -98,14 +98,7 @@ namespace WumpusCore.GameLocations
         /// <exception cref="InvalidOperationException"></exception>
         public RoomType GetRoomAt(int index)
         {
-            for (int i = 0; i < rooms.Count; i++)
-            {
-                if (rooms[i].pos == index)
-                {
-                    return rooms[i].type;
-                }
-            }
-            throw new InvalidOperationException();
+            return rooms[index].type;
         }
 
         /// <summary>
