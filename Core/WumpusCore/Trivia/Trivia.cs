@@ -15,7 +15,16 @@ namespace WumpusCore.Trivia
         private int winThreshold;
         private int questionsAnswered;
         private int questionsWon;
+        
+        /// <summary>
+        /// The number of questions that are available to ask.
+        /// </summary>
+        public int Count { get { return questions.Count; } }
 
+        /// <summary>
+        /// Initialize a Trivia object
+        /// </summary>
+        /// <param name="filepath">The path to the json file to read questions from</param>
         public Trivia(string filepath)
         {
             questions = new Questions(filepath);
@@ -50,6 +59,11 @@ namespace WumpusCore.Trivia
         /// <returns>Whether the answer was correct</returns>
         public bool SubmitAnswer(int choice)
         {
+            if (reportResult() != null)
+            {
+                throw new InvalidOperationException("Round is already over!");
+            }
+            
             if (questionsAnswered >= totalRoundQuestions)
             {
                 throw new InvalidOperationException("There are no questions to answer!");
@@ -95,6 +109,16 @@ namespace WumpusCore.Trivia
             }
 
             return null;
+        }
+        
+        /// <summary>
+        /// Returns a random question that hasn't been read yet.
+        /// Leaves the question in the stack.
+        /// </summary>
+        /// <returns>A question that hasn't yet been used</returns>
+        public AnsweredQuestion PeekRandomQuestion()
+        {
+            return questions.PeekRandomQuestion();
         }
     }
 }
