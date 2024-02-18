@@ -17,7 +17,7 @@ namespace WumpusCore.Controller
 
         public Controller()
         {
-            player = new Player.Player();
+            player = new Player.Player("");
             // TODO! This won't work
             topology = new Topology.Topology(null, 0);
 
