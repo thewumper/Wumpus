@@ -32,7 +32,7 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// Gets a random empty room from the <see cref="rooms">rooms</see>.
+        /// Gets a random empty room from the <see cref="rooms">rooms</see> array.
         /// </summary>
         /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array.</returns>
         /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
@@ -51,25 +51,6 @@ namespace WumpusCore.GameLocations
                 throw new InvalidOperationException("There are no empty rooms.");
             }
             return positions[Controller.Controller.Random.Next(0, positions.Count + 1)];
-        }
-
-        /// <summary>
-        /// Adds a room to the <see cref="rooms">rooms</see> array.
-        /// </summary>
-        /// <param name="type">The <see cref="RoomType">RoomType</see> type of room to add.</param>
-        /// <param name="index">The index of the room to be added on the <see cref="rooms">rooms</see> array.</param>
-        /// <exception cref="ArgumentException">When a room already exists at <c>index</c>.</exception>
-        public void AddRoom(RoomType type, ushort index)
-        {
-            for (int i = 0; i < rooms.Length; i++)
-            {
-                if (index == i)
-                {
-                    throw new ArgumentException("A room already exists at that position.");
-                }
-            }
-
-            rooms[index] = type;
         }
 
         /// <summary>
