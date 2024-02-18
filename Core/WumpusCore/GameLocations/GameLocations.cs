@@ -23,7 +23,7 @@ namespace WumpusCore.GameLocations
         private RoomType[] rooms;
         
         /// <summary>
-        /// The object that contains most things to do with rooms.
+        /// Contains most methods and data to do with rooms.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
         public GameLocations(ushort numRooms)
@@ -35,7 +35,7 @@ namespace WumpusCore.GameLocations
         /// Gets a random empty room from the <see cref="rooms">rooms</see>.
         /// </summary>
         /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
         public ushort GetEmptyRoom()
         {
             List<ushort> positions = new List<ushort>();
@@ -58,7 +58,7 @@ namespace WumpusCore.GameLocations
         /// </summary>
         /// <param name="type">The <see cref="RoomType">RoomType</see> type of room to add.</param>
         /// <param name="index">The index of the room to be added on the <see cref="rooms">rooms</see> array.</param>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentException">When a room already exists at <c>index</c>.</exception>
         public void AddRoom(RoomType type, ushort index)
         {
             for (int i = 0; i < rooms.Length; i++)
@@ -87,8 +87,7 @@ namespace WumpusCore.GameLocations
         /// </summary>
         /// <param name="index">The index of the room on the <see cref="rooms">rooms</see> list to check the type of.</param>
         /// <returns>The <see cref="RoomType">RoomType</see> type of room at the given location.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
-        public RoomType GetRoomAt(int index)
+        public RoomType GetRoomAt(ushort index)
         {
             return rooms[index];
         }
