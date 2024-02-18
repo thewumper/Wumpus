@@ -42,17 +42,16 @@ namespace WumpusCore.Player
         /// Stores everything to do with the player.
         /// </summary>
         /// <exception cref="FileNotFoundException">When there is no sprite stored at <see cref="spritePath"/>.</exception>
-        public Player()
+        public Player(string spritePath)
         {
-            coins = 0;
-            arrows = 0;
-
-            spritePath = "";
-
             if (!File.Exists(spritePath))
             {
                 throw new FileNotFoundException();
             }
+            this.spritePath = spritePath;
+            
+            coins = 0;
+            arrows = 0;
         }
         
         /// <summary>
