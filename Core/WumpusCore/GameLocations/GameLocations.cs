@@ -21,6 +21,11 @@ namespace WumpusCore.GameLocations
         /// The list of rooms and their positions.
         /// </summary>
         private RoomType[] rooms;
+
+        public RoomType[] Rooms
+        {
+            get { return rooms; }
+        }
         
         /// <summary>
         /// Contains most methods and data to do with rooms.
