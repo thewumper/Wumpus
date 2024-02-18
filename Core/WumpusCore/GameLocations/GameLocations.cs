@@ -8,7 +8,7 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// All possible types of rooms.
         /// </summary>
-        public enum RoomTypes
+        public enum RoomType
         {
             Flats,
             Vats,
@@ -22,55 +22,85 @@ namespace WumpusCore.GameLocations
         /// </summary>
         private List<Room> rooms;
 
-        /// <summary>
-        /// The random object from the controller class.
-        /// </summary>
-        Random random;
-
         public GameLocations()
         {
             rooms = new List<Room>();
-            random = Controller.Controller.Random;
+        }
+
+        /// <summary>
+        /// Initializes the <c>rooms</c> list with rooms of <c>RoomType</c> type <c>Flats</c>.
+        /// </summary>
+        /// <param name="numRooms">The total amount of rooms.</param>
+        public void InitRooms(ushort numRooms)
+        {
+            for (ushort i  = 0; i < numRooms; i++)
+            {
+                AddRoom(RoomType.Flats, (ushort)(i+1));
+            }
         }
 
         /// <summary>
         /// Gets a random empty room.
         /// </summary>
-        /// <returns>A random empty room.</returns>
-        public int GetEmptyRoom()
+        /// <returns>A random room of <c>RoomType</c> type <c>Flats</c> from the <c>rooms</c> list.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public ushort GetEmptyRoom()
         {
-            List<int> positions = new List<int>();
-            for (int i = 0; i < rooms.Count; i++)
+            List<ushort> positions = new List<ushort>();
+            for (ushort i = 0; i < rooms.Count; i++)
             {
-                if (rooms[i].type == RoomTypes.Flats)
+                if (rooms[i].type == RoomType.Flats)
                 {
                     positions.Add(i);
                 }
             }
-            return positions[random.Next(0, positions.Count + 1)];
+            if (positions.Count <= 0)
+            {
+                throw new InvalidOperationException("There are no empty rooms.");
+            }
+            return positions[Controller.Controller.Random.Next(0, positions.Count + 1)];
         }
 
         /// <summary>
-        /// Adds a room to the List.
+        /// Adds a room to the <c>rooms</c> list.
         /// </summary>
-        /// <param name="type">The type of room to add.</param>
+        /// <param name="type">The <c>RoomType</c> type of room to add.</param>
         /// <param name="pos">The position of the room to add.</param>
-        public void AddRoom(RoomTypes type, int pos)
+        /// <exception cref="ArgumentException"></exception>
+        public void AddRoom(RoomType type, ushort pos)
         {
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                if (pos == rooms[i].pos)
+                {
+                    throw new ArgumentException("A room already exists at that position.");
+                }
+            }
             rooms.Add(new Room(type, pos));
         }
 
         /// <summary>
-        /// Gets the type of room at a certain position.
+        /// Sets the room at <c>index</c> to another <c>RoomType</c> type.
         /// </summary>
-        /// <param name="pos">The position to check the type of.</param>
-        /// <returns>The type of room at the given location.</returns>
+        /// <param name="type">The <c>RoomType</c> type to set the room to.</param>
+        /// <param name="index">The index of the room on the <c>rooms</c> list to change the <c>RoomType</c> type of.</param>
+        public void SetRoom(RoomType type, ushort index)
+        {
+            rooms.RemoveAt(index);
+            rooms.Insert(index, new Room(type, (ushort)(index+1)));
+        }
+
+        /// <summary>
+        /// Gets the <c>RoomType</c> type of a room at <c>index</c> in the <c>rooms</c> list.
+        /// </summary>
+        /// <param name="index">The index of the room on the <c>rooms</c> list to check the type of.</param>
+        /// <returns>The <c>RoomType</c> type of room at the given location.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public RoomTypes GetRoomAt(int pos)
+        public RoomType GetRoomAt(int index)
         {
             for (int i = 0; i < rooms.Count; i++)
             {
-                if (rooms[i].pos == pos)
+                if (rooms[i].pos == index)
                 {
                     return rooms[i].type;
                 }
@@ -79,14 +109,14 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// A type that stores a RoomType and its position.
+        /// A type that stores a <c>RoomType</c> type and its position.
         /// </summary>
         private struct Room
         {
-            public RoomTypes type { get; private set; }
-            public int pos { get; private set; }
+            public RoomType type { get; private set; }
+            public ushort pos { get; private set; }
 
-            public Room(RoomTypes type, int pos)
+            public Room(RoomType type, ushort pos)
             {
                 this.type = type;
                 this.pos = pos;
