@@ -45,8 +45,11 @@ namespace WumpusCore.Trivia
                 JToken question = questionsArray[index];
 
                 questionClass tempQuestion = JsonConvert.DeserializeObject<questionClass>(question.ToString());
+
+                AnsweredQuestion appendQuestion =
+                    new AnsweredQuestion(tempQuestion.question, tempQuestion.choices, tempQuestion.answer);
                 
-                remainingQuestions.Append(new AnsweredQuestion(tempQuestion.question, tempQuestion.choices, tempQuestion.answer));
+                remainingQuestions.Push(appendQuestion);
                 questionsArray.RemoveAt(index);
             }
         } 
