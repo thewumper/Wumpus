@@ -17,18 +17,6 @@ namespace WumpusCore.Player
         }
 
         /// <summary>
-        /// The path of the player's sprite.
-        /// </summary>
-        private string spritePath;
-        /// <summary>
-        /// The path of the player's sprite.
-        /// </summary>
-        public string SpritePath
-        {
-            get { return spritePath; }
-        }
-
-        /// <summary>
         /// The amount of coins the player currently has.
         /// </summary>
         public ushort coins;
@@ -42,14 +30,8 @@ namespace WumpusCore.Player
         /// Stores everything to do with the player.
         /// </summary>
         /// <exception cref="FileNotFoundException">When there is no sprite stored at <see cref="spritePath"/>.</exception>
-        public Player(string spritePath)
-        {
-            if (!File.Exists(spritePath))
-            {
-                throw new FileNotFoundException();
-            }
-            this.spritePath = spritePath;
-            
+        public Player()
+        {   
             coins = 0;
             arrows = 0;
         }
