@@ -18,38 +18,38 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// The list of rooms and their positions.
+        /// The array of rooms.
         /// </summary>
-        private List<Room> rooms;
-
-        public GameLocations()
-        {
-            rooms = new List<Room>();
-        }
-
+        private RoomType[] rooms;
+        
         /// <summary>
-        /// Initializes the <c>rooms</c> list with rooms of <c>RoomType</c> type <c>Flats</c>.
+        /// The array of rooms.
+        /// </summary>
+        public RoomType[] Rooms
+        {
+            get { return rooms; }
+        }
+        
+        /// <summary>
+        /// Contains most methods and data to do with rooms.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
-        public void InitRooms(ushort numRooms)
+        public GameLocations(ushort numRooms)
         {
-            for (ushort i  = 0; i < numRooms; i++)
-            {
-                AddRoom(RoomType.Flats, (ushort)(i+1));
-            }
+            rooms = new RoomType[numRooms];
         }
 
         /// <summary>
-        /// Gets a random empty room.
+        /// Gets a random empty room from the <see cref="rooms">rooms</see> array.
         /// </summary>
-        /// <returns>A random room of <c>RoomType</c> type <c>Flats</c> from the <c>rooms</c> list.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array.</returns>
+        /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
         public ushort GetEmptyRoom()
         {
             List<ushort> positions = new List<ushort>();
-            for (ushort i = 0; i < rooms.Count; i++)
+            for (ushort i = 0; i < rooms.Length; i++)
             {
-                if (rooms[i].type == RoomType.Flats)
+                if (rooms[i] == RoomType.Flats)
                 {
                     positions.Add(i);
                 }
@@ -62,65 +62,23 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// Adds a room to the <c>rooms</c> list.
+        /// Sets the room at <c>index</c> to another <see cref="RoomType">RoomType</see> type.
         /// </summary>
-        /// <param name="type">The <c>RoomType</c> type of room to add.</param>
-        /// <param name="pos">The position of the room to add.</param>
-        /// <exception cref="ArgumentException"></exception>
-        public void AddRoom(RoomType type, ushort pos)
+        /// <param name="index">The index of the room on the <see cref="rooms">rooms</see> array to change the <see cref="RoomType">RoomType</see> type of.</param>
+        /// <param name="type">The <see cref="RoomType">RoomType</see> type to set the room to.</param>
+        public void SetRoom(ushort index, RoomType type)
         {
-            for (int i = 0; i < rooms.Count; i++)
-            {
-                if (pos == rooms[i].pos)
-                {
-                    throw new ArgumentException("A room already exists at that position.");
-                }
-            }
-            rooms.Add(new Room(type, pos));
+            rooms[index] = type;
         }
 
         /// <summary>
-        /// Sets the room at <c>index</c> to another <c>RoomType</c> type.
+        /// Gets the <see cref="RoomType">RoomType</see> type of a room at <c>index</c> in the <see cref="rooms">rooms</see> array.
         /// </summary>
-        /// <param name="type">The <c>RoomType</c> type to set the room to.</param>
-        /// <param name="index">The index of the room on the <c>rooms</c> list to change the <c>RoomType</c> type of.</param>
-        public void SetRoom(RoomType type, ushort index)
+        /// <param name="index">The index of the room on the <see cref="rooms">rooms</see> array to check the type of.</param>
+        /// <returns>The <see cref="RoomType">RoomType</see> type of room at the given location.</returns>
+        public RoomType GetRoomAt(ushort index)
         {
-            rooms.RemoveAt(index);
-            rooms.Insert(index, new Room(type, (ushort)(index+1)));
-        }
-
-        /// <summary>
-        /// Gets the <c>RoomType</c> type of a room at <c>index</c> in the <c>rooms</c> list.
-        /// </summary>
-        /// <param name="index">The index of the room on the <c>rooms</c> list to check the type of.</param>
-        /// <returns>The <c>RoomType</c> type of room at the given location.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
-        public RoomType GetRoomAt(int index)
-        {
-            for (int i = 0; i < rooms.Count; i++)
-            {
-                if (rooms[i].pos == index)
-                {
-                    return rooms[i].type;
-                }
-            }
-            throw new InvalidOperationException();
-        }
-
-        /// <summary>
-        /// A type that stores a <c>RoomType</c> type and its position.
-        /// </summary>
-        private struct Room
-        {
-            public RoomType type { get; private set; }
-            public ushort pos { get; private set; }
-
-            public Room(RoomType type, ushort pos)
-            {
-                this.type = type;
-                this.pos = pos;
-            }
+            return rooms[index];
         }
     }
 }
