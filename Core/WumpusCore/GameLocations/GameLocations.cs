@@ -64,9 +64,9 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// Sets the room at <c>index</c> to another <see cref="RoomType">RoomType</see> type.
         /// </summary>
-        /// <param name="type">The <see cref="RoomType">RoomType</see> type to set the room to.</param>
         /// <param name="index">The index of the room on the <see cref="rooms">rooms</see> array to change the <see cref="RoomType">RoomType</see> type of.</param>
-        public void SetRoom(RoomType type, ushort index)
+        /// <param name="type">The <see cref="RoomType">RoomType</see> type to set the room to.</param>
+        public void SetRoom(ushort index, RoomType type)
         {
             rooms[index] = type;
         }
