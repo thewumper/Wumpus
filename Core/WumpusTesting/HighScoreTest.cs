@@ -12,9 +12,27 @@ namespace WumpusTesting
     public class HighScoreTest
     {
         [TestMethod]
+        public void TestHighScoreConstructor()
+        {
+            HighScore testScore = new HighScore("pescado", 5, 300, 0, false, 2);
+            Assert.IsNotNull(testScore);
+
+        }
+
+        [TestMethod]
         public void TestStoredHighScoreStruct()
         {
-            HighScore testScore = new HighScore("player", 15, 5, 4, true, 1);
+            HighScore.StoredHighScore testStruct = new HighScore.StoredHighScore(47, "player", 15, 5, 4, true, 1);
+            Assert.IsNotNull(testStruct);
         }
+
+        [TestMethod]
+        public void ScoreCalculationTest()
+        {
+            HighScore scoring = new HighScore("crab", 27, 4, 3, true, 4);
+            int score = scoring.compactScore.score;
+            Assert.AreEqual(142, score);
+        }
+        
     }
 }

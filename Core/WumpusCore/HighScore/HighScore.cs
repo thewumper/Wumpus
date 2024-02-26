@@ -12,6 +12,11 @@ namespace WumpusCore.HighScoreNS
         private StoredHighScore[] top10HighScores;
 
         /// <summary>
+        /// The StoredHighScore struct made when the HighScore object is constructed
+        /// </summary>
+        public readonly StoredHighScore compactScore;
+
+        /// <summary>
         /// HighScore object is how the score of the game is calculated and stored to files
         /// </summary>
         /// <param name="playerName"> Name of player who owns the score </param>
@@ -25,6 +30,7 @@ namespace WumpusCore.HighScoreNS
             StoredHighScore compactScore = new StoredHighScore(
                 this.calculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
                 playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
+            this.compactScore = compactScore;
         }
 
         /// <summary>
