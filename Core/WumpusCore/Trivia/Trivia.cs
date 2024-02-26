@@ -41,6 +41,7 @@ namespace WumpusCore.Trivia
             this.winThreshold = winThreshold;
             questionsAnswered = 0;
             questionsWon = 0;
+            nextQuestion();
         }
 
         /// <summary>
@@ -49,7 +50,14 @@ namespace WumpusCore.Trivia
         /// <returns>The question currently awaiting an answer</returns>
         public AskableQuestion GetQuestion()
         {
-            return currentQuestion.question;
+            try
+            {
+                return currentQuestion.question;
+            }
+            catch (NullReferenceException e)
+            {
+                throw new InvalidOperationException("Question not initialized. Run nextQuestion()?");
+            }
         }
 
         /// <summary>
@@ -74,15 +82,15 @@ namespace WumpusCore.Trivia
                 throw new ArgumentOutOfRangeException("Not a valid answer index");
             }
             
-            nextQuestion();
-            
             questionsAnswered++;
             if (choice == currentQuestion.answer)
             {
                 questionsWon++;
+                nextQuestion();
                 return true;
             }
             
+            nextQuestion();
             return false;
         }
 
