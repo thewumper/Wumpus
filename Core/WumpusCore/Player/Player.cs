@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using WumpusCore.Topology;
+
 namespace WumpusCore.Player
 {
     public class Player
@@ -43,6 +45,16 @@ namespace WumpusCore.Player
         public void MoveTo(ushort target)
         {
             position = target;
+        }
+
+        /// <summary>
+        /// Moves the player in a certain direction relative to their current position.
+        /// </summary>
+        /// <param name="topology">The <see cref="ITopology"/> topology opject used to find the <see cref="IRoom"/> room to move to.</param>
+        /// <param name="directions">The <see cref="Directions"/> direction to move to.</param>
+        public void MoveInDirection(ITopology topology, Directions directions)
+        {
+            // MoveTo(topology.GetRoom(position).ExitRooms[directions].id);
         }
     }
 }
