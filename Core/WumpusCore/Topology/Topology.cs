@@ -28,7 +28,7 @@ namespace WumpusCore.Topology
             using (StreamReader mapData = new StreamReader(stream))
             {
                 string line;
-                ushort room = 0;
+                ushort room = 1;
                 while ((line = mapData.ReadLine()) != null)
                 {
                     string[] tokens = line.Split(',');
@@ -37,10 +37,14 @@ namespace WumpusCore.Topology
                     {
                         directions[i] = DirectionHelper.GetDirectionFromShortName(tokens[i]);
                     }
-                    rooms[room] = new Room(directions,room);
-                    rooms[room].InitializeConnections(this);
+                    rooms[room - 1] = new Room(directions, room);
                     room++;
                 }
+            }
+
+            foreach (Room room in rooms)
+            {
+                room.InitializeConnections(this);
             }
         }
         /// <summary>
@@ -59,7 +63,7 @@ namespace WumpusCore.Topology
         /// <returns></returns>
         public IRoom GetRoom(ushort id)
         {
-            return rooms[id];
+            return rooms[id - 1];
         }
 
 
@@ -67,43 +71,64 @@ namespace WumpusCore.Topology
         {
             ushort result = currentRoom;
 
+            bool isEdge = currentRoom % 6 <= 1;
+            bool isEven = currentRoom % 2 == 0;
             switch (direction)
             {
                 case Directions.North:
                     result -= 6;
                     break;
-                case Directions.NorthEast:
-                    if (currentRoom % 2 == 0)
-                        result += 1;
-                    else
-                        result -= 5;
-                    break;
-                case Directions.SouthEast:
-                    if (currentRoom % 2 == 0)
-                        result += 7;
-                    else
-                        result += 1;
-                    break;
                 case Directions.South:
                     result += 6;
                     break;
-                case Directions.SouthWest:
-                    if (currentRoom % 2 == 0)
-                        result += 5;
-                    else
-                        result -= 1;
-                    break;
                 case Directions.NorthWest:
-                    if (currentRoom % 2 == 0)
+                    if (isEdge || isEven)
+                    {
                         result -= 1;
+                    }
                     else
+                    {
                         result -= 7;
+                    }
                     break;
+                case Directions.SouthEast:
+                    if (isEdge || !isEven)
+                    {
+                        result += 1;
+                    }
+                    else
+                    {
+                        result += 7;
+                    }
+                    break;
+                case Directions.NorthEast:
+                    if (isEdge || !isEven)
+                    {
+                        result -= 5;
+                    }
+                    else
+                    {
+                        result += 1;
+                    }
+
+                    break;
+                case Directions.SouthWest:
+                    if (isEdge || isEven)
+                    {
+                        result += 5;
+                    }
+                    else
+                    {
+                        result -= 1;
+                    }
+                    break;
+                
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Invalid Direction");
             }
-            
-            return rooms[(result - 1) % 30];
+
+            int roomNum = (result - 1) % 30; // Probably could us unsafe and wrap around the ushort but I am not fully sure exactly how that owuld work
+            return rooms[roomNum >= 0 ? roomNum : roomNum + 30];
         }
         
         
@@ -121,10 +146,10 @@ namespace WumpusCore.Topology
 
             public void InitializeConnections(Topology topology)
             {
-                ExitRooms = new IRoom[ExitDirections.Length];
-                for (int i = 0; i < ExitRooms.Length; i++)
+                ExitRooms = new Dictionary<Directions, IRoom>();
+                foreach (var direction in ExitDirections)
                 {
-                    ExitRooms[i] = topology.RoomFromDirection(Id, ExitDirections[i]);
+                    ExitRooms[direction] = topology.RoomFromDirection(Id, direction);
                 }
             }
             
@@ -135,7 +160,7 @@ namespace WumpusCore.Topology
             /// <summary>
             /// Connected rooms, in same order as ExitDirections
             /// </summary>
-            public IRoom[] ExitRooms { get; private set; }
+            public Dictionary<Directions, IRoom> ExitRooms { get; private set; }
             /// <summary>
             /// This rooms ID
             /// </summary>

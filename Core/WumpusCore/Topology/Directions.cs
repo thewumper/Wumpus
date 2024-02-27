@@ -22,7 +22,7 @@ namespace WumpusCore.Topology
             { Directions.SouthEast , "SE" },
             { Directions.South     , "S"  },
             { Directions.SouthWest , "SW" },
-            { Directions.SouthEast , "SE" },
+            { Directions.NorthWest , "NW" },
         };
         
         private static readonly Dictionary<String, Directions> ShortNameToDirection = new Dictionary<String, Directions>()
@@ -32,7 +32,7 @@ namespace WumpusCore.Topology
             { "SE" , Directions.SouthEast },
             { "S"  , Directions.South     },
             { "SW" , Directions.SouthWest },
-            { "SE" , Directions.SouthEast },
+            { "NW" , Directions.NorthWest },
         };
         
         public static Directions GetDirectionFromShortName(String direction)
