@@ -6,14 +6,20 @@ namespace WumpusTesting
     [TestClass]
     public class HighScoreTest
     {
+        /// <summary>
+        /// Test if constructor makes the object without error
+        /// </summary>
         [TestMethod]
         public void TestHighScoreConstructor()
         {
-            HighScore testScore = new HighScore("pescado", 5, 300, 0, false, 2);
+            HighScore testScore = new HighScore("player", 5, 300, 0, false, 2);
             Assert.IsNotNull(testScore);
 
         }
 
+        /// <summary>
+        /// Test if Struct constructs
+        /// </summary>
         [TestMethod]
         public void TestStoredHighScoreStruct()
         {
@@ -21,13 +27,26 @@ namespace WumpusTesting
             Assert.IsNotNull(testStruct);
         }
 
+        /// <summary>
+        /// Test if score is calculating correctly
+        /// </summary>
         [TestMethod]
         public void ScoreCalculationTest()
         {
-            HighScore scoring = new HighScore("crab", 27, 4, 3, true, 4);
+            HighScore scoring = new HighScore("player", 27, 4, 3, true, 4);
             int score = scoring.compactScore.score;
             Assert.AreEqual(142, score);
         }
-        
+    }
+
+    [TestClass]
+    public class SaveFileTests
+    {
+        [TestMethod]
+        public void TestSaveFileGeneration()
+        {
+            SaveFile testSaveFile = new SaveFile();
+            Assert.IsNotNull(testSaveFile);
+        }
     }
 }
