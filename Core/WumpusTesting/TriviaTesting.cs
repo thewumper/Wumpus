@@ -44,13 +44,13 @@ namespace WumpusTesting
             Trivia trivia = makeTrivia();
             trivia.StartRound(5, 3);
             trivia.GetQuestion();
-            Assert.IsNull(trivia.reportResult());
+            Assert.AreEqual(GameResult.InProgress, trivia.reportResult());
             Assert.IsFalse(trivia.SubmitAnswer(-1));
-            Assert.IsNull(trivia.reportResult());
+            Assert.AreEqual(GameResult.InProgress, trivia.reportResult());
             Assert.IsFalse(trivia.SubmitAnswer(-1));
-            Assert.IsNull(trivia.reportResult());
+            Assert.AreEqual(GameResult.InProgress, trivia.reportResult());
             Assert.IsFalse(trivia.SubmitAnswer(-1));
-            Assert.IsFalse(trivia.reportResult());
+            Assert.AreEqual(GameResult.Loss, trivia.reportResult());
             Action submit = () => { trivia.SubmitAnswer(-1); };
             Assert.ThrowsException<InvalidOperationException>(submit);
         }

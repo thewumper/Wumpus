@@ -55,6 +55,7 @@
 		<Compile Include="Player\Player.cs" />
         <Compile Include="Trivia\AnsweredQuestion.cs" />
         <Compile Include="Trivia\AskableQuestion.cs" />
+        <Compile Include="Trivia\GameResult.cs" />
         <Compile Include="Trivia\Questions.cs" />
         <Compile Include="Trivia\Trivia.cs" />
         <Compile Include="HighScore\HighScore.cs" />

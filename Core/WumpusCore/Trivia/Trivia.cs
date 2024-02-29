@@ -67,7 +67,7 @@ namespace WumpusCore.Trivia
         /// <returns>Whether the answer was correct</returns>
         public bool SubmitAnswer(int choice)
         {
-            if (reportResult() != null)
+            if (reportResult() != GameResult.InProgress)
             {
                 throw new InvalidOperationException("Round is already over!");
             }
@@ -104,19 +104,19 @@ namespace WumpusCore.Trivia
         /// Returns whether the player won
         /// </summary>
         /// <returns>True if won, False if lost, and null if game not over</returns>
-        public bool? reportResult()
+        public GameResult reportResult()
         {
             if (questionsWon >= winThreshold)
             {
-                return true;
+                return GameResult.Win;
             }
 
             if (totalRoundQuestions - questionsAnswered < winThreshold)
             {
-                return false;
-            }
-
-            return null;
+                return GameResult.Loss;
+            } 
+            
+            return GameResult.InProgress;
         }
         
         /// <summary>
