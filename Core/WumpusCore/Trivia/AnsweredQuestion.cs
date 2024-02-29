@@ -7,9 +7,9 @@ namespace WumpusCore.Trivia
     /// </summary>
     public class AnsweredQuestion
     {
-        public AnsweredQuestion(string text, string[] choices, int answer)
+        public AnsweredQuestion(string questionText, string[] choices, int answer)
         {
-            this.question = new AskableQuestion(text, choices);
+            this.question = new AskableQuestion(questionText, choices);
             this.answer = answer;
         }
 
@@ -21,9 +21,9 @@ namespace WumpusCore.Trivia
         /// <summary>
         /// The text that will be presented as a question to the player.
         /// </summary>
-        public string text
+        public string QuestionText
         {
-            get { return question.text; }
+            get { return question.questionText; }
         }
         
         /// <summary>
