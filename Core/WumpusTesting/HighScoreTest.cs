@@ -45,8 +45,22 @@ namespace WumpusTesting
         [TestMethod]
         public void TestSaveFileGeneration()
         {
-            SaveFile testSaveFile = new SaveFile();
+            SaveFile testSaveFile = new SaveFile("File is made");
             Assert.IsNotNull(testSaveFile);
+        }
+
+        [TestMethod]
+        public void TestHighScoreSaveFile()
+        {
+            HighScore saveScore = new HighScore("player", 5, 1, 4, true, 5);
+            saveScore.storeScoreToFile(saveScore.compactScore);
+        }
+
+        [TestMethod]
+        public void TestTopTenScoresSave()
+        {
+            HighScore saveScore = new HighScore("playing", 8, 10, 4, true, 8);
+            saveScore.storeTopTenToFile();
         }
     }
 }

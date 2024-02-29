@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Security;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using WumpusCore.Topology;
 
 namespace WumpusCore.HighScoreNS
@@ -9,7 +12,7 @@ namespace WumpusCore.HighScoreNS
         /// <summary>
         /// The list of storedHighScore structs for the 10 highest scores
         /// </summary>
-        private StoredHighScore[] top10HighScores;
+        private List<StoredHighScore> topTenHighScores;
 
         /// <summary>
         /// The StoredHighScore struct made when the HighScore object is constructed
@@ -68,22 +71,82 @@ namespace WumpusCore.HighScoreNS
             return 0;
         }
 
-        /// <summary>
-        /// Stores an individual HighScore struct to the file
-        /// </summary>
-        private void storeScoreToFile()
+        private void checkTopTen()
         {
-            // file things
+            if (topTenHighScores == null)
+            {
+                //topTenHighScores = new List<StoredHighScore>;
+            }
+            
+            for (int i = 0; i < topTenHighScores.Count; i++)
+            {
+                if (topTenHighScores[i].score < compactScore.score)
+                {
+                    topTenHighScores.RemoveAt(i);
+                    topTenHighScores.Insert(i, compactScore);
+                }
+            }
+        }
+
+        private void reorganizeTopTen()
+        {
+
+        }
+
+        /// <summary>
+        /// Turns the information from a StoredHighScore Struct
+        /// into a string formatted for the save files
+        /// </summary>
+        /// <param name="compScore"> Struct to convert to string </param>
+        /// <returns> String made from StoredHighScore information </returns>
+        private string convertStoredHighScoreToString(StoredHighScore compScore)
+        {
+            string saveScore =
+                compScore.playerName + ": "
+                + compScore.score.ToString() + ",\n Turns: "
+                + compScore.numTurns.ToString() + ",\n Gold remaining: "
+                + compScore.goldLeft.ToString() + ", \n Arrows remaining: "
+                + compScore.arrowsLeft.ToString() + ", \n Wumpus slain: "
+                + compScore.isWumpusDead.ToString() + ", \n Map played: "
+                + compScore.mapUsed.ToString();
+
+            return saveScore;
+        }
+
+        /// <summary>
+        /// Stores an individual StoredHighScore struct to the file
+        /// </summary>
+        /// <param name="compScore"> Struct to access and save </param>
+        public void storeScoreToFile(StoredHighScore compScore)
+        {
+            string saveScore = convertStoredHighScoreToString(compScore);
+
+            SaveFile saveFile = new SaveFile(saveScore);
         }
 
         /// <summary>
         /// Loops through the high score struct list and
         /// stores them on the file
         /// </summary>
-        private void storeTopTenToFile()
+        public void storeTopTenToFile()
         {
-            // multiple file things
-            // call storeScoreToFile() probably
+            if (topTenHighScores == null)
+            {
+                throw new Exception("TopTenHighScores is null");
+            }
+
+            string allTextToSave = "Top Ten Scores: \n";
+            
+            for (int i = 0; i < topTenHighScores.Length; i++)
+            {
+                string infoToSave = convertStoredHighScoreToString(topTenHighScores[i]);
+                allTextToSave += infoToSave + "\n\n";
+            }
+            
+
+            allTextToSave += "Personal Score: \n" + convertStoredHighScoreToString(compactScore);
+
+            SaveFile saveFile = new SaveFile(allTextToSave);
         }
 
         /// <summary>
