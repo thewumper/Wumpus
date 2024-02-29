@@ -33,7 +33,7 @@
         /// Moves the wumpus into a connected room randomly a number of times depending on the state.  
         /// Better description coming soon
         /// </summary>
-        /// <param name="Random">Represents a pseudo-random nuumber generator, which is a device that produces a sequence of numbers that meet certain statistical requirements for randomness</param>
+        /// <param name="Random">Represents a pseudo-random number generator, which is a device that produces a sequence of numbers that meet certain statistical requirements for randomness</param>
         /// <exception cref="NotImplementedException"></exception>
         public void move(Random Random)
         {
