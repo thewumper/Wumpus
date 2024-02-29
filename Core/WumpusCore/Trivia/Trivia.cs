@@ -110,7 +110,7 @@ namespace WumpusCore.Trivia
         /// <summary>
         /// Returns whether the player won
         /// </summary>
-        /// <returns>True if won, False if lost, and null if game not over</returns>
+        /// <returns>A GameResult denoting the status from the perspective of the player</returns>
         public GameResult reportResult()
         {
             if (questionsWon >= winThreshold)
