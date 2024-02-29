@@ -8,7 +8,7 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// All possible types of rooms.
         /// </summary>
-        public enum RoomTypes
+        public enum RoomType
         {
             Flats,
             Vats,
@@ -18,79 +18,67 @@ namespace WumpusCore.GameLocations
         }
 
         /// <summary>
-        /// The list of rooms and their positions.
+        /// The array of rooms.
         /// </summary>
-        private List<Room> rooms;
-
+        private RoomType[] rooms;
+        
         /// <summary>
-        /// The random object from the controller class.
+        /// The array of rooms.
         /// </summary>
-        Random random;
-
-        public GameLocations()
+        public RoomType[] Rooms
         {
-            rooms = new List<Room>();
-            random = Controller.Controller.Random;
+            get { return rooms; }
+        }
+        
+        /// <summary>
+        /// Contains most methods and data to do with rooms.
+        /// </summary>
+        /// <param name="numRooms">The total amount of rooms.</param>
+        public GameLocations(ushort numRooms)
+        {
+            rooms = new RoomType[numRooms];
         }
 
         /// <summary>
-        /// Gets a random empty room.
+        /// Gets a random empty room from the <see cref="rooms">rooms</see> array.
         /// </summary>
-        /// <returns>A random empty room.</returns>
-        public int GetEmptyRoom()
+        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array.</returns>
+        /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
+        public ushort GetEmptyRoom()
         {
-            List<int> positions = new List<int>();
-            for (int i = 0; i < rooms.Count; i++)
+            List<ushort> positions = new List<ushort>();
+            for (ushort i = 0; i < rooms.Length; i++)
             {
-                if (rooms[i].type == RoomTypes.Flats)
+                if (rooms[i] == RoomType.Flats)
                 {
                     positions.Add(i);
                 }
             }
-            return positions[random.Next(0, positions.Count + 1)];
-        }
-
-        /// <summary>
-        /// Adds a room to the List.
-        /// </summary>
-        /// <param name="type">The type of room to add.</param>
-        /// <param name="pos">The position of the room to add.</param>
-        public void AddRoom(RoomTypes type, uint pos)
-        {
-            rooms.Add(new Room(type, pos));
-        }
-
-        /// <summary>
-        /// Gets the type of room at a certain position.
-        /// </summary>
-        /// <param name="pos">The position to check the type of.</param>
-        /// <returns>The type of room at the given location.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
-        public RoomTypes GetRoomAt(int pos)
-        {
-            for (int i = 0; i < rooms.Count; i++)
+            if (positions.Count <= 0)
             {
-                if (rooms[i].pos == pos)
-                {
-                    return rooms[i].type;
-                }
+                throw new InvalidOperationException("There are no empty rooms.");
             }
-            throw new InvalidOperationException();
+            return positions[Controller.Controller.Random.Next(0, positions.Count + 1)];
         }
 
         /// <summary>
-        /// A type that stores a RoomType and its position.
+        /// Sets the room at <c>index</c> to another <see cref="RoomType">RoomType</see> type.
         /// </summary>
-        private struct Room
+        /// <param name="index">The index of the room on the <see cref="rooms">rooms</see> array to change the <see cref="RoomType">RoomType</see> type of.</param>
+        /// <param name="type">The <see cref="RoomType">RoomType</see> type to set the room to.</param>
+        public void SetRoom(ushort index, RoomType type)
         {
-            public RoomTypes type { get; private set; }
-            public uint pos { get; private set; }
+            rooms[index] = type;
+        }
 
-            public Room(RoomTypes type, uint pos)
-            {
-                this.type = type;
-                this.pos = pos;
-            }
+        /// <summary>
+        /// Gets the <see cref="RoomType">RoomType</see> type of a room at <c>index</c> in the <see cref="rooms">rooms</see> array.
+        /// </summary>
+        /// <param name="index">The index of the room on the <see cref="rooms">rooms</see> array to check the type of.</param>
+        /// <returns>The <see cref="RoomType">RoomType</see> type of room at the given location.</returns>
+        public RoomType GetRoomAt(ushort index)
+        {
+            return rooms[index];
         }
     }
 }
