@@ -82,6 +82,13 @@ namespace WumpusCore.Trivia
                 throw new ArgumentOutOfRangeException("Not a valid answer index");
             }
             
+            
+            // -1 reserved for refusal to answer
+            if (choice < -1)
+            {
+                throw new ArgumentOutOfRangeException("Not a valid answer index");
+            }
+            
             questionsAnswered++;
             if (choice == currentQuestion.answer)
             {
