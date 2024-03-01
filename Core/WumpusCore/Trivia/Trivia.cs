@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 
 namespace WumpusCore.Trivia
 {
@@ -46,6 +47,11 @@ namespace WumpusCore.Trivia
         /// <param name="winThreshold">The number of questions the player must answer correctly in order to win the round</param>
         public void StartRound(int roundQuestions, int winThreshold)
         {
+            if (roundQuestions < Count)
+            {
+                throw new ArgumentOutOfRangeException("Insufficient remaining questions to execute Trivia round.");
+            }
+            
             totalRoundQuestions = roundQuestions;
             this.winThreshold = winThreshold;
             questionsAnswered = 0;
