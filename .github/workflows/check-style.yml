@@ -1,4 +1,9 @@
-on: [pull_request]
+on:
+  push:
+    branches: [ "main", "github-actions" ]
+  pull_request:
+    branches: [ "main" ]
+
 
 jobs:
   inspection:
