@@ -22,12 +22,21 @@ namespace WumpusCore.Trivia
         public int Count { get { return questions.Count; } }
 
         /// <summary>
-        /// Initialize a Trivia object
+        /// Initialize a Trivia object from one question file
         /// </summary>
-        /// <param name="filepath">The path to the json file to read questions from</param>
-        public Trivia(string filepath)
+        /// <param name="filePath">The path to the json file to read questions from</param>
+        public Trivia(string filePath)
         {
-            questions = new Questions(filepath);
+            questions = new Questions(filePath);
+        }
+        
+        /// <summary>
+        /// Initialize a Trivia object from multiple question files
+        /// </summary>
+        /// <param name="filePaths">The paths to the json files to read questions from</param>
+        public Trivia(string[] filePaths)
+        {
+            questions = new Questions(filePaths);
         }
 
         /// <summary>
