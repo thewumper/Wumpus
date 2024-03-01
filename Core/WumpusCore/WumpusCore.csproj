@@ -64,6 +64,7 @@
     <ItemGroup>
       <Content Include=".gitignore" />
       <Content Include="Trivia\Questions.json" />
+      <Content Include="Trivia\AdvancedQuestions.json" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
