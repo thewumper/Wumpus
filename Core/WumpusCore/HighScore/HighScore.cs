@@ -71,26 +71,38 @@ namespace WumpusCore.HighScoreNS
             return 0;
         }
 
+        /// <summary>
+        /// Makes sure the topTenHighScore list is created,
+        /// and adds the StoredHighScores into the list if
+        /// it has a top score
+        /// </summary>
         private void checkTopTen()
         {
             if (topTenHighScores == null)
             {
-                //topTenHighScores = new List<StoredHighScore>;
+                topTenHighScores = new List<StoredHighScore>();
             }
             
             for (int i = 0; i < topTenHighScores.Count; i++)
             {
                 if (topTenHighScores[i].score < compactScore.score)
                 {
-                    topTenHighScores.RemoveAt(i);
                     topTenHighScores.Insert(i, compactScore);
+                    topTenHighScores.RemoveAt(10);
+                    break;
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void reorganizeTopTen()
         {
-
+            topTenHighScores.Sort((score1, score2)=>
+            {
+                return score1.score.CompareTo(score2.score);
+            });
         }
 
         /// <summary>
@@ -137,7 +149,7 @@ namespace WumpusCore.HighScoreNS
 
             string allTextToSave = "Top Ten Scores: \n";
             
-            for (int i = 0; i < topTenHighScores.Length; i++)
+            for (int i = 0; i < topTenHighScores.Count; i++)
             {
                 string infoToSave = convertStoredHighScoreToString(topTenHighScores[i]);
                 allTextToSave += infoToSave + "\n\n";
