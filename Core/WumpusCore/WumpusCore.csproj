@@ -63,7 +63,6 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
-      <Content Include="Trivia\AdvancedQuestions.json" />
       <Content Include="Trivia\Questions.json" />
     </ItemGroup>
     <ItemGroup>

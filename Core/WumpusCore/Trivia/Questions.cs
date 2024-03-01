@@ -38,31 +38,6 @@ namespace WumpusCore.Trivia
             
             JArray questionsArray = JArray.Parse(File.ReadAllText(filePath));
 
-            initQuestions(questionsArray);
-        }
-
-        /// <summary>
-        /// Pulls all questions from specified files and overwrites the question list with the new questions, randomly ordered.
-        /// Questions should be stored in JSON format.
-        /// An array of objects in the format {"questions":"", "choices":["","",""...], "correct":0}
-        /// </summary>
-        /// <param name="filePaths">An array of paths to the files to read questions from</param>
-        public Questions(string[] filePaths)
-        {
-            remainingQuestions = new Stack<AnsweredQuestion>();
-            
-            JArray questionsArray = new JArray();
-
-            foreach (string filePath in filePaths)
-            {
-                questionsArray.Append(JArray.Parse(File.ReadAllText(filePath)));
-            }
-
-            initQuestions(questionsArray);
-        }
-
-        private void initQuestions(JArray questionsArray)
-        {
             for (int i = questionsArray.Count - 1; i >= 0; i--)
             {
                 int index = Controller.Controller.Random.Next(i);
@@ -77,7 +52,7 @@ namespace WumpusCore.Trivia
                 remainingQuestions.Push(appendQuestion);
                 questionsArray.RemoveAt(index);
             }
-        }
+        } 
         
         // Gets the index of a random question that has not yet been answered.
         private int getRandomQuestionIndex()
