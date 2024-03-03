@@ -1,17 +1,18 @@
-name: Run Dotnet Tests
-
 on:
   push:
     branches: [ "main", "github-actions" ]
   pull_request:
     branches: [ "main" ]
 
-jobs:
-  build:
-    runs-on: windows-2019
-    steps:
-      - uses: actions/checkout@v4
 
+jobs:
+  inspection:
+    runs-on: windows-2019 # or macos-latest, windows-latest
+    name: Inspection
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
@@ -20,9 +21,15 @@ jobs:
         
       - name: Restore Packages
         run: nuget restore Core/WumpusCore.sln
-
-      - name: Build Solution
-        run: msbuild Core/WumpusCore.sln -t:rebuild
         
-      - name: Run Tests
-        run: '& "$(vswhere -property installationPath)\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" Core/WumpusTesting/WumpusTesting.csproj'
+      - name: Inspect testing
+        uses: muno92/resharper_inspectcode@v1
+        with:
+          solutionPath: "Core/WumpusTesting/WumpusTesting.csproj"
+          dotnetVersion: ${{ steps.setup-dotnet.outputs.dotnet-version }}
+          
+      - name: Inspect core
+        uses: muno92/resharper_inspectcode@v1
+        with:
+          solutionPath: "Core/WumpusCore/WumpusCore.csproj"
+          dotnetVersion: ${{ steps.setup-dotnet.outputs.dotnet-version }}
