@@ -7,7 +7,7 @@ on:
 
 jobs:
   inspection:
-    runs-on: windows-2019 # or macos-latest, windows-latest
+    runs-on: ubuntu-latest # or macos-latest, windows-latest
     name: Inspection
     steps:
       - name: Checkout
