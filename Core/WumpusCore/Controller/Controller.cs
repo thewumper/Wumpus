@@ -1,6 +1,7 @@
 using System;
 using WumpusCore.Topology;
 using WumpusCore.GameLocations;
+using WumpusCore.Trivia;
 
 namespace WumpusCore.Controller
 {
@@ -10,18 +11,12 @@ namespace WumpusCore.Controller
 
         private ControllerState state;
 
-        private Player.Player player;
-        private ITopology topology;
-        private MinigameController.MinigameController minigameController;
+        private Player.Player player = new Player.Player();
+        private ITopology topology = new Topology.Topology(null, 0);
         private GameLocations.GameLocations gameLocations;
+        // TODO! This likely won't construct properly
+        private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
 
-        public Controller()
-        {
-            player = new Player.Player();
-            // TODO! This won't work
-            topology = new Topology.Topology(null, 0);
-
-        }
 
         public IRoom GetRoom(ushort roomNumber)
         {
@@ -55,12 +50,12 @@ namespace WumpusCore.Controller
 
         public bool SubmitTriviaAnswer(int guess)
         {
-            return minigameController.SubmitTriviaAnswer(guess);
+            return trivia.SubmitAnswer(guess);
         }
 
-        public string GetTriviaQuestion()
+        public Trivia.AskableQuestion GetTriviaQuestion()
         {
-            return minigameController.GetTriviaQuestion();
+            return trivia.GetQuestion();
         }
     }
 
