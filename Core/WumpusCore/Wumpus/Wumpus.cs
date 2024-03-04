@@ -61,7 +61,6 @@
         public void startBattle()
         {
             throw new NotImplementedException();
-
         }   
     }
 }
