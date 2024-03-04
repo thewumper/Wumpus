@@ -93,7 +93,7 @@ namespace WumpusCore.Entity
         }
 
         /// <summary>
-        /// Checks if the given Entity is adjacent to this Entity 
+        /// Checks if the given Entity is in a room that is adjacent to the room this Entity is in. (distance == 1)
         /// </summary>
         /// <param name="e">The entity that might be adjacent to this Entity</param>
         /// <returns>True if the given Entity is in a room adjacent to the current room, False if otherwise, even if they are in the same room.</returns>
