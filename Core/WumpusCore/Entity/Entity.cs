@@ -20,6 +20,15 @@ namespace WumpusCore.Entity
         {
             throw new NotImplementedException();
         }
+        
+        /// <summary>
+        /// Gets all room indices adjacent to the room the Entity is currently in that can be traveled to in one move
+        /// </summary>
+        /// <returns>A list of integer indices of the accessible rooms</returns>
+        public int[] GetAccessibleRooms()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Checks if the given room is adjacent to this Entity
@@ -32,9 +41,10 @@ namespace WumpusCore.Entity
         }
 
         /// <summary>
-        /// Tries to move to the given room, fails if not adjacent
+        /// Tries to move to the given room, throws an exception if not possible
         /// </summary>
         /// <param name="roomIndex">The room to move to</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the given room is not accessible</exception>
         protected void MoveToRoom(int roomIndex)
         {
             throw new NotImplementedException();
