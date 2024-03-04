@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 
 namespace WumpusCore.Trivia
 {
@@ -22,12 +23,21 @@ namespace WumpusCore.Trivia
         public int Count { get { return questions.Count; } }
 
         /// <summary>
-        /// Initialize a Trivia object
+        /// Initialize a Trivia object from one question file
         /// </summary>
-        /// <param name="filepath">The path to the json file to read questions from</param>
-        public Trivia(string filepath)
+        /// <param name="filePath">The path to the json file to read questions from</param>
+        public Trivia(string filePath)
         {
-            questions = new Questions(filepath);
+            questions = new Questions(filePath);
+        }
+        
+        /// <summary>
+        /// Initialize a Trivia object from multiple question files
+        /// </summary>
+        /// <param name="filePaths">The paths to the json files to read questions from</param>
+        public Trivia(string[] filePaths)
+        {
+            questions = new Questions(filePaths);
         }
 
         /// <summary>
@@ -37,6 +47,11 @@ namespace WumpusCore.Trivia
         /// <param name="winThreshold">The number of questions the player must answer correctly in order to win the round</param>
         public void StartRound(int roundQuestions, int winThreshold)
         {
+            if (roundQuestions > Count)
+            {
+                throw new ArgumentOutOfRangeException("Insufficient remaining questions to execute Trivia round.");
+            }
+            
             totalRoundQuestions = roundQuestions;
             this.winThreshold = winThreshold;
             questionsAnswered = 0;
