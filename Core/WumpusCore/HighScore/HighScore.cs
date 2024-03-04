@@ -34,6 +34,11 @@ namespace WumpusCore.HighScoreNS
                 this.calculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
                 playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
             this.compactScore = compactScore;
+
+
+
+            checkTopTen();
+            reorganizeTopTen();
         }
 
         /// <summary>
@@ -82,8 +87,15 @@ namespace WumpusCore.HighScoreNS
             {
                 topTenHighScores = new List<StoredHighScore>();
             }
+
+            int scoreLength = topTenHighScores.Count;
+            if (scoreLength < 10)
+            {
+                topTenHighScores.Insert(scoreLength, compactScore);
+                return;
+            }
             
-            for (int i = 0; i < topTenHighScores.Count; i++)
+            for (int i = 0; i < scoreLength; i++)
             {
                 if (topTenHighScores[i].score < compactScore.score)
                 {
@@ -95,7 +107,7 @@ namespace WumpusCore.HighScoreNS
         }
 
         /// <summary>
-        /// 
+        /// Sorts the ten high scores by score (highest to lowest)
         /// </summary>
         private void reorganizeTopTen()
         {
@@ -105,24 +117,15 @@ namespace WumpusCore.HighScoreNS
             });
         }
 
-        /// <summary>
-        /// Turns the information from a StoredHighScore Struct
-        /// into a string formatted for the save files
-        /// </summary>
-        /// <param name="compScore"> Struct to convert to string </param>
-        /// <returns> String made from StoredHighScore information </returns>
-        private string convertStoredHighScoreToString(StoredHighScore compScore)
+        private void convertStringToStoredHighScore(string compScore)
         {
-            string saveScore =
-                compScore.playerName + ": "
-                + compScore.score.ToString() + ",\n Turns: "
-                + compScore.numTurns.ToString() + ",\n Gold remaining: "
-                + compScore.goldLeft.ToString() + ", \n Arrows remaining: "
-                + compScore.arrowsLeft.ToString() + ", \n Wumpus slain: "
-                + compScore.isWumpusDead.ToString() + ", \n Map played: "
-                + compScore.mapUsed.ToString();
-
-            return saveScore;
+            string[] variables = compScore.Split(',');
+            string player = variables[0].Substring(0, variables[0].IndexOf(':'));
+            Console.WriteLine(player);
+            int score = int.Parse(variables[0].Substring(variables[0].IndexOf(':') + 1));
+            Console.WriteLine(score);
+            int turns = int.Parse(variables[1].Substring(variables[1].IndexOf(':') + 1));
+            Console.WriteLine(turns);
         }
 
         /// <summary>
@@ -131,7 +134,7 @@ namespace WumpusCore.HighScoreNS
         /// <param name="compScore"> Struct to access and save </param>
         public void storeScoreToFile(StoredHighScore compScore)
         {
-            string saveScore = convertStoredHighScoreToString(compScore);
+            string saveScore = compScore.ToString();
 
             SaveFile saveFile = new SaveFile(saveScore);
         }
@@ -151,12 +154,14 @@ namespace WumpusCore.HighScoreNS
             
             for (int i = 0; i < topTenHighScores.Count; i++)
             {
-                string infoToSave = convertStoredHighScoreToString(topTenHighScores[i]);
+                string infoToSave = topTenHighScores[i].ToString();
                 allTextToSave += infoToSave + "\n\n";
-            }
-            
 
-            allTextToSave += "Personal Score: \n" + convertStoredHighScoreToString(compactScore);
+                convertStringToStoredHighScore(infoToSave);
+            }
+
+
+            allTextToSave += "Personal Score: \n" + compactScore.ToString();
 
             SaveFile saveFile = new SaveFile(allTextToSave);
         }
@@ -189,6 +194,16 @@ namespace WumpusCore.HighScoreNS
                 this.score = score;
             }
             
+            public override string ToString()
+            {
+                return this.playerName + ": "
+                + this.score.ToString() + ",\n Turns: "
+                + this.numTurns.ToString() + ",\n Gold remaining: "
+                + this.goldLeft.ToString() + ", \n Arrows remaining: "
+                + this.arrowsLeft.ToString() + ", \n Wumpus slain: "
+                + this.isWumpusDead.ToString() + ", \n Map played: "
+                + this.mapUsed.ToString();
+            }
         }
     }
 }
