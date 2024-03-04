@@ -46,7 +46,6 @@
         <Compile Include="Controller\ControllerState.cs" />
         <Compile Include="Minigame.cs" />
         <Compile Include="LuckyCat\Cat.cs" />
-        <Compile Include="MinigameController\MinigameController.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Topology\Directions.cs" />
         <Compile Include="Topology\IRoom.cs" />
