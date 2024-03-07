@@ -21,6 +21,10 @@ public class UI : MonoBehaviour
     void FixedUpdate()
     {
         IRoom room = controller.GetRoom(0);
+        for (int i = 0; i < room.ExitRooms.Count; i++)
+        {
+            //room.ExitRooms[];
+        }
     }
 
     private void Update()
