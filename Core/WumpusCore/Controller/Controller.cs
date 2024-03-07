@@ -21,7 +21,7 @@ namespace WumpusCore.Controller
 
         public Controller()
         {
-            // This is stupd
+            // This is stupid
             using (StreamWriter outputFile = new StreamWriter("map0.wmp"))
             {
                 Directions[] directions = new Directions[]
@@ -33,13 +33,15 @@ namespace WumpusCore.Controller
                 {
                     Random.Next(0, 5);
                     string line = "";
-                    for (int j = 0; j<3; j++)
+                    for (int j = 0; j < 3; j++)
                     {
-                        line += (DirectionHelper.GetShortNameFromDirection(directions[j]));
+                        line += (DirectionHelper.GetShortNameFromDirection(directions[j])) + ", ";
                     }
+
                     outputFile.WriteLine(line);
                 }
             }
+
             topology = new Topology.Topology("./", 0);
         }
 
@@ -83,5 +85,4 @@ namespace WumpusCore.Controller
             return minigameController.GetTriviaQuestion();
         }
     }
-
 }
