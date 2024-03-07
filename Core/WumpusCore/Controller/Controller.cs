@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using WumpusCore.Topology;
 using WumpusCore.GameLocations;
 
@@ -33,9 +34,14 @@ namespace WumpusCore.Controller
                 {
                     Random.Next(0, 5);
                     string line = "";
+                    StringBuilder builder = new StringBuilder();
                     for (int j = 0; j < 3; j++)
                     {
-                        line += (DirectionHelper.GetShortNameFromDirection(directions[j])) + ",";
+                        line += (DirectionHelper.GetShortNameFromDirection(directions[j]));
+                        if (!(j == 2))
+                        {
+                            line += ",";
+                        }
                     }
 
                     outputFile.WriteLine(line);
