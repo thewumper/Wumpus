@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using WumpusCore.Topology;
 using WumpusCore.GameLocations;
 
@@ -8,19 +9,26 @@ namespace WumpusCore.Controller
     {
         public static Random Random = new Random();
 
-        private ControllerState state;
+        private ControllerState state = ControllerState.StartScreen;
 
-        private Player.Player player;
+        private Player.Player player = new Player.Player();
         private ITopology topology;
         private MinigameController.MinigameController minigameController;
         private GameLocations.GameLocations gameLocations;
 
+        // TODO! This won't work
+
         public Controller()
         {
-            player = new Player.Player();
-            // TODO! This won't work
-            topology = new Topology.Topology(null, 0);
-
+            // This is stupd
+            using (StreamWriter outputFile = new StreamWriter("map0.wmp"))
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    outputFile.WriteLine("N,NE,SE,S,SW,NW");
+                }
+            }
+            topology = new Topology.Topology("./", 0);
         }
 
         public IRoom GetRoom(ushort roomNumber)
