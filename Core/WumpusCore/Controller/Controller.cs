@@ -35,7 +35,7 @@ namespace WumpusCore.Controller
                     string line = "";
                     for (int j = 0; j < 3; j++)
                     {
-                        line += (DirectionHelper.GetShortNameFromDirection(directions[j])) + ", ";
+                        line += (DirectionHelper.GetShortNameFromDirection(directions[j])) + ",";
                     }
 
                     outputFile.WriteLine(line);
