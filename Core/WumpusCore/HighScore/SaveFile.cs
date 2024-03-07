@@ -6,6 +6,8 @@ namespace WumpusCore.HighScoreNS
 {
     internal class SaveFile
     {
+        string path;
+
         public SaveFile(string text)
         {
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -15,22 +17,37 @@ namespace WumpusCore.HighScoreNS
                 Directory.CreateDirectory(wumpusSaveDirectory);
             }
 
+            this.path = wumpusSaveDirectory;
+
             // Create the file, or overwrite if the file exists.
-            using (FileStream fs = File.Create(Path.Combine(wumpusSaveDirectory, "SaveData.txt")))
+            CreateFile(text);
+
+            // Open the stream and read it back.
+            ReadFile(true);
+        }
+
+        private void CreateFile(string text)
+        {
+            using (FileStream fs = File.Create(Path.Combine(this.path, "SaveData.txt")))
             {
                 byte[] info = new UTF8Encoding(true).GetBytes(text);
                 // Add some information to the file.
                 fs.Write(info, 0, info.Length);
             }
+        }
 
-            // Open the stream and read it back.
-            using (StreamReader sr = File.OpenText(Path.Combine(wumpusSaveDirectory, "SaveData.txt")))
+        public string ReadFile(bool printText)
+        {
+            using (StreamReader sr = File.OpenText(Path.Combine(this.path, "SaveData.txt")))
             {
                 string s = "";
+                string fullText = "";
                 while ((s = sr.ReadLine()) != null)
                 {
-                    Console.WriteLine(s);
+                    fullText += s;
+                    if (printText) { Console.WriteLine(s); }
                 }
+                return fullText;
             }
         }
     }

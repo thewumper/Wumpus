@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Security;
-using System.Runtime.InteropServices;
-using System.Security.Principal;
-using WumpusCore.Topology;
 
 namespace WumpusCore.HighScoreNS
 {
@@ -34,7 +30,6 @@ namespace WumpusCore.HighScoreNS
                 this.calculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
                 playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
             this.compactScore = compactScore;
-
 
 
             checkTopTen();
@@ -117,15 +112,30 @@ namespace WumpusCore.HighScoreNS
             });
         }
 
-        private void convertStringToStoredHighScore(string compScore)
+        private StoredHighScore convertStringToStoredHighScore(string compScore)
         {
             string[] variables = compScore.Split(',');
             string player = variables[0].Substring(0, variables[0].IndexOf(':'));
-            Console.WriteLine(player);
             int score = int.Parse(variables[0].Substring(variables[0].IndexOf(':') + 1));
-            Console.WriteLine(score);
             int turns = int.Parse(variables[1].Substring(variables[1].IndexOf(':') + 1));
-            Console.WriteLine(turns);
+            int gold = int.Parse(variables[2].Substring(variables[2].IndexOf(':') + 1));
+            int arrows = int.Parse(variables[3].Substring(variables[3].IndexOf(':') + 1));
+            bool wumpusDead = bool.Parse(variables[4].Substring(variables[4].IndexOf(':') + 1));
+            int mapUsed = int.Parse(variables[5].Substring(variables[5].IndexOf(':') + 1, variables[5].Length - variables[5].IndexOf(']') + 1));
+
+            StoredHighScore boxScore = new StoredHighScore(score, player, turns, gold, arrows, wumpusDead, mapUsed);
+            return boxScore;
+        }
+
+        private void seperateFile(string file)
+        {
+            string topTenHighScores = file.Substring(0, file.IndexOf("Personal Score"));
+            Console.WriteLine(topTenHighScores);
+            string[] scores = topTenHighScores.Split('[');
+            for (int i = 0; i < scores.Length; i++)
+            {
+                Console.WriteLine(scores[i]);
+            }
         }
 
         /// <summary>
@@ -160,10 +170,12 @@ namespace WumpusCore.HighScoreNS
                 convertStringToStoredHighScore(infoToSave);
             }
 
-
             allTextToSave += "Personal Score: \n" + compactScore.ToString();
 
             SaveFile saveFile = new SaveFile(allTextToSave);
+            string text = saveFile.ReadFile(false);
+            seperateFile(text);
+
         }
 
         /// <summary>
@@ -196,13 +208,13 @@ namespace WumpusCore.HighScoreNS
             
             public override string ToString()
             {
-                return this.playerName + ": "
+                return "[" + this.playerName + ": "
                 + this.score.ToString() + ",\n Turns: "
                 + this.numTurns.ToString() + ",\n Gold remaining: "
                 + this.goldLeft.ToString() + ", \n Arrows remaining: "
                 + this.arrowsLeft.ToString() + ", \n Wumpus slain: "
                 + this.isWumpusDead.ToString() + ", \n Map played: "
-                + this.mapUsed.ToString();
+                + this.mapUsed.ToString() + "]";
             }
         }
     }
