@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using WumpusCore.Topology;
 using WumpusCore.GameLocations;
 
@@ -23,9 +24,20 @@ namespace WumpusCore.Controller
             // This is stupd
             using (StreamWriter outputFile = new StreamWriter("map0.wmp"))
             {
+                Directions[] directions = new Directions[]
+                {
+                    Directions.North, Directions.NorthEast, Directions.SouthEast,
+                    Directions.South, Directions.SouthWest, Directions.NorthWest
+                };
                 for (int i = 0; i < 30; i++)
                 {
-                    outputFile.WriteLine("N,NE,SE,S,SW,NW");
+                    Random.Next(0, 5);
+                    string line = "";
+                    for (int j = 0; j<3; j++)
+                    {
+                        line += (DirectionHelper.GetShortNameFromDirection(directions[j]));
+                    }
+                    outputFile.WriteLine(line);
                 }
             }
             topology = new Topology.Topology("./", 0);
