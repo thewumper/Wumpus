@@ -10,7 +10,7 @@ namespace WumpusCore.Controller
     public class Controller
     {
         internal static Controller controllerRefrence;
-        public static Controller globalController
+        public static Controller GlobalController
         {
             get
             {
