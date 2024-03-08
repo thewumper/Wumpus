@@ -42,6 +42,9 @@ namespace WumpusTesting
     [TestClass]
     public class SaveFileTests
     {
+        /// <summary>
+        /// Test if generation for save file works
+        /// </summary>
         [TestMethod]
         public void TestSaveFileGeneration()
         {
@@ -49,6 +52,9 @@ namespace WumpusTesting
             Assert.IsNotNull(testSaveFile);
         }
 
+        /// <summary>
+        /// Test if score is put into the file
+        /// </summary>
         [TestMethod]
         public void TestHighScoreSaveFile()
         {
@@ -56,6 +62,9 @@ namespace WumpusTesting
             saveScore.storeScoreToFile(saveScore.compactScore);
         }
 
+        /// <summary>
+        /// Test if the top ten scores are stored in file
+        /// </summary>
         [TestMethod]
         public void TestTopTenScoresSave()
         {

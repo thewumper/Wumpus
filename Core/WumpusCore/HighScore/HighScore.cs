@@ -115,6 +115,7 @@ namespace WumpusCore.HighScoreNS
         private StoredHighScore convertStringToStoredHighScore(string compScore)
         {
             string[] variables = compScore.Split(',');
+
             string player = variables[0].Substring(0, variables[0].IndexOf(':'));
             int score = int.Parse(variables[0].Substring(variables[0].IndexOf(':') + 1));
             int turns = int.Parse(variables[1].Substring(variables[1].IndexOf(':') + 1));
@@ -132,9 +133,10 @@ namespace WumpusCore.HighScoreNS
             string topTenHighScores = file.Substring(0, file.IndexOf("Personal Score"));
             Console.WriteLine(topTenHighScores);
             string[] scores = topTenHighScores.Split('[');
-            for (int i = 0; i < scores.Length; i++)
+            for (int i = 1; i < scores.Length; i++)
             {
-                Console.WriteLine(scores[i]);
+                StoredHighScore currentTopScore = convertStringToStoredHighScore(scores[i]);
+                
             }
         }
 
