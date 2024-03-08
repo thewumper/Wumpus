@@ -1,25 +1,22 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using WumpusCore.Topology;
-using WumpusCore.GameLocations;
 
 namespace WumpusCore.Controller
 {
     public class Controller
     {
-        internal static Controller controllerRefrence;
+        internal static Controller controllerReference;
         public static Controller GlobalController
         {
             get
             {
-                if (controllerRefrence==null)
+                if (controllerReference==null)
                 {
-                    controllerRefrence = new Controller();
+                    controllerReference = new Controller();
                 }
 
-                return controllerRefrence;
+                return controllerReference;
             }
         }
         public static Random Random = new Random();
@@ -33,7 +30,7 @@ namespace WumpusCore.Controller
 
         // TODO! This won't work
 
-        public Controller()
+        private Controller()
         {
             // This is stupid
             using (StreamWriter outputFile = new StreamWriter("map0.wmp"))
@@ -63,9 +60,15 @@ namespace WumpusCore.Controller
             topology = new Topology.Topology("./", 0);
         }
 
+        /// <summary>
+        /// Returns the room at the room number from topology (1 indexed)
+        /// </summary>
+        /// <param name="roomNumber">The 1 indexed room number</param>
+        /// <returns>The room at the room number from topology</returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public IRoom GetRoom(ushort roomNumber)
         {
-            if (roomNumber<0)
+            if (roomNumber<=0)
             {
                 throw new IndexOutOfRangeException("Room number is 1 indexed, not 0.");
             }
