@@ -30,6 +30,9 @@ namespace WumpusUnity
         /// </summary>
         internal static SceneController controllerReference;
         
+        /// <summary>
+        /// The global SceneController.
+        /// </summary>
         public static SceneController GlobalSceneController
         {
             get
@@ -42,7 +45,10 @@ namespace WumpusUnity
                 return controllerReference;
             }
         }
-
+        
+        /// <summary>
+        /// Controls everything to do with scenes.
+        /// </summary>
         private SceneController()
         {
             mainMenu = SceneManager.GetSceneByName("Main Menu");
@@ -60,7 +66,11 @@ namespace WumpusUnity
             currentScene = scene;
             SceneManager.SetActiveScene(currentScene);
         }
-
+        
+        /// <summary>
+        /// Gets the correct scene based off of the global Controller's state.
+        /// </summary>
+        /// <returns>The correct scene based off of the global Controller's state.</returns>
         public Scene GetCorrectScene()
         {
             ControllerState state = controller.GetState();
@@ -72,10 +82,23 @@ namespace WumpusUnity
                     return main;
             }
         }
-
+        
+        /// <summary>
+        /// Goes to the correct scene based off of the global Controller's state.
+        /// </summary>
         public void GotoCorrectScene()
         {
             SetScene(GetCorrectScene());
+        }
+
+        public Scene GetMainMenuScene()
+        {
+            return mainMenu;
+        }
+
+        public Scene GetMainScene()
+        {
+            return main;
         }
     }
 }
