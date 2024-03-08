@@ -1,8 +1,12 @@
 using System;
+using WumpusCore.Entity;
+using WumpusCore.Player;
+using WumpusCore.Controller;
+using System.Diagnostics.PerformanceData;
 
 namespace WumpusCore.LuckyCat
 {
-    public class Cat
+    public class Cat: Entity.Entity
     {
         /// <summary>
         /// Is the cat tamed
@@ -10,9 +14,10 @@ namespace WumpusCore.LuckyCat
         private bool tamed;
 
         /// <summary>
-        /// The room number that the cat is currently in
+        /// The amount of coins the player has
+        /// Used to check for taming cat
         /// </summary>
-        private int location;
+        public ushort coins;
 
         /// <summary>
         /// The radius that the cat should be heard from
@@ -20,20 +25,41 @@ namespace WumpusCore.LuckyCat
         public const int AudibleMewingRadius = 2;
 
         /// <summary>
-        /// Figure out how many coins it will take to tame the cat
+        /// Attempts to Tame the Lucky Cat
         /// </summary>
-        /// <returns>The number of coint to tame the cat</returns>
-        public int Tame()
+        /// <returns>The state of cat tame, successful or not</returns>
+        public bool Tame()
         {
-            throw new NotImplementedException();
+            if (!tamed && coins >= 20)
+            {
+                coins = 0;
+                // (Taming success message)
+                return true;
+            }
+            else if (!tamed && coins < 20 )
+            {
+                coins = 0;
+                // (Taming failure message)
+                return false;
+            }
+            else if ( tamed )
+            {
+                // (Cat already tamed)
+                return true;
+            }
+            else 
+            { 
+                return false; 
+            }
+
         }
 
         /// <summary>
         /// Pets the cat
         /// </summary>
-        public int Pet()
+        public void Pet()
         {
-            throw new NotImplementedException();
+            // (You pet the cat, yippee)
         }
     }
 }
