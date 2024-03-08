@@ -9,6 +9,19 @@ namespace WumpusCore.Controller
 {
     public class Controller
     {
+        internal static Controller controllerRefrence;
+        static Controller globalController
+        {
+            get
+            {
+                if (controllerRefrence==null)
+                {
+                    controllerRefrence = new Controller();
+                }
+
+                return controllerRefrence;
+            }
+        }
         public static Random Random = new Random();
 
         private ControllerState state = ControllerState.StartScreen;
