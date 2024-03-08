@@ -402,4 +402,4 @@ FodyWeavers.xsd
 Unity/Assets/DLL/WumpusCore.dll
 
 # wumpus maps
-# *.wmp
+*.wmp
