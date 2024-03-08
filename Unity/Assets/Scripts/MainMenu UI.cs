@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using WumpusCore.Controller;
 using WumpusUnity;
 
 public class MainMenuUI : MonoBehaviour
