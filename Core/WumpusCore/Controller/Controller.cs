@@ -32,12 +32,11 @@ namespace WumpusCore.Controller
                 };
                 for (int i = 0; i < 30; i++)
                 {
-                    Random.Next(0, 5);
                     string line = "";
-                    StringBuilder builder = new StringBuilder();
                     for (int j = 0; j < 3; j++)
                     {
-                        line += (DirectionHelper.GetShortNameFromDirection(directions[j]));
+                        int num = Random.Next(0, 5);
+                        line += DirectionHelper.GetShortNameFromDirection(directions[num]);
                         if (!(j == 2))
                         {
                             line += ",";
@@ -53,6 +52,10 @@ namespace WumpusCore.Controller
 
         public IRoom GetRoom(ushort roomNumber)
         {
+            if (roomNumber<0)
+            {
+                throw new IndexOutOfRangeException("Room number is 1 indexed, not 0.");
+            }
             return topology.GetRoom(roomNumber);
         }
 
