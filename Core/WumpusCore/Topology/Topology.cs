@@ -189,6 +189,12 @@ namespace WumpusCore.Topology
                 {
                     ExitRooms[direction] = topology.RoomFromDirection(Id, direction);
                 }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    Directions direction = (Directions)i;
+                    AdjacentRooms[direction] = topology.RoomFromDirection(Id, direction);
+                }
             }
             
             /// <summary>
@@ -199,6 +205,10 @@ namespace WumpusCore.Topology
             /// Connected rooms, in same order as ExitDirections
             /// </summary>
             public Dictionary<Directions, IRoom> ExitRooms { get; private set; }
+            /// <summary>
+            /// All six adjacent rooms, in same order as ExitDirections
+            /// </summary>
+            public Dictionary<Directions, IRoom> AdjacentRooms { get; private set; }
             /// <summary>
             /// This rooms ID
             /// </summary>
