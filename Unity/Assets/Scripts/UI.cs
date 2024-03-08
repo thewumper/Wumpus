@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -10,6 +11,26 @@ public class UI : MonoBehaviour
     private GameObject cam;
 
     private const float camSens = 5f;
+
+    private ushort roomNum;
+    private ushort RoomNum
+    {
+        get
+        {
+            return roomNum;
+        }
+        set
+        {
+            northDoor.SetActive(false);
+            northEastDoor.SetActive(false);
+            southEastDoor.SetActive(false);
+            southDoor.SetActive(false);
+            southWestDoor.SetActive(false);
+            northWestDoor.SetActive(false);
+
+            roomNum = value;
+        }
+    }
     
     // doors
     [SerializeField]
@@ -29,16 +50,15 @@ public class UI : MonoBehaviour
     void Start()
     {
         controller = new Controller();
+        RoomNum = 1;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        IRoom room = controller.GetRoom(0);
+        IRoom room = controller.GetRoom(RoomNum);
         foreach (Directions dir in room.ExitDirections)
         {
             string name = DirectionHelper.GetShortNameFromDirection(dir);
-            Debug.Log(name);
             switch (name)
             {
                 case "N":
@@ -67,5 +87,10 @@ public class UI : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X");
         cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RoomNum = (ushort)((RoomNum + 1) % 30);
+        }
     }
 }
