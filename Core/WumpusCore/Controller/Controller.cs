@@ -94,12 +94,14 @@ namespace WumpusCore.Controller
 
         public void StartGame()
         {
+            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
+            // being prepared to handle that controller state
             ValidateScene(new []{StartScreen},InRoom);
             this.state = InRoom;
         }
 
         /// <summary>
-        /// Throws an invalid operations exception if the current state is not in the valid states. Meant to be used as validation for methods to prevent UI from getting any funny ideas
+        /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states
         /// </summary>
         /// <param name="validStates">The list of states that you are allowed to be in to use the method</param>
         /// <param name="attemptedState">The state that the called is attempting to change to</param>
