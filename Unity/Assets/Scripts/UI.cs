@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -49,7 +48,7 @@ public class UI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        controller = new Controller();
+        controller = Controller.GlobalController;
         RoomNum = 1;
     }
 
