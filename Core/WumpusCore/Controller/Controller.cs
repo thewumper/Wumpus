@@ -3,6 +3,9 @@ using System.IO;
 using System.Linq;
 using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
+using WumpusCore.GameLocations;
+using WumpusCore.Trivia;
+
 
 namespace WumpusCore.Controller
 {
@@ -22,13 +25,14 @@ namespace WumpusCore.Controller
             }
         }
         public static Random Random = new Random();
-
         private ControllerState state = StartScreen;
-
         private Player.Player player = new Player.Player();
         private ITopology topology;
-        private MinigameController.MinigameController minigameController;
+
+
         private GameLocations.GameLocations gameLocations;
+        // TODO! This likely won't construct properly
+        private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
 
         // TODO! This won't work
 
@@ -36,6 +40,7 @@ namespace WumpusCore.Controller
         {
             topology = new Topology.Topology("./Assets/Maps", 0);
         }
+
 
         /// <summary>
         /// Returns the room at the room number from topology (1 indexed)
@@ -79,12 +84,12 @@ namespace WumpusCore.Controller
 
         public bool SubmitTriviaAnswer(int guess)
         {
-            return minigameController.SubmitTriviaAnswer(guess);
+            return trivia.SubmitAnswer(guess);
         }
 
-        public string GetTriviaQuestion()
+        public Trivia.AskableQuestion GetTriviaQuestion()
         {
-            return minigameController.GetTriviaQuestion();
+            return trivia.GetQuestion();
         }
 
         public void StartGame()
