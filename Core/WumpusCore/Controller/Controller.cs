@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using WumpusCore.Topology;
+using static WumpusCore.Controller.ControllerState;
 
 namespace WumpusCore.Controller
 {
@@ -21,7 +22,7 @@ namespace WumpusCore.Controller
         }
         public static Random Random = new Random();
 
-        private ControllerState state = ControllerState.StartScreen;
+        private ControllerState state = StartScreen;
 
         private Player.Player player = new Player.Player();
         private ITopology topology;
@@ -108,6 +109,11 @@ namespace WumpusCore.Controller
         public string GetTriviaQuestion()
         {
             return minigameController.GetTriviaQuestion();
+        }
+
+        public void StartGame()
+        {
+            this.state = InRoom;
         }
     }
 }
