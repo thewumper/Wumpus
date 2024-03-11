@@ -9,6 +9,6 @@ namespace WumpusCore.Controller
         Rats,
         InBetweenRooms,
         Inventory,
-        Trivia
+        Trivia,
     }
 }
