@@ -8,21 +8,12 @@ namespace WumpusUnity
         /// <summary>
         /// The current Scene.
         /// </summary>
-        private Scene currentScene;
+        private string currentScene;
         
         /// <summary>
         /// The global Controller object.
         /// </summary>
         private Controller controller;
-        
-        /// <summary>
-        /// The Main Menu Scene.
-        /// </summary>
-        private Scene mainMenu;
-        /// <summary>
-        /// The Main Scene.
-        /// </summary>
-        private Scene main;
         
         /// <summary>
         /// The internal reference to the global SceneController.
@@ -50,9 +41,6 @@ namespace WumpusUnity
         /// </summary>
         private SceneController()
         {
-            mainMenu = SceneManager.GetSceneByName("Main Menu");
-            main = SceneManager.GetSceneByName("Main");
-
             controller = Controller.GlobalController;
         }
         
@@ -60,25 +48,25 @@ namespace WumpusUnity
         /// Sets the current Scene in Unity.
         /// </summary>
         /// <param name="scene">The new Scene.</param>
-        public void SetScene(Scene scene)
+        public void SetScene(string scene)
         {
             currentScene = scene;
-            SceneManager.SetActiveScene(currentScene);
+            SceneManager.LoadScene(scene);
         }
         
         /// <summary>
         /// Gets the correct scene based off of the global Controller's state.
         /// </summary>
         /// <returns>The correct scene based off of the global Controller's state.</returns>
-        public Scene GetCorrectScene()
+        public string GetCorrectScene()
         {
             ControllerState state = controller.GetState();
             switch (state)
             {
                 case ControllerState.StartScreen:
-                    return mainMenu;
+                    return "Main Menu";
                 default:
-                    return main;
+                    return "Main";
             }
         }
         
@@ -88,16 +76,6 @@ namespace WumpusUnity
         public void GotoCorrectScene()
         {
             SetScene(GetCorrectScene());
-        }
-
-        public Scene GetMainMenuScene()
-        {
-            return mainMenu;
-        }
-
-        public Scene GetMainScene()
-        {
-            return main;
         }
     }
 }
