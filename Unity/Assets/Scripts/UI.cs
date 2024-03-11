@@ -9,7 +9,7 @@ public class UI : MonoBehaviour
     [SerializeField] 
     private GameObject cam;
 
-    private const float camSens = 5f;
+    private const float CamSens = 5f;
 
     private ushort roomNum;
     private ushort RoomNum
@@ -85,7 +85,7 @@ public class UI : MonoBehaviour
     private void Update()
     {
         float mouseX = Input.GetAxis("Mouse X");
-        cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
+        cam.transform.eulerAngles += new Vector3(0, mouseX * CamSens, 0);
 
         if (Input.GetMouseButtonDown(0))
         {
