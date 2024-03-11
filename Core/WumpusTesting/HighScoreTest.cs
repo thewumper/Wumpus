@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Net.Security;
 using WumpusCore.HighScoreNS;
 
 namespace WumpusTesting
@@ -70,6 +72,22 @@ namespace WumpusTesting
         {
             HighScore saveScore = new HighScore("playing", 8, 10, 4, true, 8);
             saveScore.storeTopTenToFile();
+        }
+
+        [TestMethod]
+        public void TestRandomTopTen()
+        {
+            // do a thing here
+        }
+
+        private HighScore RandomScore(int index)
+        {
+            Random rand = new Random();
+            bool wumpusDead = false;
+            int checkDeath = rand.Next(0, 1);
+            if (checkDeath == 1) { wumpusDead = true; }
+            HighScore generatedScore = new HighScore(("play" + index), rand.Next(1,20), rand.Next(0,10), rand.Next(0,5), wumpusDead, rand.Next(1,10));
+            return generatedScore;
         }
     }
 }
