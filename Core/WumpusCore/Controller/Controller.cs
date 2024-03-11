@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
 
@@ -33,32 +34,7 @@ namespace WumpusCore.Controller
 
         private Controller()
         {
-            // This is stupid
-            using (StreamWriter outputFile = new StreamWriter("map0.wmp"))
-            {
-                Directions[] directions = new Directions[]
-                {
-                    Directions.North, Directions.NorthEast, Directions.SouthEast,
-                    Directions.South, Directions.SouthWest, Directions.NorthWest
-                };
-                for (int i = 0; i < 30; i++)
-                {
-                    string line = "";
-                    for (int j = 0; j < 3; j++)
-                    {
-                        int num = Random.Next(0, 5);
-                        line += DirectionHelper.GetShortNameFromDirection(directions[num]);
-                        if (!(j == 2))
-                        {
-                            line += ",";
-                        }
-                    }
-
-                    outputFile.WriteLine(line);
-                }
-            }
-
-            topology = new Topology.Topology("./", 0);
+            topology = new Topology.Topology("./Assets/Maps", 0);
         }
 
         /// <summary>
@@ -76,7 +52,7 @@ namespace WumpusCore.Controller
             return topology.GetRoom(roomNumber);
         }
 
-        public GameLocations.GameLocations.RoomType getRoomType(ushort roomNumber)
+        public GameLocations.GameLocations.RoomType GetRoomType(ushort roomNumber)
         {
             return gameLocations.GetRoomAt(roomNumber);
         }
@@ -113,7 +89,23 @@ namespace WumpusCore.Controller
 
         public void StartGame()
         {
+            ValidateScene(new []{StartScreen},InRoom);
             this.state = InRoom;
+        }
+
+        /// <summary>
+        /// Throws an invalid operations exception if the current state is not in the valid states. Meant to be used as validation for methods to prevent UI from getting any funny ideas
+        /// </summary>
+        /// <param name="validStates">The list of states that you are allowed to be in to use the method</param>
+        /// <param name="attemptedState">The state that the called is attempting to change to</param>
+        /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function</exception>
+        private void ValidateScene(ControllerState[] validStates, ControllerState attemptedState)
+        {
+            if (!validStates.Contains(state))
+            {
+                throw new InvalidOperationException(
+                    $"You cannot go to {attemptedState} from {state}. The only valid options are {validStates}");
+            }
         }
     }
 }
