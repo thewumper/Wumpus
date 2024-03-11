@@ -18,7 +18,7 @@ namespace WumpusCore.Topology
     /// <summary>
     /// Helper functionality to directions
     /// </summary>
-    public static class DirectionHelper
+    static class DirectionHelper
     {
 
         private static readonly Dictionary<Directions, String> DirectionToShortName = new Dictionary<Directions, String>()
