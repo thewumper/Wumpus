@@ -23,6 +23,7 @@ public class MainMenuUI : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            controller.StartGame();
             sceneController.GotoCorrectScene();
         }
     }
