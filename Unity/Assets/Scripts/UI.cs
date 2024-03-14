@@ -10,7 +10,8 @@ public class UI : MonoBehaviour
     private GameObject cam;
 
     private const float CamSens = 5f;
-
+    
+    [SerializeField]
     private ushort roomNum;
     private ushort RoomNum
     {
@@ -50,6 +51,13 @@ public class UI : MonoBehaviour
     {
         controller = Controller.GlobalController;
         RoomNum = 1;
+        
+        northDoor.AddComponent<Door>().Init(Directions.North);
+        northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
+        southEastDoor.AddComponent<Door>().Init(Directions.SouthEast);
+        southDoor.AddComponent<Door>().Init(Directions.South);
+        southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
+        northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
     }
 
     void FixedUpdate()
@@ -89,7 +97,15 @@ public class UI : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            RoomNum = (ushort)((RoomNum + 1) % 30);
+            Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.transform.CompareTag("door"))
+                {
+                    RoomNum = controller.MoveInADirection(hit.transform.GetComponent<Door>().GetDir());
+                    Debug.Log(RoomNum);
+                }
+            }
         }
     }
 }

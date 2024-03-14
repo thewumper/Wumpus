@@ -43,10 +43,6 @@ namespace WumpusUnity
         private SceneController()
         {
             controller = Controller.GlobalController;
-            
-            Debug.Log(controller);
-
-            controller.onStateChangeCallback = () => GotoCorrectScene();
         }
         
         /// <summary>
@@ -78,7 +74,7 @@ namespace WumpusUnity
         /// <summary>
         /// Goes to the correct scene based off of the global Controller's state.
         /// </summary>
-        private void GotoCorrectScene()
+        public void GotoCorrectScene()
         {
             SetScene(GetCorrectScene());
         }

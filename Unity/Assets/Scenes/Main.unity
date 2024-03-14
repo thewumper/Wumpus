@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 179425430}
   m_Layer: 0
   m_Name: southwestdoor
-  m_TagString: Untagged
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -455,6 +455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 173763335}
+  roomNum: 0
   northDoor: {fileID: 2046500543}
   northEastDoor: {fileID: 2110407906}
   southEastDoor: {fileID: 1943228288}
@@ -490,7 +491,7 @@ GameObject:
   - component: {fileID: 277070476}
   m_Layer: 0
   m_Name: northwestdoor
-  m_TagString: Untagged
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1191,7 +1192,7 @@ GameObject:
   - component: {fileID: 1224273435}
   m_Layer: 0
   m_Name: southdoor
-  m_TagString: Untagged
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1495,7 +1496,7 @@ GameObject:
   - component: {fileID: 1943228290}
   m_Layer: 0
   m_Name: southeastdoor
-  m_TagString: Untagged
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1637,7 +1638,7 @@ GameObject:
   - component: {fileID: 2046500545}
   m_Layer: 0
   m_Name: northdoor
-  m_TagString: Untagged
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1742,7 +1743,7 @@ GameObject:
   - component: {fileID: 2110407908}
   m_Layer: 0
   m_Name: northeastdoor
-  m_TagString: Untagged
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
