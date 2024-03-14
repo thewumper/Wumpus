@@ -30,6 +30,8 @@ namespace WumpusCore.LuckyCat
         {
         }
 
+        public int Location;
+
         /// <summary>
         /// Attempts to Tame the Lucky Cat
         /// </summary>
@@ -95,6 +97,30 @@ namespace WumpusCore.LuckyCat
 
             else { return 0; } 
 
+        }
+        
+        /// <summary>
+        /// Plays the mewing audio file if player is nearby the cat
+        /// Will depend on audio manager for sound
+        /// </summary>
+        /// <returns> Audio id </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public int Mew()
+        {
+/*          
+            if (DistanceToEntity() < AudibleMewingRadius) 
+            {
+                return 69;
+            }
+            
+            else if (DistanceToEntity() == AudibleMewingRadius)
+            {
+                return 70;
+            }
+
+            else { return 0; }
+*/ 
+            throw new NotImplementedException();
         }
     }
 }
