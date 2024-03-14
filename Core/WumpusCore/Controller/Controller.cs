@@ -12,11 +12,12 @@ namespace WumpusCore.Controller
     public class Controller
     {
         internal static Controller controllerReference;
+
         public static Controller GlobalController
         {
             get
             {
-                if (controllerReference==null)
+                if (controllerReference == null)
                 {
                     controllerReference = new Controller();
                 }
@@ -24,13 +25,34 @@ namespace WumpusCore.Controller
                 return controllerReference;
             }
         }
+
         public static Random Random = new Random();
-        private ControllerState state = StartScreen;
+
+        public ControllerState state
+        {
+            get
+            {
+                return _state;
+            }
+            set
+            {
+                onStateChangeCallback();
+                _state = value;
+            }
+        }
+
+        private ControllerState _state = StartScreen;
+
         private Player.Player player = new Player.Player();
         private ITopology topology;
 
+        public delegate void OnStateChangeCallback();
+
+        public OnStateChangeCallback onStateChangeCallback;
+
 
         private GameLocations.GameLocations gameLocations;
+
         // TODO! This likely won't construct properly
         private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
 
@@ -50,10 +72,11 @@ namespace WumpusCore.Controller
         /// <exception cref="IndexOutOfRangeException"></exception>
         public IRoom GetRoom(ushort roomNumber)
         {
-            if (roomNumber<=0)
+            if (roomNumber <= 0)
             {
                 throw new IndexOutOfRangeException("Room number is 1 indexed, not 0.");
             }
+
             return topology.GetRoom(roomNumber);
         }
 
@@ -96,7 +119,7 @@ namespace WumpusCore.Controller
         {
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
             // being prepared to handle that controller state
-            ValidateScene(new []{StartScreen},InRoom);
+            ValidateScene(new[] { StartScreen }, InRoom);
             this.state = InRoom;
         }
 
