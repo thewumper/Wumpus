@@ -12,12 +12,11 @@ namespace WumpusCore.Controller
     public class Controller
     {
         internal static Controller controllerReference;
-
         public static Controller GlobalController
         {
             get
             {
-                if (controllerReference == null)
+                if (controllerReference==null)
                 {
                     controllerReference = new Controller();
                 }
@@ -25,34 +24,14 @@ namespace WumpusCore.Controller
                 return controllerReference;
             }
         }
-
         public static Random Random = new Random();
 
-        public ControllerState State
-        {
-            get
-            {
-                return state;
-            }
-            set
-            {
-                onStateChangeCallback();
-                state = value;
-            }
-        }
-
         private ControllerState state = StartScreen;
-
         private Player.Player player = new Player.Player();
         private ITopology topology;
 
-        public delegate void OnStateChangeCallback();
-
-        public OnStateChangeCallback onStateChangeCallback;
-
 
         private GameLocations.GameLocations gameLocations;
-
         // TODO! This likely won't construct properly
         // private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
 
@@ -72,11 +51,10 @@ namespace WumpusCore.Controller
         /// <exception cref="IndexOutOfRangeException"></exception>
         public IRoom GetRoom(ushort roomNumber)
         {
-            if (roomNumber <= 0)
+            if (roomNumber<=0)
             {
                 throw new IndexOutOfRangeException("Room number is 1 indexed, not 0.");
             }
-
             return topology.GetRoom(roomNumber);
         }
 
@@ -87,7 +65,7 @@ namespace WumpusCore.Controller
 
         public ControllerState GetState()
         {
-            return State;
+            return state;
         }
 
         public string GetPlayerSpritePath()
@@ -120,7 +98,7 @@ namespace WumpusCore.Controller
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
             // being prepared to handle that controller state
             ValidateScene(new[] { StartScreen, InRoom }, InRoom);
-            this.State = InRoom;
+            this.state = InRoom;
         }
 
         public void EndGame()
@@ -128,7 +106,7 @@ namespace WumpusCore.Controller
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
             // being prepared to handle that controller state
             ValidateScene(new[] { StartScreen, InRoom }, StartScreen);
-            this.State = StartScreen;
+            this.state = StartScreen;
         }
 
         /// <summary>
@@ -139,10 +117,10 @@ namespace WumpusCore.Controller
         /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function</exception>
         private void ValidateScene(ControllerState[] validStates, ControllerState attemptedState)
         {
-            if (!validStates.Contains(State))
+            if (!validStates.Contains(state))
             {
                 throw new InvalidOperationException(
-                    $"You cannot go to {attemptedState} from {State}. The only valid options are {validStates}");
+                    $"You cannot go to {attemptedState} from {state}. The only valid options are {validStates}");
             }
         }
     }

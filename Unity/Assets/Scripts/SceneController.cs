@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 
@@ -42,13 +43,17 @@ namespace WumpusUnity
         private SceneController()
         {
             controller = Controller.GlobalController;
+            
+            Debug.Log(controller);
+
+            controller.onStateChangeCallback = () => GotoCorrectScene();
         }
         
         /// <summary>
         /// Sets the current Scene in Unity.
         /// </summary>
         /// <param name="scene">The new Scene.</param>
-        public void SetScene(string scene)
+        private void SetScene(string scene)
         {
             currentScene = scene;
             SceneManager.LoadScene(scene);
@@ -58,7 +63,7 @@ namespace WumpusUnity
         /// Gets the correct scene based off of the global Controller's state.
         /// </summary>
         /// <returns>The correct scene based off of the global Controller's state.</returns>
-        public string GetCorrectScene()
+        private string GetCorrectScene()
         {
             ControllerState state = controller.GetState();
             switch (state)
@@ -73,7 +78,7 @@ namespace WumpusUnity
         /// <summary>
         /// Goes to the correct scene based off of the global Controller's state.
         /// </summary>
-        public void GotoCorrectScene()
+        private void GotoCorrectScene()
         {
             SetScene(GetCorrectScene());
         }
