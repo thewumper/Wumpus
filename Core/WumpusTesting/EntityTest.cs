@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+/*using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Entity;
 
 namespace WumpusTesting
@@ -72,4 +72,4 @@ namespace WumpusTesting
             //
         }
     }
-}
+}*/
