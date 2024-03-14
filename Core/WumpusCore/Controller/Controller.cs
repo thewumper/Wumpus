@@ -12,11 +12,12 @@ namespace WumpusCore.Controller
     public class Controller
     {
         internal static Controller controllerReference;
+
         public static Controller GlobalController
         {
             get
             {
-                if (controllerReference==null)
+                if (controllerReference == null)
                 {
                     controllerReference = new Controller();
                 }
@@ -24,6 +25,7 @@ namespace WumpusCore.Controller
                 return controllerReference;
             }
         }
+
         public static Random Random = new Random();
 
         private ControllerState state = StartScreen;
@@ -51,10 +53,11 @@ namespace WumpusCore.Controller
         /// <exception cref="IndexOutOfRangeException"></exception>
         public IRoom GetRoom(ushort roomNumber)
         {
-            if (roomNumber<=0)
+            if (roomNumber <= 0)
             {
                 throw new IndexOutOfRangeException("Room number is 1 indexed, not 0.");
             }
+
             return topology.GetRoom(roomNumber);
         }
 
@@ -63,9 +66,9 @@ namespace WumpusCore.Controller
             return gameLocations.GetRoomAt(roomNumber);
         }
 
-        public int MoveInADirection(Directions direction)
+        public ushort MoveInADirection(Directions direction)
         {
-            player.MoveInDirection(topology,direction);
+            player.MoveInDirection(topology, direction);
             return player.Position;
         }
 
@@ -81,7 +84,7 @@ namespace WumpusCore.Controller
 
         public int GetCoins()
         {
-            throw new NotImplementedException();
+            return player.coins;
         }
 
         public int GetArrowCount()
