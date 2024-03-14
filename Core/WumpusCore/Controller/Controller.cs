@@ -119,7 +119,7 @@ namespace WumpusCore.Controller
         {
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
             // being prepared to handle that controller state
-            ValidateScene(new[] { StartScreen }, InRoom);
+            ValidateScene(new[] { StartScreen, InRoom }, InRoom);
             this.State = InRoom;
         }
 
