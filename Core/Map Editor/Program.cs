@@ -6,9 +6,9 @@ using WumpusCore.Topology;
 
 namespace Map_Editor
 {
-    
-    
-    
+    /// <summary>
+    /// Quick tool used to quickly create maps.
+    /// </summary>
     internal class MapEditor
     {
         public static void Main(string[] args)
@@ -28,8 +28,6 @@ namespace Map_Editor
             {
                 rooms[i] = new HashSet<Directions>();
             }
-            
-            
             
             bool running = true;
             while (running)
@@ -172,13 +170,11 @@ namespace Map_Editor
                          WriteError("Invalid command");
                          break;
                 }
-                
             }
         }
 
         private static void WriteError(string error)
         {
-            
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(error);
             Console.ForegroundColor = ConsoleColor.White;
@@ -186,7 +182,6 @@ namespace Map_Editor
         
         private static void WriteWarning(string warning)
         {
-            
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(warning);
             Console.ForegroundColor = ConsoleColor.White;
