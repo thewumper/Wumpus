@@ -37,8 +37,6 @@ namespace WumpusCore.Controller
         // TODO! This likely won't construct properly
         // private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
 
-        // TODO! This won't work
-
         private Controller()
         {
             topology = new Topology.Topology("./Assets/Maps", 0);
@@ -68,6 +66,7 @@ namespace WumpusCore.Controller
 
         public ushort MoveInADirection(Directions direction)
         {
+            Console.Write("Made it #1");
             player.MoveInDirection(topology, direction);
             return player.Position;
         }
@@ -75,11 +74,6 @@ namespace WumpusCore.Controller
         public ControllerState GetState()
         {
             return state;
-        }
-
-        public string GetPlayerSpritePath()
-        {
-            throw new NotImplementedException();
         }
 
         public int GetCoins()

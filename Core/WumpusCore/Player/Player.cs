@@ -55,6 +55,7 @@ namespace WumpusCore.Player
         /// <param name="directions">The <see cref="Directions"/> direction to move to.</param>
         public void MoveInDirection(ITopology topology, Directions directions)
         {
+            Console.WriteLine("Made it #2");
             MoveTo(topology.GetRoom(position).ExitRooms[directions].Id);
         }
     }
