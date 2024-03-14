@@ -28,20 +28,20 @@ namespace WumpusCore.Controller
 
         public static Random Random = new Random();
 
-        public ControllerState state
+        public ControllerState State
         {
             get
             {
-                return _state;
+                return state;
             }
             set
             {
                 onStateChangeCallback();
-                _state = value;
+                state = value;
             }
         }
 
-        private ControllerState _state = StartScreen;
+        private ControllerState state = StartScreen;
 
         private Player.Player player = new Player.Player();
         private ITopology topology;
@@ -87,7 +87,7 @@ namespace WumpusCore.Controller
 
         public ControllerState GetState()
         {
-            return state;
+            return State;
         }
 
         public string GetPlayerSpritePath()
@@ -120,7 +120,7 @@ namespace WumpusCore.Controller
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
             // being prepared to handle that controller state
             ValidateScene(new[] { StartScreen }, InRoom);
-            this.state = InRoom;
+            this.State = InRoom;
         }
 
         /// <summary>
@@ -131,10 +131,10 @@ namespace WumpusCore.Controller
         /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function</exception>
         private void ValidateScene(ControllerState[] validStates, ControllerState attemptedState)
         {
-            if (!validStates.Contains(state))
+            if (!validStates.Contains(State))
             {
                 throw new InvalidOperationException(
-                    $"You cannot go to {attemptedState} from {state}. The only valid options are {validStates}");
+                    $"You cannot go to {attemptedState} from {State}. The only valid options are {validStates}");
             }
         }
     }
