@@ -50,6 +50,7 @@ namespace WumpusCore.GameLocations
         /// Creates an entity in the game
         /// </summary>
         /// <param name="e">Places the entity into entities</param>
+        /// <exception cref="ArgumentException">If the given entity already is present</exception>
         public void AddEntity(Entity.Entity e)
         {
             if (entities.ContainsKey(e.Type))
@@ -60,6 +61,12 @@ namespace WumpusCore.GameLocations
             entities[e.Type] = e;
         }
 
+        /// <summary>
+        /// Gets an entity of a selected type.
+        /// </summary>
+        /// <param name="type">Type of entity to get</param>
+        /// <returns>The entity of the given type</returns>
+        /// <exception cref="ArgumentException">If the requested entity does not exist</exception>
         public Entity.Entity GetEntity(EntityType type)
         {
             if (!entities.ContainsKey(type))
