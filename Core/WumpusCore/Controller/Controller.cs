@@ -123,6 +123,14 @@ namespace WumpusCore.Controller
             this.State = InRoom;
         }
 
+        public void EndGame()
+        {
+            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
+            // being prepared to handle that controller state
+            ValidateScene(new[] { StartScreen, InRoom }, StartScreen);
+            this.State = StartScreen;
+        }
+
         /// <summary>
         /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states
         /// </summary>
