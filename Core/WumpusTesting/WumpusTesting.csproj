@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerTest.cs" />
     <Compile Include="EntityTest.cs" />
     <Compile Include="HighScoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
