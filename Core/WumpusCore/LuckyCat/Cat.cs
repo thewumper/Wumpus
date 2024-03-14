@@ -2,6 +2,7 @@ using System;
 using WumpusCore.Entity;
 using WumpusCore.Player;
 using WumpusCore.Controller;
+using WumpusCore.GameLocations;
 using System.Diagnostics.PerformanceData;
 
 namespace WumpusCore.LuckyCat
@@ -23,6 +24,8 @@ namespace WumpusCore.LuckyCat
         /// The radius that the cat should be heard from
         /// </summary>
         public const int AudibleMewingRadius = 2;
+
+        public int Location;
 
         /// <summary>
         /// Attempts to Tame the Lucky Cat
@@ -60,6 +63,30 @@ namespace WumpusCore.LuckyCat
         public void Pet()
         {
             // (You pet the cat, yippee)
+        }
+        
+        /// <summary>
+        /// Plays the mewing audio file if player is nearby the cat
+        /// Will depend on audio manager for sound
+        /// </summary>
+        /// <returns> Audio id </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public int Mew()
+        {
+/*          
+            if (DistanceToEntity() < AudibleMewingRadius) 
+            {
+                return 69;
+            }
+            
+            else if (DistanceToEntity() == AudibleMewingRadius)
+            {
+                return 70;
+            }
+
+            else { return 0; }
+*/ 
+            throw new NotImplementedException();
         }
     }
 }
