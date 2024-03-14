@@ -54,7 +54,7 @@ namespace WumpusCore.Controller
         private GameLocations.GameLocations gameLocations;
 
         // TODO! This likely won't construct properly
-        private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
+        // private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
 
         // TODO! This won't work
 
@@ -105,15 +105,15 @@ namespace WumpusCore.Controller
             throw new NotImplementedException();
         }
 
-        public bool SubmitTriviaAnswer(int guess)
-        {
-            return trivia.SubmitAnswer(guess);
-        }
+        // public bool SubmitTriviaAnswer(int guess)
+        // {
+        //     return trivia.SubmitAnswer(guess);
+        // }
 
-        public Trivia.AskableQuestion GetTriviaQuestion()
-        {
-            return trivia.GetQuestion();
-        }
+        // public Trivia.AskableQuestion GetTriviaQuestion()
+        // {
+        //     return trivia.GetQuestion();
+        // }
 
         public void StartGame()
         {
