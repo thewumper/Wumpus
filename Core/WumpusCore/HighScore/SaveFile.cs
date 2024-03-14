@@ -36,6 +36,11 @@ namespace WumpusCore.HighScoreNS
             }
         }
 
+        /// <summary>
+        /// Reads the information on the file
+        /// </summary>
+        /// <param name="printText"> whether or not to print the text from the file </param>
+        /// <returns> string information of file </returns>
         public string ReadFile(bool printText)
         {
             using (StreamReader sr = File.OpenText(Path.Combine(this.path, "SaveData.txt")))

@@ -77,12 +77,16 @@ namespace WumpusTesting
         [TestMethod]
         public void TestRandomTopTen()
         {
-            // do a thing here
+            for (int i = 0; i < 10; i++)
+            {
+                HighScore randScore = RandomScore(i);
+                randScore.storeTopTenToFile();
+            }
         }
 
         private HighScore RandomScore(int index)
         {
-            Random rand = new Random();
+            Random rand = new Random(index);
             bool wumpusDead = false;
             int checkDeath = rand.Next(0, 1);
             if (checkDeath == 1) { wumpusDead = true; }

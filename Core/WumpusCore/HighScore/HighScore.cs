@@ -131,7 +131,6 @@ namespace WumpusCore.HighScoreNS
         private void seperateFile(string file)
         {
             string topTenHighScores = file.Substring(0, file.IndexOf("Personal Score"));
-            Console.WriteLine(topTenHighScores);
             string[] scores = topTenHighScores.Split('[');
             for (int i = 1; i < scores.Length; i++)
             {
@@ -173,11 +172,9 @@ namespace WumpusCore.HighScoreNS
             }
 
             allTextToSave += "Personal Score: \n" + compactScore.ToString();
+            Console.WriteLine();
 
             SaveFile saveFile = new SaveFile(allTextToSave);
-            string text = saveFile.ReadFile(false);
-            seperateFile(text);
-
         }
 
         /// <summary>
