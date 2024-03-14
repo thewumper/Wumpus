@@ -66,7 +66,6 @@ namespace WumpusCore.Controller
 
         public ushort MoveInADirection(Directions direction)
         {
-            Console.Write("Made it #1");
             player.MoveInDirection(topology, direction);
             return player.Position;
         }

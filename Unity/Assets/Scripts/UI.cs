@@ -103,7 +103,6 @@ public class UI : MonoBehaviour
                 if (hit.transform.CompareTag("door"))
                 {
                     RoomNum = controller.MoveInADirection(hit.transform.GetComponent<Door>().GetDir());
-                    Debug.Log(RoomNum);
                 }
             }
         }
