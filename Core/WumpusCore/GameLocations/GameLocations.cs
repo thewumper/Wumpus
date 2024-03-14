@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using WumpusCore.Entity;
 
 namespace WumpusCore.GameLocations
 {
     public class GameLocations
     {
+        /// <summary>
+        /// All entities in the game
+        /// </summary>
+        private Dictionary<EntityType, Entity.Entity> entities;
+        
         /// <summary>
         /// All possible types of rooms.
         /// </summary>
@@ -37,6 +44,30 @@ namespace WumpusCore.GameLocations
         public GameLocations(ushort numRooms)
         {
             rooms = new RoomType[numRooms];
+        }
+
+        /// <summary>
+        /// Creates an entity in the game
+        /// </summary>
+        /// <param name="e">Places the entity into entities</param>
+        public void AddEntity(Entity.Entity e)
+        {
+            if (entities.ContainsKey(e.Type))
+            {
+                throw new ArgumentException("Entity type already created in GameLocations!");
+            }
+
+            entities[e.Type] = e;
+        }
+
+        public Entity.Entity GetEntity(EntityType type)
+        {
+            if (!entities.ContainsKey(type))
+            {
+                throw new ArgumentException("Cannot retrieve entity. Entity type not present in GameLocations!");
+            }
+
+            return entities[type];
         }
 
         /// <summary>
