@@ -63,6 +63,12 @@ namespace WumpusCore.Controller
             return gameLocations.GetRoomAt(roomNumber);
         }
 
+        public int MoveInADirection(Directions direction)
+        {
+            player.MoveInDirection(topology,direction);
+            return player.Position;
+        }
+
         public ControllerState GetState()
         {
             return state;

@@ -10,6 +10,7 @@ namespace WumpusCore.Player
         /// The room the player is currently in.
         /// </summary>
         private ushort position;
+
         /// <summary>
         /// The room the player is currently in.
         /// </summary>
@@ -22,22 +23,22 @@ namespace WumpusCore.Player
         /// The amount of coins the player currently has.
         /// </summary>
         public ushort coins;
-        
+
         /// <summary>
         /// The amount of arrows the player currently has.
         /// </summary>
         public ushort arrows;
-        
+
         /// <summary>
         /// Stores everything to do with the player.
         /// </summary>
         /// <exception cref="FileNotFoundException">When there is no sprite stored at <see cref="spritePath"/>.</exception>
         public Player()
-        {   
+        {
             coins = 0;
             arrows = 0;
         }
-        
+
         /// <summary>
         /// Moves the Player to the room at <c>target</c>.
         /// </summary>
@@ -54,7 +55,7 @@ namespace WumpusCore.Player
         /// <param name="directions">The <see cref="Directions"/> direction to move to.</param>
         public void MoveInDirection(ITopology topology, Directions directions)
         {
-            // MoveTo(topology.GetRoom(position).ExitRooms[directions].id);
+            MoveTo(topology.GetRoom(position).ExitRooms[directions].Id);
         }
     }
 }
