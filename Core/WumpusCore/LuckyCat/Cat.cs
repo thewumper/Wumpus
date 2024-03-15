@@ -13,7 +13,7 @@ namespace WumpusCore.LuckyCat
         /// Is the cat tamed
         /// </summary>
         private bool tamed;
-
+        
         /// <summary>
         /// The amount of coins the player has
         /// Used to check for taming cat
@@ -25,6 +25,9 @@ namespace WumpusCore.LuckyCat
         /// </summary>
         public const int AudibleMewingRadius = 2;
 
+        /// <summary>
+        /// Location of cat entity
+        /// </summary>
         public int Location;
 
         /// <summary>
