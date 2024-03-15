@@ -211,7 +211,11 @@ namespace WumpusCore.Topology
                     // Distance between each adjacent room is 1
                     // also some of this is required by SPEC to be 1-indexed, hence the off-by-ones.
                     int index = getConnections(currentRoom)[i].Id - 1;
-                    distance[index] = distance[currentRoomIndex] + 1;
+                    int newDistance = distance[currentRoomIndex] + 1;
+                    if (newDistance < distance[index])
+                    {
+                        distance[index] = newDistance;
+                    }
                 }
 
                 visited[currentRoomIndex] = true;
@@ -275,6 +279,7 @@ namespace WumpusCore.Topology
                     ExitRooms[direction] = topology.RoomFromDirection(Id, direction);
                 }
 
+                AdjacentRooms = new Dictionary<Directions, IRoom>();
                 for (int i = 0; i < 6; i++)
                 {
                     Directions direction = (Directions)i;
