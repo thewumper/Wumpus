@@ -30,6 +30,9 @@ namespace WumpusCore.LuckyCat
         {
         }
 
+        /// <summary>
+        /// Location of cat entity
+        /// </summary>
         public int Location;
 
         /// <summary>
