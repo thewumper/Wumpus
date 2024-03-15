@@ -6,9 +6,9 @@ namespace WumpusCore.HighScoreNS
 {
     internal class SaveFile
     {
-        string path;
+        public readonly string path;
 
-        public SaveFile(string text)
+        public SaveFile(string text, bool readText)
         {
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string wumpusSaveDirectory = Path.Combine(appDataPath, "WumpusGame");
@@ -23,10 +23,10 @@ namespace WumpusCore.HighScoreNS
             CreateFile(text);
 
             // Open the stream and read it back.
-            ReadFile(true);
+            ReadFile(readText);
         }
 
-        private void CreateFile(string text)
+        public void CreateFile(string text)
         {
             using (FileStream fs = File.Create(Path.Combine(this.path, "SaveData.txt")))
             {

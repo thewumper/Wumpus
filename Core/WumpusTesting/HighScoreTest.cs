@@ -50,7 +50,7 @@ namespace WumpusTesting
         [TestMethod]
         public void TestSaveFileGeneration()
         {
-            SaveFile testSaveFile = new SaveFile("File is made");
+            SaveFile testSaveFile = new SaveFile("File is made", true);
             Assert.IsNotNull(testSaveFile);
         }
 
@@ -77,10 +77,12 @@ namespace WumpusTesting
         [TestMethod]
         public void TestRandomTopTen()
         {
+
             for (int i = 0; i < 10; i++)
             {
                 HighScore randScore = RandomScore(i);
                 randScore.storeTopTenToFile();
+                Console.WriteLine();
             }
         }
 

@@ -31,6 +31,7 @@ namespace WumpusCore.HighScoreNS
                 playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
             this.compactScore = compactScore;
 
+            SaveFile test = new SaveFile("placeholder", false);
 
             checkTopTen();
             reorganizeTopTen();
@@ -147,7 +148,7 @@ namespace WumpusCore.HighScoreNS
         {
             string saveScore = compScore.ToString();
 
-            SaveFile saveFile = new SaveFile(saveScore);
+            SaveFile saveFile = new SaveFile(saveScore, true);
         }
 
         /// <summary>
@@ -174,7 +175,7 @@ namespace WumpusCore.HighScoreNS
             allTextToSave += "Personal Score: \n" + compactScore.ToString();
             Console.WriteLine();
 
-            SaveFile saveFile = new SaveFile(allTextToSave);
+            SaveFile saveFile = new SaveFile(allTextToSave, true);
         }
 
         /// <summary>
