@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 
@@ -11,7 +13,6 @@ public class UI : MonoBehaviour
 
     private const float CamSens = 5f;
     
-    [SerializeField]
     private ushort roomNum;
     private ushort RoomNum
     {
@@ -46,6 +47,8 @@ public class UI : MonoBehaviour
     [SerializeField]
     private GameObject northWestDoor;
 
+    [SerializeField] 
+    private TMP_Text coins;
     // Start is called before the first frame update
     void Start()
     {
@@ -106,5 +109,7 @@ public class UI : MonoBehaviour
                 }
             }
         }
+
+        coins.text = "" + controller.GetCoins();
     }
 }
