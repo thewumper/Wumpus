@@ -52,6 +52,9 @@ public class UI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
         controller = Controller.GlobalController;
         RoomNum = 1;
         
@@ -63,7 +66,7 @@ public class UI : MonoBehaviour
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         IRoom room = controller.GetRoom(RoomNum);
         foreach (Directions dir in room.ExitDirections)
