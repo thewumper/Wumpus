@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -48,12 +49,17 @@ public class UI : MonoBehaviour
     private GameObject northWestDoor;
 
     [SerializeField] 
-    private TMP_Text coins;
+    private TMP_Text coinsText;
+    [SerializeField] 
+    private TMP_Text roomText;
+    
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        roomText.text = "Room: 1";
         
         controller = Controller.GlobalController;
         RoomNum = 1;
@@ -69,6 +75,7 @@ public class UI : MonoBehaviour
     void LateUpdate()
     {
         IRoom room = controller.GetRoom(RoomNum);
+        roomText.text = "Room: " + RoomNum;
         foreach (Directions dir in room.ExitDirections)
         {
             string name = DirectionHelper.GetShortNameFromDirection(dir);
@@ -113,6 +120,6 @@ public class UI : MonoBehaviour
             }
         }
 
-        coins.text = "" + controller.GetCoins();
+        coinsText.text = "" + controller.GetCoins();
     }
 }
