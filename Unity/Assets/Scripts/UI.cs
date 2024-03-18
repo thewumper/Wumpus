@@ -48,6 +48,9 @@ public class UI : MonoBehaviour
     [SerializeField]
     private GameObject northWestDoor;
 
+    [SerializeField]
+    private GameObject interactIcon;
+    
     [SerializeField] 
     private TMP_Text coinsText;
     [SerializeField] 
@@ -60,6 +63,8 @@ public class UI : MonoBehaviour
         Cursor.visible = false;
 
         roomText.text = "Room: 1";
+
+        interactIcon.SetActive(false);
         
         controller = Controller.GlobalController;
         RoomNum = 1;
@@ -107,17 +112,21 @@ public class UI : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X");
         cam.transform.eulerAngles += new Vector3(0, mouseX * CamSens, 0);
-
-        if (Input.GetMouseButtonDown(0))
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (hit.transform.CompareTag("door"))
             {
-                if (hit.transform.CompareTag("door"))
+                interactIcon.SetActive(true);
+                if (Input.GetMouseButtonDown(0))
                 {
                     RoomNum = controller.MoveInADirection(hit.transform.GetComponent<Door>().GetDir());
                 }
             }
+        }
+        else
+        {
+            interactIcon.SetActive(false);
         }
 
         coinsText.text = "" + controller.GetCoins();
