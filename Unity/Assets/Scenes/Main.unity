@@ -575,7 +575,7 @@ RectTransform:
   m_GameObject: {fileID: 763137745}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.06, y: 0.06, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1579286503}
@@ -605,7 +605,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: dd8290f14cfa2b04fb3b22f02f94a956, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -848,30 +848,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 290805935}
     m_Modifications:
-    - target: {fileID: -3584497630037689987, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: b1e5d169c70027e40b54a25e6cae4ccd, type: 2}
-    - target: {fileID: -2573037202045888488, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: -1287055800773140231, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 542208a131bb338459282bf7992d0445, type: 2}
-    - target: {fileID: 1482089236796264038, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 0a5053af2babf6a4c8569b4e018a0356, type: 2}
-    - target: {fileID: 3594243245622329198, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 9083307113634347752, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8e25c18662b259a4788d73ba88eea36e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -947,6 +923,30 @@ PrefabInstance:
     - target: {fileID: 9083307113634347752, guid: 8e25c18662b259a4788d73ba88eea36e, type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: -3584497630037689987, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b1e5d169c70027e40b54a25e6cae4ccd, type: 2}
+    - target: {fileID: -2573037202045888488, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -1287055800773140231, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 542208a131bb338459282bf7992d0445, type: 2}
+    - target: {fileID: 1482089236796264038, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0a5053af2babf6a4c8569b4e018a0356, type: 2}
+    - target: {fileID: 3594243245622329198, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 9083307113634347752, guid: 5b82eb311be9cda45b9ada0e0135a792, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1346,12 +1346,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
