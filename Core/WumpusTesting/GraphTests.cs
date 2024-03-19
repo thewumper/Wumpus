@@ -8,9 +8,16 @@ namespace WumpusTesting
     [TestClass] 
     public class GraphTests
     {
-        GraphTests()
+        public GraphTests()
         {
             
+        }
+
+
+        [TestMethod]
+        public void TestTests()
+        {
+            Assert.AreEqual(true,false);
         }
 
         [TestMethod]
