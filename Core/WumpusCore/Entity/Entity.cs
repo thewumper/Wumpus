@@ -94,7 +94,8 @@ namespace WumpusCore.Entity
         /// <returns>True if the given room is accessible by a door, False otherwise</returns>
         public bool CheckIfAccessible(ushort roomIndex)
         {
-            return GetAccessibleRooms().Contains(roomIndex);
+            ushort[] accessibleRooms = GetAccessibleRooms();
+            return accessibleRooms.Contains(roomIndex);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace WumpusCore.Entity
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the given room is not accessible</exception>
         protected void MoveToRoom(ushort roomIndex)
         {
-            if (CheckIfAccessible(roomIndex))
+            if (!CheckIfAccessible(roomIndex))
             {
                 throw new ArgumentOutOfRangeException("Room not accessible!");
             }
