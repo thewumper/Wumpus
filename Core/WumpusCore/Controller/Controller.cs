@@ -34,11 +34,22 @@ namespace WumpusCore.Controller
 
 
         private GameLocations.GameLocations gameLocations;
-        // TODO! This likely won't construct properly
-        // private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
+        private Trivia.Trivia trivia;
 
         private Controller()
         {
+            string testAssemblyName = "Microsoft.VisualStudio.QualityTools.UnitTestFramework";
+            bool isInTests = AppDomain.CurrentDomain.GetAssemblies()
+                .Any(a => a.FullName.StartsWith(testAssemblyName));
+
+            if (isInTests)
+            {
+                trivia = new Trivia.Trivia("../Trivia");
+            }
+            else
+            {
+                trivia = new Trivia.Trivia("./Assets/Trivia");
+            }
             topology = new Topology.Topology("./Assets/Maps", 0);
         }
 
@@ -82,7 +93,7 @@ namespace WumpusCore.Controller
 
         public int GetArrowCount()
         {
-            throw new NotImplementedException();
+            return player.arrows;
         }
 
         // public bool SubmitTriviaAnswer(int guess)
