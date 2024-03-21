@@ -246,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 173763335}
   camLock: 0
+  ableToMove: 1
   northDoor: {fileID: 798882399}
   northEastDoor: {fileID: 513308440}
   southEastDoor: {fileID: 1218492701}
