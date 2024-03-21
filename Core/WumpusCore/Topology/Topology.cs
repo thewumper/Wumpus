@@ -174,6 +174,16 @@ namespace WumpusCore.Topology
         }
         
         /// <summary>
+        /// Function for DistanceBetweenRooms. Pass into getConnections to navigate ignoring all obstacles.
+        /// </summary>
+        public static Func<IRoom, IRoom[]> NavigateBoundless = room => room.AdjacentRooms.Values.ToArray();
+        
+        /// <summary>
+        /// Function for DistanceBetweenRooms. Pass into getConnections to navigate only through accessible doors.
+        /// </summary>
+        public static Func<IRoom, IRoom[]> NavigateDoors = room => room.ExitRooms.Values.ToArray();
+        
+        /// <summary>
         /// Finds the distance in room movements between two given room indices, ignoring walls, doors, and obstacles.
         /// Uses Dijkstra's algorithm
         /// </summary>

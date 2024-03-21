@@ -15,19 +15,13 @@ namespace WumpusCore.Entity
         public readonly EntityType Type;
         
         // Link to the GameLocations that spawned it
-        private GameLocations.GameLocations gameLocations;
+        private readonly GameLocations.GameLocations gameLocations;
         
         // Location index in Topology
-        public ushort location { get; protected set; }
+        public ushort location { get; private set; }
 
         // Given on initialization by Controller
         private Topology.Topology topologyLink;
-
-        Entity(Topology.Topology topologyLink, ushort startingRoom)
-        {
-            this.topologyLink = topologyLink;
-            this.location = startingRoom;
-        }
 
         // The room this Entity is currently in
         private IRoom thisRoom
@@ -41,11 +35,13 @@ namespace WumpusCore.Entity
         /// <summary>
         /// Create an Entity. Generic constructor that should never be run on its own.
         /// </summary>
+        /// <param name="topology">The topology that this Entity traverses</param>
         /// <param name="parent">The GameLocations object that spawned this Entity</param>
         /// <param name="location">Starting topology room id</param>
         /// <param name="entityType">Type of this Entity</param>
-        public Entity(GameLocations.GameLocations parent, ushort location, EntityType entityType)
+        public Entity(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType)
         {
+            this.topologyLink = topology;
             this.Type = entityType;
             this.location = location;
             this.gameLocations = parent;
@@ -167,8 +163,7 @@ namespace WumpusCore.Entity
         /// <returns>Distance (in accessible rooms) to the given room</returns>
         public int AccessibleDistanceToRoom(ushort roomIndex)
         {
-            return topologyLink.DistanceBetweenRooms(this.location, roomIndex, 
-                room => room.ExitRooms.Values.ToArray());
+            return topologyLink.DistanceBetweenRooms(this.location, roomIndex, Topology.Topology.NavigateDoors);
         }
 
         /// <summary>
@@ -190,8 +185,7 @@ namespace WumpusCore.Entity
         /// <returns>The distance to the given room</returns>
         public int DistanceToRoom(ushort roomIndex)
         {
-            return topologyLink.DistanceBetweenRooms(this.location, roomIndex, 
-                room => room.AdjacentRooms.Values.ToArray());
+            return topologyLink.DistanceBetweenRooms(this.location, roomIndex, Topology.Topology.NavigateBoundless);
         }
         
         /// <summary>
