@@ -10,7 +10,7 @@ namespace WumpusTesting
     [TestClass] 
     public class EntityTest
     {
-        EntityTest()
+        public EntityTest()
         {
             // Write the string array to a new file named "WriteLines.txt".
             using (StreamWriter outputFile = new StreamWriter("entitytest1.map"))
