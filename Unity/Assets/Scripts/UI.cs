@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -8,11 +9,13 @@ using WumpusCore.Topology;
 public class UI : MonoBehaviour
 {
     private Controller controller;
-
-    [SerializeField] 
-    private GameObject cam;
+    
+    public GameObject cam;
 
     private const float CamSens = 5f;
+    public bool camLock = false;
+
+    public bool ableToMove = true;
     
     private ushort roomNum;
     private ushort RoomNum
@@ -55,6 +58,11 @@ public class UI : MonoBehaviour
     private TMP_Text coinsText;
     [SerializeField] 
     private TMP_Text roomText;
+
+    [SerializeField] 
+    private Animator movingAnimator;
+
+    private Directions moveDir;
     
     // Start is called before the first frame update
     void Start()
@@ -110,25 +118,43 @@ public class UI : MonoBehaviour
 
     private void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        cam.transform.eulerAngles += new Vector3(0, mouseX * CamSens, 0);
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (!camLock)
         {
-            if (hit.transform.CompareTag("door"))
-            {
-                interactIcon.SetActive(true);
-                if (Input.GetMouseButtonDown(0))
-                {
-                    RoomNum = controller.MoveInADirection(hit.transform.GetComponent<Door>().GetDir());
-                }
-            }
-        }
-        else
-        {
-            interactIcon.SetActive(false);
+            float mouseX = Input.GetAxis("Mouse X");
+            cam.transform.eulerAngles += new Vector3(0, mouseX * CamSens, 0);
         }
 
-        coinsText.text = "" + controller.GetCoins();
+        if (ableToMove)
+        {
+            Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.transform.CompareTag("door"))
+                {
+                    interactIcon.SetActive(true);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        movingAnimator.SetBool("moving", true);
+                        moveDir = hit.transform.GetComponent<Door>().GetDir();
+                    }
+                }
+            }
+            else
+            {
+                interactIcon.SetActive(false);
+            }
+
+            coinsText.text = "" + controller.GetCoins();
+        }
+    }
+    
+    /// <summary>
+    /// Actually changes which room the player is currently in.
+    /// </summary>
+    public void MoveRooms()
+    {
+        RoomNum = controller.MoveInADirection(moveDir);
+        camLock = false;
+        movingAnimator.SetBool("moving", false);
     }
 }
