@@ -23,12 +23,17 @@ namespace WumpusTesting
         public void GrabQuestions()
         {
             Trivia trivia = makeTrivia();
-            AnsweredQuestion question = trivia.PeekRandomQuestion();
-            AnsweredQuestion question2 = trivia.PeekRandomQuestion();
-            if (question == question2)
+            for (int i = 0; i < 100; i++)
             {
-                Assert.Fail();
+                AnsweredQuestion question = trivia.PeekRandomQuestion();
+                AnsweredQuestion question2 = trivia.PeekRandomQuestion();
+                if (question != question2)
+                {
+                    return;
+                }
             }
+
+            Assert.Fail();
         }
 
         [TestMethod]
