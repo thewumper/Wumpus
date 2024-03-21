@@ -44,6 +44,7 @@ namespace WumpusCore.GameLocations
         public GameLocations(ushort numRooms)
         {
             rooms = new RoomType[numRooms];
+            entities = new Dictionary<EntityType, Entity.Entity>();
         }
 
         /// <summary>
