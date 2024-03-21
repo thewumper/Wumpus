@@ -123,13 +123,10 @@ public class UI : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");
             cam.transform.eulerAngles += new Vector3(0, mouseX * CamSens, 0);
         }
-
-        if (ableToMove)
-        {
             Ray ray = new Ray(cam.transform.position, cam.transform.forward);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                if (hit.transform.CompareTag("door"))
+                if (hit.transform.CompareTag("door") && ableToMove)
                 {
                     interactIcon.SetActive(true);
                     if (Input.GetMouseButtonDown(0))
@@ -145,7 +142,6 @@ public class UI : MonoBehaviour
             }
 
             coinsText.text = "" + controller.GetCoins();
-        }
     }
     
     /// <summary>
