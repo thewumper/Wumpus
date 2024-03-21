@@ -16,6 +16,11 @@ namespace WumpusCore.HighScoreNS
         public readonly StoredHighScore compactScore;
 
         /// <summary>
+        /// The path to save high scores to
+        /// </summary>
+        private string savePath;
+
+        /// <summary>
         /// HighScore object is how the score of the game is calculated and stored to files
         /// </summary>
         /// <param name="playerName"> Name of player who owns the score </param>
@@ -31,7 +36,27 @@ namespace WumpusCore.HighScoreNS
                 playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
             this.compactScore = compactScore;
 
-            SaveFile test = new SaveFile("placeholder", false);
+            checkTopTen();
+            reorganizeTopTen();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="savePath"> computer path to save information to </param>
+        /// <param name="playerName"> Name of player who owns the score </param>
+        /// <param name="numTurns"> How long it took for game to end in turns </param>
+        /// <param name="goldLeft"> Number of gold remaining when game ends </param>
+        /// <param name="arrowsLeft"> Number of arrows remaining when game ends </param>
+        /// <param name="isWumpusDead"> Was the wumpus killed when the game ended </param>
+        /// <param name="mapUsed"> Number code of the map generation from the game </param>
+        public HighScore(string savePath, string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
+        {
+            StoredHighScore compactScore = new StoredHighScore(
+                this.calculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
+                playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
+            this.compactScore = compactScore;
+            this.savePath = savePath;
 
             checkTopTen();
             reorganizeTopTen();
@@ -136,7 +161,7 @@ namespace WumpusCore.HighScoreNS
             for (int i = 1; i < scores.Length; i++)
             {
                 StoredHighScore currentTopScore = convertStringToStoredHighScore(scores[i]);
-                
+                this.topTenHighScores.Add(currentTopScore);
             }
         }
 
@@ -148,7 +173,14 @@ namespace WumpusCore.HighScoreNS
         {
             string saveScore = compScore.ToString();
 
-            SaveFile saveFile = new SaveFile(saveScore, true);
+            if (this.savePath != null)
+            {
+                SaveFile saveFile = new SaveFile(true, this.savePath);
+            }
+            else
+            {
+                SaveFile saveFile = new SaveFile(saveScore, true);
+            }
         }
 
         /// <summary>
@@ -163,7 +195,11 @@ namespace WumpusCore.HighScoreNS
             }
 
             string allTextToSave = "Top Ten Scores: \n";
-            
+
+            // read from file path inputted
+            SaveFile headFile = new SaveFile(false, this.savePath);
+            // seperate here probably
+
             for (int i = 0; i < topTenHighScores.Count; i++)
             {
                 string infoToSave = topTenHighScores[i].ToString();
@@ -172,10 +208,19 @@ namespace WumpusCore.HighScoreNS
                 convertStringToStoredHighScore(infoToSave);
             }
 
+            // this should be fine
+
             allTextToSave += "Personal Score: \n" + compactScore.ToString();
             Console.WriteLine();
 
-            SaveFile saveFile = new SaveFile(allTextToSave, true);
+            if (this.savePath != null)
+            {
+                SaveFile saveFile = new SaveFile(true, this.savePath);
+            }
+            else
+            {
+                SaveFile saveFile = new SaveFile(allTextToSave, true);
+            }
         }
 
         /// <summary>

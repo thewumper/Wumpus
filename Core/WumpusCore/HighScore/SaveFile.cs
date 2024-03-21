@@ -6,8 +6,16 @@ namespace WumpusCore.HighScoreNS
 {
     internal class SaveFile
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly string path;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"> What information to save to the file </param>
+        /// <param name="readText"> Whether or not to print the text to console </param>
         public SaveFile(string text, bool readText)
         {
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -23,6 +31,22 @@ namespace WumpusCore.HighScoreNS
             CreateFile(text);
 
             // Open the stream and read it back.
+            ReadFile(readText);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="readText"> file path to get information from </param>
+        /// <param name="readText"> Whether or not to print the text to console </param>
+        public SaveFile(bool readText, string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            this.path = path;
+
             ReadFile(readText);
         }
 

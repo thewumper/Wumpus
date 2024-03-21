@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Net.Security;
 using WumpusCore.HighScoreNS;
 
 namespace WumpusTesting
@@ -77,6 +76,8 @@ namespace WumpusTesting
         [TestMethod]
         public void TestRandomTopTen()
         {
+            SaveFile testHeadFile = new SaveFile("¯\\_(ツ)_/¯", true);
+            string pathToUse = testHeadFile.path;
 
             for (int i = 0; i < 10; i++)
             {
