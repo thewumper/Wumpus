@@ -75,11 +75,11 @@ namespace WumpusTesting
             for (int i = 0; i < 500; i++)
             {
                 int locA = game.GetEntity(EntityType.Player).location;
-                ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRandomWrapper();
+                getEntity(game).TeleportToRandomWrapper();
                 int locB = game.GetEntity(EntityType.Player).location;
-                ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRandomWrapper();
+                getEntity(game).TeleportToRandomWrapper();
                 int locC = game.GetEntity(EntityType.Player).location;
-                ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRandomWrapper();
+                getEntity(game).TeleportToRandomWrapper();
                 int locD = game.GetEntity(EntityType.Player).location;
                 if (locA != locB && locB != locC && locC != locD)
                 {
@@ -93,50 +93,50 @@ namespace WumpusTesting
         public void TestCheckIfEntitySharingRoom()
         {
             GameLocations game = SetupGameLocations();
-            Assert.IsFalse(((DummyEntity)game.GetEntity(EntityType.Player)).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
+            Assert.IsFalse(getEntity(game).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
             ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(20);
-            Assert.IsTrue(((DummyEntity)game.GetEntity(EntityType.Player)).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
+            Assert.IsTrue(getEntity(game).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
         }
         
         [TestMethod]
         public void TestCheckIfEntityAdjacent()
         {
             GameLocations game = SetupGameLocations();
-            Assert.IsFalse(((DummyEntity)game.GetEntity(EntityType.Player)).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).MoveToRoomWrapper(14);
-            Assert.IsTrue(((DummyEntity)game.GetEntity(EntityType.Player)).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).MoveToRoomWrapper(20);
-            Assert.IsFalse(((DummyEntity)game.GetEntity(EntityType.Player)).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
+            Assert.IsFalse(getEntity(game).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).MoveToRoomWrapper(14);
+            Assert.IsTrue(getEntity(game).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).MoveToRoomWrapper(20);
+            Assert.IsFalse(getEntity(game).CheckIfEntitySharingRoom(game.GetEntity(EntityType.Wumpus)));
         }
         
         [TestMethod]
         public void TestAccessibleDistanceToEntity()
         {
             GameLocations game = SetupGameLocations();
-            Assert.AreEqual(3, game.GetEntity(EntityType.Player).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(29);
-            Assert.AreEqual(3, game.GetEntity(EntityType.Player).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(21);
-            Assert.AreEqual(2, game.GetEntity(EntityType.Player).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(20);
-            Assert.AreEqual(0, game.GetEntity(EntityType.Player).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(26);
-            Assert.AreEqual(1, game.GetEntity(EntityType.Player).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(1);
-            Assert.AreEqual(2, game.GetEntity(EntityType.Player).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            Assert.AreEqual(3, getEntity(game).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(29);
+            Assert.AreEqual(3, getEntity(game).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(21);
+            Assert.AreEqual(2, getEntity(game).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(20);
+            Assert.AreEqual(0, getEntity(game).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(26);
+            Assert.AreEqual(1, getEntity(game).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(1);
+            Assert.AreEqual(2, getEntity(game).AccessibleDistanceToEntity(game.GetEntity(EntityType.Wumpus)));
         }
         
         [TestMethod]
         public void TestDistanceToEntity()
         {
             GameLocations game = SetupGameLocations();
-            Assert.AreEqual(2, game.GetEntity(EntityType.Player).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(29);
-            Assert.AreEqual(3, game.GetEntity(EntityType.Player).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(21);
-            Assert.AreEqual(1, game.GetEntity(EntityType.Player).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
-            ((DummyEntity)game.GetEntity(EntityType.Player)).TeleportToRoomWrapper(20);
-            Assert.AreEqual(0, game.GetEntity(EntityType.Player).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            Assert.AreEqual(2, getEntity(game).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(29);
+            Assert.AreEqual(3, getEntity(game).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(21);
+            Assert.AreEqual(1, getEntity(game).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
+            getEntity(game).TeleportToRoomWrapper(20);
+            Assert.AreEqual(0, getEntity(game).DistanceToEntity(game.GetEntity(EntityType.Wumpus)));
         }
     }
 }
