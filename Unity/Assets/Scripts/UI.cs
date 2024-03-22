@@ -1,8 +1,5 @@
-using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 
@@ -61,10 +58,12 @@ public class UI : MonoBehaviour
 
     [SerializeField] 
     private Animator movingAnimator;
-
+    
+    /// <summary>
+    /// The <see cref="Directions"/> direction the player is moving in.
+    /// </summary>
     private Directions moveDir;
     
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -123,25 +122,25 @@ public class UI : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");
             cam.transform.eulerAngles += new Vector3(0, mouseX * CamSens, 0);
         }
-            Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit))
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            if (hit.transform.CompareTag("door") && ableToMove)
             {
-                if (hit.transform.CompareTag("door") && ableToMove)
+                interactIcon.SetActive(true);
+                if (Input.GetMouseButtonDown(0))
                 {
-                    interactIcon.SetActive(true);
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        movingAnimator.SetBool("moving", true);
-                        moveDir = hit.transform.GetComponent<Door>().GetDir();
-                    }
+                    movingAnimator.SetBool("moving", true);
+                    moveDir = hit.transform.GetComponent<Door>().GetDir();
                 }
             }
-            else
-            {
-                interactIcon.SetActive(false);
-            }
+        }
+        else
+        {
+            interactIcon.SetActive(false);
+        }
 
-            coinsText.text = "" + controller.GetCoins();
+        coinsText.text = "" + controller.GetCoins();
     }
     
     /// <summary>

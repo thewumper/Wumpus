@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class FadeController : MonoBehaviour
@@ -22,7 +21,10 @@ public class FadeController : MonoBehaviour
         ui.cam.transform.position =
             new Vector3(0, ui.cam.transform.position.y, 0);
     }
-
+    
+    /// <summary>
+    /// Called when the player is able to move rooms again.
+    /// </summary>
     public void AbleToMove()
     {
         ui.ableToMove = true;
