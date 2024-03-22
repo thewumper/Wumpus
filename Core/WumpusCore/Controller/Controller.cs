@@ -44,11 +44,11 @@ namespace WumpusCore.Controller
 
             if (isInTests)
             {
-                trivia = new Trivia.Trivia("../Trivia");
+                trivia = new Trivia.Trivia("../Trivia/questions.json");
             }
             else
             {
-                trivia = new Trivia.Trivia("./Assets/Trivia");
+                trivia = new Trivia.Trivia("./Assets/Trivia/questions.json");
             }
             topology = new Topology.Topology("./Assets/Maps", 0);
         }
@@ -110,7 +110,7 @@ namespace WumpusCore.Controller
         {
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
             // being prepared to handle that controller state
-            ValidateScene(new[] { StartScreen, InRoom }, InRoom);
+            ValidateState(new[] { StartScreen, InRoom });
             this.state = InRoom;
         }
 
@@ -118,7 +118,7 @@ namespace WumpusCore.Controller
         {
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
             // being prepared to handle that controller state
-            ValidateScene(new[] { StartScreen, InRoom }, StartScreen);
+            ValidateState(new[] { StartScreen, InRoom });
             this.state = StartScreen;
         }
 
@@ -128,12 +128,12 @@ namespace WumpusCore.Controller
         /// <param name="validStates">The list of states that you are allowed to be in to use the method</param>
         /// <param name="attemptedState">The state that the called is attempting to change to</param>
         /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function</exception>
-        private void ValidateScene(ControllerState[] validStates, ControllerState attemptedState)
+        private void ValidateState(ControllerState[] validStates)
         {
             if (!validStates.Contains(state))
             {
                 throw new InvalidOperationException(
-                    $"You cannot go to {attemptedState} from {state}. The only valid options are {validStates}");
+                    $"You cannot go to that state from {state}. The only valid options are {validStates}");
             }
         }
     }
