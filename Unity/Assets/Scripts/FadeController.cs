@@ -13,7 +13,7 @@ public class FadeController : MonoBehaviour
     }
     
     /// <summary>
-    /// Is called when we are changing rooms.
+    /// Is called when the roomNum in UI is actually going to be changed.
     /// </summary>
     public void MoveRooms()
     {
@@ -32,6 +32,7 @@ public class FadeController : MonoBehaviour
 
     private void Update()
     {
+        // Moving the camera forward during animation
         if (GetComponent<Animator>().GetBool("moving"))
         {
             ui.camLock = true;
