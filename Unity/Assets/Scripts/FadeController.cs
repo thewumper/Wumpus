@@ -4,7 +4,7 @@ using UnityEngine;
 public class FadeController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject UI;
+    private UI ui;
 
     private float camSpeed;
 
@@ -18,23 +18,23 @@ public class FadeController : MonoBehaviour
     /// </summary>
     public void MoveRooms()
     {
-        UI.GetComponent<UI>().MoveRooms();
-        UI.GetComponent<UI>().cam.transform.position =
-            new Vector3(0, UI.GetComponent<UI>().cam.transform.position.y, 0);
+        ui.MoveRooms();
+        ui.cam.transform.position =
+            new Vector3(0, ui.cam.transform.position.y, 0);
     }
 
     public void AbleToMove()
     {
-        UI.GetComponent<UI>().ableToMove = true;
+        ui.ableToMove = true;
     }
 
     private void Update()
     {
         if (GetComponent<Animator>().GetBool("moving"))
         {
-            UI.GetComponent<UI>().camLock = true;
-            UI.GetComponent<UI>().ableToMove = false;
-            UI.GetComponent<UI>().cam.transform.position += UI.GetComponent<UI>().cam.transform.forward * Time.deltaTime * camSpeed;
+            ui.camLock = true;
+            ui.ableToMove = false;
+            ui.cam.transform.position += ui.cam.transform.forward * Time.deltaTime * camSpeed;
         }
     }
 }
