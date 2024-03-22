@@ -44,11 +44,11 @@ namespace WumpusCore.Controller
 
             if (isInTests)
             {
-                trivia = new Trivia.Trivia("../Trivia");
+                trivia = new Trivia.Trivia("../Trivia/questions.json");
             }
             else
             {
-                trivia = new Trivia.Trivia("./Assets/Trivia");
+                trivia = new Trivia.Trivia("./Assets/Trivia/questions.json");
             }
             topology = new Topology.Topology("./Assets/Maps", 0);
         }
