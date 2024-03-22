@@ -1,6 +1,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Topology;
 
@@ -20,6 +21,32 @@ namespace WumpusTesting
                     outputFile.WriteLine("N,NE,SE,S,SW,NW");
                 }
             }
+            
+            using (StreamWriter outputFile = new StreamWriter("test2.map"))
+            {
+                for (int i = 1; i <= 30; i++)
+                {
+                    if (i == 9)
+                    {
+                        // Omit door for 9 -> 10
+                        outputFile.WriteLine("N,NE,S,SW,NW");
+                        continue;
+                    }
+                    if (i == 10)
+                    {
+                        // Omit door for 10 -> 9
+                        outputFile.WriteLine("N,NE,SE,S,SW");
+                        continue;
+                    }
+                    if (i == 5)
+                    {
+                        // Omit door for 5 -> 30
+                        outputFile.WriteLine("N,SE,S,SW,NW");
+                        continue;
+                    }
+                    outputFile.WriteLine("N,NE,SE,S,SW,NW");
+                }
+            }
         }
         
         [TestMethod]
@@ -27,6 +54,7 @@ namespace WumpusTesting
         {
             ITopology topology = new Topology("test1.map");
         }
+        
         [TestMethod]
         public void TestLoopingNoErrs()
         {
@@ -119,6 +147,28 @@ namespace WumpusTesting
             Assert.AreEqual(topology.GetRoom(23).ExitRooms[Directions.South], topology.GetRoom(29));
             Assert.AreEqual(topology.GetRoom(23).ExitRooms[Directions.SouthEast], topology.GetRoom(24));
             Assert.AreEqual(topology.GetRoom(23).ExitRooms[Directions.NorthEast], topology.GetRoom(18));
+        }
+
+        [TestMethod]
+        public void TestDijkstra()
+        {
+            ITopology topology = new Topology("test1.map");
+
+            Assert.AreEqual(1, topology.DistanceBetweenRooms(1, 2, room => room.AdjacentRooms.Values.ToArray()));
+            Assert.AreEqual(1, topology.DistanceBetweenRooms(1, 2, room => room.ExitRooms.Values.ToArray()));
+            Assert.AreEqual(3, topology.DistanceBetweenRooms(1, 15, room => room.AdjacentRooms.Values.ToArray()));
+            Assert.AreEqual(3, topology.DistanceBetweenRooms(19, 10, room => room.AdjacentRooms.Values.ToArray()));
+            Assert.AreEqual(2, topology.DistanceBetweenRooms(24, 1, room => room.AdjacentRooms.Values.ToArray()));
+            Assert.AreEqual(2, topology.DistanceBetweenRooms(26, 7, room => room.AdjacentRooms.Values.ToArray()));
+            
+            // Test doors
+            topology = new Topology("test2.map");
+            Assert.AreEqual(2, topology.DistanceBetweenRooms(9, 10, room => room.ExitRooms.Values.ToArray()));
+            Assert.AreEqual(2, topology.DistanceBetweenRooms(10, 9, room => room.ExitRooms.Values.ToArray()));
+            
+            // Test one-way doors
+            Assert.AreEqual(3, topology.DistanceBetweenRooms(5, 25, room => room.ExitRooms.Values.ToArray()));
+            Assert.AreEqual(2, topology.DistanceBetweenRooms(25, 5, room => room.ExitRooms.Values.ToArray()));
         }
     }
 }

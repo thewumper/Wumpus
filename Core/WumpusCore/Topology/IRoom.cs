@@ -12,9 +12,13 @@ namespace WumpusCore.Topology
         /// </summary>
         Directions[] ExitDirections { get; }
         /// <summary>
-        /// Get an exit room from a direction
+        /// Get an exit room from a direction. Only rooms that can be reached through a door
         /// </summary>
         Dictionary<Directions, IRoom> ExitRooms { get; }
+        /// <summary>
+        /// Get an adjacent room from a direction. Includes rooms that are bordered by walls.
+        /// </summary>
+        Dictionary<Directions, IRoom> AdjacentRooms { get; }
         /// <summary>
         /// Get the room id (1-30)
         /// </summary>
