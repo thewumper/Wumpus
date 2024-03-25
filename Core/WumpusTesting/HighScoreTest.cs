@@ -69,31 +69,33 @@ namespace WumpusTesting
         [TestMethod]
         public void TestTopTenScoresSave()
         {
-            HighScore saveScore = new HighScore("playing", 8, 10, 4, true, 8);
+            SaveFile testHeadFile = new SaveFile("pesacdo", false);
+            string pathToUse = testHeadFile.path;
+            HighScore saveScore = new HighScore(pathToUse, "playing", 8, 10, 4, true, 8);
             saveScore.storeTopTenToFile();
         }
 
         [TestMethod]
         public void TestRandomTopTen()
         {
-            SaveFile testHeadFile = new SaveFile("¯\\_(ツ)_/¯", true);
+            SaveFile testHeadFile = new SaveFile("¯\\_(ツ)_/¯", false);
             string pathToUse = testHeadFile.path;
 
             for (int i = 0; i < 10; i++)
             {
-                HighScore randScore = RandomScore(i);
+                HighScore randScore = RandomScore(i, pathToUse);
                 randScore.storeTopTenToFile();
                 Console.WriteLine();
             }
         }
 
-        private HighScore RandomScore(int index)
+        private HighScore RandomScore(int index, string path)
         {
-            Random rand = new Random(index);
+            Random rand = new Random(index * (int)DateTime.Now.Ticks);
             bool wumpusDead = false;
             int checkDeath = rand.Next(0, 1);
             if (checkDeath == 1) { wumpusDead = true; }
-            HighScore generatedScore = new HighScore(("play" + index), rand.Next(1,20), rand.Next(0,10), rand.Next(0,5), wumpusDead, rand.Next(1,10));
+            HighScore generatedScore = new HighScore(path, ("play" + index), rand.Next(1,20), rand.Next(0,10), rand.Next(0,5), wumpusDead, rand.Next(1,10));
             return generatedScore;
         }
     }

@@ -37,7 +37,6 @@ namespace WumpusCore.HighScoreNS
             this.compactScore = compactScore;
 
             checkTopTen();
-            reorganizeTopTen();
         }
 
         /// <summary>
@@ -59,7 +58,6 @@ namespace WumpusCore.HighScoreNS
             this.savePath = savePath;
 
             checkTopTen();
-            reorganizeTopTen();
         }
 
         /// <summary>
@@ -134,7 +132,7 @@ namespace WumpusCore.HighScoreNS
         {
             topTenHighScores.Sort((score1, score2)=>
             {
-                return score1.score.CompareTo(score2.score);
+                return -score1.score.CompareTo(score2.score);
             });
         }
 
@@ -163,6 +161,7 @@ namespace WumpusCore.HighScoreNS
                 StoredHighScore currentTopScore = convertStringToStoredHighScore(scores[i]);
                 this.topTenHighScores.Add(currentTopScore);
             }
+            reorganizeTopTen();
         }
 
         /// <summary>
@@ -195,10 +194,13 @@ namespace WumpusCore.HighScoreNS
             }
 
             string allTextToSave = "Top Ten Scores: \n";
-
-            // read from file path inputted
+            
             SaveFile headFile = new SaveFile(false, this.savePath);
-            // seperate here probably
+            string saveData = headFile.ReadFile(false);
+            if (saveData.StartsWith("Top Ten Scores:"))
+            {
+                seperateFile(saveData);
+            }
 
             for (int i = 0; i < topTenHighScores.Count; i++)
             {
@@ -208,14 +210,13 @@ namespace WumpusCore.HighScoreNS
                 convertStringToStoredHighScore(infoToSave);
             }
 
-            // this should be fine
-
             allTextToSave += "Personal Score: \n" + compactScore.ToString();
-            Console.WriteLine();
 
             if (this.savePath != null)
             {
                 SaveFile saveFile = new SaveFile(true, this.savePath);
+                saveFile.CreateFile(allTextToSave);
+                saveFile.ReadFile(false);
             }
             else
             {
