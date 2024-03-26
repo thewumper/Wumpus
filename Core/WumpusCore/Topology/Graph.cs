@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WumpusCore.Topology
@@ -11,20 +12,26 @@ namespace WumpusCore.Topology
         {
             this.nodes = nodes;
         }
+
+
+        public bool IsNodeRemovalValid(IRoom room)
+        {
+            return IsNodeRemovalValid(new HashSet<IRoom>() {room});
+        }
         
         /// <summary>
         /// Checks if removing a node disconnects graph
         /// </summary>
-        /// <param name="room">Node to remove</param>>
+        /// <param name="rooms">Nodes to remove</param>>
         /// <returns>True if the node can be removed without disconnecting the graph</returns>
-        public bool IsNodeRemovalValid(IRoom room)
+        public bool IsNodeRemovalValid(HashSet<IRoom> rooms)
         {
             // If we are to small it just doesn't make any sense
-            if (nodes.Count <= 1)
+            if (nodes.Count <= rooms.Count)
             {
                 return false;
             }
-            HashSet<IRoom> visited = new HashSet<IRoom> { room };
+            HashSet<IRoom> visited = new HashSet<IRoom>(rooms);
             Queue<IRoom> toExplore = new Queue<IRoom>();
             toExplore.Enqueue(nodes[0] != room ? nodes[0] : nodes[1]);
             while (toExplore.Count > 0)
@@ -45,5 +52,32 @@ namespace WumpusCore.Topology
             }
             return visited.Count == nodes.Count;
         }
+
+        public HashSet<IRoom> GetRandomPossibleSolutions(ushort numRemoved, ushort panicExit=10000)
+        {
+            Random random = new Random();
+            HashSet<IRoom> solution = new HashSet<IRoom>();
+            ushort tries = 0;
+            while (tries < panicExit)
+            {
+                ushort hasRemoved = 0;
+                List<IRoom> nodesInSolution = new List<IRoom>(nodes);
+                solution.Clear();
+                while (numRemoved > hasRemoved)
+                {
+                    int index = random.Next() % nodesInSolution.Count;
+                    IRoom node = nodesInSolution[index];
+                    solution.Add(node);
+                    nodesInSolution.RemoveAt(index);
+                    if (IsNodeRemovalValid(solution))
+                    {
+                        
+                    }
+                    hasRemoved++;
+                }
+                tries++;
+            }
+        }
+        
     }
 }
