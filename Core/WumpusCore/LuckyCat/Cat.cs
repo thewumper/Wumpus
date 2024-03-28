@@ -110,8 +110,6 @@ namespace WumpusCore.LuckyCat
         /// Plays the mewing audio file if player is nearby the cat
         /// Will depend on audio manager for sound
         /// </summary>
-        /// <returns> Audio id </returns>
-        /// <exception cref="NotImplementedException"></exception>
         public int Mew()
         {          
 
