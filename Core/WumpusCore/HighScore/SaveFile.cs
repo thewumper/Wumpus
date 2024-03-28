@@ -7,12 +7,12 @@ namespace WumpusCore.HighScoreNS
     internal class SaveFile
     {
         /// <summary>
-        /// 
+        /// The file path used by the savefile object
         /// </summary>
         public readonly string path;
 
         /// <summary>
-        /// 
+        /// Creates a save file at a set directory
         /// </summary>
         /// <param name="text"> What information to save to the file </param>
         /// <param name="readText"> Whether or not to print the text to console </param>
@@ -35,7 +35,7 @@ namespace WumpusCore.HighScoreNS
         }
 
         /// <summary>
-        /// 
+        /// Takes a directory to create a file
         /// </summary>
         /// <param name="readText"> file path to get information from </param>
         /// <param name="readText"> Whether or not to print the text to console </param>
@@ -50,6 +50,11 @@ namespace WumpusCore.HighScoreNS
             ReadFile(readText);
         }
 
+        /// <summary>
+        /// Uses the directory to create a file
+        /// with the given text stored
+        /// </summary>
+        /// <param name="text"> what text to store in the file </param>
         public void CreateFile(string text)
         {
             using (FileStream fs = File.Create(Path.Combine(this.path, "SaveData.txt")))

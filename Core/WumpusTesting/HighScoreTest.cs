@@ -75,6 +75,12 @@ namespace WumpusTesting
             saveScore.storeTopTenToFile();
         }
 
+        /// <summary>
+        /// Generate random scores and have
+        /// the top ten high scores list
+        /// update for each from the
+        /// head file generated at the start
+        /// </summary>
         [TestMethod]
         public void TestRandomTopTen()
         {
@@ -89,6 +95,13 @@ namespace WumpusTesting
             }
         }
 
+        /// <summary>
+        /// Generate random variables to
+        /// create a high score object
+        /// </summary>
+        /// <param name="index"> multiplier for seed for random constructor </param>
+        /// <param name="path"> the directory to send to highscore object alternate constructor </param>
+        /// <returns>  </returns>
         private HighScore RandomScore(int index, string path)
         {
             Random rand = new Random(index * (int)DateTime.Now.Ticks);

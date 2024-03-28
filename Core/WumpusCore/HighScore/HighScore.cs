@@ -40,7 +40,8 @@ namespace WumpusCore.HighScoreNS
         }
 
         /// <summary>
-        /// 
+        /// Alternate constructor to have the save path given
+        /// without needing to normally pass it in
         /// </summary>
         /// <param name="savePath"> computer path to save information to </param>
         /// <param name="playerName"> Name of player who owns the score </param>
@@ -49,15 +50,10 @@ namespace WumpusCore.HighScoreNS
         /// <param name="arrowsLeft"> Number of arrows remaining when game ends </param>
         /// <param name="isWumpusDead"> Was the wumpus killed when the game ended </param>
         /// <param name="mapUsed"> Number code of the map generation from the game </param>
-        public HighScore(string savePath, string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
+        public HighScore(string savePath, string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed) 
+            : this(playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed)
         {
-            StoredHighScore compactScore = new StoredHighScore(
-                this.calculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
-                playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
-            this.compactScore = compactScore;
             this.savePath = savePath;
-
-            checkTopTen();
         }
 
         /// <summary>
@@ -136,6 +132,12 @@ namespace WumpusCore.HighScoreNS
             });
         }
 
+        /// <summary>
+        /// Translates a string representation of a StoredHighScore
+        /// and creates a StoredHighScore with the values in the string
+        /// </summary>
+        /// <param name="compScore"> string representation of StoredHighScore </param>
+        /// <returns> translated StoredHighScore with values from string </returns>
         private StoredHighScore convertStringToStoredHighScore(string compScore)
         {
             string[] variables = compScore.Split(',');
@@ -152,6 +154,13 @@ namespace WumpusCore.HighScoreNS
             return boxScore;
         }
 
+        /// <summary>
+        /// Seperates the different scores within a file
+        /// that contains the top ten high scores list
+        /// then loops through and calls the string to shs converter function
+        /// to add it into the topTenHighScores list object field
+        /// </summary>
+        /// <param name="file"> Information from file to seperate </param>
         private void seperateFile(string file)
         {
             string topTenHighScores = file.Substring(0, file.IndexOf("Personal Score"));
