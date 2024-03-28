@@ -60,6 +60,7 @@ public class UI : MonoBehaviour
 
     [SerializeField] 
     private Animator movingAnimator;
+    private int movingID;
 
     [SerializeField] 
     private GameObject black;
@@ -80,6 +81,8 @@ public class UI : MonoBehaviour
         
         controller = Controller.GlobalController;
         RoomNum = 1;
+
+        movingID = Animator.StringToHash("moving");
         
         northDoor.AddComponent<Door>().Init(Directions.North);
         northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
@@ -136,7 +139,7 @@ public class UI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     moveDir = hit.transform.GetComponent<Door>().GetDir();
-                    movingAnimator.SetBool("moving", true);
+                    movingAnimator.SetBool(movingID, true);
                     camLock = true;
                     ableToMove = false;
                 }
@@ -147,13 +150,13 @@ public class UI : MonoBehaviour
             interactIcon.SetActive(false);
         }
         
-        if (movingAnimator.GetBool("moving"))
+        if (movingAnimator.GetBool(movingID))
         {
-            if (black.GetComponent<Image>().color.a == 1)
+            if (black.GetComponent<Image>().color.a.Equals(1))
             {
                 RoomNum = controller.MoveInADirection(moveDir);
                 cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
-                movingAnimator.SetBool("moving", false);
+                movingAnimator.SetBool(movingID, false);
                 camLock = false;
                 ableToMove = true;
             }
