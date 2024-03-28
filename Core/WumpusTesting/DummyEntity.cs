@@ -5,7 +5,7 @@ namespace WumpusTesting
     public class DummyEntity: Entity
     {
         public DummyEntity(WumpusCore.Topology.Topology topology, WumpusCore.GameLocations.GameLocations parent, EntityType type) : 
-            base(topology, parent, 15, type) { }
+            base(topology, parent, 14, type) { }
 
         public void MoveToRoomWrapper(ushort roomIndex)
         {

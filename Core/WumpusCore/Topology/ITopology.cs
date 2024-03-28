@@ -10,7 +10,7 @@ namespace WumpusCore.Topology
         /// <summary>
         /// Get a room from an ID
         /// </summary>
-        /// <param name="id">the room ID</param>
+        /// <param name="id">the room ID. Zero-indexed</param>
         /// <returns>The room with the given ID</returns>
         IRoom GetRoom(ushort id);
 

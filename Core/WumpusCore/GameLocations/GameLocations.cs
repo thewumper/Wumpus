@@ -97,7 +97,7 @@ namespace WumpusCore.GameLocations
             {
                 throw new InvalidOperationException("There are no empty rooms.");
             }
-            return positions[Controller.Controller.Random.Next(0, positions.Count + 1)];
+            return positions[Controller.Controller.Random.Next(0, positions.Count)];
         }
 
         /// <summary>

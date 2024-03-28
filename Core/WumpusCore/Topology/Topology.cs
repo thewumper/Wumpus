@@ -46,7 +46,7 @@ namespace WumpusCore.Topology
             using (StreamReader mapData = new StreamReader(stream))
             {                                                                                                
                 string line;
-                ushort room = 1;
+                ushort room = 0;
                 // Keep reading until the file is done
                 while ((line = mapData.ReadLine()) != null)
                 {
@@ -59,7 +59,7 @@ namespace WumpusCore.Topology
                         directions[i] = DirectionHelper.GetDirectionFromShortName(tokens[i]);
                     }
                     // Create a room
-                    rooms[room - 1] = new Room(directions, room);
+                    rooms[room] = new Room(directions, room);
                     room++;
                 }
             }
@@ -85,7 +85,7 @@ namespace WumpusCore.Topology
         /// <returns></returns>
         public IRoom GetRoom(ushort id)
         {
-            return rooms[id - 1];
+            return rooms[id];
         }
 
         /// <summary>
@@ -98,6 +98,7 @@ namespace WumpusCore.Topology
         private  IRoom RoomFromDirection(ushort currentRoom, Directions direction)
         {
             // Probably could write 
+            currentRoom += 1;
             
             // These numbers help us navigate this map
             const short width = 6; // Up and down
@@ -170,7 +171,7 @@ namespace WumpusCore.Topology
             }
             
             int roomNum = (result - neighborMod) % 30; // Wrap the rooms
-            return rooms[roomNum >= 0 ? roomNum : roomNum + 30]; // Fix the negative modulus
+            return rooms[(roomNum >= 0 ? roomNum : roomNum + 30)]; // Fix the negative modulus
         }
         
         /// <summary>
@@ -191,12 +192,10 @@ namespace WumpusCore.Topology
         /// <param name="roomIndexB">The second room, the end point of the search</param>
         /// <param name="getConnections">Takes in an IRoom and returns an array of all rooms that should be navigable to. Use to define which paths are considered to route through.</param>
         /// <returns>The distance in movements between the two rooms</returns>
-        public int DistanceBetweenRooms(ushort roomIndexA, ushort roomIndexB, Func<IRoom, IRoom[]> getConnections)
+        public int DistanceBetweenRooms(ushort startRoomIndex, ushort endRoomIndex, Func<IRoom, IRoom[]> getConnections)
         {
-            ushort startRoomIndex = (ushort)(roomIndexA - 1);
-            ushort endRoomIndex = (ushort)(roomIndexB - 1);
             
-            if (roomIndexA == roomIndexB)
+            if (startRoomIndex == endRoomIndex)
             {
                 return 0;
             }
@@ -219,8 +218,7 @@ namespace WumpusCore.Topology
                 for (int i = 0; i < getConnections(currentRoom).Length; i++)
                 {
                     // Distance between each adjacent room is 1
-                    // also some of this is required by SPEC to be 1-indexed, hence the off-by-ones.
-                    int index = getConnections(currentRoom)[i].Id - 1;
+                    int index = getConnections(currentRoom)[i].Id;
                     int newDistance = distance[currentRoomIndex] + 1;
                     if (newDistance < distance[index])
                     {

@@ -20,7 +20,7 @@ namespace WumpusCore.Topology
         /// </summary>
         Dictionary<Directions, IRoom> AdjacentRooms { get; }
         /// <summary>
-        /// Get the room id (1-30)
+        /// Get the room id (0-29)
         /// </summary>
         ushort Id { get; }
     }
