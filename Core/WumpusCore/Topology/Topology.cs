@@ -212,6 +212,11 @@ namespace WumpusCore.Topology
             /// </summary>
             public ushort Id { get; }
         }
+
+        public IRoom[] GetRooms()
+        {
+            return rooms;
+        }
     }
 
 

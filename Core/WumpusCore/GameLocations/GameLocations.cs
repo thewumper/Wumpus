@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WumpusCore.Entity;
+using WumpusCore.Topology;
 
 namespace WumpusCore.GameLocations
 {
@@ -41,9 +42,13 @@ namespace WumpusCore.GameLocations
         /// Contains most methods and data to do with rooms.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
-        public GameLocations(ushort numRooms)
+        public GameLocations(ushort numRooms,ushort numVats, ushort numBats, ushort numRats, ushort numAcrobats, Topology.Topology topology)
         {
             rooms = new RoomType[numRooms];
+            ushort hardHazards = (ushort)(numVats + numBats);
+            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
+            HashSet<IRoom> solutions =  graph.GetRandomPossibleSolutions(hardHazards);
+            
         }
 
         /// <summary>

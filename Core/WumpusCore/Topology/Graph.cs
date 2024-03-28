@@ -33,7 +33,14 @@ namespace WumpusCore.Topology
             }
             HashSet<IRoom> visited = new HashSet<IRoom>(rooms);
             Queue<IRoom> toExplore = new Queue<IRoom>();
-            toExplore.Enqueue(nodes[0] != room ? nodes[0] : nodes[1]);
+
+            List<IRoom> possibleStarts = new List<IRoom>(nodes);
+            foreach (IRoom room in rooms)
+            {
+                possibleStarts.Remove(room);
+            }
+            
+            toExplore.Enqueue(possibleStarts[0]);
             while (toExplore.Count > 0)
             {
                 var currentRoom = toExplore.Dequeue();
@@ -63,20 +70,28 @@ namespace WumpusCore.Topology
                 ushort hasRemoved = 0;
                 List<IRoom> nodesInSolution = new List<IRoom>(nodes);
                 solution.Clear();
+                bool validSolution = true;
                 while (numRemoved > hasRemoved)
                 {
                     int index = random.Next() % nodesInSolution.Count;
                     IRoom node = nodesInSolution[index];
                     solution.Add(node);
                     nodesInSolution.RemoveAt(index);
-                    if (IsNodeRemovalValid(solution))
+                    if (!IsNodeRemovalValid(solution))
                     {
-                        
+                        validSolution = false;
+                        break;
                     }
                     hasRemoved++;
                 }
+                if (validSolution)
+                {
+                    return solution;
+                }
                 tries++;
             }
+
+            throw new TimeoutException("Could not find a valid solution to the rooms ");
         }
         
     }
