@@ -15,7 +15,7 @@ namespace WumpusCore.Entity
         public readonly EntityType Type;
         
         // Link to the GameLocations that spawned it
-        private readonly GameLocations.GameLocations gameLocations;
+        protected readonly GameLocations.GameLocations gameLocations;
         
         // Location index in Topology
         public ushort location { get; private set; }
@@ -96,6 +96,16 @@ namespace WumpusCore.Entity
         {
             ushort[] accessibleRooms = GetAccessibleRooms();
             return accessibleRooms.Contains(roomIndex);
+        }
+
+        /// <summary>
+        /// Get the room in a direction from the current room
+        /// </summary>
+        /// <param name="direction">The door/wall to check through</param>
+        /// <returns>The index of the room in the given direction</returns>
+        public ushort GetRoomInDirection(Directions direction)
+        {
+            return thisRoom.AdjacentRooms[direction].Id;
         }
 
         /// <summary>
