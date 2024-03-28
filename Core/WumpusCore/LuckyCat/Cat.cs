@@ -67,17 +67,18 @@ namespace WumpusCore.LuckyCat
         /// <summary>
         /// Pets the cat
         /// </summary>
-        public void Pet()
+        /// <returns> Meow Sound Effect ID </returns>
+        public int Pet()
         {
+            if (tamed && AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) == 0) ;
             // (You pet the cat, yippee)
+            return 70;
         }
 
         /// <summary>
         /// Plays the mewing audio file if player is nearby the cat
         /// Will depend on audio manager for sound
         /// </summary>
-        /// <returns> Audio id </returns>
-        /// <exception cref="NotImplementedException"></exception>
         public int Mew()
         {          
 
