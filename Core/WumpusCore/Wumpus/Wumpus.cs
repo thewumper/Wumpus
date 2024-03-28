@@ -1,43 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WumpusCore.Wumpus
+﻿namespace WumpusCore.Wumpus
 {
     internal class Wumpus
     {
         /// <summary>
-        /// Current Room Wumpus is in
+        /// Current Room Wumpus is in.  
+        /// Better description coming soon
         /// </summary>
         public int Position { get; private set; }
         /// <summary>
-        /// Current state Wumpus is in
+        /// state of wumpus.  
+        /// Better description coming soon
         /// </summary>
-        /*
-        0: sleep
-        1: moving
-        2: combat
-        3: dead
-         */
-        public int State { get; private set; }
+        public enum State
+        {
+            Sleeping,
+            Wake,   
+            Wandering,
+            Combat,
+            FleeingArrow,
+            FleeingCombat,
+            Dead
+        }
+        /// <summary>
+        /// Constructs the Wumpus.  
+        /// Better description coming soon
+        /// </summary>
         public Wumpus()
         {
             Position = 0;
-            State = 0;
+            State currentState = State.Sleeping;
         }
         /// <summary>
-        /// Moves the wumpus randomly
+        /// Moves the wumpus into a connected room randomly a number of times depending on the state.  
+        /// Better description coming soon
         /// </summary>
-        public void move(int maxMove)
-        {
+        public void move(Random rand)
+        { 
             throw new NotImplementedException();
-
         }
         /// <summary>
-        /// mods state and starts a battle changing state stuff
+        /// Changes state and starts minigame, then changes state again based on result of battle.  
+        /// Better description coming soon
         /// </summary>
         public void startBattle()
         {

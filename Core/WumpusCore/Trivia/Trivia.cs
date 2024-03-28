@@ -1,50 +1,154 @@
 using System;
+using System.Data;
 
 namespace WumpusCore.Trivia
 {
     /// <summary>
     /// A minigame that asks a player a number of trivia questions.
     /// </summary>
-    public class Trivia
+    public class Trivia: Minigame
     {
+        private Questions questions;
         // The question we're waiting on the player to answer
-        private Question currentQuestion;
+        private AnsweredQuestion currentQuestion;
         private int totalRoundQuestions;
         // If player gets this many or more questions right they win the round
         private int winThreshold;
         private int questionsAnswered;
         private int questionsWon;
+        
+        /// <summary>
+        /// The number of questions that are available to ask.
+        /// </summary>
+        public int Count { get { return questions.Count; } }
+
+        /// <summary>
+        /// Initialize a Trivia object from one question file
+        /// </summary>
+        /// <param name="filePath">The path to the json file to read questions from</param>
+        public Trivia(string filePath)
+        {
+            questions = new Questions(filePath);
+        }
+        
+        /// <summary>
+        /// Initialize a Trivia object from multiple question files
+        /// </summary>
+        /// <param name="filePaths">The paths to the json files to read questions from</param>
+        public Trivia(string[] filePaths)
+        {
+            questions = new Questions(filePaths);
+        }
 
         /// <summary>
         /// Starts a new round of trivia. Will report to minigame controller when the player wins or loses
         /// </summary>
         /// <param name="roundQuestions">The total number of questions in the round</param>
-        /// <param name="questionsNecessary">The number of questions the player must win</param>
-        public void StartRound(int roundQuestions, int questionsNecessary)
+        /// <param name="winThreshold">The number of questions the player must answer correctly in order to win the round</param>
+        public void StartRound(int roundQuestions, int winThreshold)
         {
-            throw new NotImplementedException();
+            if (roundQuestions > Count)
+            {
+                throw new ArgumentOutOfRangeException("Insufficient remaining questions to execute Trivia round.");
+            }
+            
+            totalRoundQuestions = roundQuestions;
+            this.winThreshold = winThreshold;
+            questionsAnswered = 0;
+            questionsWon = 0;
+            nextQuestion();
+        }
+
+        /// <summary>
+        /// Get the question currently awaiting an answer
+        /// </summary>
+        /// <returns>The question currently awaiting an answer</returns>
+        public AskableQuestion GetQuestion()
+        {
+            try
+            {
+                return currentQuestion.question;
+            }
+            catch (NullReferenceException e)
+            {
+                throw new InvalidOperationException("Question not initialized. Run nextQuestion()?");
+            }
         }
 
         /// <summary>
         /// Submit an answer to the current question
         /// </summary>
         /// <param name="choice">The answer index selected</param>
-        /// <returns></returns>
+        /// <returns>Whether the answer was correct</returns>
         public bool SubmitAnswer(int choice)
         {
-            throw new NotImplementedException();
+            if (reportResult() != GameResult.InProgress)
+            {
+                throw new InvalidOperationException("Round is already over!");
+            }
+            
+            if (questionsAnswered >= totalRoundQuestions)
+            {
+                throw new InvalidOperationException("There are no questions to answer!");
+            }
+
+            if (choice >= currentQuestion.choices.Length)
+            {
+                throw new ArgumentOutOfRangeException("Not a valid answer index");
+            }
+            
+            
+            // -1 reserved for refusal to answer
+            if (choice < -1)
+            {
+                throw new ArgumentOutOfRangeException("Not a valid answer index");
+            }
+            
+            questionsAnswered++;
+            if (choice == currentQuestion.answer)
+            {
+                questionsWon++;
+                nextQuestion();
+                return true;
+            }
+            
+            nextQuestion();
+            return false;
         }
 
         // Sets the next question
         private void nextQuestion()
         {
-            throw new NotImplementedException();
+            currentQuestion = questions.GetQuestion();
         }
 
-        // Reports to minigame controller whether the player won the round or not
-        private void reportResult(bool winner)
+        /// <summary>
+        /// Returns whether the player won
+        /// </summary>
+        /// <returns>A GameResult denoting the status from the perspective of the player</returns>
+        public GameResult reportResult()
         {
-            throw new NotImplementedException();
+            if (questionsWon >= winThreshold)
+            {
+                return GameResult.Win;
+            }
+
+            if (totalRoundQuestions - questionsAnswered < winThreshold)
+            {
+                return GameResult.Loss;
+            } 
+            
+            return GameResult.InProgress;
+        }
+        
+        /// <summary>
+        /// Returns a random question that hasn't been read yet.
+        /// Leaves the question in the stack.
+        /// </summary>
+        /// <returns>A question that hasn't yet been used</returns>
+        public AnsweredQuestion PeekRandomQuestion()
+        {
+            return questions.PeekRandomQuestion();
         }
     }
 }
