@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 
@@ -7,9 +8,10 @@ public class UI : MonoBehaviour
 {
     private Controller controller;
     
-    public GameObject cam;
-
-    private const float CamSens = 5f;
+    [SerializeField]
+    private GameObject cam;
+    private const float camSens = 5f;
+    private const float camSpeed = 4f;
     public bool camLock = false;
 
     public bool ableToMove = true;
@@ -58,6 +60,9 @@ public class UI : MonoBehaviour
 
     [SerializeField] 
     private Animator movingAnimator;
+
+    [SerializeField] 
+    private GameObject black;
     
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
@@ -120,7 +125,7 @@ public class UI : MonoBehaviour
         if (!camLock)
         {
             float mouseX = Input.GetAxis("Mouse X");
-            cam.transform.eulerAngles += new Vector3(0, mouseX * CamSens, 0);
+            cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
         }
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit))
@@ -130,8 +135,10 @@ public class UI : MonoBehaviour
                 interactIcon.SetActive(true);
                 if (Input.GetMouseButtonDown(0))
                 {
-                    movingAnimator.SetBool("moving", true);
                     moveDir = hit.transform.GetComponent<Door>().GetDir();
+                    movingAnimator.SetBool("moving", true);
+                    camLock = true;
+                    ableToMove = false;
                 }
             }
         }
@@ -139,17 +146,23 @@ public class UI : MonoBehaviour
         {
             interactIcon.SetActive(false);
         }
+        
+        if (movingAnimator.GetBool("moving"))
+        {
+            if (black.GetComponent<Image>().color.a == 1)
+            {
+                RoomNum = controller.MoveInADirection(moveDir);
+                cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
+                movingAnimator.SetBool("moving", false);
+                camLock = false;
+                ableToMove = true;
+            }
+            else
+            {
+                cam.transform.position += cam.transform.forward * Time.deltaTime * camSpeed;
+            }
+        }
 
         coinsText.text = "" + controller.GetCoins();
-    }
-    
-    /// <summary>
-    /// Actually changes which room the player is currently in.
-    /// </summary>
-    public void MoveRooms()
-    {
-        RoomNum = controller.MoveInADirection(moveDir);
-        camLock = false;
-        movingAnimator.SetBool("moving", false);
     }
 }
