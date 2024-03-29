@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace WumpusCore.HighScoreNS
 {
@@ -18,7 +19,7 @@ namespace WumpusCore.HighScoreNS
         /// <summary>
         /// The path to save high scores to
         /// </summary>
-        private string savePath;
+        public readonly string savePath;
 
         /// <summary>
         /// HighScore object is how the score of the game is calculated and stored to files
@@ -231,6 +232,15 @@ namespace WumpusCore.HighScoreNS
             {
                 SaveFile saveFile = new SaveFile(allTextToSave, true);
             }
+        }
+
+        /// <summary>
+        /// Gets the list of storedHighScores
+        /// </summary>
+        /// <returns> StoredHighScore list of the top ten high scores </returns>
+        public List<StoredHighScore> getTopTen()
+        {
+            return this.topTenHighScores;
         }
 
         /// <summary>

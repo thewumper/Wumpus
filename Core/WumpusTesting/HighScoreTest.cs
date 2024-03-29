@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using WumpusCore.HighScoreNS;
 
 namespace WumpusTesting
@@ -59,8 +60,13 @@ namespace WumpusTesting
         [TestMethod]
         public void TestHighScoreSaveFile()
         {
-            HighScore saveScore = new HighScore("player", 5, 1, 4, true, 5);
+            SaveFile file = new SaveFile("[:_]", false);
+            HighScore saveScore = new HighScore(file.path,"player", 5, 1, 4, true, 5);
             saveScore.storeScoreToFile(saveScore.compactScore);
+            string path = saveScore.savePath;
+            SaveFile usedFile = new SaveFile(false, path);
+            string info = usedFile.ReadFile(true);
+            Assert.AreEqual(saveScore.compactScore.ToString(), info);
         }
 
         /// <summary>
@@ -86,12 +92,26 @@ namespace WumpusTesting
         {
             SaveFile testHeadFile = new SaveFile("¯\\_(ツ)_/¯", false);
             string pathToUse = testHeadFile.path;
+            HighScore lastScore = null;
 
             for (int i = 0; i < 10; i++)
             {
                 HighScore randScore = RandomScore(i, pathToUse);
                 randScore.storeTopTenToFile();
                 Console.WriteLine();
+                if (i == 9)
+                {
+                    lastScore = randScore;
+                }
+            }
+            if (lastScore != null)
+            {
+                List<HighScore.StoredHighScore> topTen = lastScore.getTopTen();
+                for (int i = 0; i < topTen.Count;i++)
+                {
+                    Console.WriteLine(topTen[i].ToString());
+                }
+                Assert.AreEqual(10, topTen.Count);
             }
         }
 
