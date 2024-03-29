@@ -70,9 +70,14 @@ namespace WumpusCore.LuckyCat
         /// <returns> Meow Sound Effect ID </returns>
         public int Pet()
         {
-            if (tamed && AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) == 0) ;
+            if (tamed && AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) == 0) 
+            { 
             // (You pet the cat, yippee)
             return 70;
+            }
+            
+            else { return 0; }
+
         }
 
         /// <summary>
