@@ -67,7 +67,7 @@ namespace WumpusCore.Controller
             return gameLocations.GetRoomAt(roomNumber);
         }
 
-        public ushort MoveInADirection(Directions direction)
+        public void MoveInADirection(Directions direction)
         {
             state = InBetweenRooms;
             beforeRoom = topology.GetRoom(player.Position);
@@ -75,7 +75,6 @@ namespace WumpusCore.Controller
 
 
             player.MoveInDirection(topology, direction);
-            return player.Position;
         }
 
         public ushort MoveFromHallway(HallwayDir hallwayDir)
@@ -88,7 +87,15 @@ namespace WumpusCore.Controller
             state=InRoom;
 
             return player.Position;
+        }
 
+        /// <summary>
+        /// Get the location of the player from topology.
+        /// </summary>
+        /// <returns>The location of the player</returns>
+        public ushort GetPlayerLocation()
+        {
+            return player.Position;
         }
 
         public ControllerState GetState()
