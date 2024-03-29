@@ -11,15 +11,15 @@ namespace WumpusCore.Controller
 {
     public class Controller
     {
-        internal static Controller controllerReference;
+        private Controller controllerReference;
 
-        public static Controller GlobalController
+        public Controller GlobalController
         {
             get
             {
                 if (controllerReference == null)
                 {
-                    controllerReference = new Controller();
+                    throw new NullReferenceException("Cannot refrence a controller that hasn't been instantiated yet");
                 }
 
                 return controllerReference;
@@ -36,21 +36,11 @@ namespace WumpusCore.Controller
         private GameLocations.GameLocations gameLocations;
         private Trivia.Trivia trivia;
 
-        private Controller()
+        public Controller(string trviaFile, string topologyDirectory, ushort mapId)
         {
-            string testAssemblyName = "Microsoft.VisualStudio.QualityTools.UnitTestFramework";
-            bool isInTests = AppDomain.CurrentDomain.GetAssemblies()
-                .Any(a => a.FullName.StartsWith(testAssemblyName));
-
-            if (isInTests)
-            {
-                trivia = new Trivia.Trivia("../Trivia/questions.json");
-            }
-            else
-            {
-                trivia = new Trivia.Trivia("./Assets/Trivia/questions.json");
-            }
-            topology = new Topology.Topology("./Assets/Maps", 0);
+            controllerReference = this;
+            trivia = new Trivia.Trivia(trviaFile);
+            topology = new Topology.Topology(topologyDirectory, mapId);
         }
 
 
