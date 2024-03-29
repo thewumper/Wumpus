@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
+using WumpusUnity;
 
-public class UI : MonoBehaviour
+public class MainUI : MonoBehaviour
 {
     private Controller controller;
     
@@ -12,9 +13,9 @@ public class UI : MonoBehaviour
     private GameObject cam;
     private const float camSens = 5f;
     private const float camSpeed = 4f;
-    public bool camLock = false;
+    private bool camLock;
 
-    public bool ableToMove = true;
+    private bool ableToMove = true;
     
     private ushort roomNum;
     private ushort RoomNum
@@ -63,7 +64,7 @@ public class UI : MonoBehaviour
     private int movingID;
 
     [SerializeField] 
-    private GameObject black;
+    private Image black;
     
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
@@ -83,6 +84,7 @@ public class UI : MonoBehaviour
         RoomNum = 1;
 
         movingID = Animator.StringToHash("moving");
+        camLock = false;
         
         northDoor.AddComponent<Door>().Init(Directions.North);
         northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
@@ -152,7 +154,7 @@ public class UI : MonoBehaviour
         
         if (movingAnimator.GetBool(movingID))
         {
-            if (black.GetComponent<Image>().color.a.Equals(1))
+            if (black.color.a.Equals(1))
             {
                 RoomNum = controller.MoveInADirection(moveDir);
                 cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
@@ -162,7 +164,7 @@ public class UI : MonoBehaviour
             }
             else
             {
-                cam.transform.position += cam.transform.forward * Time.deltaTime * camSpeed;
+                cam.transform.position += cam.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
 

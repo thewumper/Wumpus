@@ -342,8 +342,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 173763335}
-  camLock: 0
-  ableToMove: 1
   northDoor: {fileID: 798882399}
   northEastDoor: {fileID: 513308440}
   southEastDoor: {fileID: 1218492701}
@@ -354,7 +352,7 @@ MonoBehaviour:
   coinsText: {fileID: 1872784049}
   roomText: {fileID: 1799547984}
   movingAnimator: {fileID: 210612756}
-  black: {fileID: 210612753}
+  black: {fileID: 210612757}
 --- !u!4 &212410748
 Transform:
   m_ObjectHideFlags: 0

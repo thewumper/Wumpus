@@ -65,6 +65,8 @@ namespace WumpusUnity
             {
                 case ControllerState.StartScreen:
                     return "Main Menu";
+                case ControllerState.InBetweenRooms:
+                    return "Hallway";
                 default:
                     return "Main";
             }
