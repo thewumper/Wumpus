@@ -12,6 +12,8 @@ namespace WumpusCore.Controller
     public class Controller
     {
         private Controller controllerReference;
+        private IRoom nextRoom;
+        private IRoom beforeRoom;
 
         public Controller GlobalController
         {
@@ -67,8 +69,26 @@ namespace WumpusCore.Controller
 
         public ushort MoveInADirection(Directions direction)
         {
+            state = InBetweenRooms;
+            beforeRoom = topology.GetRoom(player.Position);
+            nextRoom = topology.GetRoom (player.Position).ExitRooms[direction];
+
+
             player.MoveInDirection(topology, direction);
             return player.Position;
+        }
+
+        public ushort MoveFromHallway(HallwayDir hallwayDir)
+        {
+            if (hallwayDir == HallwayDir.Forward)
+            {
+                player.MoveTo(nextRoom.Id);
+            }
+            // If the player is going back to the previous room then you don't have to change anything
+            state=InRoom;
+
+            return player.Position;
+
         }
 
         public ControllerState GetState()

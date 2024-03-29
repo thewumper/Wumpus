@@ -54,6 +54,12 @@ namespace WumpusCore.Topology
             // Connect all of the rooms
             foreach (Room room in rooms)
             {
+                if (room == null)
+                {
+                    throw new NullReferenceException(
+                        "Room wasn't initialized properly, make sure your map has 30 rooms.");
+                }
+
                 room.InitializeConnections(this);
             }
         }
