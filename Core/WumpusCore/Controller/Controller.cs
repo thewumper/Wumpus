@@ -11,11 +11,11 @@ namespace WumpusCore.Controller
 {
     public class Controller
     {
-        private Controller controllerReference;
+        private static Controller controllerReference;
         private IRoom nextRoom;
         private IRoom beforeRoom;
 
-        public Controller GlobalController
+        public static Controller GlobalController
         {
             get
             {
