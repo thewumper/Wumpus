@@ -1,6 +1,8 @@
-﻿namespace WumpusCore.Wumpus
+﻿using System;
+
+namespace WumpusCore.Wumpus
 {
-    internal class Wumpus
+    internal class Wumpus: Entity.Entity
     {
         /// <summary>
         /// Current Room Wumpus is in.  
