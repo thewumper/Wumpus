@@ -1,4 +1,5 @@
 ﻿using System;
+using WumpusCore.Entity;
 
 namespace WumpusCore.Wumpus
 {
@@ -27,7 +28,7 @@ namespace WumpusCore.Wumpus
         /// Constructs the Wumpus.  
         /// Better description coming soon
         /// </summary>
-        public Wumpus()
+        public Wumpus(Topology.Topology topology, GameLocations.GameLocations gameLocations): base(topology, gameLocations, 0, EntityType.Wumpus)
         {
             Position = 0;
             State currentState = State.Sleeping;
