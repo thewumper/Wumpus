@@ -5,20 +5,21 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{20024C3F-3BAA-43EA-81CD-BD1137931B9B}</ProjectGuid>
-        <OutputType>Library</OutputType>
+        <ProjectGuid>{33042A65-561A-429A-86AC-F9BAB7F3C068}</ProjectGuid>
+        <OutputType>Exe</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>WumpusCore</RootNamespace>
-        <AssemblyName>WumpusCore</AssemblyName>
+        <RootNamespace>Map_Editor</RootNamespace>
+        <AssemblyName>Map_Editor</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>../../Unity/Assets/DLL</OutputPath>
+        <OutputPath>bin\Debug\</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -27,48 +28,26 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>../../Unity/Assets/DLL</OutputPath>
+        <OutputPath>bin\Release\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-          <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Controller\Controller.cs" />
-        <Compile Include="Controller\ControllerState.cs" />
-        <Compile Include="HighScore\SaveFile.cs" />
-    		<Compile Include="Entity\Entity.cs" />
-        <Compile Include="Minigame.cs" />
-        <Compile Include="LuckyCat\Cat.cs" />
+        <Compile Include="Program.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Topology\Directions.cs" />
-        <Compile Include="Topology\IRoom.cs" />
-        <Compile Include="Topology\ITopology.cs" />
-        <Compile Include="Topology\Topology.cs" />
-		    <Compile Include="Player\Player.cs" />
-        <Compile Include="Trivia\AnsweredQuestion.cs" />
-        <Compile Include="Trivia\AskableQuestion.cs" />
-        <Compile Include="Trivia\GameResult.cs" />
-        <Compile Include="Trivia\Questions.cs" />
-        <Compile Include="Trivia\Trivia.cs" />
-        <Compile Include="HighScore\HighScore.cs" />
-        <Compile Include="GameLocations\GameLocations.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include=".gitignore" />
-      <Content Include="Trivia\Questions.json" />
-      <Content Include="Trivia\AdvancedQuestions.json" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Include="packages.config" />
+      <ProjectReference Include="..\WumpusCore\WumpusCore.csproj">
+        <Project>{20024c3f-3baa-43ea-81cd-bd1137931b9b}</Project>
+        <Name>WumpusCore</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -78,4 +57,5 @@
     <Target Name="AfterBuild">
     </Target>
     -->
+
 </Project>

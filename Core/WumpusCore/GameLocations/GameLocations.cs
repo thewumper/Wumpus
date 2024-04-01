@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using WumpusCore.Entity;
 
 namespace WumpusCore.GameLocations
 {
     public class GameLocations
     {
+        /// <summary>
+        /// All entities in the game
+        /// </summary>
+        private Dictionary<EntityType, Entity.Entity> entities;
+        
         /// <summary>
         /// All possible types of rooms.
         /// </summary>
@@ -37,6 +44,38 @@ namespace WumpusCore.GameLocations
         public GameLocations(ushort numRooms)
         {
             rooms = new RoomType[numRooms];
+            entities = new Dictionary<EntityType, Entity.Entity>();
+        }
+
+        /// <summary>
+        /// Creates an entity in the game
+        /// </summary>
+        /// <param name="e">Places the entity into entities</param>
+        /// <exception cref="ArgumentException">If the given entity already is present</exception>
+        public void AddEntity(Entity.Entity e)
+        {
+            if (entities.ContainsKey(e.Type))
+            {
+                throw new ArgumentException("Entity type already created in GameLocations!");
+            }
+
+            entities[e.Type] = e;
+        }
+
+        /// <summary>
+        /// Gets an entity of a selected type.
+        /// </summary>
+        /// <param name="type">Type of entity to get</param>
+        /// <returns>The entity of the given type</returns>
+        /// <exception cref="ArgumentException">If the requested entity does not exist</exception>
+        public Entity.Entity GetEntity(EntityType type)
+        {
+            if (!entities.ContainsKey(type))
+            {
+                throw new ArgumentException("Cannot retrieve entity. Entity type not present in GameLocations!");
+            }
+
+            return entities[type];
         }
 
         /// <summary>
@@ -58,7 +97,7 @@ namespace WumpusCore.GameLocations
             {
                 throw new InvalidOperationException("There are no empty rooms.");
             }
-            return positions[Controller.Controller.Random.Next(0, positions.Count + 1)];
+            return positions[Controller.Controller.Random.Next(0, positions.Count)];
         }
 
         /// <summary>
