@@ -12,11 +12,19 @@ public class MainMenuUI : MonoBehaviour
     /// The global Controller object.
     /// </summary>
     private Controller controller;
+
+    [SerializeField] 
+    private string triviaNormal;
+    private string topologyDir;
     
-    void Start()
+    
+    void Awake()
     {
+        triviaNormal = Application.dataPath + "/Trivia/Questions.json";
+        topologyDir = Application.dataPath + "/Maps";
+        
+        controller = new Controller(triviaNormal, topologyDir, 0);
         sceneController = SceneController.GlobalSceneController;
-        controller = Controller.GlobalController;
     }
 
     void Update()
