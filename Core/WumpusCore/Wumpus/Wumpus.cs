@@ -3,7 +3,7 @@ using WumpusCore.Entity;
 
 namespace WumpusCore.Wumpus
 {
-    internal class Wumpus: Entity.Entity
+    public class Wumpus: Entity.Entity
     {
         /// <summary>
         /// Current Room Wumpus is in.  
