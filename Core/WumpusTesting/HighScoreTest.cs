@@ -62,11 +62,11 @@ namespace WumpusTesting
         {
             SaveFile file = new SaveFile("[:_]", false);
             HighScore saveScore = new HighScore(file.path,"player", 5, 1, 4, true, 5);
-            saveScore.storeScoreToFile(saveScore.compactScore);
+            saveScore.StoreScoreToFile(saveScore.compactScore);
             string path = saveScore.savePath;
             SaveFile usedFile = new SaveFile(false, path);
-            string info = usedFile.ReadFile(true);
-            Assert.AreEqual(saveScore.compactScore.ToString(), info);
+            string info = usedFile.ReadFile(false);
+            Assert.AreEqual(saveScore.compactScore, saveScore.ConvertStringToStoredHighScore(info));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace WumpusTesting
             SaveFile testHeadFile = new SaveFile("pesacdo", false);
             string pathToUse = testHeadFile.path;
             HighScore saveScore = new HighScore(pathToUse, "playing", 8, 10, 4, true, 8);
-            saveScore.storeTopTenToFile();
+            saveScore.StoreTopTenToFile();
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace WumpusTesting
             for (int i = 0; i < 10; i++)
             {
                 HighScore randScore = RandomScore(i, pathToUse);
-                randScore.storeTopTenToFile();
+                randScore.StoreTopTenToFile();
                 Console.WriteLine();
                 if (i == 9)
                 {
@@ -106,7 +106,7 @@ namespace WumpusTesting
             }
             if (lastScore != null)
             {
-                List<HighScore.StoredHighScore> topTen = lastScore.getTopTen();
+                List<HighScore.StoredHighScore> topTen = lastScore.GetTopTen();
                 for (int i = 0; i < topTen.Count;i++)
                 {
                     Console.WriteLine(topTen[i].ToString());
