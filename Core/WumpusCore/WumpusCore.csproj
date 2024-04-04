@@ -44,8 +44,9 @@
     <ItemGroup>
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
-        <Compile Include="Entity\Entity.cs" />
-        <Compile Include="Entity\EntityType.cs" />
+        <Compile Include="HighScore\SaveFile.cs" />
+    		<Compile Include="Entity\Entity.cs" />
+			<Compile Include="Entity\EntityType.cs" />
         <Compile Include="Minigame.cs" />
         <Compile Include="LuckyCat\Cat.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
@@ -53,7 +54,7 @@
         <Compile Include="Topology\IRoom.cs" />
         <Compile Include="Topology\ITopology.cs" />
         <Compile Include="Topology\Topology.cs" />
-		<Compile Include="Player\Player.cs" />
+		    <Compile Include="Player\Player.cs" />
         <Compile Include="Trivia\AnsweredQuestion.cs" />
         <Compile Include="Trivia\AskableQuestion.cs" />
         <Compile Include="Trivia\GameResult.cs" />
