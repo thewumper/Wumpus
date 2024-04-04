@@ -7,6 +7,7 @@ using WumpusCore.Topology;
 public class UI : MonoBehaviour
 {
     private Controller controller;
+    private SoundManager soundManager;
     
     [SerializeField]
     private GameObject cam;
@@ -64,7 +65,11 @@ public class UI : MonoBehaviour
 
     [SerializeField] 
     private GameObject black;
-    
+
+    [SerializeField]
+    private AudioClip wumpusClip;
+    private AudioClip luckyCatClip;
+
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
     /// </summary>
@@ -80,6 +85,7 @@ public class UI : MonoBehaviour
         interactIcon.SetActive(false);
         
         controller = Controller.GlobalController;
+        soundManager = new SoundManager(wumpusClip);
         RoomNum = 1;
 
         movingID = Animator.StringToHash("moving");
@@ -90,6 +96,8 @@ public class UI : MonoBehaviour
         southDoor.AddComponent<Door>().Init(Directions.South);
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
+
+        soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
     }
 
     void LateUpdate()
@@ -149,7 +157,7 @@ public class UI : MonoBehaviour
         {
             interactIcon.SetActive(false);
         }
-        
+
         if (movingAnimator.GetBool(movingID))
         {
             if (black.GetComponent<Image>().color.a.Equals(1))
