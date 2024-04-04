@@ -61,6 +61,7 @@
         <Compile Include="Trivia\Trivia.cs" />
         <Compile Include="HighScore\HighScore.cs" />
         <Compile Include="GameLocations\GameLocations.cs" />
+		<Compile Include="Wumpus\Wumpus.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
