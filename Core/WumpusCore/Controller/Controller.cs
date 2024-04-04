@@ -38,6 +38,12 @@ namespace WumpusCore.Controller
         private GameLocations.GameLocations gameLocations;
         private Trivia.Trivia trivia;
 
+        /// <summary>
+        /// Instantiates a controller and setup the required stuff for global controller
+        /// </summary>
+        /// <param name="trviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format</param>
+        /// <param name="topologyDirectory">The directory to load map files from</param>
+        /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId</param>
         public Controller(string trviaFile, string topologyDirectory, ushort mapId)
         {
             controllerReference = this;
@@ -79,6 +85,13 @@ namespace WumpusCore.Controller
 
         public ushort MoveFromHallway(HallwayDir hallwayDir)
         {
+            ValidateState(new [] {InBetweenRooms});
+
+            if (nextRoom == null)
+            {
+                throw new InvalidOperationException("You need to start in a room and move from it before calling move from hallway");
+            }
+
             if (hallwayDir == HallwayDir.Forward)
             {
                 player.MoveTo(nextRoom.Id);
@@ -101,6 +114,15 @@ namespace WumpusCore.Controller
         public ControllerState GetState()
         {
             return state;
+        }
+
+        /// <summary>
+        /// Returns a question that hasn't been asked yet
+        /// </summary>
+        /// <returns>A question that hasn't been used by trivia yet</returns>
+        public AnsweredQuestion GetUnaskedQuestion()
+        {
+            return trivia.PeekRandomQuestion();
         }
 
         public int GetCoins()
