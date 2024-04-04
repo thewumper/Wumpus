@@ -26,7 +26,7 @@ namespace WumpusCore.Controller
         }
         public static Random Random = new Random();
         private ControllerState state = StartScreen;
-        private Player.Player player = new Player.Player();
+        //private Player.Player player = new Player.Player();
         private ITopology topology;
 
 
