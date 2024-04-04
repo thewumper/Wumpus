@@ -21,10 +21,10 @@ namespace WumpusCore.Entity
         public ushort location { get; private set; }
 
         // Given on initialization by Controller
-        private Topology.Topology topologyLink;
+        protected Topology.Topology topologyLink;
 
         // The room this Entity is currently in
-        private IRoom thisRoom
+        protected IRoom thisRoom
         {
             get
             {
