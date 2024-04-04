@@ -16,7 +16,7 @@ namespace WumpusCore.Controller
         {
             get
             {
-                if (controllerReference==null)
+                if (controllerReference == null)
                 {
                     controllerReference = new Controller();
                 }
@@ -41,6 +41,34 @@ namespace WumpusCore.Controller
             topology = new Topology.Topology("./Assets/Maps", 0);
         }
 
+        /// <summary>
+        /// Win the game.
+        /// </summary>
+        public void WinGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Lose the game.
+        /// </summary>
+        public void LoseGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Executed each turn the player takes.
+        /// </summary>
+        public void GameTick()
+        {
+            throw new NotImplementedException();
+            if (GetCoins() < 0)
+            {
+                LoseGame();
+            }
+            // TODO: Entity motion here
+        }
 
         /// <summary>
         /// Returns the room at the room number from topology (1 indexed)
@@ -55,6 +83,28 @@ namespace WumpusCore.Controller
                 throw new IndexOutOfRangeException("Room number is 0 indexed, not -1.");
             }
             return topology.GetRoom(roomNumber);
+        }
+        
+        /// <summary>
+        /// Play trivia to earn arrows for free. Can happen in any room.
+        /// Gain two arrows if won, encounter danger if lost.
+        /// Call this after trivia (3, 2) was already played
+        /// </summary>
+        /// <param name="triviaOutcome">Whether you won or lost the trivia game</param>
+        public void EarnArrows(GameResult triviaOutcome)
+        {
+            throw new NotImplementedException();
+        }
+        
+        /// <summary>
+        /// Play trivia to learn a secret. Can happen in any room.
+        /// Learn something if won, encounter danger if lost.
+        /// Call this after trivia (3, 2) was already played.
+        /// </summary>
+        /// <param name="triviaOutcome">Whether you won or lost the trivia game</param>
+        public void EarnSecret(GameResult triviaOutcome)
+        {
+            throw new NotImplementedException();
         }
 
         public GameLocations.GameLocations.RoomType GetRoomType(ushort roomNumber)
@@ -74,12 +124,12 @@ namespace WumpusCore.Controller
 
         public int GetCoins()
         {
-            throw new NotImplementedException();
+            return gameLocations.GetPlayer().Coins;
         }
 
         public int GetArrowCount()
         {
-            throw new NotImplementedException();
+            return (int)gameLocations.GetPlayer().Arrows;
         }
 
         public bool SubmitTriviaAnswer(int guess)
