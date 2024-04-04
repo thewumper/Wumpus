@@ -38,26 +38,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Controller.cs" />
-    <Compile Include="Controller\ControllerState.cs" />
-    <Compile Include="LuckyCat\Cat.cs" />
-    <Compile Include="MinigameController\MinigameController.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCore.cs" />
-    <Compile Include="Topology\Directions.cs" />
-    <Compile Include="Topology\IRoom.cs" />
-    <Compile Include="Topology\ITopology.cs" />
-    <Compile Include="Topology\Topology.cs" />
-    <Compile Include="Player\Player.cs" />
-    <Compile Include="Trivia\Question.cs" />
-    <Compile Include="Trivia\Questions.cs" />
-    <Compile Include="Trivia\Trivia.cs" />
-    <Compile Include="HighScore\HighScore.cs" />
-    <Compile Include="GameLocations\GameLocations.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include=".gitignore" />
-  </ItemGroup>
+        <Compile Include="Controller\Controller.cs" />
+        <Compile Include="Controller\ControllerState.cs" />
+        <Compile Include="Entity\Entity.cs" />
+        <Compile Include="Entity\EntityType.cs" />
+        <Compile Include="Minigame.cs" />
+        <Compile Include="LuckyCat\Cat.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Topology\Directions.cs" />
+        <Compile Include="Topology\IRoom.cs" />
+        <Compile Include="Topology\ITopology.cs" />
+        <Compile Include="Topology\Topology.cs" />
+		<Compile Include="Player\Player.cs" />
+        <Compile Include="Trivia\AnsweredQuestion.cs" />
+        <Compile Include="Trivia\AskableQuestion.cs" />
+        <Compile Include="Trivia\GameResult.cs" />
+        <Compile Include="Trivia\Questions.cs" />
+        <Compile Include="Trivia\Trivia.cs" />
+		<Compile Include="Wumpus\Wumpus.cs" />
+        <Compile Include="HighScore\HighScore.cs" />
+        <Compile Include="GameLocations\GameLocations.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include=".gitignore" />
+      <Content Include="Trivia\Questions.json" />
+      <Content Include="Trivia\AdvancedQuestions.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
