@@ -167,10 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1408d6a6d30124abfb3bc133205152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenu:
-    m_Handle: 0
-  main:
-    m_Handle: 0
+  triviaNormal: {fileID: 4900000, guid: 7dd3f1e0080706d4db3bc729a49a6a4a, type: 3}
 --- !u!1 &2129580380
 GameObject:
   m_ObjectHideFlags: 0

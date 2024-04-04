@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,14 +9,15 @@ using WumpusUnity;
 public class MainUI : MonoBehaviour
 {
     private Controller controller;
+    private SceneController sceneController;
     
     [SerializeField]
     private GameObject cam;
+    [SerializeField] 
+    private GameObject player;
     private const float camSens = 5f;
     private const float camSpeed = 4f;
-    private bool camLock;
-
-    private bool ableToMove = true;
+    private bool pLock;
     
     private ushort roomNum;
     private ushort RoomNum
@@ -70,7 +72,22 @@ public class MainUI : MonoBehaviour
     /// The <see cref="Directions"/> direction the player is moving in.
     /// </summary>
     private Directions moveDir;
-    
+
+    private void Awake()
+    {
+        try
+        {
+            controller = Controller.GlobalController;
+        }
+        catch (NullReferenceException)
+        {
+            controller = new Controller
+                (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
+        }
+
+        sceneController = SceneController.GlobalSceneController;
+    }
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -80,11 +97,10 @@ public class MainUI : MonoBehaviour
 
         interactIcon.SetActive(false);
         
-        controller = Controller.GlobalController;
         RoomNum = 1;
 
         movingID = Animator.StringToHash("moving");
-        camLock = false;
+        pLock = false;
         
         northDoor.AddComponent<Door>().Init(Directions.North);
         northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
@@ -127,7 +143,7 @@ public class MainUI : MonoBehaviour
 
     private void Update()
     {
-        if (!camLock)
+        //if (!pLock)
         {
             float mouseX = Input.GetAxis("Mouse X");
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
@@ -135,15 +151,15 @@ public class MainUI : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.transform.CompareTag("door") && ableToMove)
+            if (hit.transform.CompareTag("door") && !pLock)
             {
                 interactIcon.SetActive(true);
                 if (Input.GetMouseButtonDown(0))
                 {
+                    player.transform.eulerAngles = cam.transform.eulerAngles;
                     moveDir = hit.transform.GetComponent<Door>().GetDir();
                     movingAnimator.SetBool(movingID, true);
-                    camLock = true;
-                    ableToMove = false;
+                    pLock = true;
                 }
             }
         }
@@ -156,15 +172,15 @@ public class MainUI : MonoBehaviour
         {
             if (black.color.a.Equals(1))
             {
-                RoomNum = controller.MoveInADirection(moveDir);
+                controller.MoveInADirection(moveDir);
+                RoomNum = controller.MoveFromHallway(HallwayDir.Forward);
                 cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
                 movingAnimator.SetBool(movingID, false);
-                camLock = false;
-                ableToMove = true;
+                pLock = false;
             }
             else
             {
-                cam.transform.position += cam.transform.forward * (Time.deltaTime * camSpeed);
+                cam.transform.position += player.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
 
