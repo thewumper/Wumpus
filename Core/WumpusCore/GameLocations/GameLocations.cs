@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WumpusCore.Entity;
+using WumpusCore.LuckyCat;
 
 namespace WumpusCore.GameLocations
 {
@@ -64,6 +65,7 @@ namespace WumpusCore.GameLocations
 
         /// <summary>
         /// Gets an entity of a selected type.
+        /// Result must be cast to the desired type.
         /// </summary>
         /// <param name="type">Type of entity to get</param>
         /// <returns>The entity of the given type</returns>
@@ -76,6 +78,29 @@ namespace WumpusCore.GameLocations
             }
 
             return entities[type];
+        }
+        
+        /// <summary>
+        /// Get the player entity
+        /// </summary>
+        /// <returns>The Player</returns>
+        public Player.Player GetPlayer()
+        {
+            return (Player.Player)GetEntity(EntityType.Player);
+        }
+
+        /// <summary>
+        /// Get the cat entity
+        /// </summary>
+        /// <returns>The Cat</returns>
+        public Cat GetCat()
+        {
+            return (Cat)GetEntity(EntityType.Cat);
+        }
+
+        public Wumpus.Wumpus GetWumpus()
+        {
+            return (Wumpus.Wumpus)GetEntity(EntityType.Wumpus);
         }
 
         /// <summary>
