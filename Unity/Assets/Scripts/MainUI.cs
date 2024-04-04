@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -14,7 +15,7 @@ public class MainUI : MonoBehaviour
     [SerializeField]
     private GameObject cam;
     [SerializeField] 
-    private GameObject player;
+    private GameObject movementRotation;
     private const float camSens = 5f;
     private const float camSpeed = 4f;
     private bool pLock;
@@ -97,7 +98,7 @@ public class MainUI : MonoBehaviour
 
         interactIcon.SetActive(false);
         
-        RoomNum = 1;
+        RoomNum = controller.GetPlayerLocation();
 
         movingID = Animator.StringToHash("moving");
         pLock = false;
@@ -143,7 +144,7 @@ public class MainUI : MonoBehaviour
 
     private void Update()
     {
-        //if (!pLock)
+        if (!pLock)
         {
             float mouseX = Input.GetAxis("Mouse X");
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
@@ -156,7 +157,7 @@ public class MainUI : MonoBehaviour
                 interactIcon.SetActive(true);
                 if (Input.GetMouseButtonDown(0))
                 {
-                    player.transform.eulerAngles = cam.transform.eulerAngles;
+                    movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
                     moveDir = hit.transform.GetComponent<Door>().GetDir();
                     movingAnimator.SetBool(movingID, true);
                     pLock = true;
@@ -167,23 +168,28 @@ public class MainUI : MonoBehaviour
         {
             interactIcon.SetActive(false);
         }
+
+        coinsText.text = "" + controller.GetCoins();
         
         if (movingAnimator.GetBool(movingID))
         {
             if (black.color.a.Equals(1))
             {
                 controller.MoveInADirection(moveDir);
-                RoomNum = controller.MoveFromHallway(HallwayDir.Forward);
-                cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
                 movingAnimator.SetBool(movingID, false);
                 pLock = false;
+                if (controller.GetState() == ControllerState.InBetweenRooms)
+                {
+                    sceneController.GotoCorrectScene();
+                    return;
+                }
+                RoomNum = controller.MoveFromHallway(HallwayDir.Forward);
+                cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
             }
             else
             {
-                cam.transform.position += player.transform.forward * (Time.deltaTime * camSpeed);
+                cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
-
-        coinsText.text = "" + controller.GetCoins();
     }
 }
