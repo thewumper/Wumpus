@@ -1,7 +1,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -169,7 +168,7 @@ public class MainUI : MonoBehaviour
             interactIcon.SetActive(false);
         }
 
-        coinsText.text = "" + controller.GetCoins();
+        coinsText.text = controller.GetCoins().ToString();
         
         if (movingAnimator.GetBool(movingID))
         {
