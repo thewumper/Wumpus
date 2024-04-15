@@ -37,18 +37,50 @@ namespace WumpusCore.GameLocations
         {
             get { return rooms; }
         }
-        
+
         /// <summary>
         /// Contains most methods and data to do with rooms.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
+        /// <param name="numVats">The number of vat rooms to generate</param>
+        /// <param name="numBats">The number of bat rooms to generate</param>
+        /// <param name="numRats">The number of rat rooms to generate</param>
+        /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
+        /// <param name="topology">The topology structure</param>
+        /// <param name="random">A random object</param>
         public GameLocations(ushort numRooms,ushort numVats, ushort numBats, ushort numRats, ushort numAcrobats, Topology.Topology topology, Random random)
         {
+            if (numVats + numRats + numAcrobats + numBats >= 30)
+            {
+                throw new ArgumentException("Too many hazards!");
+            }
+            
             rooms = new RoomType[numRooms];
             ushort hardHazards = (ushort)(numVats + numBats);
             Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
-            HashSet<IRoom> solutions = graph.GetRandomPossibleSolutions(hardHazards);
-            for (solutions)
+            
+            List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
+            List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
+
+            UseListPopulateHazards(solutions, RoomType.Vats, numVats,random);
+            UseListPopulateHazards(solutions, RoomType.Bats, numBats,random);
+            UseListPopulateHazards(validRooms, RoomType.Rats, numRats,random);
+            UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats,random);
+        }
+
+        private void UseListPopulateHazards(List<IRoom> list, RoomType type, ushort num, Random random)
+        {
+            var i = 0;
+            foreach (IRoom location in list)
+            {
+                list.Remove(location);
+                rooms[location.Id] = type;
+                i++;
+                if (i >= num)
+                {
+                    break;
+                }
+            }
         }
 
         /// <summary>
