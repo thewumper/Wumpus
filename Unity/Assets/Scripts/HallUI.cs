@@ -1,7 +1,9 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WumpusCore.Controller;
+using WumpusCore.Trivia;
 using WumpusUnity;
 
 public class HallUI : MonoBehaviour
@@ -33,6 +35,9 @@ public class HallUI : MonoBehaviour
 
     [SerializeField] 
     private Image black;
+
+    [SerializeField] 
+    private TMP_Text hint;
     
     // Start is called before the first frame update
     void Start()
@@ -52,6 +57,9 @@ public class HallUI : MonoBehaviour
         
         backDoor.AddComponent<HallDoor>().Init(HallwayDir.Previous);
         forwardDoor.AddComponent<HallDoor>().Init(HallwayDir.Forward);
+
+        AnsweredQuestion q = controller.GetUnaskedQuestion();
+        hint.text = $"An answer is {q.choices[q.answer]}.";
 
         interactIcon.SetActive(false);
     }
