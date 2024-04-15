@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
@@ -12,10 +13,14 @@ namespace WumpusTesting
         public ControllerTest()
         {
             // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter("map0.wmp"))
+            using (StreamWriter outputFile = new StreamWriter("./map0.wmp"))
             {
-                outputFile.WriteLine("N,NE,SE,S,SW,NW");
+
                 outputFile.WriteLine("N");
+                for (int i = 0; i < 29; i++)
+                {
+                    outputFile.WriteLine("N,NE,SE,S,SW,NW");
+                }
             }
 
             using (StreamWriter outputFile = new StreamWriter("./questions.json"))
@@ -23,28 +28,33 @@ namespace WumpusTesting
                 outputFile.WriteLine("[{\"question\": \"Which is right\", choices : [\"correct\",\"wrong\",\"wrong\",\"wrong\"],\"answer\": 0}]");
             }
 
+            // This will just create it at global controller which is what we want
+            new Controller("./questions.json","./",0);
+        }
 
-
+        [TestMethod]
+        public void TestGlobalController()
+        {
+            Assert.AreEqual(Controller.GlobalController, Controller.GlobalController);
         }
 
         [TestMethod]
         public void TestGettingARoom()
         {
-            Assert.AreEqual(
-                new Controller("./questions.json","./",0).GetRoom(1).ExitDirections,
-                new []
-                {
-                    Directions.North ,
-                    Directions.NorthEast,
-                    Directions.SouthEast,
-                    Directions.South,
-                    Directions.SouthEast,
-                    Directions.NorthWest,
-                }
-            );
+            var v1 = Controller.GlobalController.GetRoom(2).ExitDirections;
+            var v2 = new []
+            {
+                Directions.North,
+                Directions.NorthEast,
+                Directions.SouthEast,
+                Directions.South,
+                Directions.SouthWest,
+                Directions.NorthWest,
+            };
+            CollectionAssert.AreEqual(v2,v1);
 
-            Assert.AreEqual(
-                new Controller("./questions.json","./",0).GetRoom(2).ExitDirections,
+            CollectionAssert.AreEqual(
+                Controller.GlobalController.GetRoom(1).ExitDirections,
                 new [] { Directions.North }
             );
         }
