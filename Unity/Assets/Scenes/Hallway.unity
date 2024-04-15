@@ -559,7 +559,7 @@ MonoBehaviour:
   forwardDoor: {fileID: 1509912520}
   interactIcon: {fileID: 1545710426}
   doorIcon: {fileID: 21300000, guid: dd8290f14cfa2b04fb3b22f02f94a956, type: 3}
-  uninteractableIcon: {fileID: 21300000, guid: dd8290f14cfa2b04fb3b22f02f94a956, type: 3}
+  uninteractableIcon: {fileID: 21300000, guid: 2cd2fa24be74bbf43a2aa38dd7a37dcd, type: 3}
   movingAnimator: {fileID: 481580103}
   black: {fileID: 481580104}
   hint: {fileID: 875413186}

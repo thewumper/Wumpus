@@ -79,26 +79,20 @@ public class HallUI : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.transform.CompareTag("hallDoor"))
+            if (hit.transform.CompareTag("hallDoor") && !pLock)
             {
-                if (!pLock)
+                ShowInteract(doorIcon);
+                if (Input.GetMouseButtonDown(0))
                 {
-                    ShowInteract(doorIcon);
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
-                        moveDir = hit.transform.GetComponent<HallDoor>().GetDir();
-                        movingAnimator.SetBool(movingID, true);
-                        pLock = true;
-                    }
+                    movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
+                    moveDir = hit.transform.GetComponent<HallDoor>().GetDir();
+                    movingAnimator.SetBool(movingID, true);
+                    pLock = true;
                 }
-            } else if (hit.transform.CompareTag("unmoveableDoor"))
+            } else if (hit.transform.CompareTag("unmoveableDoor") && !pLock)
             {
-                if (!pLock)
-                {
-                    ShowInteract(uninteractableIcon);
-                }
-            }
+                ShowInteract(uninteractableIcon);
+            } 
             else
             {
                 HideInteract();

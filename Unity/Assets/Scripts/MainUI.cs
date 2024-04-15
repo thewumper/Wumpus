@@ -165,14 +165,11 @@ public class MainUI : MonoBehaviour
                     movingAnimator.SetBool(movingID, true);
                     pLock = true;
                 }
-            }
-        } else if (hit.transform.CompareTag("unmoveableDoor"))
-        {
-            if (!pLock)
+            } else if (hit.transform.CompareTag("unmoveableDoor") && !pLock)
             {
                 ShowInteract(uninteractableIcon);
             }
-        }
+        } 
         else
         {
             HideInteract();
