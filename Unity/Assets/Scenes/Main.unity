@@ -350,6 +350,8 @@ MonoBehaviour:
   southWestDoor: {fileID: 476424740}
   northWestDoor: {fileID: 1864841506}
   interactIcon: {fileID: 763137745}
+  doorIcon: {fileID: 21300000, guid: dd8290f14cfa2b04fb3b22f02f94a956, type: 3}
+  uninteractableIcon: {fileID: 21300000, guid: dd8290f14cfa2b04fb3b22f02f94a956, type: 3}
   coinsText: {fileID: 1872784049}
   roomText: {fileID: 1799547984}
   movingAnimator: {fileID: 210612756}
