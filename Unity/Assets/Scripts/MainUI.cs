@@ -166,6 +166,12 @@ public class MainUI : MonoBehaviour
                     pLock = true;
                 }
             }
+        } else if (hit.transform.CompareTag("unmoveableDoor"))
+        {
+            if (!pLock)
+            {
+                ShowInteract(uninteractableIcon);
+            }
         }
         else
         {
