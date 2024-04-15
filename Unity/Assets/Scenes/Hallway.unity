@@ -1413,7 +1413,7 @@ GameObject:
   - component: {fileID: 1621221436}
   m_Layer: 0
   m_Name: backDoor
-  m_TagString: hallDoor
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

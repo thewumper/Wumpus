@@ -59,7 +59,7 @@ public class HallUI : MonoBehaviour
         forwardDoor.AddComponent<HallDoor>().Init(HallwayDir.Forward);
 
         AnsweredQuestion q = controller.GetUnaskedQuestion();
-        hint.text = $"An answer is {q.choices[q.answer]}.";
+        hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
 
         interactIcon.SetActive(false);
     }
