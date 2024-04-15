@@ -55,6 +55,10 @@ public class MainUI : MonoBehaviour
 
     [SerializeField]
     private GameObject interactIcon;
+    [SerializeField] 
+    private Sprite doorIcon;
+    [SerializeField] 
+    private Sprite uninteractableIcon;
     
     [SerializeField] 
     private TMP_Text coinsText;
@@ -153,7 +157,7 @@ public class MainUI : MonoBehaviour
         {
             if (hit.transform.CompareTag("door") && !pLock)
             {
-                interactIcon.SetActive(true);
+                ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
                     movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
@@ -162,10 +166,16 @@ public class MainUI : MonoBehaviour
                     pLock = true;
                 }
             }
+        } else if (hit.transform.CompareTag("unmoveableDoor"))
+        {
+            if (!pLock)
+            {
+                ShowInteract(uninteractableIcon);
+            }
         }
         else
         {
-            interactIcon.SetActive(false);
+            HideInteract();
         }
 
         coinsText.text = controller.GetCoins().ToString();
@@ -190,5 +200,16 @@ public class MainUI : MonoBehaviour
                 cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
+    }
+    
+    private void ShowInteract(Sprite sprite)
+    {
+        interactIcon.GetComponent<Image>().sprite = sprite;
+        interactIcon.SetActive(true);
+    }
+
+    private void HideInteract()
+    {
+        interactIcon.SetActive(false);
     }
 }

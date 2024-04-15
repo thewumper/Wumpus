@@ -28,6 +28,10 @@ public class HallUI : MonoBehaviour
     
     [SerializeField]
     private GameObject interactIcon;
+    [SerializeField] 
+    private Sprite doorIcon;
+    [SerializeField] 
+    private Sprite uninteractableIcon;
     
     [SerializeField] 
     private Animator movingAnimator;
@@ -59,7 +63,7 @@ public class HallUI : MonoBehaviour
         forwardDoor.AddComponent<HallDoor>().Init(HallwayDir.Forward);
 
         AnsweredQuestion q = controller.GetUnaskedQuestion();
-        hint.text = $"An answer is {q.choices[q.answer]}.";
+        hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
 
         interactIcon.SetActive(false);
     }
@@ -79,7 +83,7 @@ public class HallUI : MonoBehaviour
             {
                 if (!pLock)
                 {
-                    interactIcon.SetActive(true);
+                    ShowInteract(doorIcon);
                     if (Input.GetMouseButtonDown(0))
                     {
                         movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
@@ -88,10 +92,16 @@ public class HallUI : MonoBehaviour
                         pLock = true;
                     }
                 }
+            } else if (hit.transform.CompareTag("unmoveableDoor"))
+            {
+                if (!pLock)
+                {
+                    ShowInteract(uninteractableIcon);
+                }
             }
             else
             {
-                interactIcon.SetActive(false);
+                HideInteract();
             }
         }
         
@@ -112,5 +122,16 @@ public class HallUI : MonoBehaviour
                 cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
+    }
+
+    private void ShowInteract(Sprite sprite)
+    {
+        interactIcon.GetComponent<Image>().sprite = sprite;
+        interactIcon.SetActive(true);
+    }
+
+    private void HideInteract()
+    {
+        interactIcon.SetActive(false);
     }
 }
