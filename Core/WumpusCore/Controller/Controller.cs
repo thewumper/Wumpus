@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using WumpusCore.Entity;
 using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
 using WumpusCore.GameLocations;
@@ -13,7 +14,6 @@ namespace WumpusCore.Controller
     {
         private static Controller controllerReference;
         private IRoom nextRoom;
-        private IRoom beforeRoom;
 
         public static Controller GlobalController
         {
@@ -31,7 +31,6 @@ namespace WumpusCore.Controller
         public static Random Random = new Random();
 
         private ControllerState state = StartScreen;
-        private Player.Player player = new Player.Player();
         private ITopology topology;
 
 
@@ -49,6 +48,7 @@ namespace WumpusCore.Controller
             controllerReference = this;
             trivia = new Trivia.Trivia(trviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
+            gameLocations = new GameLocations.GameLocations(topology.RoomCount);
         }
 
 
@@ -76,39 +76,43 @@ namespace WumpusCore.Controller
         public void MoveInADirection(Directions direction)
         {
             state = InBetweenRooms;
-            beforeRoom = topology.GetRoom(player.Position);
-            nextRoom = topology.GetRoom (player.Position).ExitRooms[direction];
+
+            Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
+
+            nextRoom = topology.GetRoom ((ushort) player.location).ExitRooms[direction];
 
 
-            player.MoveInDirection(topology, direction);
+            player.location = topology.GetRoom((ushort) player.location).ExitRooms[direction].Id;
         }
 
-        public ushort MoveFromHallway(HallwayDir hallwayDir)
+        /// <summary>
+        /// Moves a player from the hallway they are in  to the room they previously targets
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public int MoveFromHallway()
         {
             ValidateState(new [] {InBetweenRooms});
-
             if (nextRoom == null)
             {
                 throw new InvalidOperationException("You need to start in a room and move from it before calling move from hallway");
             }
 
-            if (hallwayDir == HallwayDir.Forward)
-            {
-                player.MoveTo(nextRoom.Id);
-            }
-            // If the player is going back to the previous room then you don't have to change anything
+            Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
+
+            player.location = nextRoom.Id;
             state=InRoom;
 
-            return player.Position;
+            return player.location;
         }
 
         /// <summary>
         /// Get the location of the player from topology.
         /// </summary>
         /// <returns>The location of the player</returns>
-        public ushort GetPlayerLocation()
+        public int GetPlayerLocation()
         {
-            return player.Position;
+            return gameLocations.GetEntity(EntityType.Player).location;
         }
 
         public ControllerState GetState()
@@ -127,12 +131,12 @@ namespace WumpusCore.Controller
 
         public int GetCoins()
         {
-            return player.coins;
+            throw new NotImplementedException("This can't exist rn ngl");
         }
 
         public int GetArrowCount()
         {
-            return player.arrows;
+            throw new NotImplementedException("This can't exist rn ngl");
         }
 
         // public bool SubmitTriviaAnswer(int guess)
