@@ -58,6 +58,7 @@
     <Compile Include="ControllerTest.cs" />
     <Compile Include="DummyEntity.cs" />
     <Compile Include="EntityTest.cs" />
+    <Compile Include="PlayerTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TriviaTesting.cs" />
     <Compile Include="TopologyTests.cs" />
