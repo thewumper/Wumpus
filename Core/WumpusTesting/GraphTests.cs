@@ -148,6 +148,7 @@ namespace WumpusTesting
         public Directions[] ExitDirections => ExitRooms.Keys.ToArray();
 
         public Dictionary<Directions, IRoom> ExitRooms { get; private set; }
+        public Dictionary<Directions, IRoom> AdjacentRooms { get; }
 
         public ushort Id => 0;
     }

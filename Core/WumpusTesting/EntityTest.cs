@@ -36,7 +36,7 @@ namespace WumpusTesting
         public GameLocations SetupGameLocations()
         {
             Topology topology = new Topology("entitytest1.map");
-            GameLocations game = new GameLocations(30);
+            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random());
             game.AddEntity(new DummyEntity(topology, game, EntityType.Player));
             game.AddEntity(new Entity(topology, game, 19, EntityType.Wumpus));
             return game;
@@ -45,7 +45,7 @@ namespace WumpusTesting
         public GameLocations SetupGameLocationsDirected()
         {
             Topology topology = new Topology("entitytest2.map");
-            GameLocations game = new GameLocations(30);
+            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random());
             game.AddEntity(new DummyEntity(topology, game, EntityType.Player));
             game.AddEntity(new Entity(topology, game, 19, EntityType.Wumpus));
             return game;
