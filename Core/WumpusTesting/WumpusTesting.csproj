@@ -54,6 +54,7 @@
     <Compile Include="EntityTest.cs" />
     <Compile Include="PlayerTesting.cs" />
     <Compile Include="HighScoreTest.cs" />
+    <Compile Include="LuckyCatTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TriviaTesting.cs" />
     <Compile Include="TopologyTests.cs" />

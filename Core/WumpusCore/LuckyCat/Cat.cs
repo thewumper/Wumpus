@@ -42,7 +42,7 @@ namespace WumpusCore.LuckyCat
             MewQuiet
         }
 
-        public Cat(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType) : base(topology, parent, location, entityType)
+        public Cat(Topology.Topology topology, GameLocations.GameLocations parent, ushort location): base(topology, parent, location, EntityType.Cat)
         {
         }
 
@@ -50,23 +50,22 @@ namespace WumpusCore.LuckyCat
         /// Attempts to Tame the Lucky Cat
         /// </summary>
         /// <returns>The state of cat tame, successful or not</returns>
-        public bool Tame()
+        public bool Tame(ushort coins)
         {
             if (!tamed && coins >= 20)
             {
-                coins = 0;
-                // (Taming success message)
+                coins -= 20;
+                Console.WriteLine("You tame'd the kitty cat");
                 return true;
             }
             else if (!tamed && coins < 20 )
             {
-                coins = 0;
-                // (Taming failure message)
+                Console.WriteLine("Failed to tame'd the kitty cat.");
                 return false;
             }
             else if ( tamed )
             {
-                // (Cat already tamed)
+                Console.WriteLine("Kitty cat already tame'd idoit");
                 return true;
             }
             else 
