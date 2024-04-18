@@ -50,7 +50,7 @@ namespace WumpusCore.GameLocations
         /// <param name="random">A random object</param>
         public GameLocations(ushort numRooms,ushort numVats, ushort numBats, ushort numRats, ushort numAcrobats, Topology.Topology topology, Random random)
         {
-            if (numVats + numRats + numAcrobats + numBats >= 30)
+            if (numVats + numRats + numAcrobats + numBats >= numRooms)
             {
                 throw new ArgumentException("Too many hazards!");
             }
