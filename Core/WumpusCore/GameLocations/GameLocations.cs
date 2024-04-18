@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WumpusCore.Entity;
 using WumpusCore.LuckyCat;
+using WumpusCore.Topology;
 
 namespace WumpusCore.GameLocations
 {
@@ -23,6 +24,28 @@ namespace WumpusCore.GameLocations
             Bats,
             Rats,
             Acrobat
+        }
+        
+        // Whether there is a coin in the hallway out from a given room
+        public Dictionary<Directions, bool>[] hallwayCoins;
+
+
+
+        private bool[] triviaRemaining;
+
+        public bool GetTriviaAvailable(int index)
+        {
+            // Trivia is not available in hazard rooms
+            if (GetRoomAt((ushort)index) == RoomType.Flats)
+            {
+                return triviaRemaining[index];
+            } 
+            return false;
+        }
+
+        public void SetTriviaRemaining(int index, bool remaining)
+        {
+            triviaRemaining[index] = remaining;
         }
 
         /// <summary>
@@ -46,6 +69,18 @@ namespace WumpusCore.GameLocations
         {
             rooms = new RoomType[numRooms];
             entities = new Dictionary<EntityType, Entity.Entity>();
+            
+            hallwayCoins = new Dictionary<Directions, bool>[30];
+            for (int i = 0; i < rooms.Length; i++)
+            {
+                hallwayCoins[i] = new Dictionary<Directions, bool>();
+                for (int j = 0; j < 6; j++)
+                {
+                    hallwayCoins[i][(Directions)j] = true;
+                }
+
+                triviaRemaining[i] = true;
+            }
         }
 
         /// <summary>
@@ -110,10 +145,20 @@ namespace WumpusCore.GameLocations
         /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
         public ushort GetEmptyRoom()
         {
+            return GetRoomOfType(RoomType.Flats);
+        }
+
+        /// <summary>
+        /// Gets a random room of the given type from the <see cref="rooms">rooms</see> array.
+        /// </summary>
+        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>type</c> from the <see cref="rooms">rooms</see> array.</returns>
+        /// <exception cref="InvalidOperationException">When there are no rooms of the given type.</exception>
+        public ushort GetRoomOfType(RoomType type)
+        {
             List<ushort> positions = new List<ushort>();
             for (ushort i = 0; i < rooms.Length; i++)
             {
-                if (rooms[i] == RoomType.Flats)
+                if (rooms[i] == type)
                 {
                     positions.Add(i);
                 }
