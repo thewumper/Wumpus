@@ -70,7 +70,8 @@ namespace WumpusCore.GameLocations
             rooms = new RoomType[numRooms];
             entities = new Dictionary<EntityType, Entity.Entity>();
             
-            hallwayCoins = new Dictionary<Directions, bool>[30];
+            hallwayCoins = new Dictionary<Directions, bool>[numRooms];
+            triviaRemaining = new bool[numRooms];
             for (int i = 0; i < rooms.Length; i++)
             {
                 hallwayCoins[i] = new Dictionary<Directions, bool>();

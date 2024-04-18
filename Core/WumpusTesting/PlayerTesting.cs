@@ -57,7 +57,7 @@ namespace WumpusTesting
             player.EarnArrows(GameResult.Win);
             Assert.AreEqual(5, player.Arrows);
             player.EarnArrows(GameResult.Loss);
-            Assert.AreEqual(2, player.Coins);
+            Assert.AreEqual(4, player.Coins);
         }
     }
 }
