@@ -88,11 +88,6 @@ public class HallUI : MonoBehaviour
     /// </summary>
     [SerializeField] 
     private TMP_Text hint;
-    
-    /// <summary>
-    /// The <see cref="HallwayDir"/> that the player is moving.
-    /// </summary>
-    private HallwayDir moveDir;
 
     private void Awake()
     {
@@ -114,9 +109,6 @@ public class HallUI : MonoBehaviour
     {
         // Initializes the movingID.
         movingID = Animator.StringToHash("moving");
-        
-        backDoor.AddComponent<HallDoor>().Init(HallwayDir.Previous);
-        forwardDoor.AddComponent<HallDoor>().Init(HallwayDir.Forward);
 
         AnsweredQuestion q = controller.GetUnaskedQuestion();
         hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
@@ -145,7 +137,6 @@ public class HallUI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
-                    moveDir = hit.transform.GetComponent<HallDoor>().GetDir();
                     movingAnimator.SetBool(movingID, true);
                     pLock = true;
                 }
@@ -169,7 +160,7 @@ public class HallUI : MonoBehaviour
             if (black.color.a.Equals(1))
             {
                 // Move from the Hallway.
-                controller.MoveFromHallway(moveDir);
+                controller.MoveFromHallway();
                 movingAnimator.SetBool(movingID, false);
                 // Unlock the player.
                 pLock = false;

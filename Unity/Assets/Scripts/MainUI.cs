@@ -186,9 +186,9 @@ public class MainUI : MonoBehaviour
         // Initializes the roomNum to the player's starting location.
         controller = Controller.GlobalController;
         soundManager = new SoundManager(wumpusClip);
-        
-        RoomNum = controller.GetPlayerLocation();
-        
+
+        RoomNum = (ushort) controller.GetPlayerLocation();
+            
         // Initializes the movingID.
         movingID = Animator.StringToHash("moving");
         
@@ -305,7 +305,7 @@ public class MainUI : MonoBehaviour
                     return;
                 }
                 // If not in a hallway, move to the next room.
-                RoomNum = controller.MoveFromHallway(HallwayDir.Forward);
+                RoomNum = (ushort) controller.MoveFromHallway();
                 // Reset camera position.
                 cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
             }
