@@ -14,7 +14,11 @@ public class HallDoor : MonoBehaviour
     {
         this.dir = dir;
     }
-
+    
+    /// <summary>
+    /// Gets the direction of this door.
+    /// </summary>
+    /// <returns>The direction of this door.</returns>
     public HallwayDir GetDir()
     {
         return this.dir;
