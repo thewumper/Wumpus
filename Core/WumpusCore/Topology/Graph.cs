@@ -60,14 +60,14 @@ namespace WumpusCore.Topology
             return visited.Count == nodes.Count;
         }
 
-        public HashSet<IRoom> GetRandomPossibleSolutions(ushort numRemoved, ushort panicExit=10000)
+        public HashSet<IRoom> GetRandomPossibleSolutions(int numRemoved, ushort panicExit=10000)
         {
             Random random = new Random();
             HashSet<IRoom> solution = new HashSet<IRoom>();
-            ushort tries = 0;
+            int tries = 0;
             while (tries < panicExit)
             {
-                ushort hasRemoved = 0;
+                int hasRemoved = 0;
                 List<IRoom> nodesInSolution = new List<IRoom>(nodes);
                 solution.Clear();
                 bool validSolution = true;

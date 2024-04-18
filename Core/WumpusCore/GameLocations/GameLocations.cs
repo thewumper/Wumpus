@@ -48,7 +48,7 @@ namespace WumpusCore.GameLocations
         /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
         /// <param name="topology">The topology structure</param>
         /// <param name="random">A random object</param>
-        public GameLocations(ushort numRooms,ushort numVats, ushort numBats, ushort numRats, ushort numAcrobats, Topology.Topology topology, Random random)
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, Topology.Topology topology, Random random)
         {
             if (numVats + numRats + numAcrobats + numBats >= numRooms)
             {
@@ -56,19 +56,19 @@ namespace WumpusCore.GameLocations
             }
             
             rooms = new RoomType[numRooms];
-            ushort hardHazards = (ushort)(numVats + numBats);
+            int hardHazards = (numVats + numBats);
             Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
             
             List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
             List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
 
-            UseListPopulateHazards(solutions, RoomType.Vats, numVats,random);
-            UseListPopulateHazards(solutions, RoomType.Bats, numBats,random);
-            UseListPopulateHazards(validRooms, RoomType.Rats, numRats,random);
-            UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats,random);
+            UseListPopulateHazards(solutions, RoomType.Vats, numVats);
+            UseListPopulateHazards(solutions, RoomType.Bats, numBats);
+            UseListPopulateHazards(validRooms, RoomType.Rats, numRats);
+            UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats);
         }
 
-        private void UseListPopulateHazards(List<IRoom> list, RoomType type, ushort num, Random random)
+        private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
         {
             var i = 0;
             foreach (IRoom location in list)
