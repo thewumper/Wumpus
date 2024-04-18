@@ -16,13 +16,13 @@ namespace WumpusCore.Wumpus
         }
     public class Wumpus: Entity.Entity
     {
-        private State WumpusState;
+        private State WumpState;
         /// <summary>
         /// Constructs the Wump.  
         /// </summary>
         public Wumpus(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType) : base(topology, parent, location, entityType)
         {
-            WumpusState = State.Sleeping;
+            WumpState = State.Sleeping;
         }
         /// <summary>
         /// Moves the Wump into a connected room randomly a number of times depending on the state.
@@ -31,11 +31,11 @@ namespace WumpusCore.Wumpus
         public void move(Random Random)
         {
             int maxMoves;
-            if ((int)WumpusState == 1)
+            if ((int)WumpState == 1)
             {
                 maxMoves = 1;
             }
-            else if ((int)WumpusState == 2)
+            else if ((int)WumpState == 2)
             {
                 maxMoves = 4;
             }
@@ -48,7 +48,7 @@ namespace WumpusCore.Wumpus
                     MoveToRandomAdjacent();
                 }
             }
-            WumpusState = State.Sleeping;
+            WumpState = State.Sleeping;
         }
         /// <summary>
         /// Sets the state of the Wump
@@ -56,7 +56,11 @@ namespace WumpusCore.Wumpus
         /// <param name="newState">The new state of the Wump.  0 for sleep, 1 for fleeing arrow shoot, 2 for fleeing combat, 3 for in combat, 4 for ded</param>
         public void setState(int newState)
         {
-            this.WumpusState = (State)newState;
+            this.WumpState = (State)newState;
+        }
+        public int getWumpState()
+        {
+            return (int)WumpState;
         }
     }
 }
