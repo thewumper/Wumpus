@@ -9,11 +9,12 @@ using WumpusUnity;
 public class MainUI : MonoBehaviour
 {
     private Controller controller;
+    private SoundManager soundManager;
     private SceneController sceneController;
-    
+
     [SerializeField]
     private GameObject cam;
-    [SerializeField] 
+    [SerializeField]
     private GameObject movementRotation;
     private const float camSens = 5f;
     private const float camSpeed = 4f;
@@ -55,11 +56,11 @@ public class MainUI : MonoBehaviour
 
     [SerializeField]
     private GameObject interactIcon;
-    [SerializeField] 
+    [SerializeField]
     private Sprite doorIcon;
-    [SerializeField] 
+    [SerializeField]
     private Sprite uninteractableIcon;
-    
+
     [SerializeField] 
     private TMP_Text coinsText;
     [SerializeField] 
@@ -72,6 +73,11 @@ public class MainUI : MonoBehaviour
     [SerializeField] 
     private Image black;
     
+
+    [SerializeField]
+    private AudioClip wumpusClip;
+    private AudioClip luckyCatClip;
+
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
     /// </summary>
@@ -101,17 +107,22 @@ public class MainUI : MonoBehaviour
 
         interactIcon.SetActive(false);
         
+        controller = Controller.GlobalController;
+        soundManager = new SoundManager(wumpusClip);
+        RoomNum = 1;
         RoomNum = controller.GetPlayerLocation();
 
         movingID = Animator.StringToHash("moving");
         pLock = false;
-        
+
         northDoor.AddComponent<Door>().Init(Directions.North);
         northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
         southEastDoor.AddComponent<Door>().Init(Directions.SouthEast);
         southDoor.AddComponent<Door>().Init(Directions.South);
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
+
+        soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
     }
 
     void LateUpdate()
@@ -169,14 +180,15 @@ public class MainUI : MonoBehaviour
             {
                 ShowInteract(uninteractableIcon);
             }
-        } 
+        }
         else
         {
             HideInteract();
         }
 
         coinsText.text = controller.GetCoins().ToString();
-        
+
+
         if (movingAnimator.GetBool(movingID))
         {
             if (black.color.a.Equals(1))
@@ -198,7 +210,7 @@ public class MainUI : MonoBehaviour
             }
         }
     }
-    
+
     private void ShowInteract(Sprite sprite)
     {
         interactIcon.GetComponent<Image>().sprite = sprite;
