@@ -107,6 +107,14 @@ namespace WumpusCore.Controller
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Called when the player successfully earns a secret. Generate a new secret and give it to the player.
+        /// </summary>
+        public void GenerateSecret()
+        {
+            throw new NotImplementedException();
+        }
+
         public GameLocations.GameLocations.RoomType GetRoomType(ushort roomNumber)
         {
             return gameLocations.GetRoomAt(roomNumber);

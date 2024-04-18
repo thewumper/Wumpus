@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using WumpusCore.Controller;
 using WumpusCore.Entity;
 using WumpusCore.Topology;
@@ -19,15 +20,12 @@ namespace WumpusCore.Player
         /// <summary>
         /// The amount of arrows the player currently has.
         /// </summary>
-        public uint Arrows { get; private set; }
+        public int Arrows { get; private set; }
         
         /// <summary>
         /// Number of moves made so far
         /// </summary>
         public int TurnsTaken { get; private set; }
-
-        // Whether there is a coin in the hallway out from a given room
-        private Dictionary<Directions, bool>[] hallwayCoins;
         
         
         
@@ -39,16 +37,6 @@ namespace WumpusCore.Player
         {   
             Coins = 0;
             Arrows = 3;
-
-            hallwayCoins = new Dictionary<Directions, bool>[30];
-            for (int i = 0; i < topology.RoomCount; i++)
-            {
-                hallwayCoins[i] = new Dictionary<Directions, bool>();
-                for (int j = 0; j < 6; j++)
-                {
-                    hallwayCoins[i][(Directions)j] = true;
-                }
-            }
         }
         
         /// <summary>
@@ -102,8 +90,8 @@ namespace WumpusCore.Player
             if (CoinRemainingInHallway(direction))
             {
                 GainCoins(1);
-                hallwayCoins[location][direction] = false;
-                hallwayCoins[thisRoom.ExitRooms[direction].Id][direction.GetInverse()] = false;
+                gameLocations.hallwayCoins[location][direction] = false;
+                gameLocations.hallwayCoins[thisRoom.ExitRooms[direction].Id][direction.GetInverse()] = false;
             }
             TurnsTaken++;
         }
@@ -114,7 +102,62 @@ namespace WumpusCore.Player
         /// <returns>Whether there is a coin in the hallway</returns>
         public bool CoinRemainingInHallway(Directions direction)
         {
-            return hallwayCoins[location][direction];
+            return gameLocations.hallwayCoins[location][direction];
+        }
+
+        public bool TriviaAvailable
+        {
+            get
+            {
+                return gameLocations.GetTriviaAvailable(location);
+            }
+        }
+
+        /// <summary>
+        /// Earn arrows by answering trivia questions (3, 2)
+        /// Run after trivia is complete
+        /// </summary>
+        /// <param name="triviaOutcome">The outcome of the preceding trivia game</param>
+        public void EarnArrows(GameResult triviaOutcome)
+        {
+            if (triviaOutcome == GameResult.Win)
+            {
+                Arrows += 2;
+                gameLocations.SetTriviaRemaining(location, false);
+            }
+            else if (triviaOutcome == GameResult.Loss)
+            {
+                LoseCoins(1);
+                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
+                gameLocations.SetTriviaRemaining(location, false);
+            }
+            else
+            {
+                throw new ArgumentException("Game still in progress!");
+            }
+        }
+
+        /// <summary>
+        /// Earn knowledge by answering trivia questions (3, 2)
+        /// Run after trivia is complete
+        /// </summary>
+        /// <param name="triviaOutcome">The outcome of the preceding trivia game</param>
+        public void EarnSecret(GameResult triviaOutcome)
+        {
+            if (triviaOutcome == GameResult.Win)
+            {
+                Controller.Controller.GlobalController.GenerateSecret();
+            } 
+            else if (triviaOutcome == GameResult.Loss)
+            {
+                LoseCoins(1);
+                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
+                gameLocations.SetTriviaRemaining(location, false);
+            }
+            else
+            {
+                throw new ArgumentException("Game still in progress!");
+            }
         }
     }
 }
