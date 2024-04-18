@@ -15,7 +15,8 @@ namespace WumpusCore.Entity
         private GameLocations.GameLocations gameLocations;
         
         // Location index in Topology
-        public int location { get; protected set; }
+        // TODO: This is bad and temporary. This should be a real method with validation
+        public int location { get; set; }
 
         /// <summary>
         /// Create an Entity. Generic constructor that should never be run on its own.

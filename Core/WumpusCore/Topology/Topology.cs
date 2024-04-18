@@ -13,7 +13,12 @@ namespace WumpusCore.Topology
         /// Array of rooms
         /// </summary>
         private readonly Room[] rooms;
-        
+
+        public ushort RoomCount
+        {
+            get { return (ushort) rooms.Length; }
+        }
+
         /// <summary>
         /// Creates topology from filepath to map data
         /// </summary>

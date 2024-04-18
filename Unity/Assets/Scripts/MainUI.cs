@@ -12,10 +12,13 @@ public class MainUI : MonoBehaviour
     /// Reference to the global Controller.
     /// </summary>
     private Controller controller;
+
     /// <summary>
     /// Reference to the global SceneController.
     /// </summary>
     private SceneController sceneController;
+    
+    private SoundManager soundManager;
     
     /// <summary>
     /// The GameObject of the Camera.
@@ -25,8 +28,8 @@ public class MainUI : MonoBehaviour
     /// <summary>
     /// The Rotation for the Movement of the Player.
     /// </summary>
-    [SerializeField] 
     private GameObject movementRotation;
+    
     /// <summary>
     /// The speed at which the camera rotates with the player's mouse.
     /// </summary>
@@ -102,6 +105,7 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private GameObject interactIcon;
+
     /// <summary>
     /// The icon that represents being able to move through a door.
     /// </summary>
@@ -140,6 +144,11 @@ public class MainUI : MonoBehaviour
     [SerializeField] 
     private Image black;
     
+
+    [SerializeField]
+    private AudioClip wumpusClip;
+    private AudioClip luckyCatClip;
+
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
     /// </summary>
@@ -175,6 +184,9 @@ public class MainUI : MonoBehaviour
         HideInteract();
         
         // Initializes the roomNum to the player's starting location.
+        controller = Controller.GlobalController;
+        soundManager = new SoundManager(wumpusClip);
+        
         RoomNum = controller.GetPlayerLocation();
         
         // Initializes the movingID.
@@ -190,6 +202,8 @@ public class MainUI : MonoBehaviour
         southDoor.AddComponent<Door>().Init(Directions.South);
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
+
+        soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
     }
 
     void LateUpdate()
@@ -303,7 +317,6 @@ public class MainUI : MonoBehaviour
             }
         }
     }
-    
     /// <summary>
     /// Shows the <see cref="interactIcon"/> with the given sprite.
     /// </summary>

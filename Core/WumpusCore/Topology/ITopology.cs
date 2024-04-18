@@ -12,5 +12,6 @@
         /// <returns>The room with the given ID</returns>
         IRoom GetRoom(ushort id);
 
+        ushort RoomCount { get; }
     }
 }
