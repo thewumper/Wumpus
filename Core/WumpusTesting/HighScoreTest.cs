@@ -16,7 +16,13 @@ namespace WumpusTesting
         {
             HighScore testScore = new HighScore("player", 5, 300, 0, false, 2);
             Assert.IsNotNull(testScore);
-
+            HighScore.StoredHighScore compScore = testScore.compactScore;
+            Assert.AreEqual("player", compScore.playerName);
+            Assert.AreEqual(5, compScore.numTurns);
+            Assert.AreEqual(300, compScore.goldLeft);
+            Assert.AreEqual(0, compScore.arrowsLeft);
+            Assert.AreEqual(false, compScore.isWumpusDead);
+            Assert.AreEqual(2, compScore.mapUsed);
         }
 
         /// <summary>
@@ -51,7 +57,9 @@ namespace WumpusTesting
         public void TestSaveFileGeneration()
         {
             SaveFile testSaveFile = new SaveFile("File is made", true);
+            string saveText = testSaveFile.ReadFile(false);
             Assert.IsNotNull(testSaveFile);
+            Assert.AreEqual("File is made", saveText);
         }
 
         /// <summary>
