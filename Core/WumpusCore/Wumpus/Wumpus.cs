@@ -4,11 +4,10 @@ using WumpusCore.Entity;
 namespace WumpusCore.Wumpus
 {
         /// <summary>
-        /// state of wumpus.  
-        /// Better description coming soon
+        /// State of Wump.
         /// </summary>
         public enum State
-        { 
+        {
             Sleeping,
             FleeingArrow,
             FleeingCombat,
@@ -19,14 +18,14 @@ namespace WumpusCore.Wumpus
     {
         private State WumpusState;
         /// <summary>
-        /// Constructs the Wumpus.  
+        /// Constructs the Wump.  
         /// </summary>
         public Wumpus(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType) : base(topology, parent, location, entityType)
         {
             WumpusState = State.Sleeping;
         }
         /// <summary>
-        /// Moves the wumpus into a connected room randomly a number of times depending on the state.
+        /// Moves the Wump into a connected room randomly a number of times depending on the state.
         /// </summary>
         /// <param name="Random">Represents a pseudo-random number generator, which is a device that produces a sequence of numbers that meet certain statistical requirements for randomness</param>
         public void move(Random Random)
@@ -52,12 +51,12 @@ namespace WumpusCore.Wumpus
             WumpusState = State.Sleeping;
         }
         /// <summary>
-        /// Changes state and starts minigame, then changes state again based on result of battle.  
-        /// Better description coming soon
+        /// Sets the state of the Wump
         /// </summary>
-        public void startBattle()
+        /// <param name="newState">The new state of the Wump.  0 for sleep, 1 for fleeing arrow shoot, 2 for fleeing combat, 3 for in combat, 4 for ded</param>
+        public void setState(int newState)
         {
-            throw new NotImplementedException();
-        }   
+            this.WumpusState = (State)newState;
+        }
     }
 }
