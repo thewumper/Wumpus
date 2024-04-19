@@ -22,7 +22,7 @@ namespace WumpusCore.Controller
             {
                 if (controllerReference == null)
                 {
-                    throw new InvalidOperationException(
+                    throw new NullReferenceException(
                         "You have to initialize a controller before you can grab a global controller");
                 }
 
