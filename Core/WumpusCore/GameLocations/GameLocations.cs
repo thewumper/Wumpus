@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WumpusCore.Entity;
+using WumpusCore.LuckyCat;
 using WumpusCore.Topology;
 
 namespace WumpusCore.GameLocations
