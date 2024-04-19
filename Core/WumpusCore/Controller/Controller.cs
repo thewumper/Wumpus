@@ -147,10 +147,10 @@ namespace WumpusCore.Controller
         public List<HazardType> getRoomHazards()
         {
             var hazards = new List<HazardType>();
-            if (gameLocations.GetEntity(EntityType.Wumpus).location == GetPlayerLocation())
-            {
+            // if (gameLocations.GetEntity(EntityType.Wumpus).location == GetPlayerLocation())
+            // {
                 hazards.Add(HazardType.Wumpus);
-            }
+            // }
 
             return hazards;
         }
