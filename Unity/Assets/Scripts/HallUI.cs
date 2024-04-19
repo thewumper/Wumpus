@@ -8,46 +8,90 @@ using WumpusUnity;
 
 public class HallUI : MonoBehaviour
 {
+    /// <summary>
+    /// Reference to the global Controller.
+    /// </summary>
     private Controller controller;
+    /// <summary>
+    /// Reference to the global SceneController.
+    /// </summary>
     private SceneController sceneController;
     
-    [SerializeField] 
+    /// <summary>
+    /// The GameObject of the Camera.
+    /// </summary>
+    [SerializeField]
     private GameObject cam;
+    /// <summary>
+    /// The Rotation for the Movement of the Player.
+    /// </summary>
     [SerializeField] 
     private GameObject movementRotation;
+    /// <summary>
+    /// The speed at which the camera rotates with the player's mouse.
+    /// </summary>
     private const float camSens = 5f;
+    /// <summary>
+    /// The speed the camera moves.
+    /// </summary>
     private const float camSpeed = 4f;
+    /// <summary>
+    /// Whether or not the player can move or look around.
+    /// </summary>
     private bool pLock;
     
+    /// <summary>
+    /// The door facing behind the player.
+    /// </summary>
     [SerializeField] 
     private GameObject backDoor;
+    /// <summary>
+    /// The door facing in front of the player.
+    /// </summary>
     [SerializeField] 
     private GameObject forwardDoor;
-
-    private HallwayDir moveDir;
     
+    /// <summary>
+    /// The GameObject that shows each interactable icon.
+    /// </summary>
     [SerializeField]
     private GameObject interactIcon;
+    /// <summary>
+    /// The icon that represents being able to move through a door.
+    /// </summary>
     [SerializeField] 
     private Sprite doorIcon;
+    /// <summary>
+    /// The icon that represents not being able to interact with something.
+    /// </summary>
     [SerializeField] 
     private Sprite uninteractableIcon;
     
+    // <summary>
+    /// The Animator that handles the player moving.
+    /// </summary>
     [SerializeField] 
     private Animator movingAnimator;
+    /// <summary>
+    /// The ID of the moving variable in <see cref="movingAnimator"/>.
+    /// </summary>
     private int movingID;
 
+    /// <summary>
+    /// The image used to fade in and out.
+    /// </summary>
     [SerializeField] 
     private Image black;
-
+    
+    /// <summary>
+    /// The text of the hint that is shown in the hallway.
+    /// </summary>
     [SerializeField] 
     private TMP_Text hint;
-    
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
-        movingID = Animator.StringToHash("moving");
-        
+        // Instantiates the Controller, if there isn't one already.
         try
         {
             controller = Controller.GlobalController;
@@ -57,10 +101,14 @@ public class HallUI : MonoBehaviour
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
+        // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
-        
-        backDoor.AddComponent<HallDoor>().Init(HallwayDir.Previous);
-        forwardDoor.AddComponent<HallDoor>().Init(HallwayDir.Forward);
+    }
+
+    void Start()
+    {
+        // Initializes the movingID.
+        movingID = Animator.StringToHash("moving");
 
         AnsweredQuestion q = controller.GetUnaskedQuestion();
         hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
@@ -68,62 +116,80 @@ public class HallUI : MonoBehaviour
         interactIcon.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // If the player isn't locked.
         if (!pLock)
         {
+            // Look around using the mouse.
             float mouseX = Input.GetAxis("Mouse X");
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
         }
+        // Used for checking what the player is looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        // If the player is looking at something.
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            // If the player is looking at a door in a hallway.
             if (hit.transform.CompareTag("hallDoor") && !pLock)
             {
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
                     movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
-                    moveDir = hit.transform.GetComponent<HallDoor>().GetDir();
                     movingAnimator.SetBool(movingID, true);
                     pLock = true;
                 }
-            } else if (hit.transform.CompareTag("unmoveableDoor") && !pLock)
+            }
+            // If the player is looking at a door that they can't move through.
+            else if (hit.transform.CompareTag("unmoveableDoor") && !pLock)
             {
                 ShowInteract(uninteractableIcon);
             } 
+            // If the player is looking at something that is none of these.
             else
             {
                 HideInteract();
             }
         }
         
+        // If the player is moving.
         if (movingAnimator.GetBool(movingID))
         {
+            // If the screen has fully faded to black.
             if (black.color.a.Equals(1))
             {
-                controller.MoveFromHallway(moveDir);
-                Debug.Log(moveDir);
-                Debug.Log(controller.GetPlayerLocation());
-                cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
+                // Move from the Hallway.
+                controller.MoveFromHallway();
                 movingAnimator.SetBool(movingID, false);
+                // Unlock the player.
                 pLock = false;
+                // Reset camera position.
+                cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
                 sceneController.GotoCorrectScene();
             }
+            // If the screen has not fully faded to black.
             else
             {
+                // Move the camera toward the doorway.
                 cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
     }
 
+    /// <summary>
+    /// Shows the <see cref="interactIcon"/> with the given sprite.
+    /// </summary>
+    /// <param name="sprite">The sprite that the interactIcon shows.</param>
     private void ShowInteract(Sprite sprite)
     {
         interactIcon.GetComponent<Image>().sprite = sprite;
         interactIcon.SetActive(true);
     }
 
+    /// <summary>
+    /// Hides the <see cref="interactIcon"/>.
+    /// </summary>
     private void HideInteract()
     {
         interactIcon.SetActive(false);
