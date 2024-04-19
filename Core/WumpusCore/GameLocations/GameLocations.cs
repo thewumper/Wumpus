@@ -89,17 +89,6 @@ namespace WumpusCore.GameLocations
             UseListPopulateHazards(solutions, RoomType.Bats, numBats);
             UseListPopulateHazards(validRooms, RoomType.Rats, numRats);
             UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats);
-        }
-
-        private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
-        {
-            int listSize = list.Count;
-            for (int i = listSize - 1; i >= listSize - num; i--)            {
-                var location = list[i];
-                list.Remove(location);
-                rooms[location.Id] = type;
-            }
-            entities = new Dictionary<EntityType, Entity.Entity>();
             
             hallwayCoins = new Dictionary<Directions, bool>[numRooms];
             triviaRemaining = new bool[numRooms];
@@ -113,6 +102,17 @@ namespace WumpusCore.GameLocations
 
                 triviaRemaining[i] = true;
             }
+        }
+
+        private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
+        {
+            int listSize = list.Count;
+            for (int i = listSize - 1; i >= listSize - num; i--)            {
+                var location = list[i];
+                list.Remove(location);
+                rooms[location.Id] = type;
+            }
+            entities = new Dictionary<EntityType, Entity.Entity>();
         }
 
         /// <summary>
