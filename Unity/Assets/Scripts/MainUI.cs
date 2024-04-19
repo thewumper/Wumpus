@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,6 +102,12 @@ public class MainUI : MonoBehaviour
     private GameObject northWestDoor;
     
     /// <summary>
+    /// The wumpus GameObject in the room.
+    /// </summary>
+    [SerializeField]
+    private GameObject wumpus;
+    
+    /// <summary>
     /// The GameObject that shows each interactable icon.
     /// </summary>
     [SerializeField]
@@ -143,7 +150,6 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField] 
     private Image black;
-    
 
     [SerializeField]
     private AudioClip wumpusClip;
@@ -182,6 +188,9 @@ public class MainUI : MonoBehaviour
         
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
+        
+        // Makes it so you can't normally see the wumpus.
+        wumpus.SetActive(false);
         
         // Initializes the roomNum to the player's starting location.
         controller = Controller.GlobalController;
@@ -235,6 +244,20 @@ public class MainUI : MonoBehaviour
                     break;
                 case "NW":
                     northWestDoor.SetActive(true);
+                    break;
+            }
+        }
+        
+        // All hazards in the player's current room.
+        List<HazardType> hazards = controller.getRoomHazards();
+        // For each hazard in the room.
+        foreach (HazardType hazard in hazards)
+        {
+            // Make the hazard visible.
+            switch (hazard)
+            {
+                case HazardType.Wumpus:
+                    wumpus.SetActive(true);
                     break;
             }
         }
