@@ -18,7 +18,7 @@ namespace WumpusCore.Entity
         protected readonly GameLocations.GameLocations gameLocations;
         
         // Location index in Topology
-        public ushort location { get; private set; }
+        public ushort location { get;  set; }
 
         // Given on initialization by Controller
         private Topology.Topology topologyLink;
