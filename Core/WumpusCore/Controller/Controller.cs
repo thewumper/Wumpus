@@ -22,7 +22,7 @@ namespace WumpusCore.Controller
             {
                 if (controllerReference == null)
                 {
-                    throw new NullReferenceException("Cannot refrence a controller that hasn't been instantiated yet");
+                    controllerReference = new Controller();
                 }
 
                 return controllerReference;
@@ -30,7 +30,6 @@ namespace WumpusCore.Controller
         }
 
         public static Random Random = new Random();
-
         private ControllerState state = StartScreen;
         private ITopology topology;
 
@@ -61,6 +60,10 @@ namespace WumpusCore.Controller
         /// <exception cref="IndexOutOfRangeException"></exception>
         public IRoom GetRoom(ushort roomNumber)
         {
+            if (roomNumber < 0)
+            {
+                throw new IndexOutOfRangeException("Room number is 0 indexed, not -1.");
+            }
             return topology.GetRoom(roomNumber);
         }
 
@@ -151,15 +154,11 @@ namespace WumpusCore.Controller
             return hazards;
         }
 
-        // public bool SubmitTriviaAnswer(int guess)
-        // {
-        //     return trivia.SubmitAnswer(guess);
-        // }
 
-        // public Trivia.AskableQuestion GetTriviaQuestion()
-        // {
-        //     return trivia.GetQuestion();
-        // }
+        public Trivia.AskableQuestion GetTriviaQuestion()
+        {
+            return trivia.GetQuestion();
+        }
 
         public void StartGame()
         {
@@ -189,10 +188,6 @@ namespace WumpusCore.Controller
                 throw new InvalidOperationException(
                     $"You cannot go to that state from {state}. The only valid options are {validStates}");
             }
-
-            Console.Write("Do you want to continue? ");
-            string answer = Console.ReadLine();
-
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Net.Security;
+using System.Collections.Generic;
 using WumpusCore.HighScoreNS;
 
 namespace WumpusTesting
@@ -50,7 +50,7 @@ namespace WumpusTesting
         [TestMethod]
         public void TestSaveFileGeneration()
         {
-            SaveFile testSaveFile = new SaveFile("File is made");
+            SaveFile testSaveFile = new SaveFile("File is made", true);
             Assert.IsNotNull(testSaveFile);
         }
 
@@ -60,8 +60,13 @@ namespace WumpusTesting
         [TestMethod]
         public void TestHighScoreSaveFile()
         {
-            HighScore saveScore = new HighScore("player", 5, 1, 4, true, 5);
-            saveScore.storeScoreToFile(saveScore.compactScore);
+            SaveFile file = new SaveFile("[:_]", false);
+            HighScore saveScore = new HighScore(file.path,"player", 5, 1, 4, true, 5);
+            saveScore.StoreScoreToFile(saveScore.compactScore);
+            string path = saveScore.savePath;
+            SaveFile usedFile = new SaveFile(false, path);
+            string info = usedFile.ReadFile(false);
+            Assert.AreEqual(saveScore.compactScore, saveScore.ConvertStringToStoredHighScore(info));
         }
 
         /// <summary>
@@ -70,23 +75,60 @@ namespace WumpusTesting
         [TestMethod]
         public void TestTopTenScoresSave()
         {
-            HighScore saveScore = new HighScore("playing", 8, 10, 4, true, 8);
-            saveScore.storeTopTenToFile();
+            SaveFile testHeadFile = new SaveFile("pesacdo", false);
+            string pathToUse = testHeadFile.path;
+            HighScore saveScore = new HighScore(pathToUse, "playing", 8, 10, 4, true, 8);
+            saveScore.StoreTopTenToFile();
         }
 
+        /// <summary>
+        /// Generate random scores and have
+        /// the top ten high scores list
+        /// update for each from the
+        /// head file generated at the start
+        /// </summary>
         [TestMethod]
         public void TestRandomTopTen()
         {
-            // do a thing here
+            SaveFile testHeadFile = new SaveFile("¯\\_(ツ)_/¯", false);
+            string pathToUse = testHeadFile.path;
+            HighScore lastScore = null;
+
+            for (int i = 0; i < 10; i++)
+            {
+                HighScore randScore = RandomScore(i, pathToUse);
+                randScore.StoreTopTenToFile();
+                Console.WriteLine();
+                if (i == 9)
+                {
+                    lastScore = randScore;
+                }
+            }
+            if (lastScore != null)
+            {
+                List<HighScore.StoredHighScore> topTen = lastScore.GetTopTen();
+                for (int i = 0; i < topTen.Count;i++)
+                {
+                    Console.WriteLine(topTen[i].ToString());
+                }
+                Assert.AreEqual(10, topTen.Count);
+            }
         }
 
-        private HighScore RandomScore(int index)
+        /// <summary>
+        /// Generate random variables to
+        /// create a high score object
+        /// </summary>
+        /// <param name="index"> multiplier for seed for random constructor </param>
+        /// <param name="path"> the directory to send to highscore object alternate constructor </param>
+        /// <returns>  </returns>
+        private HighScore RandomScore(int index, string path)
         {
-            Random rand = new Random();
+            Random rand = new Random(index * (int)DateTime.Now.Ticks);
             bool wumpusDead = false;
             int checkDeath = rand.Next(0, 1);
             if (checkDeath == 1) { wumpusDead = true; }
-            HighScore generatedScore = new HighScore(("play" + index), rand.Next(1,20), rand.Next(0,10), rand.Next(0,5), wumpusDead, rand.Next(1,10));
+            HighScore generatedScore = new HighScore(path, ("play" + index), rand.Next(1,20), rand.Next(0,10), rand.Next(0,5), wumpusDead, rand.Next(1,10));
             return generatedScore;
         }
     }
