@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WumpusCore.Entity;
@@ -139,6 +140,22 @@ namespace WumpusCore.Controller
             throw new NotImplementedException("This can't exist rn ngl");
         }
 
+
+        /// <summary>
+        /// Gives the hazards that are in the room the player is currently in.
+        /// </summary>
+        /// <returns>A `HazardType` enum</returns>
+        public List<HazardType> getRoomHazards()
+        {
+            var hazards = new List<HazardType>();
+            if (gameLocations.GetEntity(EntityType.Wumpus).location == GetPlayerLocation())
+            {
+                hazards.Add(HazardType.Wumpus);
+            }
+
+            return hazards;
+        }
+
         // public bool SubmitTriviaAnswer(int guess)
         // {
         //     return trivia.SubmitAnswer(guess);
@@ -177,6 +194,10 @@ namespace WumpusCore.Controller
                 throw new InvalidOperationException(
                     $"You cannot go to that state from {state}. The only valid options are {validStates}");
             }
+
+            Console.Write("Do you want to continue? ");
+            string answer = Console.ReadLine();
+
         }
     }
 }

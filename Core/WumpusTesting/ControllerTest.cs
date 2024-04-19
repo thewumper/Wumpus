@@ -28,7 +28,8 @@ namespace WumpusTesting
                 outputFile.WriteLine("[{\"question\": \"Which is right\", choices : [\"correct\",\"wrong\",\"wrong\",\"wrong\"],\"answer\": 0}]");
             }
 
-            // This will just create it at global controller which is what we want
+            // This will just create it at global controller which is what we want. Resharper doesn't like this, but it's fine
+            // ReSharper disable once ObjectCreationAsStatement
             new Controller("./questions.json","./",0);
         }
 

@@ -44,6 +44,7 @@
     <ItemGroup>
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
+        <Compile Include="Controller\HazardType.cs" />
         <Compile Include="HighScore\SaveFile.cs" />
         <Compile Include="Entity\Entity.cs" />
         <Compile Include="Entity\EntityType.cs" />
