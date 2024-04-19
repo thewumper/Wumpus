@@ -54,18 +54,13 @@ namespace WumpusCore.Controller
 
 
         /// <summary>
-        /// Returns the room at the room number from topology (1 indexed)
+        /// Returns the room at the room number from topology (0 indexed)
         /// </summary>
-        /// <param name="roomNumber">The 1 indexed room number</param>
+        /// <param name="roomNumber">The 0 indexed room number</param>
         /// <returns>The room at the room number from topology</returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
         public IRoom GetRoom(ushort roomNumber)
         {
-            if (roomNumber <= 0)
-            {
-                throw new IndexOutOfRangeException("Room number is 1 indexed, not 0.");
-            }
-
             return topology.GetRoom(roomNumber);
         }
 
