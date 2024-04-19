@@ -16,6 +16,7 @@ namespace WumpusTesting
         {
             HighScore testScore = new HighScore("player", 5, 300, 0, false, 2);
             Assert.IsNotNull(testScore);
+          
             HighScore.StoredHighScore compScore = testScore.compactScore;
             Assert.AreEqual("player", compScore.playerName);
             Assert.AreEqual(5, compScore.numTurns);
