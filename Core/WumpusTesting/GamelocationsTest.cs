@@ -24,6 +24,7 @@ namespace WumpusTesting
         public void TestGameLocationsInitalization()
         {
             GameLocations gl = new GameLocations(30,5,5,5,5,new Topology("test1.map"),new Random());
+            gl.GetRoomAt(0);
         }
     }
 }

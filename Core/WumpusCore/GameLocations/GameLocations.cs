@@ -70,15 +70,11 @@ namespace WumpusCore.GameLocations
 
         private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
         {
-            
-            for (int i = list.Count - 1; i >= 0; i--)            {
+            int listSize = list.Count;
+            for (int i = listSize - 1; i >= listSize - num; i--)            {
                 var location = list[i];
                 list.Remove(location);
                 rooms[location.Id] = type;
-                if (list.Count - i >= num)
-                {
-                    break;
-                }
             }
             entities = new Dictionary<EntityType, Entity.Entity>();
         }
