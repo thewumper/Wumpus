@@ -13,6 +13,11 @@ namespace WumpusCore.Trivia
             this.answer = answer;
         }
 
+        public String LogEntry()
+        {
+            return QuestionText + "\n" + choices[answer] + ".";
+        }
+
         /// <summary>
         /// Everything but the answer. Safe to hand out of Trivia.
         /// </summary>
