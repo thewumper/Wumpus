@@ -87,7 +87,15 @@ namespace WumpusCore.Topology
         {
             return rooms[id];
         }
-
+        /// <summary>
+        /// Creates a graph object for this topology
+        /// </summary>
+        /// <returns>A graph</returns>
+        public Graph GetGraph()
+        {
+            return new Graph(new List<IRoom>(rooms));
+        }
+        
         /// <summary>
         /// Get the room adjacent to another room in a direction
         /// </summary>
@@ -311,6 +319,11 @@ namespace WumpusCore.Topology
             /// This rooms ID
             /// </summary>
             public ushort Id { get; }
+        }
+
+        public IRoom[] GetRooms()
+        {
+            return rooms;
         }
     }
 

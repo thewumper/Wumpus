@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.GameLocations;
@@ -25,7 +26,7 @@ namespace WumpusTesting
         private Player makePlayer()
         {
             Topology topology = new Topology("test1.map");
-            GameLocations gameLocations = new GameLocations(30);
+            GameLocations gameLocations = new GameLocations(30,0,0,0,0,topology,new Random());
             return new Player(topology, gameLocations, 15);
         }
         

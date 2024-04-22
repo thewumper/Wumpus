@@ -12,7 +12,6 @@ namespace WumpusTesting
     {
         public TopologyTests()
         {
-
             // Write the string array to a new file named "WriteLines.txt".
             using (StreamWriter outputFile = new StreamWriter("test1.map"))
             {

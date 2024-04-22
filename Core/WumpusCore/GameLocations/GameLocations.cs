@@ -60,15 +60,35 @@ namespace WumpusCore.GameLocations
         {
             get { return rooms; }
         }
-        
+
         /// <summary>
         /// Contains most methods and data to do with rooms.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
-        public GameLocations(ushort numRooms)
+        /// <param name="numVats">The number of vat rooms to generate</param>
+        /// <param name="numBats">The number of bat rooms to generate</param>
+        /// <param name="numRats">The number of rat rooms to generate</param>
+        /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
+        /// <param name="topology">The topology structure</param>
+        /// <param name="random">A random object</param>
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, Topology.Topology topology, Random random)
         {
+            if (numVats + numRats + numAcrobats + numBats >= numRooms)
+            {
+                throw new ArgumentException("Too many hazards!");
+            }
+            
             rooms = new RoomType[numRooms];
-            entities = new Dictionary<EntityType, Entity.Entity>();
+            int hardHazards = (numVats + numBats);
+            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
+            
+            List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
+            List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
+
+            UseListPopulateHazards(solutions, RoomType.Vats, numVats);
+            UseListPopulateHazards(solutions, RoomType.Bats, numBats);
+            UseListPopulateHazards(validRooms, RoomType.Rats, numRats);
+            UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats);
             
             hallwayCoins = new Dictionary<Directions, bool>[numRooms];
             triviaRemaining = new bool[numRooms];
@@ -82,6 +102,17 @@ namespace WumpusCore.GameLocations
 
                 triviaRemaining[i] = true;
             }
+        }
+
+        private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
+        {
+            int listSize = list.Count;
+            for (int i = listSize - 1; i >= listSize - num; i--)            {
+                var location = list[i];
+                list.Remove(location);
+                rooms[location.Id] = type;
+            }
+            entities = new Dictionary<EntityType, Entity.Entity>();
         }
 
         /// <summary>
