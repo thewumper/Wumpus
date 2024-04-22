@@ -190,5 +190,13 @@ namespace WumpusCore.Controller
                     $"You cannot go to that state from {state}. The only valid options are {validStates}");
             }
         }
+
+        /// <summary>
+        /// Called when the player successfully earns a secret. Generate a new secret and give it to the player.
+        /// </summary>
+        public void GenerateSecret()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

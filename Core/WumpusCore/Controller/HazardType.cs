@@ -6,5 +6,7 @@ namespace WumpusCore.Controller
         Wumpus,
         Vat,
         Rat,
+        Bats,
+        Acrobat
     }
 }
