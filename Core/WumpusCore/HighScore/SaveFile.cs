@@ -38,6 +38,7 @@ namespace WumpusCore.HighScoreNS
         /// Takes a directory to create a file
         /// </summary>
         /// <param name="readText"> Whether or not to print the text to console </param>
+        /// <param name="path">The path to the directory</param>
         public SaveFile(bool readText, string path)
         {
             if (!Directory.Exists(path))

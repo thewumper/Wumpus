@@ -71,7 +71,7 @@ namespace WumpusCore.GameLocations
         /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
         /// <param name="topology">The topology structure</param>
         /// <param name="random">A random object</param>
-        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, Topology.Topology topology, Random random)
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, ITopology topology, Random random)
         {
             if (numVats + numRats + numAcrobats + numBats >= numRooms)
             {

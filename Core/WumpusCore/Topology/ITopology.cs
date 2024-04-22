@@ -14,6 +14,9 @@ namespace WumpusCore.Topology
         /// <returns>The room with the given ID</returns>
         IRoom GetRoom(ushort id);
 
+
+        IRoom[] GetRooms();
+
         ushort RoomCount { get; }
         /// <summary>
         /// Finds the distance in room movements between two given room indices, ignoring walls, doors, and obstacles.
