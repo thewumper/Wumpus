@@ -29,6 +29,7 @@ public class MainUI : MonoBehaviour
     /// <summary>
     /// The Rotation for the Movement of the Player.
     /// </summary>
+    [SerializeField]
     private GameObject movementRotation;
     
     /// <summary>
@@ -183,23 +184,23 @@ public class MainUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        // Initializes the roomText text.
-        roomText.text = $"Room: {RoomNum}";
-        
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
         
         // Makes it so you can't normally see the wumpus.
         wumpus.SetActive(false);
         
-        // Initializes the roomNum to the player's starting location.
-        controller = Controller.GlobalController;
-        soundManager = new SoundManager(wumpusClip);
-
-        RoomNum = (ushort) controller.GetPlayerLocation();
-            
         // Initializes the movingID.
         movingID = Animator.StringToHash("moving");
+        
+        // Initializes the roomText text.
+        roomText.text = $"Room: {RoomNum}";
+        
+        // Initializes the SoundManager
+        soundManager = new SoundManager(wumpusClip);
+        
+        // Initializes the RoomNum with the Player's location.
+        RoomNum = (ushort) controller.GetPlayerLocation();
         
         // Initializes the pLock.
         pLock = false;
