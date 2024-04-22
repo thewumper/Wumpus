@@ -141,8 +141,15 @@ namespace WumpusCore.HighScoreNS
         public StoredHighScore ConvertStringToStoredHighScore(string compScore)
         {
             string[] variables = compScore.Split(',');
+          
+            int startIndex = 0;
+            if (variables[0].StartsWith("["))
+            {
+                startIndex = 1;
+            }
 
-            string player = variables[0].Substring(1, variables[0].IndexOf(':') - 1);
+            string player = variables[0].Substring(startIndex, variables[0].IndexOf(':') - startIndex);
+          
             int score = int.Parse(variables[0].Substring(variables[0].IndexOf(':') + 1));
             int turns = int.Parse(variables[1].Substring(variables[1].IndexOf(':') + 1));
             int gold = int.Parse(variables[2].Substring(variables[2].IndexOf(':') + 1));
@@ -216,7 +223,7 @@ namespace WumpusCore.HighScoreNS
             {
                 string infoToSave = topTenHighScores[i].ToString();
                 allTextToSave += infoToSave + "\n\n";
-
+              
                 ConvertStringToStoredHighScore(infoToSave);
             }
 
