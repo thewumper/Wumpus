@@ -66,10 +66,6 @@ namespace WumpusCore.Controller
         /// <exception cref="IndexOutOfRangeException"></exception>
         public IRoom GetRoom(ushort roomNumber)
         {
-            if (roomNumber < 0)
-            {
-                throw new IndexOutOfRangeException("Room number is 0 indexed, not -1.");
-            }
             return topology.GetRoom(roomNumber);
         }
 
