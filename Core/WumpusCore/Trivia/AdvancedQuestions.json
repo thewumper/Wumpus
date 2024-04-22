@@ -7,7 +7,7 @@
       "Feeling a person we met before looks strangely familiar",
       "Being convinced about being watched or stalked"
     ],
-    "answer": "Believing that different people are all the same person in disguise"
+    "answer": 0
   },
   {
     "question": "What does the mere-exposure effect suggest?",
@@ -17,7 +17,7 @@
       "We dislike things we are familiar with",
       "None of the above"
     ],
-    "answer": "We prefer things simply because we are familiar with them"
+    "answer": 1
   },
   {
     "question": "The term 'Paternal Uncertainty' is used to explain...",
@@ -27,7 +27,7 @@
       "A father's insecurity about his parenting skills",
       "None of the above"
     ],
-    "answer": "A condition where a male is unsure of his child's paternity"
+    "answer": 0
   },
   {
     "question": "Cognitive dissonance theory suggests...",
@@ -37,7 +37,7 @@
       "We favor new beliefs over old ones",
       "We tend to change our beliefs according to societal trends"
     ],
-    "answer": "We hold all our attitudes and beliefs in harmony and avoid disharmony or dissonance"
+    "answer": 1
   },
   {
     "question": "The Diathesis-Stress Model is related to...",
@@ -47,7 +47,7 @@
       "A person's ability to handle stress",
       "The relationship between diet and stress"
     ],
-    "answer": "The interaction between a person's vulnerability for a disorder and stress"
+    "answer": 1
   },
   {
     "question": "Genetic Fallacy judges...",
@@ -57,7 +57,7 @@
       "Incorrect assumptions about medical genetics",
       "The moral implications of genetics research"
     ],
-    "answer": "The accuracy or value of a claim based on its origin"
+    "answer": 0
   },
   {
     "question": "Peak-end Rule relates to...",
@@ -67,7 +67,7 @@
       "The sudden end of relationships",
       "None of the above"
     ],
-    "answer": "Judge an experience based on its peak and end"
+    "answer": 1
   },
   {
     "question": "Dunning-Kruger Effect suggests...",
@@ -77,7 +77,7 @@
       "Both a and b",
       "None of the above"
     ],
-    "answer": "Both a and b"
+    "answer": 2
   },
   {
     "question": "The Leptosomatic body type, according to Somatotype Psychology, is related to...",
@@ -87,7 +87,7 @@
       "Introversion, quietude, and being reflective",
       "None of the above"
     ],
-    "answer": "Introversion, quietude, and being reflective"
+    "answer": 2
   },
   {
     "question": "The Hawthorne Effect refers to...",
@@ -97,7 +97,7 @@
       "A change in human behavior when individuals realize they are being observed",
       "None of the above"
     ],
-    "answer": "A change in human behavior when individuals realize they are being observed"
+    "answer":2
   },
   {
     "question": "Paradoxical Intention is a technique that involves...",
@@ -107,7 +107,7 @@
       "Avoidance of behaviors that trigger negative reactions",
       "Following and accepting all behaviors irrespective of their consequences"
     ],
-    "answer": "Intent to engage in behaviors that are paradoxical to their therapeutic goals"
+    "answer": 1
   },
   {
     "question": "What is the process that releases nuclear energy called?",
@@ -117,7 +117,7 @@
       "Nuclear Alarm",
       "Cracking"
     ],
-    "answer": "Nuclear Fission"
+    "answer": 0
   },
   {
     "question": "What is the place where a nuclear reaction occurs?",
@@ -127,7 +127,7 @@
       "Transformer",
       "Pressurizer"
     ],
-    "answer": "Reactor Core"
+    "answer": 1
   },
   {
     "question": "Which nuclear reactor uses ordinary water as a coolant?",
@@ -137,7 +137,7 @@
       "Fast Breeder Reactor",
       "Heavy Water Reactor"
     ],
-    "answer": "Pressurized Water Reactor"
+    "answer": 0
   },
   {
     "question": "What is the chain reaction where the result can extract useful energy?",
@@ -147,7 +147,7 @@
       "Spontaneous Chain Reaction",
       "None of the above"
     ],
-    "answer": "Controlled Chain Reaction"
+    "answer": 0
   },
   {
     "question": "One common nuclear fuel is...",
@@ -157,7 +157,7 @@
       "Hydrogen-1",
       "Neon-20"
     ],
-    "answer": "Uranium-235"
+    "answer": 0
   },
   {
     "question": "Radioactive decay involves the emission of...",
@@ -167,7 +167,7 @@
       "Radiation",
       "Electrons"
     ],
-    "answer": "Radiation"
+    "answer": 2
   },
   {
     "question": "Which of these is NOT a type of ionizing radiation emitted by radioactive elements?",
@@ -177,7 +177,7 @@
       "Alpha",
       "Photon"
     ],
-    "answer": "Photon"
+    "answer": 3
   },
   {
     "question": "What is the process of splitting one heavy nucleus into two lighter ones called?",
@@ -187,7 +187,7 @@
       "Neutron Activation",
       "Nuclear Decay"
     ],
-    "answer": "Nuclear Fission"
+    "answer": 1
   },
   {
     "question": "Who were the pioneers of nuclear fission?",
@@ -197,7 +197,7 @@
       "Otto Hahn, Fritz Strassmann, Lise Meitner, and Otto Frisch",
       "James Chadwick and Ernest Rutherford"
     ],
-    "answer": "Otto Hahn, Fritz Strassmann, Lise Meitner, and Otto Frisch"
+    "answer": 2
   },
   {
     "question": "The disaster at Chernobyl was the result of a:",
@@ -207,7 +207,7 @@
       "Nuclear bomb",
       "Chemical spill"
     ],
-    "answer": "Steam explosion"
+    "answer": 1
   },
   {
     "question": "Which region worships the Electro Archon?",
@@ -217,7 +217,7 @@
       "Inazuma",
       "Snezhnaya"
     ],
-    "answer": "Inazuma"
+    "answer": 2
   },
   {
     "question": "Who founded the city of Mondstadt?",
@@ -227,7 +227,7 @@
       "Paimon",
       "Dvalin"
     ],
-    "answer": "Barbatos"
+    "answer": 0
   },
   {
     "question": "Which character is known as the 'Spindrift Knight'?",
@@ -237,7 +237,7 @@
       "Eula",
       "Diluc"
     ],
-    "answer": "Eula"
+    "answer": 2
   },
   {
     "question": "Who is the god of contracts in Liyue?",
@@ -247,7 +247,7 @@
       "Beelzebul",
       "Azhdaha"
     ],
-    "answer": "Morax"
+    "answer": 1
   },
   {
     "question": "What's the name of the dragon that terrorized Mondstadt?",
@@ -257,7 +257,7 @@
       "Dvalin",
       "Azhdaha"
     ],
-    "answer": "Dvalin"
+    "answer": 2
   },
   {
     "question": "The artifact set 'Thundering Fury' increases the power of which element?",
@@ -267,7 +267,7 @@
       "Electro",
       "Cryo"
     ],
-    "answer": "Electro"
+    "answer": 2
   },
   {
     "question": "Which character is associated with the constellation 'Leo Minor'?",
@@ -277,7 +277,7 @@
       "Chongyun",
       "Klee"
     ],
-    "answer": "Razor"
+    "answer": 0
   },
   {
     "question": "The Boreas fight is located in which area?",
@@ -287,7 +287,7 @@
       "Cape Oath",
       "Stormterror's Lair"
     ],
-    "answer": "Wolvendom"
+    "answer": 1
   },
   {
     "question": "Klee often gets in trouble with...",
@@ -297,7 +297,7 @@
       "The Qixing",
       "The Adventurer's Guild"
     ],
-    "answer": "The Knights of Favonius"
+    "answer": 0
   },
   {
     "question": "Who is the current leader of the Qixing in Liyue?",
@@ -307,6 +307,6 @@
       "Ningguang",
       "Zhongli"
     ],
-    "answer": "Ningguang"
+    "answer": 2
   }
 ]
