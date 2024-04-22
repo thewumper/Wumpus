@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WumpusCore")]
+[assembly: AssemblyTitle("Map_Editor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WumpusCore")]
+[assembly: AssemblyProduct("Map_Editor")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -18,10 +17,9 @@ using System.Runtime.InteropServices;
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
-[assembly: InternalsVisibleTo("WumpusTesting")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("20024C3F-3BAA-43EA-81CD-BD1137931B9B")]
+[assembly: Guid("33042A65-561A-429A-86AC-F9BAB7F3C068")]
 
 // Version information for an assembly consists of the following four values:
 //
