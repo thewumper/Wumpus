@@ -79,10 +79,10 @@ namespace WumpusCore.Controller
 
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
 
-            nextRoom = topology.GetRoom ((ushort) player.location).ExitRooms[direction];
+            nextRoom = topology.GetRoom (player.location).ExitRooms[direction];
 
 
-            player.location = topology.GetRoom((ushort) player.location).ExitRooms[direction].Id;
+            player.location = topology.GetRoom(player.location).ExitRooms[direction].Id;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace WumpusCore.Controller
         /// <returns>The location of the player</returns>
         public int GetPlayerLocation()
         {
-            return gameLocations.GetEntity(EntityType.Player).location;
+            return gameLocations.GetPlayer().location;
         }
 
         public ControllerState GetState()
@@ -131,12 +131,12 @@ namespace WumpusCore.Controller
 
         public int GetCoins()
         {
-            throw new NotImplementedException("This can't exist rn ngl");
+            return gameLocations.GetPlayer().Coins;
         }
 
         public int GetArrowCount()
         {
-            throw new NotImplementedException("This can't exist rn ngl");
+            return gameLocations.GetPlayer().Arrows;
         }
 
 
