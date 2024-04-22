@@ -137,6 +137,12 @@ public class MainUI : MonoBehaviour
     private TMP_Text roomText;
     
     /// <summary>
+    /// The text that shows which direction the player is looking in.
+    /// </summary>
+    [SerializeField] 
+    private TMP_Text directionText;
+    
+    /// <summary>
     /// The Animator that handles the player moving.
     /// </summary>
     [SerializeField] 
@@ -194,7 +200,7 @@ public class MainUI : MonoBehaviour
         movingID = Animator.StringToHash("moving");
         
         // Initializes the roomText text.
-        roomText.text = $"Room: {RoomNum}";
+        roomText.SetText($"Room: {RoomNum}");
         
         // Initializes the SoundManager
         soundManager = new SoundManager(wumpusClip);
@@ -214,6 +220,8 @@ public class MainUI : MonoBehaviour
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
         soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
+        
+        Debug.Log(controller.GetWumpusLocation());
     }
 
     void LateUpdate()
@@ -221,7 +229,7 @@ public class MainUI : MonoBehaviour
         // Makes an IRoom which is the room that the player is currently in.
         IRoom room = controller.GetRoom(RoomNum);
         // Makes the roomText show which room the player is actually in.
-        roomText.text = $"Room: {RoomNum}";
+        roomText.SetText($"Room: {RoomNum}");
         // Makes only the doors that are in the room visible.
         foreach (Directions dir in room.ExitDirections)
         {
@@ -281,11 +289,12 @@ public class MainUI : MonoBehaviour
             // If the player is looking at a door.
             if (hit.transform.CompareTag("door") && !pLock)
             {
+                moveDir = hit.transform.GetComponent<Door>().GetDir();
+                directionText.SetText(moveDir.ToString());
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
                     movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
-                    moveDir = hit.transform.GetComponent<Door>().GetDir();
                     movingAnimator.SetBool(movingID, true);
                     pLock = true;
                 }
@@ -308,7 +317,7 @@ public class MainUI : MonoBehaviour
         }
         
         // Makes the coinsText show the actual amount of coins that the player currently has.
-        coinsText.text = controller.GetCoins().ToString();
+        coinsText.SetText(controller.GetCoins().ToString());
         
         // If the player is moving.
         if (movingAnimator.GetBool(movingID))

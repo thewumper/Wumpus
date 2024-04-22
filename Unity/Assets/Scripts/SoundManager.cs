@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
-using WumpusCore.Topology;
 
 public class SoundManager
 {
@@ -9,12 +7,19 @@ public class SoundManager
     private AudioClip luckyCatClip;
     private AudioClip batsClip;
     private AudioClip ratsClip;
-
+    
+    /// <summary>
+    /// Manages everything to do with audio playing.
+    /// </summary>
+    /// <param name="wumpusClip">The <see cref="AudioClip"/> clip to play for a wumpus.</param>
     public SoundManager(AudioClip wumpusClip)
     {
         this.wumpusClip = wumpusClip;
     }
-
+    
+    /// <summary>
+    /// Contains all possible types of sounds.
+    /// </summary>
     public enum SoundType
     {
         Wumpus,
@@ -24,10 +29,10 @@ public class SoundManager
     }
 
     /// <summary>
-    /// Plays a single sound type at the given door
+    /// Plays a single <see cref="SoundType"/> type at a given door.
     /// </summary>
-    /// <param name="type">The sound type</param>
-    /// <param name="door">The door to play the sound</param>
+    /// <param name="type">The <see cref="SoundType"/> type to play at the door.</param>
+    /// <param name="door">The door to play the sound at.</param>
     public void PlaySound(SoundType type, GameObject door)
     {
         if (door == null)
@@ -42,10 +47,10 @@ public class SoundManager
             doorAudioSource = door.AddComponent<AudioSource>();
         }
         
-        // Set the sound clip
+        // Set the sound clip.
         doorAudioSource.clip = GetAudioClipFromType(type);
 
-        // Set a few settings
+        // Set a few settings.
         doorAudioSource.loop = true;
         doorAudioSource.spatialBlend = 1.0f;
 
@@ -54,10 +59,10 @@ public class SoundManager
     }
 
     /// <summary>
-    /// Plays all the given sound types at the given door
+    /// Plays an array of <see cref="SoundType"/> types at a given door.
     /// </summary>
-    /// <param name="types">An array of sound types</param>
-    /// <param name="door">The door to play it at</param>
+    /// <param name="types">The array of <see cref="SoundType"/> types to play on the door.</param>
+    /// <param name="door">The door to play the sounds at.</param>
     public void PlaySound(SoundType[] types, GameObject door)
     {
         for (int i = 0; i < types.Length; i++)
@@ -67,9 +72,10 @@ public class SoundManager
     }
 
     /// <summary>
-    /// Stops playing the sound on the specified door
+    /// Stops playing all sounds on the specified door.
     /// </summary>
-    /// <param name="door">The door to stop playing the sound on</param>
+    /// <param name="door">The door to stop playing the sound on.</param>
+    /// <exception cref="InvalidOperationException">When the door is null, or an <see cref="AudioSource"/> source does not exist on the door.</exception>
     public void StopSound(GameObject door)
     {
         if (door == null)
@@ -89,11 +95,11 @@ public class SoundManager
     }
 
     /// <summary>
-    /// Gets an audio clip from the given sound type
+    /// Gets an audio clip from the given sound type.
     /// </summary>
-    /// <param name="type">The given sound type</param>
-    /// <returns>An audio clip</returns>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <param name="type">The <see cref="SoundType"/> type to find the associated <see cref="AudioClip"/> of.</param>
+    /// <returns>The <see cref="AudioClip"/> clip associated with the given <see cref="SoundType"/>.</returns>
+    /// <exception cref="InvalidOperationException">When the <see cref="SoundType"/> type does not have an <see cref="AudioClip"/> associated with it.</exception>
     private AudioClip GetAudioClipFromType(SoundType type)
     {
         switch (type)
