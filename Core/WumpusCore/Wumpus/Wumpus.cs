@@ -44,7 +44,7 @@ namespace WumpusCore.Wumpus
                 maxMoves = 0;
             }
                 for (int i = 0; i<maxMoves; i++){
-                if ((maxMoves==4&&i <= 1)||Random.Next(0,2)==1) {
+                if ((maxMoves==4&&i<=1)||Random.Next(0,2)<=1) {
                     MoveToRandomAdjacent();
                 }
             }
