@@ -41,13 +41,13 @@ namespace WumpusCore.Controller
         /// <summary>
         /// Instantiates a controller and setup the required stuff for global controller
         /// </summary>
-        /// <param name="trviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format</param>
+        /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format</param>
         /// <param name="topologyDirectory">The directory to load map files from</param>
         /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId</param>
-        public Controller(string trviaFile, string topologyDirectory, ushort mapId)
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId)
         {
             controllerReference = this;
-            trivia = new Trivia.Trivia(trviaFile);
+            trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount);
         }
