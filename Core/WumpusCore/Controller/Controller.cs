@@ -6,6 +6,7 @@ using WumpusCore.Entity;
 using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
 using WumpusCore.GameLocations;
+using WumpusCore.LuckyCat;
 using WumpusCore.Trivia;
 
 
@@ -50,6 +51,10 @@ namespace WumpusCore.Controller
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount);
+
+            gameLocations.AddEntity(new Player.Player(topology, gameLocations, 0));
+            gameLocations.AddEntity(new Cat(topology, gameLocations, 1));
+            gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations));
         }
 
 

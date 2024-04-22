@@ -21,7 +21,7 @@ namespace WumpusCore.Entity
         public ushort location { get;  set; }
 
         // Given on initialization by Controller
-        protected Topology.Topology topologyLink;
+        protected ITopology topologyLink;
 
         // The room this Entity is currently in
         protected IRoom thisRoom
@@ -39,7 +39,7 @@ namespace WumpusCore.Entity
         /// <param name="parent">The GameLocations object that spawned this Entity</param>
         /// <param name="location">Starting topology room id</param>
         /// <param name="entityType">Type of this Entity</param>
-        public Entity(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType)
+        public Entity(ITopology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType)
         {
             this.topologyLink = topology;
             this.Type = entityType;
