@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,6 +50,7 @@ public class MainUI : MonoBehaviour
     /// The room that the player is currently in.
     /// </summary>
     private ushort roomNum;
+
     /// <summary>
     /// The room that the player is currently in.
     /// </summary>
@@ -135,6 +137,12 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField] 
     private TMP_Text roomText;
+
+    /// <summary>
+    /// The hint for what sounds are near you
+    /// </summary>
+    [SerializeField]
+    private TMP_Text roomHintText;
     
     /// <summary>
     /// The text that shows which direction the player is looking in.
@@ -270,6 +278,9 @@ public class MainUI : MonoBehaviour
                     break;
             }
         }
+        List<String> hints = controller.GetHazardHints();
+        roomHintText.SetText(string.Join('\n', hints));
+        Debug.Log(roomHintText.text);
     }
 
     private void Update()
