@@ -152,9 +152,34 @@ namespace WumpusCore.Controller
             {
                 hazards.Add(HazardType.Wumpus);
             }
-
+            HazardType? hazard = gameLocations.GetRoomAt((ushort)GetPlayerLocation()).ToHazard();
+            if (hazard != null)
+            {
+                hazards.Add((HazardType)hazard);
+            }
             return hazards;
         }
+        /// <summary>
+        /// Returns the hints for the sounding rooms
+        /// </summary>
+        /// <returns>List containing a line of text for each hint</returns>
+        public List<string> GetHazardHints()
+        {
+            List<GameLocations.GameLocations.RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
+            
+            List<string> hints = new List<string>();
+            foreach (GameLocations.GameLocations.RoomType roomType in rooms)
+            {
+                HazardType? hazardType = roomType.ToHazard();
+                if (hazardType != null)
+                {
+                    hints.Add(((HazardType)hazardType).GetHint());
+                }
+            }
+
+            return hints;
+        }
+        
 
         /// <summary>
         /// This is a debug method
@@ -186,6 +211,8 @@ namespace WumpusCore.Controller
             ValidateState(new[] { StartScreen, InRoom });
             this.state = StartScreen;
         }
+        
+        
 
         /// <summary>
         /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states

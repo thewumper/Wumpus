@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WumpusCore.Controller;
 using WumpusCore.Entity;
 using WumpusCore.LuckyCat;
 using WumpusCore.Topology;
@@ -13,6 +14,10 @@ namespace WumpusCore.GameLocations
         /// All entities in the game
         /// </summary>
         private Dictionary<EntityType, Entity.Entity> entities;
+        /// <summary>
+        /// How all the rooms connect to each other
+        /// </summary>
+        private ITopology topology;
         
         /// <summary>
         /// All possible types of rooms.
@@ -221,5 +226,19 @@ namespace WumpusCore.GameLocations
         {
             return rooms[index];
         }
+
+        public Dictionary<Directions, RoomType> GetAdjacentRoomTypes(int position)
+        {
+            IRoom room = topology.GetRoom((ushort)position);
+            Dictionary<Directions, RoomType> adjacentRooms = new Dictionary<Directions, RoomType>();
+            foreach (Directions direction in room.ExitDirections)
+            {
+                adjacentRooms[direction] = rooms[room.AdjacentRooms[direction].Id];
+            }
+
+            return adjacentRooms;
+        }
+        
+        
     }
 }
