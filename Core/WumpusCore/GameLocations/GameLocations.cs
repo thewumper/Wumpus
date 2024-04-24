@@ -78,6 +78,7 @@ namespace WumpusCore.GameLocations
         /// <param name="random">A random object</param>
         public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, ITopology topology, Random random)
         {
+            this.topology = topology;
             if (numVats + numRats + numAcrobats + numBats >= numRooms)
             {
                 throw new ArgumentException("Too many hazards!");
@@ -86,7 +87,6 @@ namespace WumpusCore.GameLocations
             rooms = new RoomType[numRooms];
             int hardHazards = (numVats + numBats);
             Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
-            
             List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
             List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
 

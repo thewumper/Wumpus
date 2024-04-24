@@ -143,7 +143,11 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private TMP_Text roomHintText;
-    
+    /// <summary>
+    /// Rext that displays your current room type
+    /// </summary>
+    [SerializeField]
+    private TMP_Text roomTypeText;
     /// <summary>
     /// The text that shows which direction the player is looking in.
     /// </summary>
@@ -280,7 +284,7 @@ public class MainUI : MonoBehaviour
         }
         List<String> hints = controller.GetHazardHints();
         roomHintText.SetText(string.Join('\n', hints));
-        Debug.Log(roomHintText.text);
+        roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
     }
 
     private void Update()

@@ -50,7 +50,7 @@ namespace WumpusCore.Controller
             controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
-            gameLocations = new GameLocations.GameLocations(topology.RoomCount,1,1,1,1,topology,Controller.Random);
+            gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random);
 
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, 0));
             gameLocations.AddEntity(new Cat(topology, gameLocations, 1));
@@ -72,6 +72,11 @@ namespace WumpusCore.Controller
         public GameLocations.GameLocations.RoomType GetRoomType(ushort roomNumber)
         {
             return gameLocations.GetRoomAt(roomNumber);
+        }
+
+        public GameLocations.GameLocations.RoomType GetCurrentRoomType()
+        {
+            return GetRoomType((ushort)GetPlayerLocation());
         }
 
         public void MoveInADirection(Directions direction)
