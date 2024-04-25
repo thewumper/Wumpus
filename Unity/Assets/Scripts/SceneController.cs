@@ -48,7 +48,7 @@ namespace WumpusUnity
         /// Sets the current Scene in Unity.
         /// </summary>
         /// <param name="scene">The new Scene.</param>
-        public void SetScene(string scene)
+        private void SetScene(string scene)
         {
             currentScene = scene;
             SceneManager.LoadScene(scene);
@@ -58,13 +58,15 @@ namespace WumpusUnity
         /// Gets the correct scene based off of the global Controller's state.
         /// </summary>
         /// <returns>The correct scene based off of the global Controller's state.</returns>
-        public string GetCorrectScene()
+        private string GetCorrectScene()
         {
             ControllerState state = controller.GetState();
             switch (state)
             {
                 case ControllerState.StartScreen:
                     return "Main Menu";
+                case ControllerState.InBetweenRooms:
+                    return "Hallway";
                 default:
                     return "Main";
             }

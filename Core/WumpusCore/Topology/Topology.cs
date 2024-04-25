@@ -66,6 +66,12 @@ namespace WumpusCore.Topology
             // Connect all of the rooms
             foreach (Room room in rooms)
             {
+                if (room == null)
+                {
+                    throw new NullReferenceException(
+                        "Room wasn't initialized properly, make sure your map has 30 rooms.");
+                }
+
                 room.InitializeConnections(this);
             }
         }
@@ -107,7 +113,7 @@ namespace WumpusCore.Topology
         {
             // Probably could write 
             currentRoom += 1;
-            
+
             // These numbers help us navigate this map
             const short width = 6; // Up and down
             const short neighborMod = 1; // If the room sequential appears in front or behind us in the array
@@ -186,12 +192,12 @@ namespace WumpusCore.Topology
         /// Function for DistanceBetweenRooms. Pass into getConnections to navigate ignoring all obstacles.
         /// </summary>
         public static Func<IRoom, IRoom[]> NavigateBoundless = room => room.AdjacentRooms.Values.ToArray();
-        
+
         /// <summary>
         /// Function for DistanceBetweenRooms. Pass into getConnections to navigate only through accessible doors.
         /// </summary>
         public static Func<IRoom, IRoom[]> NavigateDoors = room => room.ExitRooms.Values.ToArray();
-        
+
         /// <summary>
         /// Finds the distance in room movements between two given room indices, ignoring walls, doors, and obstacles.
         /// Uses Dijkstra's algorithm
@@ -202,7 +208,7 @@ namespace WumpusCore.Topology
         /// <returns>The distance in movements between the two rooms</returns>
         public int DistanceBetweenRooms(ushort startRoomIndex, ushort endRoomIndex, Func<IRoom, IRoom[]> getConnections)
         {
-            
+
             if (startRoomIndex == endRoomIndex)
             {
                 return 0;
@@ -244,14 +250,14 @@ namespace WumpusCore.Topology
                 {
                     // Skip if we've already seen this one
                     if (visited[i]) {continue;}
-                    
+
                     // Skip if bigger than others
                     if (distance[i] >= minimum) {continue;}
 
                     minimum = distance[i];
                     minimumIndex = i;
                 }
-                    
+
                 if (minimum == Int32.MaxValue)
                 {
                     // No more reachable nodes.
@@ -267,7 +273,7 @@ namespace WumpusCore.Topology
                 currentRoomIndex = (ushort)minimumIndex;
             }
         }
-        
+
         /// <summary>
         /// Internally used to keep track of rooms
         /// </summary>

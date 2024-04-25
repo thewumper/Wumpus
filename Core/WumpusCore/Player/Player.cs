@@ -32,7 +32,7 @@ namespace WumpusCore.Player
         /// <summary>
         /// Stores everything to do with the player.
         /// </summary>
-        public Player(WumpusCore.Topology.Topology topology, WumpusCore.GameLocations.GameLocations parent, ushort location) 
+        public Player(ITopology topology, WumpusCore.GameLocations.GameLocations parent, ushort location)
             : base(topology, parent, location, EntityType.Player)
         {   
             Coins = 0;
