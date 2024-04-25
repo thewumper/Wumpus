@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using WumpusCore.Entity;
+using WumpusCore.LuckyCat;
+using WumpusCore.Topology;
 
 namespace WumpusCore.GameLocations
 {
@@ -23,6 +25,28 @@ namespace WumpusCore.GameLocations
             Rats,
             Acrobat
         }
+        
+        // Whether there is a coin in the hallway out from a given room
+        public Dictionary<Directions, bool>[] hallwayCoins;
+
+
+
+        private bool[] triviaRemaining;
+
+        public bool GetTriviaAvailable(int index)
+        {
+            // Trivia is not available in hazard rooms
+            if (GetRoomAt((ushort)index) == RoomType.Flats)
+            {
+                return triviaRemaining[index];
+            } 
+            return false;
+        }
+
+        public void SetTriviaRemaining(int index, bool remaining)
+        {
+            triviaRemaining[index] = remaining;
+        }
 
         /// <summary>
         /// The array of rooms.
@@ -36,14 +60,58 @@ namespace WumpusCore.GameLocations
         {
             get { return rooms; }
         }
-        
+
         /// <summary>
         /// Contains most methods and data to do with rooms.
         /// </summary>
         /// <param name="numRooms">The total amount of rooms.</param>
-        public GameLocations(ushort numRooms)
+        /// <param name="numVats">The number of vat rooms to generate</param>
+        /// <param name="numBats">The number of bat rooms to generate</param>
+        /// <param name="numRats">The number of rat rooms to generate</param>
+        /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
+        /// <param name="topology">The topology structure</param>
+        /// <param name="random">A random object</param>
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, Topology.Topology topology, Random random)
         {
+            if (numVats + numRats + numAcrobats + numBats >= numRooms)
+            {
+                throw new ArgumentException("Too many hazards!");
+            }
+            
             rooms = new RoomType[numRooms];
+            int hardHazards = (numVats + numBats);
+            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
+            
+            List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
+            List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
+
+            UseListPopulateHazards(solutions, RoomType.Vats, numVats);
+            UseListPopulateHazards(solutions, RoomType.Bats, numBats);
+            UseListPopulateHazards(validRooms, RoomType.Rats, numRats);
+            UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats);
+            
+            hallwayCoins = new Dictionary<Directions, bool>[numRooms];
+            triviaRemaining = new bool[numRooms];
+            for (int i = 0; i < rooms.Length; i++)
+            {
+                hallwayCoins[i] = new Dictionary<Directions, bool>();
+                for (int j = 0; j < 6; j++)
+                {
+                    hallwayCoins[i][(Directions)j] = true;
+                }
+
+                triviaRemaining[i] = true;
+            }
+        }
+
+        private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
+        {
+            int listSize = list.Count;
+            for (int i = listSize - 1; i >= listSize - num; i--)            {
+                var location = list[i];
+                list.Remove(location);
+                rooms[location.Id] = type;
+            }
             entities = new Dictionary<EntityType, Entity.Entity>();
         }
 
@@ -64,6 +132,7 @@ namespace WumpusCore.GameLocations
 
         /// <summary>
         /// Gets an entity of a selected type.
+        /// Result must be cast to the desired type.
         /// </summary>
         /// <param name="type">Type of entity to get</param>
         /// <returns>The entity of the given type</returns>
@@ -77,6 +146,29 @@ namespace WumpusCore.GameLocations
 
             return entities[type];
         }
+        
+        /// <summary>
+        /// Get the player entity
+        /// </summary>
+        /// <returns>The Player</returns>
+        public Player.Player GetPlayer()
+        {
+            return (Player.Player)GetEntity(EntityType.Player);
+        }
+
+        /// <summary>
+        /// Get the cat entity
+        /// </summary>
+        /// <returns>The Cat</returns>
+        public Cat GetCat()
+        {
+            return (Cat)GetEntity(EntityType.Cat);
+        }
+
+        public Wumpus.Wumpus GetWumpus()
+        {
+            return (Wumpus.Wumpus)GetEntity(EntityType.Wumpus);
+        }
 
         /// <summary>
         /// Gets a random empty room from the <see cref="rooms">rooms</see> array.
@@ -85,10 +177,20 @@ namespace WumpusCore.GameLocations
         /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
         public ushort GetEmptyRoom()
         {
+            return GetRoomOfType(RoomType.Flats);
+        }
+
+        /// <summary>
+        /// Gets a random room of the given type from the <see cref="rooms">rooms</see> array.
+        /// </summary>
+        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>type</c> from the <see cref="rooms">rooms</see> array.</returns>
+        /// <exception cref="InvalidOperationException">When there are no rooms of the given type.</exception>
+        public ushort GetRoomOfType(RoomType type)
+        {
             List<ushort> positions = new List<ushort>();
             for (ushort i = 0; i < rooms.Length; i++)
             {
-                if (rooms[i] == RoomType.Flats)
+                if (rooms[i] == type)
                 {
                     positions.Add(i);
                 }

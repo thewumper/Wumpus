@@ -9,6 +9,7 @@ namespace WumpusTesting
         [TestMethod]
         public void testMap()
         {
+            
         }
     }
 }
