@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WumpusCore.Controller;
 using WumpusCore.Entity;
 using WumpusCore.LuckyCat;
 using WumpusCore.Topology;
@@ -13,6 +14,10 @@ namespace WumpusCore.GameLocations
         /// All entities in the game
         /// </summary>
         private Dictionary<EntityType, Entity.Entity> entities;
+        /// <summary>
+        /// How all the rooms connect to each other
+        /// </summary>
+        private ITopology topology;
         
         /// <summary>
         /// All possible types of rooms.
@@ -71,8 +76,9 @@ namespace WumpusCore.GameLocations
         /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
         /// <param name="topology">The topology structure</param>
         /// <param name="random">A random object</param>
-        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, Topology.Topology topology, Random random)
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, ITopology topology, Random random)
         {
+            this.topology = topology;
             if (numVats + numRats + numAcrobats + numBats >= numRooms)
             {
                 throw new ArgumentException("Too many hazards!");
@@ -81,7 +87,6 @@ namespace WumpusCore.GameLocations
             rooms = new RoomType[numRooms];
             int hardHazards = (numVats + numBats);
             Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
-            
             List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
             List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
 
@@ -221,5 +226,19 @@ namespace WumpusCore.GameLocations
         {
             return rooms[index];
         }
+
+        public Dictionary<Directions, RoomType> GetAdjacentRoomTypes(int position)
+        {
+            IRoom room = topology.GetRoom((ushort)position);
+            Dictionary<Directions, RoomType> adjacentRooms = new Dictionary<Directions, RoomType>();
+            foreach (Directions direction in room.ExitDirections)
+            {
+                adjacentRooms[direction] = rooms[room.AdjacentRooms[direction].Id];
+            }
+
+            return adjacentRooms;
+        }
+        
+        
     }
 }
