@@ -202,6 +202,8 @@ public class MainUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
+        cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
+        Debug.Log(PersistentData.Instance.EulerAngle);
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
         
@@ -295,7 +297,9 @@ public class MainUI : MonoBehaviour
         {
             // Look around using the mouse.
             float mouseX = Input.GetAxis("Mouse X");
+
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
+            PersistentData.Instance.EulerAngle = cam.transform.eulerAngles;
         }
         // Used for checking what the player is currently looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
