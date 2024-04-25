@@ -283,7 +283,8 @@ public class MainUI : MonoBehaviour
             }
         }
         List<String> hints = controller.GetHazardHints();
-        roomHintText.SetText(string.Join('\n', hints));
+        if (!(hints.Count <= 0)) roomHintText.SetText(string.Join('\n', hints));
+        else roomHintText.SetText("You hear nothing.");
         roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
     }
 
@@ -323,12 +324,14 @@ public class MainUI : MonoBehaviour
             else
             {
                 HideInteract();
+                directionText.SetText("");
             }
         } 
         // If the player isn't looking at anything.
         else
         {
             HideInteract();
+            directionText.SetText("");
         }
         
         // Makes the coinsText show the actual amount of coins that the player currently has.
