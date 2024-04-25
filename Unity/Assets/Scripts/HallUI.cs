@@ -152,6 +152,11 @@ public class HallUI : MonoBehaviour
                 HideInteract();
             }
         }
+        // If the player isn't looking at anything.
+        else
+        {
+            HideInteract();
+        }
         
         // If the player is moving.
         if (movingAnimator.GetBool(movingID))
