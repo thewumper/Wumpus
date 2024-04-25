@@ -24,13 +24,18 @@ namespace WumpusCore.Controller
                 return controllerReference;
             }
         }
+        
+        // TODO: Add documentation, and/or move all of this into constructor. Code is illegible
         public static Random Random = new Random();
+        
         private ControllerState state = StartScreen;
+        
         //private Player.Player player = new Player.Player();
         private ITopology topology;
 
 
         private GameLocations.GameLocations gameLocations;
+        
         // TODO! This likely won't construct properly
         private Trivia.Trivia trivia = new Trivia.Trivia("../Trivia/");
 
