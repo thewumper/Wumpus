@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using WumpusCore.Entity;
 using WumpusCore.Topology;
@@ -40,11 +39,11 @@ namespace WumpusCore.Controller
         private Trivia.Trivia trivia;
 
         /// <summary>
-        /// Instantiates a controller and setup the required stuff for global controller
+        /// Instantiates a controller and setup the required stuff for global controller.
         /// </summary>
-        /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format</param>
-        /// <param name="topologyDirectory">The directory to load map files from</param>
-        /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId</param>
+        /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
+        /// <param name="topologyDirectory">The directory to load map files from.</param>
+        /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
         public Controller(string triviaFile, string topologyDirectory, ushort mapId)
         {
             controllerReference = this;
@@ -68,7 +67,12 @@ namespace WumpusCore.Controller
         {
             return topology.GetRoom(roomNumber);
         }
-
+        
+        /// <summary>
+        /// Returns the RoomType of the given room.
+        /// </summary>
+        /// <param name="roomNumber">The room's position.</param>
+        /// <returns>The RoomType of the given room.</returns>
         public GameLocations.GameLocations.RoomType GetRoomType(ushort roomNumber)
         {
             return gameLocations.GetRoomAt(roomNumber);
@@ -78,7 +82,11 @@ namespace WumpusCore.Controller
         {
             return GetRoomType((ushort)GetPlayerLocation());
         }
-
+        
+        /// <summary>
+        /// Moves the player in a given direction.
+        /// </summary>
+        /// <param name="direction">The direction to move the player in.</param>
         public void MoveInADirection(Directions direction)
         {
             state = InBetweenRooms;
@@ -92,10 +100,10 @@ namespace WumpusCore.Controller
         }
 
         /// <summary>
-        /// Moves a player from the hallway they are in  to the room they previously targets
+        /// Moves a player from the hallway they are in  to the room they previously targets.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>The new position of the player after moving.</returns>
+        /// <exception cref="InvalidOperationException">You need to move from a room.</exception>
         public int MoveFromHallway()
         {
             ValidateState(new [] {InBetweenRooms});
@@ -115,21 +123,25 @@ namespace WumpusCore.Controller
         /// <summary>
         /// Get the location of the player from topology.
         /// </summary>
-        /// <returns>The location of the player</returns>
+        /// <returns>The location of the player.</returns>
         public int GetPlayerLocation()
         {
             return gameLocations.GetPlayer().location;
         }
-
+        
+        /// <summary>
+        /// Returns the current state of the controller.
+        /// </summary>
+        /// <returns>The current <see cref="ControllerState"/></returns>
         public ControllerState GetState()
         {
             return state;
         }
 
         /// <summary>
-        /// Returns a question that hasn't been asked yet
+        /// Returns a question that hasn't been asked yet.
         /// </summary>
-        /// <returns>A question that hasn't been used by trivia yet</returns>
+        /// <returns>A question that hasn't been used by trivia yet.</returns>
         public AnsweredQuestion GetUnaskedQuestion()
         {
             return trivia.PeekRandomQuestion();
@@ -149,7 +161,7 @@ namespace WumpusCore.Controller
         /// <summary>
         /// Gives the hazards that are in the room the player is currently in.
         /// </summary>
-        /// <returns>A `HazardType` enum</returns>
+        /// <returns>All hazards that are in the room the player is currently in.</returns>
         public List<HazardType> getRoomHazards()
         {
             var hazards = new List<HazardType>();
@@ -164,10 +176,11 @@ namespace WumpusCore.Controller
             }
             return hazards;
         }
+        
         /// <summary>
-        /// Returns the hints for the sounding rooms
+        /// Returns the hints for the sounding rooms.
         /// </summary>
-        /// <returns>List containing a line of text for each hint</returns>
+        /// <returns>List containing a line of text for each hint.</returns>
         public List<string> GetHazardHints()
         {
             List<GameLocations.GameLocations.RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
@@ -187,9 +200,9 @@ namespace WumpusCore.Controller
         
 
         /// <summary>
-        /// This is a debug method
+        /// This is a debug method.
         /// </summary>
-        /// <returns>The room number the wumpus is in</returns>
+        /// <returns>The room number the wumpus is in.</returns>
         public int GetWumpusLocation()
         {
             return gameLocations.GetWumpus().location;
@@ -203,16 +216,16 @@ namespace WumpusCore.Controller
 
         public void StartGame()
         {
-            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
-            // being prepared to handle that controller state
+            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not.
+            // being prepared to handle that controller state.
             ValidateState(new[] { StartScreen, InRoom });
             this.state = InRoom;
         }
 
         public void EndGame()
         {
-            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
-            // being prepared to handle that controller state
+            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not.
+            // being prepared to handle that controller state.
             ValidateState(new[] { StartScreen, InRoom });
             this.state = StartScreen;
         }
@@ -220,10 +233,10 @@ namespace WumpusCore.Controller
         
 
         /// <summary>
-        /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states
+        /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states.
         /// </summary>
-        /// <param name="validStates">The list of states that you are allowed to be in to use the method</param>
-        /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function</exception>
+        /// <param name="validStates">The list of states that you are allowed to be in to use the method.</param>
+        /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function.</exception>
         private void ValidateState(ControllerState[] validStates)
         {
             if (!validStates.Contains(state))
