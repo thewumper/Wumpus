@@ -18,7 +18,7 @@ namespace WumpusCore.Wumpus
     {
         private State WumpState;
         /// <summary>
-        /// Constructs the Wump.  
+        /// Constructs the Wump.
         /// </summary>
         public Wumpus(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType) : base(topology, parent, location, entityType)
         {
