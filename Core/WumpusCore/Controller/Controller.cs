@@ -190,45 +190,52 @@ namespace WumpusCore.Controller
             {
                 hazards.Add(HazardType.Wumpus);
             }
-            HazardType? hazard = gameLocations.GetRoomAt((ushort)GetPlayerLocation()).ToHazard();
-            if (hazard != null)
-            {
-                hazards.Add((HazardType)hazard);
-            }
+            // HazardType? hazard = gameLocations.GetRoomAt((ushort)GetPlayerLocation()).ToHazard();
+            // if (hazard != null)
+            // {
+                // hazards.Add((HazardType)hazard);
+            // }
             return hazards;
         }
-        
+
+
+
+        public List<string> GetHazardHints()
+        {
+            return null;
+        }
+
         /// <summary>
         /// Returns the hazards currently around the player.
         /// </summary>
         /// <returns>List containing the hazards that are around the player</returns>
-        public List<HazardType> GetHazardHints()
-        {
-            private struct DirectionalHint
-            {
-                public Directions Direction;
-                public List<HazardType> Hazards;
-                public DirectionalHint(List<HazardType> hazards, Directions direction)
-                {
-                    Hazards = hazards;
-                    Direction = direction;
-                }
-            }
-
-            List<RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
-            
-            List<string> hints = new List<string>();
-            foreach (RoomType roomType in rooms)
-            {
-                HazardType? hazardType = roomType.ToHazard();
-                if (hazardType != null)
-                {
-                    hints.Add(((HazardType)hazardType).GetHint());
-                }
-            }
-
-            return hints;
-        }
+        // public List<HazardType> GetHazardHints()
+        // {
+        //     private struct DirectionalHint
+        //     {
+        //         public Directions Direction;
+        //         public List<HazardType> Hazards;
+        //         public DirectionalHint(List<HazardType> hazards, Directions direction)
+        //         {
+        //             Hazards = hazards;
+        //             Direction = direction;
+        //         }
+        //     }
+        //
+        //     List<RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
+        //
+        //     List<string> hints = new List<string>();
+        //     foreach (RoomType roomType in rooms)
+        //     {
+        //         HazardType? hazardType = roomType.ToHazard();
+        //         if (hazardType != null)
+        //         {
+        //             hints.Add(((HazardType)hazardType).GetHint());
+        //         }
+        //     }
+        //
+        //     return hints;
+        // }
         
 
         /// <summary>
