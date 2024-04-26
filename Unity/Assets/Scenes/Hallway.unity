@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 0fd9fc42aff1cac499e13044113425a1, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 14fad58a8327c5c49bbbefe152640c34, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -873,9 +873,9 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.8843246, b: 0.7311321, a: 1}
-  m_Intensity: 0.54
+  m_Intensity: 0.62
   m_Range: 100
-  m_SpotAngle: 161.3
+  m_SpotAngle: 110
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
@@ -1361,7 +1361,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2135522885}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
