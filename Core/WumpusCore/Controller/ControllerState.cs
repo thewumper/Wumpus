@@ -10,5 +10,6 @@ namespace WumpusCore.Controller
         InBetweenRooms,
         Inventory,
         Trivia,
+        Acrobat,
     }
 }

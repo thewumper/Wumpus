@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WumpusCore.Entity;
+using WumpusCore.GameLocations;
 using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
-using WumpusCore.GameLocations;
 using WumpusCore.LuckyCat;
 using WumpusCore.Trivia;
 
 
 namespace WumpusCore.Controller
 {
+    /// <summary>
+    /// The overall controller for the Wumpus game. This shouuld be your main interaction point for any UI implementation
+    /// </summary>
     public class Controller
     {
         private static Controller controllerReference;
@@ -73,12 +76,16 @@ namespace WumpusCore.Controller
         /// </summary>
         /// <param name="roomNumber">The room's position.</param>
         /// <returns>The RoomType of the given room.</returns>
-        public GameLocations.GameLocations.RoomType GetRoomType(ushort roomNumber)
+        public RoomType GetRoomType(ushort roomNumber)
         {
             return gameLocations.GetRoomAt(roomNumber);
         }
 
-        public GameLocations.GameLocations.RoomType GetCurrentRoomType()
+        /// <summary>
+        /// Gets the room type for the current room
+        /// </summary>
+        /// <returns>A RoomType enum with the current room type</returns>
+        public RoomType GetCurrentRoomType()
         {
             return GetRoomType((ushort)GetPlayerLocation());
         }
@@ -115,7 +122,21 @@ namespace WumpusCore.Controller
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
 
             player.location = nextRoom.Id;
-            state=InRoom;
+
+            RoomType nextroomType =  gameLocations.GetRoomAt(nextRoom.Id);
+            if (nextroomType == RoomType.Flats)
+            {
+                state=InRoom;
+            }
+            else if (nextroomType == RoomType.Acrobat)
+            {
+                state = ControllerState.Acrobat;
+            }
+            else if (nextroomType == RoomType.Bats)
+            {
+
+            }
+
 
             return player.location;
         }
@@ -178,15 +199,26 @@ namespace WumpusCore.Controller
         }
         
         /// <summary>
-        /// Returns the hints for the sounding rooms.
+        /// Returns the hazards currently around the player.
         /// </summary>
-        /// <returns>List containing a line of text for each hint.</returns>
-        public List<string> GetHazardHints()
+        /// <returns>List containing the hazards that are around the player</returns>
+        public List<HazardType> GetHazardHints()
         {
-            List<GameLocations.GameLocations.RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
+            private struct DirectionalHint
+            {
+                public Directions Direction;
+                public List<HazardType> Hazards;
+                public DirectionalHint(List<HazardType> hazards, Directions direction)
+                {
+                    Hazards = hazards;
+                    Direction = direction;
+                }
+            }
+
+            List<RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
             
             List<string> hints = new List<string>();
-            foreach (GameLocations.GameLocations.RoomType roomType in rooms)
+            foreach (RoomType roomType in rooms)
             {
                 HazardType? hazardType = roomType.ToHazard();
                 if (hazardType != null)
