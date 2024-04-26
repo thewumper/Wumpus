@@ -1,12 +1,11 @@
-﻿namespace WumpusCore.Wumpus
+﻿using System;
+using WumpusCore.Entity;
+using WumpusCore.Topology;
+
+namespace WumpusCore.Wumpus
 {
-    internal class Wumpus
+    public class Wumpus: Entity.Entity
     {
-        /// <summary>
-        /// Current Room Wumpus is in.  
-        /// Better description coming soon
-        /// </summary>
-        public int Position { get; private set; }
         /// <summary>
         /// state of wumpus.  
         /// Better description coming soon
@@ -25,9 +24,10 @@
         /// Constructs the Wumpus.  
         /// Better description coming soon
         /// </summary>
-        public Wumpus()
+        public Wumpus(ITopology topology, GameLocations.GameLocations gameLocations): base(topology, gameLocations, 0, EntityType.Wumpus)
         {
-            Position = 0;
+            location = gameLocations.GetEmptyRoom();
+
             State currentState = State.Sleeping;
         }
         /// <summary>

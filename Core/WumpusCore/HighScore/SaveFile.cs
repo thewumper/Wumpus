@@ -6,9 +6,17 @@ namespace WumpusCore.HighScoreNS
 {
     internal class SaveFile
     {
-        string path;
+        /// <summary>
+        /// The file path used by the savefile object
+        /// </summary>
+        public readonly string path;
 
-        public SaveFile(string text)
+        /// <summary>
+        /// Creates a save file at a set directory
+        /// </summary>
+        /// <param name="text"> What information to save to the file </param>
+        /// <param name="readText"> Whether or not to print the text to console </param>
+        public SaveFile(string text, bool readText)
         {
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string wumpusSaveDirectory = Path.Combine(appDataPath, "WumpusGame");
@@ -23,10 +31,31 @@ namespace WumpusCore.HighScoreNS
             CreateFile(text);
 
             // Open the stream and read it back.
-            ReadFile(true);
+            ReadFile(readText);
         }
 
-        private void CreateFile(string text)
+        /// <summary>
+        /// Takes a directory to create a file
+        /// </summary>
+        /// <param name="readText"> Whether or not to print the text to console </param>
+        /// <param name="path">The path to the directory</param>
+        public SaveFile(bool readText, string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            this.path = path;
+
+            ReadFile(readText);
+        }
+
+        /// <summary>
+        /// Uses the directory to create a file
+        /// with the given text stored
+        /// </summary>
+        /// <param name="text"> what text to store in the file </param>
+        public void CreateFile(string text)
         {
             using (FileStream fs = File.Create(Path.Combine(this.path, "SaveData.txt")))
             {
@@ -36,6 +65,11 @@ namespace WumpusCore.HighScoreNS
             }
         }
 
+        /// <summary>
+        /// Reads the information on the file
+        /// </summary>
+        /// <param name="printText"> whether or not to print the text from the file </param>
+        /// <returns> string information of file </returns>
         public string ReadFile(bool printText)
         {
             using (StreamReader sr = File.OpenText(Path.Combine(this.path, "SaveData.txt")))

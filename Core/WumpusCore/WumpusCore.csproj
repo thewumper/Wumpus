@@ -22,6 +22,7 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <DocumentationFile>..\..\Unity\Assets\DLL\WumpusCore.xml</DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <DocumentationFile>..\..\Unity\Assets\DLL\WumpusCore.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -44,16 +46,19 @@
     <ItemGroup>
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
+        <Compile Include="Controller\HazardType.cs" />
         <Compile Include="HighScore\SaveFile.cs" />
-		<Compile Include="Entity\Entity.cs" />
+        <Compile Include="Entity\Entity.cs" />
+        <Compile Include="Entity\EntityType.cs" />
         <Compile Include="Minigame.cs" />
         <Compile Include="LuckyCat\Cat.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Topology\Directions.cs" />
+        <Compile Include="Topology\Graph.cs" />
         <Compile Include="Topology\IRoom.cs" />
         <Compile Include="Topology\ITopology.cs" />
         <Compile Include="Topology\Topology.cs" />
-		<Compile Include="Player\Player.cs" />
+        <Compile Include="Player\Player.cs" />
         <Compile Include="Trivia\AnsweredQuestion.cs" />
         <Compile Include="Trivia\AskableQuestion.cs" />
         <Compile Include="Trivia\GameResult.cs" />
@@ -61,11 +66,10 @@
         <Compile Include="Trivia\Trivia.cs" />
         <Compile Include="HighScore\HighScore.cs" />
         <Compile Include="GameLocations\GameLocations.cs" />
+		<Compile Include="Wumpus\Wumpus.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
-      <Content Include="Trivia\Questions.json" />
-      <Content Include="Trivia\AdvancedQuestions.json" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
