@@ -169,5 +169,43 @@ namespace WumpusTesting
             Assert.AreEqual(3, topology.DistanceBetweenRooms(4, 24, room => room.ExitRooms.Values.ToArray()));
             Assert.AreEqual(2, topology.DistanceBetweenRooms(24, 4, room => room.ExitRooms.Values.ToArray()));
         }
+
+        [TestMethod]
+        public void TestHexagon()
+        {
+            // Base hexagon
+            Hexagon hex = new Hexagon(0, 0);
+            
+            // Test each direction for south hexagons
+            Assert.AreEqual(new Hexagon(-1, 0), hex.GetFromDirection(Directions.North));
+            Assert.AreEqual(new Hexagon(0, 1), hex.GetFromDirection(Directions.NorthEast));
+            Assert.AreEqual(new Hexagon(1, 1), hex.GetFromDirection(Directions.SouthEast));
+            Assert.AreEqual(new Hexagon(1, 0), hex.GetFromDirection(Directions.South));
+            Assert.AreEqual(new Hexagon(1, -1), hex.GetFromDirection(Directions.SouthWest));
+            Assert.AreEqual(new Hexagon(0, -1), hex.GetFromDirection(Directions.NorthWest));
+            
+            // Test each direction for north hexagons
+            Hexagon hexHigh = new Hexagon(0, 1);
+            Assert.AreEqual(new Hexagon(-1, 1), hexHigh.GetFromDirection(Directions.North));
+            Assert.AreEqual(new Hexagon(-1, 2), hexHigh.GetFromDirection(Directions.NorthEast));
+            Assert.AreEqual(new Hexagon(0, 2), hexHigh.GetFromDirection(Directions.SouthEast));
+            Assert.AreEqual(new Hexagon(1, 1), hexHigh.GetFromDirection(Directions.South));
+            Assert.AreEqual(new Hexagon(0, 0), hexHigh.GetFromDirection(Directions.SouthWest));
+            Assert.AreEqual(new Hexagon(-1, 0), hexHigh.GetFromDirection(Directions.NorthWest));
+            
+            // Traveling hexagon that should return on its original position
+            Hexagon hex2 = hex.GetFromDirection(Directions.South);
+            Hexagon hex3 = hex2.GetFromDirection(Directions.NorthEast);
+            Hexagon hex4 = hex3.GetFromDirection(Directions.North);
+            Hexagon hex5 = hex4.GetFromDirection(Directions.NorthWest);
+            Hexagon hex6 = hex5.GetFromDirection(Directions.SouthWest);
+            Hexagon hex7 = hex6.GetFromDirection(Directions.South);
+            Hexagon hex8 = hex7.GetFromDirection(Directions.NorthEast);
+            Assert.AreEqual(hex, hex8);
+            
+            Hexagon hex9 = hex.GetFromDirection(Directions.NorthEast).GetFromDirection(Directions.SouthEast)
+                .GetFromDirection(Directions.South).GetFromDirection(Directions.NorthWest);
+            Assert.AreEqual(new Hexagon(1, 1), hex3);
+        }
     }
 }
