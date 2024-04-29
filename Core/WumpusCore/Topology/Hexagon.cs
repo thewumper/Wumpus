@@ -6,7 +6,7 @@ namespace WumpusCore.Topology
     /// Hexagons along a column fall in a line, hexagons along a row do not.
     /// Row numbers increase going south.
     /// Column numbers increase going east.
-    /// Hexagon (0,0) lies at a southern hexagon in its row
+    /// Hexagon (0,0) lies at a northern hexagon in its row
     /// </summary>
     public class Hexagon
     {
@@ -21,17 +21,17 @@ namespace WumpusCore.Topology
         public readonly int column;
         
         /// <summary>
-        /// Is this hexagon one of the top members of the row?
+        /// Is this hexagon one of the northern members of the row?
         /// </summary>
-        public bool rowTop {
+        public bool isNorthern {
             get
             {
                 // Fix negative modulus
                 if (column < 0)
                 {
-                    return -column % 2 == 1;
+                    return -column % 2 == 0;
                 }
-                return (column % 2) == 1;
+                return (column % 2) == 0;
             }
         }
 
@@ -77,7 +77,7 @@ namespace WumpusCore.Topology
             int newRow = row;
             int newColumn = column;
 
-            // Assume at top of row
+            // Assume at north of row
             switch (direction)
             {
                 case Directions.NorthEast:
@@ -96,8 +96,8 @@ namespace WumpusCore.Topology
                     break;
             }
 
-            // Change functionality if at a row bottom
-            if (!rowTop)
+            // Change functionality if southern
+            if (!isNorthern)
             {
                 newRow++;
             }
