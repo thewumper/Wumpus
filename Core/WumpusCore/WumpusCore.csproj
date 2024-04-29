@@ -45,6 +45,11 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Battle\BattleController.cs" />
+        <Compile Include="Battle\BattleMode.cs" />
+        <Compile Include="Battle\BattleStructure.cs" />
+        <Compile Include="Battle\Incomprehensible\EnemyPatternMode.cs" />
+        <Compile Include="Battle\Incomprehensible\PlayerPatternInput.cs" />
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
         <Compile Include="Controller\RatRoomStats.cs" />
@@ -74,6 +79,9 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Battle\BulletHell\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
