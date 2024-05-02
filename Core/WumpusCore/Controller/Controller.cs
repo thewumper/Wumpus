@@ -30,14 +30,19 @@ namespace WumpusCore.Controller
                 return controllerReference;
             }
         }
-
+      
+        // TODO: Add documentation, and/or move all of this into constructor. Code is illegible
         public static Random Random = new Random();
+        
         private ControllerState state = StartScreen;
+      
         private ITopology topology;
 
 
         private GameLocations.GameLocations gameLocations;
+
         private Trivia.Trivia trivia;
+
 
         /// <summary>
         /// Instantiates a controller and setup the required stuff for global controller
@@ -50,7 +55,7 @@ namespace WumpusCore.Controller
             controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
-            gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random);
+            gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random,trivia);
 
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, 0));
             gameLocations.AddEntity(new Cat(topology, gameLocations, 1));
