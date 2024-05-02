@@ -55,7 +55,7 @@ namespace WumpusCore.Controller
             controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
-            gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random);
+            gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random,trivia);
 
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, 0));
             gameLocations.AddEntity(new Cat(topology, gameLocations, 1));
