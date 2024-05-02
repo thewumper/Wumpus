@@ -59,16 +59,22 @@ public class SoundManager
         // Play!
         doorAudioSource.Play();
     }
-
+    
+    // TODO: Make work
     /// <summary>
     /// Plays an array of <see cref="SoundType"/> types at a given door.
     /// This doesn't work yet, at the moment it will only play the last sound in the array.
-    /// TODO: Make work
     /// </summary>
     /// <param name="types">The array of <see cref="SoundType"/> types to play on the door.</param>
     /// <param name="door">The door to play the sounds at.</param>
+    /// <exception cref="InvalidOperationException">When the door is null.</exception>
     public void PlaySound(SoundType[] types, GameObject door)
     {
+        if (door == null)
+        {
+            throw new InvalidOperationException("Door is null.");
+        }
+        
         for (int i = 0; i < types.Length; i++)
         {
             PlaySound(types[i], door);

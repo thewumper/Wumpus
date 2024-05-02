@@ -36,6 +36,10 @@ public class HallUI : MonoBehaviour
     /// </summary>
     private const float camSpeed = 4f;
     /// <summary>
+    /// The position the camera is supposed to stop moving at in the scene.
+    /// </summary>
+    private const int camStartPos = 0;
+    /// <summary>
     /// Whether or not the player can move or look around.
     /// </summary>
     private bool pLock;
@@ -152,9 +156,20 @@ public class HallUI : MonoBehaviour
                 HideInteract();
             }
         }
+        // If the player isn't looking at anything.
+        else
+        {
+            HideInteract();
+        }
         
+        // move forward when just starting in hallway.
+        if (cam.transform.position.z < camStartPos)
+        {
+            cam.transform.position += Vector3.forward * (Time.deltaTime * camSpeed);
+        }
+
         // If the player is moving.
-        if (movingAnimator.GetBool(movingID))
+        if (movingAnimator.GetBool(movingID) && cam.transform.position.z >= camStartPos)
         {
             // If the screen has fully faded to black.
             if (black.color.a.Equals(1))

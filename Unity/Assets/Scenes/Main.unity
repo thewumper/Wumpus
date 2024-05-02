@@ -589,7 +589,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Direction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1484,10 +1484,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1579286503}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -560, y: -267}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 150, y: 20}
+  m_SizeDelta: {x: 300, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228532530
 MonoBehaviour:
@@ -1922,6 +1922,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 13.467
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: f864ad2fe3c615d4092dab2f86313ab8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 44cf3048920e7484eb32b78a876b4ce1, type: 2}
     - target: {fileID: 919132149155446097, guid: f864ad2fe3c615d4092dab2f86313ab8, type: 3}
       propertyPath: m_Name
       value: SmoothPlaceWump
@@ -2039,10 +2043,10 @@ RectTransform:
   - {fileID: 1872784048}
   - {fileID: 1799547983}
   - {fileID: 763137746}
-  - {fileID: 210612754}
   - {fileID: 495967429}
   - {fileID: 1404257790}
   - {fileID: 1228532529}
+  - {fileID: 210612754}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

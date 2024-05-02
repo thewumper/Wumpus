@@ -202,6 +202,8 @@ public class MainUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
+        cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
+        Debug.Log(PersistentData.Instance.EulerAngle);
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
         
@@ -238,8 +240,9 @@ public class MainUI : MonoBehaviour
 
     void LateUpdate()
     {
+        if (controller.GetState() == ControllerState.InBetweenRooms) return;
         // Makes an IRoom which is the room that the player is currently in.
-        IRoom room = controller.GetRoom(RoomNum);
+        IRoom room = controller.GetCurrentRoom();
         // Makes the roomText show which room the player is actually in.
         roomText.SetText($"Room: {RoomNum}");
         // Makes only the doors that are in the room visible.
@@ -270,20 +273,29 @@ public class MainUI : MonoBehaviour
         }
         
         // All hazards in the player's current room.
-        List<HazardType> hazards = controller.getRoomHazards();
+        List<RoomAnomalies> hazards = controller.GetAnomaliesInRoom(RoomNum);
         // For each hazard in the room.
-        foreach (HazardType hazard in hazards)
+        foreach (RoomAnomalies hazard in hazards)
         {
             // Make the hazard visible.
             switch (hazard)
             {
-                case HazardType.Wumpus:
+                case RoomAnomalies.Wumpus:
                     wumpus.SetActive(true);
                     break;
             }
         }
-        List<String> hints = controller.GetHazardHints();
-        roomHintText.SetText(string.Join('\n', hints));
+        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
+        List<string> hintString = new List<string>();
+        foreach (Controller.DirectionalHint hint in hints)
+        {
+            foreach (RoomAnomalies anomaly in hint.Hazards)
+            {
+                hintString.Add("You hear " + anomaly);
+            }
+        }
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
+        else roomHintText.SetText("You hear nothing.");
         roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
     }
 
@@ -294,7 +306,9 @@ public class MainUI : MonoBehaviour
         {
             // Look around using the mouse.
             float mouseX = Input.GetAxis("Mouse X");
+
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
+            PersistentData.Instance.EulerAngle = cam.transform.eulerAngles;
         }
         // Used for checking what the player is currently looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
@@ -323,12 +337,14 @@ public class MainUI : MonoBehaviour
             else
             {
                 HideInteract();
+                directionText.SetText("");
             }
         } 
         // If the player isn't looking at anything.
         else
         {
             HideInteract();
+            directionText.SetText("");
         }
         
         // Makes the coinsText show the actual amount of coins that the player currently has.
