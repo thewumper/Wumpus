@@ -4,6 +4,7 @@ using WumpusCore.Player;
 using WumpusCore.Controller;
 using WumpusCore.GameLocations;
 using System.Diagnostics.PerformanceData;
+using WumpusCore.Topology;
 
 namespace WumpusCore.LuckyCat
 {
@@ -25,12 +26,7 @@ namespace WumpusCore.LuckyCat
         /// </summary>
         public const int AudibleMewingRadius = 1;
 
-        /// <summary>
-        /// Location of cat entity
-        /// </summary>
-        public int Location;
-
-        public Cat(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType) : base(topology, parent, location, entityType)
+        public Cat(ITopology topology, GameLocations.GameLocations parent, ushort location) : base(topology, parent, location, EntityType.Cat)
         {
         }
 
