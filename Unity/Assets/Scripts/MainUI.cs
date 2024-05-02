@@ -272,20 +272,28 @@ public class MainUI : MonoBehaviour
         }
         
         // All hazards in the player's current room.
-        List<HazardType> hazards = controller.getRoomHazards();
+        List<RoomAnomalies> hazards = controller.GetAnomaliesInRoom(RoomNum);
         // For each hazard in the room.
-        foreach (HazardType hazard in hazards)
+        foreach (RoomAnomalies hazard in hazards)
         {
             // Make the hazard visible.
             switch (hazard)
             {
-                case HazardType.Wumpus:
+                case RoomAnomalies.Wumpus:
                     wumpus.SetActive(true);
                     break;
             }
         }
-        List<String> hints = controller.GetHazardHints();
-        if (!(hints.Count <= 0)) roomHintText.SetText(string.Join('\n', hints));
+        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
+        List<string> hintString = new List<string>();
+        foreach (Controller.DirectionalHint hint in hints)
+        {
+            foreach (RoomAnomalies anomaly in hint.Hazards)
+            {
+                hintString.Add("You hear " + anomaly);
+            }
+        }
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
         else roomHintText.SetText("You hear nothing.");
         roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
     }
