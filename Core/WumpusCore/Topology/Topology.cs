@@ -111,9 +111,13 @@ namespace WumpusCore.Topology
         /// <exception cref="ArgumentOutOfRangeException">If an invalid direction is provided</exception>
         private  IRoom RoomFromDirection(ushort currentRoom, Directions direction)
         {
+            // Cave size
+            int width = 6;
+            int height = 5;
+            
             // Hexagon representing input room
-            int row = currentRoom / 6;
-            int column = currentRoom % 6;
+            int row = currentRoom / width;
+            int column = currentRoom % width;
             Hexagon room = new Hexagon(row, column);
 
             // Find the next room
@@ -124,26 +128,24 @@ namespace WumpusCore.Topology
             // Wrap around
             if (row < 0)
             {
-                row += 5;
+                row += height;
             }
-
-            if (row >= 5)
+            else if (row >= height)
             {
-                row -= 5;
+                row -= height;
             }
 
             if (column < 0)
             {
-                column += 6;
-            }
-
-            if (column >= 6)
+                column += width;
+            } 
+            else if (column >= width)
             {
-                column -= 6;
+                column -= width;
             }
             
             // Find the room in array
-            return rooms[row * 6 + column];
+            return rooms[row * width + column];
         }
         
         /// <summary>
