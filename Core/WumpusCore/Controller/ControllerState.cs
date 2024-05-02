@@ -11,5 +11,7 @@ namespace WumpusCore.Controller
         Inventory,
         Trivia,
         Acrobat,
+        BatTransition,
+        VatRoomTrivia
     }
 }

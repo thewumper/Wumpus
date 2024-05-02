@@ -38,26 +38,5 @@ namespace WumpusTesting
         {
             Assert.AreEqual(Controller.GlobalController, Controller.GlobalController);
         }
-
-        [TestMethod]
-        public void TestGettingARoom()
-        {
-            var v1 = Controller.GlobalController.GetRoom(2).ExitDirections;
-            var v2 = new []
-            {
-                Directions.North,
-                Directions.NorthEast,
-                Directions.SouthEast,
-                Directions.South,
-                Directions.SouthWest,
-                Directions.NorthWest,
-            };
-            CollectionAssert.AreEqual(v2,v1);
-
-            CollectionAssert.AreEqual(
-                Controller.GlobalController.GetRoom(1).ExitDirections,
-                new [] { Directions.North }
-            );
-        }
     }
 }

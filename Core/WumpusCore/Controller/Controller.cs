@@ -12,7 +12,7 @@ using WumpusCore.Trivia;
 namespace WumpusCore.Controller
 {
     /// <summary>
-    /// The overall controller for the Wumpus game. This shouuld be your main interaction point for any UI implementation
+    /// The overall controller for the Wumpus game. This should be your main interaction point for any UI implementation
     /// </summary>
     public class Controller
     {
@@ -59,35 +59,16 @@ namespace WumpusCore.Controller
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations));
         }
 
-
-        /// <summary>
-        /// Returns the room at the room number from topology (0 indexed)
-        /// </summary>
-        /// <param name="roomNumber">The 0 indexed room number</param>
-        /// <returns>The room at the room number from topology</returns>
-        /// <exception cref="IndexOutOfRangeException"></exception>
-        public IRoom GetRoom(ushort roomNumber)
-        {
-            return topology.GetRoom(roomNumber);
-        }
-        
-        /// <summary>
-        /// Returns the RoomType of the given room.
-        /// </summary>
-        /// <param name="roomNumber">The room's position.</param>
-        /// <returns>The RoomType of the given room.</returns>
-        public RoomType GetRoomType(ushort roomNumber)
-        {
-            return gameLocations.GetRoomAt(roomNumber);
-        }
-
         /// <summary>
         /// Gets the room type for the current room
         /// </summary>
         /// <returns>A RoomType enum with the current room type</returns>
         public RoomType GetCurrentRoomType()
         {
-            return GetRoomType((ushort)GetPlayerLocation());
+            // You can only get the room type if you're in the room
+            ValidateState(new [] {InRoom});
+
+            return gameLocations.GetRoomAt(gameLocations.GetPlayer().location);
         }
         
         /// <summary>
@@ -96,6 +77,7 @@ namespace WumpusCore.Controller
         /// <param name="direction">The direction to move the player in.</param>
         public void MoveInADirection(Directions direction)
         {
+            ValidateState(new [] {InRoom});
             state = InBetweenRooms;
 
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
@@ -126,15 +108,19 @@ namespace WumpusCore.Controller
             RoomType nextroomType =  gameLocations.GetRoomAt(nextRoom.Id);
             if (nextroomType == RoomType.Flats)
             {
-                state=InRoom;
+                state = InRoom;
             }
             else if (nextroomType == RoomType.Acrobat)
             {
-                state = ControllerState.Acrobat;
+                state = Acrobat;
             }
             else if (nextroomType == RoomType.Bats)
             {
-
+                state = BatTransition;
+            }
+            else if (nextroomType == RoomType.Vats)
+            {
+                state = VatRoomTrivia;
             }
 
 
@@ -263,15 +249,13 @@ namespace WumpusCore.Controller
         {
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not.
             // being prepared to handle that controller state.
-            ValidateState(new[] { StartScreen, InRoom });
+            ValidateState(new[] { StartScreen });
             this.state = InRoom;
         }
 
         public void EndGame()
         {
-            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not.
-            // being prepared to handle that controller state.
-            ValidateState(new[] { StartScreen, InRoom });
+            // TODO! This will need to be rewritten
             this.state = StartScreen;
         }
         
