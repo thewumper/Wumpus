@@ -55,7 +55,7 @@ namespace WumpusTesting
             CollectionAssert.AreEqual(v2,v1);
 
             CollectionAssert.AreEqual(
-                Controller.GlobalController.GetRoom(1).ExitDirections,
+                Controller.GlobalController.GetRoom(0).ExitDirections,
                 new [] { Directions.North }
             );
         }
