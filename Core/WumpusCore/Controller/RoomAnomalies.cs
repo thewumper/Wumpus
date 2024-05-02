@@ -3,12 +3,13 @@ using WumpusCore.GameLocations;
 namespace WumpusCore.Controller
 {
 
-    public enum HazardType
+    public enum RoomAnomalies
     {
         Wumpus,
         Vat,
         Rat,
         Bats,
-        Acrobat
+        Acrobat,
+        Cat,
     }
 }

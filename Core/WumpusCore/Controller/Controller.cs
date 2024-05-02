@@ -179,63 +179,69 @@ namespace WumpusCore.Controller
         }
 
 
-        /// <summary>
-        /// Gives the hazards that are in the room the player is currently in.
-        /// </summary>
-        /// <returns>All hazards that are in the room the player is currently in.</returns>
-        public List<HazardType> getRoomHazards()
+        public struct DirectionalHint
         {
-            var hazards = new List<HazardType>();
-            if (gameLocations.GetEntity(EntityType.Wumpus).location == GetPlayerLocation())
+            public Directions Direction;
+            public List<RoomAnomalies> Hazards;
+            public DirectionalHint(List<RoomAnomalies> hazards, Directions direction)
             {
-                hazards.Add(HazardType.Wumpus);
+                Hazards = hazards;
+                Direction = direction;
             }
-            // HazardType? hazard = gameLocations.GetRoomAt((ushort)GetPlayerLocation()).ToHazard();
-            // if (hazard != null)
-            // {
-                // hazards.Add((HazardType)hazard);
-            // }
-            return hazards;
-        }
-
-
-
-        public List<string> GetHazardHints()
-        {
-            return null;
         }
 
         /// <summary>
         /// Returns the hazards currently around the player.
         /// </summary>
         /// <returns>List containing the hazards that are around the player</returns>
-        // public List<HazardType> GetHazardHints()
-        // {
-        //     private struct DirectionalHint
-        //     {
-        //         public Directions Direction;
-        //         public List<HazardType> Hazards;
-        //         public DirectionalHint(List<HazardType> hazards, Directions direction)
-        //         {
-        //             Hazards = hazards;
-        //             Direction = direction;
-        //         }
-        //     }
-        //
-        //     List<RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
-        //
-        //     List<string> hints = new List<string>();
-        //     foreach (RoomType roomType in rooms)
-        //     {
-        //         HazardType? hazardType = roomType.ToHazard();
-        //         if (hazardType != null)
-        //         {
-        //             hints.Add(((HazardType)hazardType).GetHint());
-        //         }
-        //     }
-        //
-        //     return hints;
-        // }
+        public List<DirectionalHint> GetHazardHints()
+        {
+
+            Dictionary<Directions, IRoom> rooms = topology.GetRoom((ushort)GetPlayerLocation()).AdjacentRooms;
+        
+            List<DirectionalHint> hints = new List<DirectionalHint>();
+
+            // Loop over all the keys
+            foreach (Directions directions in rooms.Keys)
+            {
+                hints.Add(new DirectionalHint(
+                    GetAnomaliesInRoom(rooms[directions].Id),directions));
+            }
+
+            return hints;
+        }
+
+
+        public List<RoomAnomalies> GetAnomaliesInRoom(int roomnum)
+        {
+            List<RoomAnomalies> anomaliesList = new List<RoomAnomalies>();
+
+            if (gameLocations.GetCat().location == roomnum)
+            {
+                anomaliesList.Add(RoomAnomalies.Cat);
+            }
+
+            if (gameLocations.GetWumpus().location == roomnum)
+            {
+                anomaliesList.Add(RoomAnomalies.Wumpus);
+            }
+
+            RoomType room = gameLocations.GetRoomAt((ushort) roomnum);
+
+            switch (room)
+            {
+                case RoomType.Acrobat: anomaliesList.Add(RoomAnomalies.Acrobat);
+                    break;
+                case RoomType.Bats: anomaliesList.Add(RoomAnomalies.Bats);
+                    break;
+                case RoomType.Rats: anomaliesList.Add(RoomAnomalies.Rat);
+                    break;
+                case RoomType.Vats: anomaliesList.Add(RoomAnomalies.Vat);
+                    break;
+            }
+
+            return anomaliesList;
+        }
         
 
         /// <summary>
