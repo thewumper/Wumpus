@@ -295,5 +295,16 @@ namespace WumpusCore.Controller
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Allows you to exit the bat state. Puts the player in a random room and changes the controller state to InRoom.
+        /// </summary>
+        public void ExitBat()
+        {
+            ValidateState(new []{BatTransition});
+
+            gameLocations.GetPlayer().location = gameLocations.GetEmptyRoom();
+            state = InRoom;
+        }
     }
 }
