@@ -47,12 +47,7 @@
     <ItemGroup>
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
-<<<<<<< HEAD
-        <Compile Include="Controller\RoomAnomalies.cs" />
-        <Compile Include="GameLocations\RoomType.cs" />
-=======
-        <Compile Include="Controller\HazardType.cs" />
->>>>>>> refs/heads/main
+        <Compile Include="Controller\RoomAnomalies.cs"/>
         <Compile Include="HighScore\SaveFile.cs" />
         <Compile Include="Entity\Entity.cs" />
         <Compile Include="Entity\EntityType.cs" />
@@ -73,12 +68,7 @@
         <Compile Include="HighScore\HighScore.cs" />
         <Compile Include="GameLocations\GameLocations.cs" />
 		<Compile Include="Wumpus\Wumpus.cs" />
-        <Compile Include="Controller\RoomAnomalies.cs" />
         <Compile Include="GameLocations\RoomType.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include=".gitignore" />
-        <DocumentationFile>..\..\Unity\Assets\DLL\WumpusCore.xml</DocumentationFile>
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
