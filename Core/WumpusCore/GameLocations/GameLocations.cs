@@ -8,12 +8,29 @@ using WumpusCore.Topology;
 
 namespace WumpusCore.GameLocations
 {
-    public partial class GameLocations
+    public class GameLocations
     {
         /// <summary>
         /// All entities in the game
         /// </summary>
         private Dictionary<EntityType, Entity.Entity> entities;
+        /// <summary>
+        /// How all the rooms connect to each other
+        /// </summary>
+        private ITopology topology;
+
+        /// <summary>
+        /// All possible types of rooms.
+        /// </summary>
+        public enum RoomType
+        {
+            Flats,
+            Vats,
+            Bats,
+            Rats,
+            Acrobat
+        }
+
         /// <summary>
         /// How all the rooms connect to each other
         /// </summary>
@@ -226,7 +243,7 @@ namespace WumpusCore.GameLocations
 
             return adjacentRooms;
         }
-        
-        
+
+
     }
 }
