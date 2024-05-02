@@ -72,6 +72,19 @@ namespace WumpusCore.Controller
         }
         
         /// <summary>
+        /// Gets the IRoom the current room
+        /// </summary>
+        /// <returns>An IRoom for the current room</returns>
+        public IRoom GetCurrentRoom()
+        {
+            // You can only get the room type if you're in the room
+            ValidateState(new [] {InRoom});
+
+            return topology.GetRoom(gameLocations.GetPlayer().location);
+        }
+
+
+        /// <summary>
         /// Moves the player in a given direction.
         /// </summary>
         /// <param name="direction">The direction to move the player in.</param>
