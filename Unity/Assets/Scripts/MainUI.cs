@@ -240,8 +240,9 @@ public class MainUI : MonoBehaviour
 
     void LateUpdate()
     {
+        if (controller.GetState() == ControllerState.InBetweenRooms) return;
         // Makes an IRoom which is the room that the player is currently in.
-        IRoom room = controller.GetRoom(RoomNum);
+        IRoom room = controller.GetCurrentRoom();
         // Makes the roomText show which room the player is actually in.
         roomText.SetText($"Room: {RoomNum}");
         // Makes only the doors that are in the room visible.
