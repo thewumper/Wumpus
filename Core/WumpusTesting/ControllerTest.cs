@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
-using WumpusCore.Topology;
 
 namespace WumpusTesting
 {
@@ -28,6 +26,11 @@ namespace WumpusTesting
                 outputFile.WriteLine("[{\"question\": \"Which is right\", choices : [\"correct\",\"wrong\",\"wrong\",\"wrong\"],\"answer\": 0}]");
             }
 
+            CreateNewController();
+        }
+
+        private static void CreateNewController()
+        {
             // This will just create it at global controller which is what we want. Resharper doesn't like this, but it's fine
             // ReSharper disable once ObjectCreationAsStatement
             new Controller("./questions.json","./",0);
@@ -37,6 +40,29 @@ namespace WumpusTesting
         public void TestGlobalController()
         {
             Assert.AreEqual(Controller.GlobalController, Controller.GlobalController);
+        }
+
+        [TestMethod]
+        public void SimulateGames()
+        {
+            // Run through it 100 times to make sure that stuff doens't happen randomly
+            for (int i = 0; i < 1000; i++)
+            {
+                // Setup
+                Controller.Random = new Random(i);
+
+                // Start the game
+                Assert.AreEqual(Controller.GlobalController.GetState(), ControllerState.StartScreen);
+                Controller.GlobalController.StartGame();
+
+                // Verify that the player starts in an empty room
+                Assert.AreEqual(Controller.GlobalController.GetState(), ControllerState.InRoom);
+                Assert.AreEqual(Controller.GlobalController.GetAnomaliesInRoom(Controller.GlobalController.GetPlayerLocation()).Count, 0);
+
+                //
+
+                CreateNewController();
+            }
         }
     }
 }
