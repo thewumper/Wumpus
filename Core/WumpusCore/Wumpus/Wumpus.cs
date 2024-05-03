@@ -1,10 +1,13 @@
 ﻿using System;
 using WumpusCore.Entity;
+using WumpusCore.Topology;
 
 namespace WumpusCore.Wumpus
 {
+    public class Wumpus: Entity.Entity
+    {
         /// <summary>
-        /// State of Wump.
+        /// Current state of Wumpus
         /// </summary>
         public enum State
         {
@@ -14,16 +17,17 @@ namespace WumpusCore.Wumpus
             Combat,
             Dead
         }
-    public class Wumpus: Entity.Entity
-    {
+        
         private State WumpState;
+        
         /// <summary>
         /// Constructs the Wump.
         /// </summary>
-        public Wumpus(Topology.Topology topology, GameLocations.GameLocations parent, ushort location, EntityType entityType) : base(topology, parent, location, entityType)
+        public Wumpus(ITopology topology, GameLocations.GameLocations parent, ushort location) : base(topology, parent, location, EntityType.Wumpus)
         {
             WumpState = State.Sleeping;
         }
+        
         /// <summary>
         /// Moves the Wump into a connected room randomly a number of times depending on the state.
         /// </summary>
@@ -50,6 +54,7 @@ namespace WumpusCore.Wumpus
             }
             WumpState = State.Sleeping;
         }
+        
         /// <summary>
         /// Sets the state of the Wump
         /// </summary>

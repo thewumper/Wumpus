@@ -66,6 +66,12 @@ namespace WumpusCore.Topology
             // Connect all of the rooms
             foreach (Room room in rooms)
             {
+                if (room == null)
+                {
+                    throw new NullReferenceException(
+                        "Room wasn't initialized properly, make sure your map has 30 rooms.");
+                }
+
                 room.InitializeConnections(this);
             }
         }
@@ -105,93 +111,53 @@ namespace WumpusCore.Topology
         /// <exception cref="ArgumentOutOfRangeException">If an invalid direction is provided</exception>
         private  IRoom RoomFromDirection(ushort currentRoom, Directions direction)
         {
-            // Probably could write 
-            currentRoom += 1;
+            // Cave size
+            int width = 6;
+            int height = 5;
             
-            // These numbers help us navigate this map
-            const short width = 6; // Up and down
-            const short neighborMod = 1; // If the room sequential appears in front or behind us in the array
-            const short upRightMod = 7; // If the room to the NW/SE does not appear in front/behind us sequentially in the array 
-            const short upLeftMod = 5;  // If the room to the NE/SW does no appear in front/behind us sequentially i the array 
-            // It needs to be a short because we go negative
-            short result = (short)currentRoom;
-            // Check if we are on an edge/it is even in this specific map arrangement this can be used to determine if rooms appear sequentially in front or behind of us
-            bool isEdge = currentRoom % width <= 1;
-            bool isEven = currentRoom % 2 == 0;
-            // Apply the modifer based on the direction
-            switch (direction)
+            // Hexagon representing input room
+            int row = currentRoom / width;
+            int column = currentRoom % width;
+            Hexagon room = new Hexagon(row, column);
+
+            // Find the next room
+            Hexagon nextRoom = room.GetFromDirection(direction);
+            row = nextRoom.row;
+            column = nextRoom.column;
+            
+            // Wrap around
+            if (row < 0)
             {
-                // If we go north we just subtract the width
-                case Directions.North:
-                    result -= width;
-                    break;
-                // If we go south we just add the width
-                case Directions.South:
-                    result += width;
-                    break;
-                // If we go northwest it's complicated but if it is even or we are on an edge we are adjacent and ahead so just subtract by 1 otherwise we are not on an edge so subtract by the NW/SE modifer
-                case Directions.NorthWest:
-                    if (isEdge || isEven)
-                    {
-                        result -= neighborMod;
-                    }
-                    else
-                    {
-                        result -= upRightMod;
-                    }
-                    break;
-                // If we go northwest it's complicated but if it is odd or we are on an edge we are adjacent and behind so just add 1 otherwise we are not on an edge so add by the NW/SE modifer
-                case Directions.SouthEast:
-                    if (isEdge || !isEven)
-                    {
-                        result += neighborMod;
-                    }
-                    else
-                    {
-                        result += upRightMod;
-                    }
-                    break;
-                // If we want to go northeast and we are on the edge or it is odd we are not adjacent so subtract by the NE/SW modifer, otherwise we are adjacent and behind so add 1
-                case Directions.NorthEast:
-                    if (isEdge || !isEven)
-                    {
-                        result -= upLeftMod;
-                    }
-                    else
-                    {
-                        result += neighborMod;
-                    }
-                    break;
-                // Same as above just some of the logic and signs are flipped. If we are on an edge or it is even we are not adjacent so add the NE/SW modifer, otherwise we are adjacent and ahead so subtract 1
-                case Directions.SouthWest:
-                    if (isEdge || isEven)
-                    {
-                        result += upLeftMod;
-                    }
-                    else
-                    {
-                        result -= neighborMod;
-                    }
-                    break;
-                
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(direction), direction, "Invalid Direction");
+                row += height;
+            }
+            else if (row >= height)
+            {
+                row -= height;
+            }
+
+            if (column < 0)
+            {
+                column += width;
+            } 
+            else if (column >= width)
+            {
+                column -= width;
             }
             
-            int roomNum = (result - neighborMod) % 30; // Wrap the rooms
-            return rooms[(roomNum >= 0 ? roomNum : roomNum + 30)]; // Fix the negative modulus
+            // Find the room in array
+            return rooms[row * width + column];
         }
         
         /// <summary>
         /// Function for DistanceBetweenRooms. Pass into getConnections to navigate ignoring all obstacles.
         /// </summary>
         public static Func<IRoom, IRoom[]> NavigateBoundless = room => room.AdjacentRooms.Values.ToArray();
-        
+
         /// <summary>
         /// Function for DistanceBetweenRooms. Pass into getConnections to navigate only through accessible doors.
         /// </summary>
         public static Func<IRoom, IRoom[]> NavigateDoors = room => room.ExitRooms.Values.ToArray();
-        
+
         /// <summary>
         /// Finds the distance in room movements between two given room indices, ignoring walls, doors, and obstacles.
         /// Uses Dijkstra's algorithm
@@ -202,7 +168,7 @@ namespace WumpusCore.Topology
         /// <returns>The distance in movements between the two rooms</returns>
         public int DistanceBetweenRooms(ushort startRoomIndex, ushort endRoomIndex, Func<IRoom, IRoom[]> getConnections)
         {
-            
+
             if (startRoomIndex == endRoomIndex)
             {
                 return 0;
@@ -244,14 +210,14 @@ namespace WumpusCore.Topology
                 {
                     // Skip if we've already seen this one
                     if (visited[i]) {continue;}
-                    
+
                     // Skip if bigger than others
                     if (distance[i] >= minimum) {continue;}
 
                     minimum = distance[i];
                     minimumIndex = i;
                 }
-                    
+
                 if (minimum == Int32.MaxValue)
                 {
                     // No more reachable nodes.
@@ -267,7 +233,7 @@ namespace WumpusCore.Topology
                 currentRoomIndex = (ushort)minimumIndex;
             }
         }
-        
+
         /// <summary>
         /// Internally used to keep track of rooms
         /// </summary>

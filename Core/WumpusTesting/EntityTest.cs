@@ -4,12 +4,24 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Entity;
 using WumpusCore.GameLocations;
 using WumpusCore.Topology;
+using WumpusCore.Trivia;
 
 namespace WumpusTesting
 {
     [TestClass] 
     public class EntityTest
     {
+        public Trivia makeTrivia()
+        {
+            string path = Path.GetFullPath("..\\..\\..\\..\\Unity\\Assets\\Trivia\\Questions.json");
+            Trivia trivia = new Trivia(path);
+            if (trivia.Count == 0)
+            {
+                throw new Exception("THERE ARE NO QUESTIONS HERE!");
+            }
+            return trivia;
+        }
+        
         public EntityTest()
         {
             // Write the string array to a new file named "WriteLines.txt".
@@ -36,7 +48,8 @@ namespace WumpusTesting
         public GameLocations SetupGameLocations()
         {
             Topology topology = new Topology("entitytest1.map");
-            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random());
+            Trivia trivia = makeTrivia();
+            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random(), trivia);
             game.AddEntity(new DummyEntity(topology, game, EntityType.Player));
             game.AddEntity(new Entity(topology, game, 19, EntityType.Wumpus));
             return game;
@@ -45,7 +58,8 @@ namespace WumpusTesting
         public GameLocations SetupGameLocationsDirected()
         {
             Topology topology = new Topology("entitytest2.map");
-            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random());
+            Trivia trivia = makeTrivia();
+            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random(), trivia);
             game.AddEntity(new DummyEntity(topology, game, EntityType.Player));
             game.AddEntity(new Entity(topology, game, 19, EntityType.Wumpus));
             return game;
