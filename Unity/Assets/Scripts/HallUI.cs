@@ -36,7 +36,7 @@ public class HallUI : MonoBehaviour
     /// </summary>
     private const float camSpeed = 4f;
     /// <summary>
-    /// Whether or not the player can move or look around.
+    /// Whether the player can move or look around.
     /// </summary>
     private bool pLock;
     
@@ -118,6 +118,7 @@ public class HallUI : MonoBehaviour
 
     void Update()
     {
+        
         // If the player isn't locked.
         if (!pLock)
         {
