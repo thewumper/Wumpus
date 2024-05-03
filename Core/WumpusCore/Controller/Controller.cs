@@ -19,6 +19,7 @@ namespace WumpusCore.Controller
         private static Controller controllerReference;
         private IRoom nextRoom;
 
+
         public static Controller GlobalController
         {
             get
@@ -36,6 +37,7 @@ namespace WumpusCore.Controller
         public static Random Random = new Random();
         private ControllerState state = StartScreen;
         private ITopology topology;
+        public bool debug = false;
 
 
         private GameLocations.GameLocations gameLocations;
@@ -54,9 +56,9 @@ namespace WumpusCore.Controller
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random);
 
-            gameLocations.AddEntity(new Player.Player(topology, gameLocations, 0));
-            gameLocations.AddEntity(new Cat(topology, gameLocations, 1));
+            gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations));
+            gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
         }
 
         /// <summary>
@@ -133,7 +135,7 @@ namespace WumpusCore.Controller
             }
             else if (nextroomType == RoomType.Vats)
             {
-                state = VatRoomTrivia;
+                state = VatRoom;
             }
 
 
@@ -252,10 +254,33 @@ namespace WumpusCore.Controller
             return gameLocations.GetWumpus().location;
         }
 
+        public void StartTrivia()
+        {
+            ValidateState(new []{ ControllerState.VatRoom });
+
+            trivia.StartRound(3,2);
+        }
+
 
         public Trivia.AskableQuestion GetTriviaQuestion()
         {
             return trivia.GetQuestion();
+        }
+
+        public bool SubmitTriviaAnswer(int choice)
+        {
+            bool correctness = trivia.SubmitAnswer(choice);
+
+            if (trivia.reportResult() == GameResult.Win)
+            {
+                state = InRoom;
+            }
+            else if (trivia.reportResult() == GameResult.Loss)
+            {
+                state = GameOver;
+            }
+
+            return correctness;
         }
 
         public void StartGame()
@@ -281,6 +306,10 @@ namespace WumpusCore.Controller
         /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function.</exception>
         private void ValidateState(ControllerState[] validStates)
         {
+            if (debug)
+            {
+                return;
+            }
             if (!validStates.Contains(state))
             {
                 throw new InvalidOperationException(
@@ -306,5 +335,6 @@ namespace WumpusCore.Controller
             gameLocations.GetPlayer().location = gameLocations.GetEmptyRoom();
             state = InRoom;
         }
+
     }
 }
