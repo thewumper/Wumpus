@@ -37,6 +37,7 @@ namespace WumpusCore.Controller
         public static Random Random = new Random();
         private ControllerState state = StartScreen;
         private ITopology topology;
+        public bool debug = false;
 
 
         private GameLocations.GameLocations gameLocations;
@@ -305,6 +306,10 @@ namespace WumpusCore.Controller
         /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function.</exception>
         private void ValidateState(ControllerState[] validStates)
         {
+            if (debug)
+            {
+                return;
+            }
             if (!validStates.Contains(state))
             {
                 throw new InvalidOperationException(
