@@ -26,8 +26,16 @@ namespace WumpusCore.Player
         /// Number of moves made so far
         /// </summary>
         public int TurnsTaken { get; private set; }
-        
-        
+
+        /// <summary>
+        /// Player's health
+        /// </summary>
+        public int Health;
+
+        /// <summary>
+        /// Limit of player's health
+        /// </summary>
+        public int HealthMax;
         
         /// <summary>
         /// Stores everything to do with the player.
@@ -37,6 +45,7 @@ namespace WumpusCore.Player
         {   
             Coins = 0;
             Arrows = 3;
+            Health = 100;
         }
         
         /// <summary>
