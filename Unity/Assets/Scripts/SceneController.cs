@@ -50,6 +50,7 @@ namespace WumpusUnity
         /// <param name="scene">The new Scene.</param>
         private void SetScene(string scene)
         {
+            if (currentScene == scene) SceneManager.LoadScene("Main Menu");
             currentScene = scene;
             SceneManager.LoadScene(scene);
         }
@@ -67,6 +68,12 @@ namespace WumpusUnity
                     return "Main Menu";
                 case ControllerState.InBetweenRooms:
                     return "Hallway";
+                case ControllerState.VatRoom:
+                    return "Vat";
+                case ControllerState.Rats:
+                    return "Rat";
+                case ControllerState.BatTransition:
+                    return "Bat";
                 default:
                     return "Main";
             }
