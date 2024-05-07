@@ -313,7 +313,7 @@ namespace WumpusCore.Controller
             if (!validStates.Contains(state))
             {
                 throw new InvalidOperationException(
-                    $"You cannot go to that state from {state}. The only valid options are {validStates}");
+                    $"You cannot do that operation from {state}. The only valid options are {validStates}");
             }
         }
 
