@@ -39,7 +39,8 @@ public class AcrobatGame : MonoBehaviour
 
     private float totalDuration;
     private int score;
-
+    private bool finished = false;
+    private bool started = false;
     public void Awake()
     {
         targets = new List<TargetPair>();
@@ -55,6 +56,11 @@ public class AcrobatGame : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (!started)
+            {
+                started = true;
+                return;
+            }
             if (Physics.Raycast(new Ray(camera.transform.position, camera.transform.forward), out var hit))
             {
                 if (hit.transform.CompareTag("Target"))
@@ -74,8 +80,18 @@ public class AcrobatGame : MonoBehaviour
             }
             
         }
+
+        if (!started)
+        {
+            return;
+        }
         
-        totalDuration += Time.deltaTime;
+        totalDuration += !finished ? Time.deltaTime : 0;
+        if (totalDuration >= maxTime)
+        {
+            targets.ToList().ForEach((RemoveTarget));
+            finished = true;
+        }
         foreach (TargetPair pair in targets.ToList())
         {
             pair.time += Time.deltaTime;

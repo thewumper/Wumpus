@@ -631,7 +631,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c02bb486b9d34ff4d9636627cd26cb2b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -670,7 +670,7 @@ Transform:
   m_GameObject: {fileID: 1125158784}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 8}
+  m_LocalPosition: {x: 0, y: 0, z: 45}
   m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -832,7 +832,7 @@ Transform:
   m_GameObject: {fileID: 1421142724}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3410473, y: -0.73974705, z: -9.030511}
+  m_LocalPosition: {x: 1.3410473, y: -0.73974705, z: 26.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -899,7 +899,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 101.1
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -959,10 +959,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeText: {fileID: 715343536}
   scoreText: {fileID: 887528282}
-  growthRate: 2
-  maxTargetTime: 5
-  maxTime: 100
-  numTargets: 3
+  growthRate: 5
+  maxTargetTime: 3
+  maxTime: 60
+  numTargets: 5
   target: {fileID: 1168890338281938332, guid: bc9b33ca6f40e864abbee8937c0f96d8, type: 3}
   spawnArea:
     serializedVersion: 2
@@ -970,10 +970,11 @@ MonoBehaviour:
     y: -25
     width: 50
     height: 50
-  zDepth: 8
+  zDepth: 40
   targetExplodePenalty: 5
   targetMissPenalty: 2
   targetHitBonus: 10
+  camera: {fileID: 1495926873}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
