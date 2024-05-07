@@ -47,7 +47,8 @@
         <Compile Include="Battle\BattleType.cs" />
         <Compile Include="Battle\BattleStructure.cs" />
         <Compile Include="Battle\BulletHell\Bullet.cs" />
-        <Compile Include="Battle\BulletHell\Spawner.cs" />
+        <Compile Include="Battle\BulletHell\IDisplayable.cs" />
+        <Compile Include="Battle\BulletHell\ISpawner.cs" />
         <Compile Include="Battle\BulletHell\Vector2.cs" />
         <Compile Include="Battle\IBattleTypeController.cs" />
         <Compile Include="Battle\BulletHell\BulletHellController.cs" />
@@ -82,10 +83,6 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Battle\Memory\" />
-      <Folder Include="Battle\Pattern\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
