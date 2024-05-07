@@ -15,6 +15,7 @@ namespace WumpusCore.Topology
         /// Creates a graph repersenation of a set of nodes
         /// </summary>
         /// <param name="nodes">The nodes in the graph</param>
+        /// <param name="random">The random number generator to be used by the graph</param>
         public Graph(List<IRoom> nodes, Random random)
         {
             this.nodes = nodes;
@@ -96,7 +97,6 @@ namespace WumpusCore.Topology
             // It just tries random things until something works basically
             // In theory it could try the same thing over and over again
             // Maybe later I could make it not do the same thing over and over again
-            Random random = new Random();
             HashSet<IRoom> solution = new HashSet<IRoom>();
             int tries = 0;
             while (tries < panicExit)
