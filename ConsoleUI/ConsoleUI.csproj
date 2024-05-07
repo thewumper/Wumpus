@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="WumpusCore">
       <HintPath>..\Unity\Assets\DLL\WumpusCore.dll</HintPath>
     </Reference>
