@@ -7,13 +7,26 @@ namespace WumpusCore.Topology
     public class Graph
     {
         private List<IRoom> nodes;
+
+        // The random number generator
+        private readonly Random random;
+
         /// <summary>
         /// Creates a graph repersenation of a set of nodes
         /// </summary>
         /// <param name="nodes">The nodes in the graph</param>
-        public Graph(List<IRoom> nodes)
+        public Graph(List<IRoom> nodes, Random random)
         {
             this.nodes = nodes;
+            this.random = random;
+        }
+
+        /// <summary>
+        /// Creates a graph repersenation of a set of nodes
+        /// </summary>
+        /// <param name="nodes">The nodes in the graph</param>
+        public Graph(List<IRoom> nodes) : this(nodes, new Random())
+        {
         }
 
         /// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
+using WumpusCore.Topology;
 
 namespace WumpusTesting
 {
@@ -59,7 +60,49 @@ namespace WumpusTesting
                 Assert.AreEqual(Controller.GlobalController.GetState(), ControllerState.InRoom);
                 Assert.AreEqual(Controller.GlobalController.GetAnomaliesInRoom(Controller.GlobalController.GetPlayerLocation()).Count, 0);
 
-                //
+                // Go one room north
+                Controller.GlobalController.MoveInADirection(Directions.North);
+                Controller.GlobalController.MoveFromHallway();
+                try
+                {
+                    Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState( ));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
+                switch (Controller.GlobalController.GetState())
+                {
+                        case ControllerState.Acrobat:
+                        {
+                            Console.WriteLine("Acrobat");
+                            break;
+                        }
+                        case ControllerState.Rats:
+                        {
+                            Console.WriteLine("Rats");
+                            break;
+                        }
+                        case ControllerState.BatTransition:
+                        {
+                            Console.WriteLine("Bats");
+                            break;
+                        }
+                        case ControllerState.InRoom:
+                        {
+                            Console.WriteLine("InRoom");
+                            break;
+                        }
+                        case ControllerState.VatRoom:
+                        {
+                            Console.WriteLine("Vatroom");
+                            break;
+                        }
+                        default:
+                            throw new Exception($"{Controller.GlobalController.GetState()} was not handled in the test (this is bad)");
+                }
 
                 CreateNewController();
             }
