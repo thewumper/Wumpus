@@ -59,7 +59,7 @@ namespace WumpusCore.Controller
 
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, 0));
             gameLocations.AddEntity(new Cat(topology, gameLocations, 1));
-            gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations, Random));
+            gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations, gameLocations.GetEmptyRoom()));
         }
 
 
