@@ -86,38 +86,44 @@ namespace ConsoleUI
 
         public void InRoom()
         {
-            IRoom location = controller.GetRoom((ushort)controller.GetPlayerLocation());
-            SlowWriteLine("You find yourselve in a gloomy stone cavern with a dim light coming from a torch on the wall.");
-            ReportHazards();
-            SlowWrite("The rooms has 3 passages exiting it: ");
-            ReportDoors(location);
-
-            bool cancontinue = false;
-            String response = "";
-            while (!cancontinue)
+            IRoom location = controller.GetCurrentRoom();
+            switch (controller.GetState())
             {
-                SlowWriteLine("");
-                SlowWriteLine("Where do you wanna go? ");
-                response = Console.ReadLine();
-                // test rather than relying on exceptions
-                try
-                {
-                    cancontinue = location.ExitDirections.Contains(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
-                }
-                catch
-                {
-                    cancontinue = false;
-                    SlowWrite("You can't go that way.");
-                }
+                case ControllerState.InRoom:
+                    SlowWriteLine("You find yourselve in a gloomy stone cavern with a dim light coming from a torch on the wall.");
+                    ReportHazards();
+                    SlowWrite("The rooms has 3 passages exiting it: ");
+                    ReportDoors(location);
+
+                    bool cancontinue = false;
+                    String response = "";
+                    while (!cancontinue)
+                    {
+                        SlowWriteLine("");
+                        SlowWriteLine("Where do you wanna go? ");
+                        response = Console.ReadLine();
+                        // test rather than relying on exceptions
+                        try
+                        {
+                            cancontinue = location.ExitDirections.Contains(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
+                        }
+                        catch
+                        {
+                            cancontinue = false;
+                            SlowWrite("You can't go that way.");
+                        }
+                    }
+                    controller.MoveInADirection(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
+                    break;
+                
             }
-            controller.MoveInADirection(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
         }
 
         public void InHallway()
         {
             SlowWriteLine("You see something written on the wall as you traverse the passage. ");
             AnsweredQuestion AQ = controller.GetUnaskedQuestion();
-            ReportTrivia();
+            ReportHint();
             SlowWrite("You see a dim light ahead, do you wish to continue into the next room? (yes) (no)");
             
             String move = Console.ReadLine();
@@ -126,7 +132,7 @@ namespace ConsoleUI
             {
                 controller.MoveFromHallway();
             }
-            /**
+            /*
             String[] denied = { "You take a closer look at the writing on the wall", "You ponder the words carefully, making to sure to fully take in every word as it is written", "You have entered a state of madness, completely obsessed over the writing before you." };
             String[] question = { "Has your curiosity been satisfied? (yes) (no)", "With your mind filled with the poetry written before you, are you ready to continue your adventure? (yes) (no)", "You must break out of your trance! Say something! Anything!" };
 
@@ -135,7 +141,7 @@ namespace ConsoleUI
             {
 
                 SlowWriteLine(denied[timesdenied]);
-                ReportTrivia();
+                ReportHint();
                 SlowWriteLine(question[timesdenied]);
 
                 move = Console.ReadLine();
@@ -148,16 +154,16 @@ namespace ConsoleUI
             }
 
             controller.MoveFromHallway();
-            **/
+            */
             SlowWriteLine("");
         }
 
         public void ReportHazards()
         {
-            List<String> hazards = controller.GetHazardHints();
+            List<Controller.DirectionalHint> hazards = controller.GetHazardHints();
             for (int i = 0; i < hazards.Count; i++)
             {
-                SlowWriteLine(hazards[i]);
+                SlowWriteLine(hazards[i].ToString());
             }
         }
 
@@ -170,7 +176,7 @@ namespace ConsoleUI
             }
         }
 
-        public void ReportTrivia()
+        public void ReportHint()
         {
             AnsweredQuestion AQ = controller.GetUnaskedQuestion();
             SlowWriteLine("\"" + AQ.QuestionText + "\"");
