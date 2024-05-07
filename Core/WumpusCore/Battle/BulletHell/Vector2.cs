@@ -8,12 +8,12 @@ namespace WumpusCore.Battle.BulletHell
         /// <summary>
         /// The vector's X coordinate
         /// </summary>
-        public double X;
+        public double x;
         
         /// <summary>
         /// The vector's y coordinate
         /// </summary>
-        public double Y;
+        public double y;
 
         /// <summary>
         /// The opposite of this vector
@@ -22,14 +22,19 @@ namespace WumpusCore.Battle.BulletHell
         {
             get
             {
-                return new Vector2(-X, -Y);
+                return new Vector2(-x, -y);
             }
         }
 
+        /// <summary>
+        /// Creates a vector
+        /// </summary>
+        /// <param name="x">The x component of the vector</param>
+        /// <param name="y">The y component of the vector</param>
         public Vector2(double x, double y)
         {
-            X = x;
-            Y = y;
+            this.x = x;
+            this.y = y;
         }
 
         /// <summary>
@@ -38,8 +43,8 @@ namespace WumpusCore.Battle.BulletHell
         /// <param name="additive">The vector to add to this vector</param>
         public void Increment(Vector2 additive)
         {
-            this.X += additive.X;
-            this.Y += additive.Y;
+            this.x += additive.x;
+            this.y += additive.y;
         }
 
         /// <summary>
@@ -48,8 +53,8 @@ namespace WumpusCore.Battle.BulletHell
         /// <param name="scalar">The amount to scale this vector by</param>
         public void Scale(double scalar)
         {
-            this.X *= scalar;
-            this.Y *= scalar;
+            this.x *= scalar;
+            this.y *= scalar;
         }
 
         /// <summary>
@@ -58,7 +63,7 @@ namespace WumpusCore.Battle.BulletHell
         /// <returns>A vector with the same data as this vector</returns>
         public Vector2 Clone()
         {
-            return new Vector2(X, Y);
+            return new Vector2(x, y);
         }
     }
 }

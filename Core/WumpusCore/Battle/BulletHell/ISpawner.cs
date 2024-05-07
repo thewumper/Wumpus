@@ -1,9 +1,10 @@
 namespace WumpusCore.Battle.BulletHell
 {
-    public interface Spawner
+    public interface ISpawner: IDisplayable
     {
-        int DisplayID { get; }
-        
+        /// <summary>
+        /// The position of the spawner
+        /// </summary>
         Vector2 Position { get; }
 
         /// <summary>
@@ -11,7 +12,5 @@ namespace WumpusCore.Battle.BulletHell
         /// </summary>
         /// <param name="seconds">The number of seconds since the last game tick</param>
         void Tick(double seconds);
-        
-        
     }
 }

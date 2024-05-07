@@ -33,6 +33,9 @@ namespace WumpusCore.Battle.BulletHell
             }
         }
 
+        /// <summary>
+        /// Advances the game in time, based on how long it has been since the previous tick.
+        /// </summary>
         public void Tick()
         {
             double seconds = previousTick.Elapsed.Ticks / 10000000.0;
