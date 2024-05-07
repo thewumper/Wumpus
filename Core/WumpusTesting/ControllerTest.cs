@@ -45,7 +45,7 @@ namespace WumpusTesting
         [TestMethod]
         public void SimulateGames()
         {
-            // Run through it 100 times to make sure that stuff doens't happen randomly
+            // Run through it 1000 times to make sure that stuff doesn't happen randomly
             for (int i = 0; i < 1000; i++)
             {
                 // Setup
