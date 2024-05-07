@@ -44,11 +44,12 @@ namespace WumpusTesting
 			Console.WriteLine("Start Coins: " + coins + ", Checking with: " + coins2);
 			
 			bool tamed = true;
-			cat.Tame(coins);
+			cat.Tame(coins, tamed);
 			Assert.AreEqual(coins2, coins);
 			Console.WriteLine(coins + ", " + coins2);
 			
 			tamed = false;
+			cat.Tame(coins, tamed);
 			if (coins < 20)
 			{
 				Assert.AreEqual(coins2, coins);
@@ -61,6 +62,18 @@ namespace WumpusTesting
 				Assert.AreEqual(true, tamed);
                 Console.WriteLine(coins + ", " + coins2);
             }
+		}
+
+		[TestMethod]
+		public void PetTest()
+		{
+			bool tamed = cat.Tame(10, false);
+			Assert.AreEqual(false, tamed);
+			cat.Pet(tamed);
+
+			tamed = cat.Tame(20, false);
+			Assert.AreEqual(true, tamed);
+			cat.Pet(tamed);
 		}
 	}
 }

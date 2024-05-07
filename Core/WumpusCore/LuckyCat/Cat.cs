@@ -50,7 +50,7 @@ namespace WumpusCore.LuckyCat
         /// Attempts to Tame the Lucky Cat
         /// </summary>
         /// <returns>The state of cat tame, successful or not</returns>
-        public bool Tame(ushort coins)
+        public bool Tame(ushort coins, bool tamed)
         {
             if (!tamed && coins >= 20)
             {
@@ -79,7 +79,7 @@ namespace WumpusCore.LuckyCat
         /// Pets the cat
         /// </summary>
         /// <returns> Meow Sound Effect ID </returns>
-        public catSound Pet()
+        public catSound Pet(bool tamed)
         {
             if (tamed && AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) == 0) 
             { 
