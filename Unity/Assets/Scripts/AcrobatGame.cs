@@ -6,8 +6,6 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-
-
 public class AcrobatGame : MonoBehaviour
 {
     private class TargetPair
@@ -35,7 +33,7 @@ public class AcrobatGame : MonoBehaviour
     [SerializeField] private int targetExplodePenalty;
     [SerializeField] private int targetMissPenalty;
     [SerializeField] private int targetHitBonus;
-
+    [SerializeField] private Camera camera;
 
     private List<TargetPair> targets;
 
@@ -55,14 +53,35 @@ public class AcrobatGame : MonoBehaviour
 
     public void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(new Ray(camera.transform.position, camera.transform.forward), out var hit))
+            {
+                if (hit.transform.CompareTag("Target"))
+                {
+                    foreach (var targetPair in targets.Where(targetPair => targetPair.obj == hit.transform.gameObject))
+                    {
+                        RemoveTarget(targetPair);
+                        SpawnTarget(targetPair.obj.name + " hit");
+                        score += targetHitBonus;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                score -= targetMissPenalty;
+            }
+            
+        }
+        
         totalDuration += Time.deltaTime;
         foreach (TargetPair pair in targets.ToList())
         {
             pair.time += Time.deltaTime;
             if (pair.time >= maxTargetTime)
             {
-                targets.Remove(pair);
-                Destroy(pair.obj);
+                RemoveTarget(pair);
                 SpawnTarget(pair.obj.name + "-1"); // This will create bad names really fast. Oh well
                 score -= targetExplodePenalty;
             }
@@ -76,6 +95,12 @@ public class AcrobatGame : MonoBehaviour
         timeText.SetText(TimeSpan.FromSeconds(maxTime - totalDuration).ToString("g"));
     }
 
+    private void RemoveTarget(TargetPair pair)
+    {
+        targets.Remove(pair);
+        Destroy(pair.obj);
+    }
+
 
     private void SpawnTarget(string targetName)
     {
@@ -84,6 +109,5 @@ public class AcrobatGame : MonoBehaviour
         newTarget.transform.position = new Vector3(Random.Range(spawnArea.xMin, spawnArea.xMax),
             Random.Range(spawnArea.yMin, spawnArea.yMax),zDepth);
         targets.Add(new TargetPair(newTarget,0));
-
     }
 }
