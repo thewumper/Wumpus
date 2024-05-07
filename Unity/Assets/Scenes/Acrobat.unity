@@ -961,7 +961,7 @@ MonoBehaviour:
   scoreText: {fileID: 887528282}
   growthRate: 5
   maxTargetTime: 3
-  maxTime: 60
+  maxTime: 20
   numTargets: 5
   target: {fileID: 1168890338281938332, guid: bc9b33ca6f40e864abbee8937c0f96d8, type: 3}
   spawnArea:

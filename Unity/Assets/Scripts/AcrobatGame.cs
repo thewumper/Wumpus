@@ -54,6 +54,10 @@ public class AcrobatGame : MonoBehaviour
 
     public void Update()
     {
+        if (finished)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             if (!started)
@@ -72,6 +76,10 @@ public class AcrobatGame : MonoBehaviour
                         score += targetHitBonus;
                         break;
                     }
+                }
+                else
+                {
+                    score -= targetMissPenalty;
                 }
             }
             else
