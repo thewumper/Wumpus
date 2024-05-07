@@ -75,7 +75,7 @@ namespace WumpusCore.GameLocations
             
             rooms = new RoomType[numRooms];
             int hardHazards = (numVats + numBats);
-            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
+            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()),random);
             List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
             List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
 
