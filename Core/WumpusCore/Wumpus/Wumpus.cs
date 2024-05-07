@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using WumpusCore.Entity;
 using WumpusCore.Topology;
 
@@ -23,7 +24,7 @@ namespace WumpusCore.Wumpus
         /// <summary>
         /// Constructs the Wump.
         /// </summary>
-        public Wumpus(ITopology topology, GameLocations.GameLocations parent, Random Random) : base(topology, parent, (ushort)Random.Next(0,29), EntityType.Wumpus)
+        public Wumpus(ITopology topology, GameLocations.GameLocations parent, ushort location) : base(topology, parent, location, EntityType.Wumpus)
         {
             WumpState = State.Sleeping;
         }
