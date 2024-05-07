@@ -9,9 +9,8 @@ namespace WumpusCore.Controller
         Rats,
         InBetweenRooms,
         Inventory,
-        Trivia,
         Acrobat,
         BatTransition,
-        VatRoomTrivia
+        VatRoom
     }
 }
