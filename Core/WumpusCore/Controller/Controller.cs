@@ -137,6 +137,14 @@ namespace WumpusCore.Controller
             {
                 state = VatRoom;
             }
+            else if (nextroomType == RoomType.Rats)
+            {
+                state = Rats;
+            }
+            else
+            {
+                throw new Exception("Somehow the room you're going to isn't handled here.");
+            }
 
 
             return player.location;

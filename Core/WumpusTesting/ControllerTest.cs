@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
+using WumpusCore.Trivia;
 
 namespace WumpusTesting
 {
@@ -63,15 +64,9 @@ namespace WumpusTesting
                 // Go one room north
                 Controller.GlobalController.MoveInADirection(Directions.North);
                 Controller.GlobalController.MoveFromHallway();
-                try
-                {
-                    Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState( ));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+
+
+                Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState( ));
 
                 switch (Controller.GlobalController.GetState())
                 {
@@ -97,8 +92,18 @@ namespace WumpusTesting
                         }
                         case ControllerState.VatRoom:
                         {
-                            Console.WriteLine("Vatroom");
+                            Controller.GlobalController.StartTrivia();
+                            AskableQuestion question = Controller.GlobalController.GetTriviaQuestion();
+
+                            int choice = Controller.Random.Next(0, 4);
+                            if (choice==0)
+                            {
+                                // This should succeed
+                                Controller.GlobalController.SubmitTriviaAnswer(choice);
+                            }
+
                             break;
+
                         }
                         default:
                             throw new Exception($"{Controller.GlobalController.GetState()} was not handled in the test (this is bad)");
