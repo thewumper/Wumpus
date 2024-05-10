@@ -95,11 +95,17 @@ namespace WumpusTesting
                             Controller.GlobalController.StartTrivia();
                             AskableQuestion question = Controller.GlobalController.GetTriviaQuestion();
 
+                            int questionNum = Int32.Parse(question.questionText);
+
                             int choice = Controller.Random.Next(0, 4);
-                            if (choice==0)
+                            if (choice==questionNum)
                             {
                                 // This should succeed
-                                Controller.GlobalController.SubmitTriviaAnswer(choice);
+                                Assert.IsTrue(Controller.GlobalController.SubmitTriviaAnswer(choice));
+                            }
+                            else
+                            {
+                                Assert.IsFalse(Controller.GlobalController.SubmitTriviaAnswer(choice));
                             }
 
                             break;

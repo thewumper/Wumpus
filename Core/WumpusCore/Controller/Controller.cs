@@ -120,8 +120,8 @@ namespace WumpusCore.Controller
 
             player.location = nextRoom.Id;
 
-            RoomType nextroomType =  gameLocations.GetRoomAt(nextRoom.Id);
-            if (nextroomType == RoomType.Flats)
+            List<RoomAnomalies> nextroomType =  GetAnomaliesInRoom(nextRoom.Id);
+            if (nextroomType == )
             {
                 state = InRoom;
             }
