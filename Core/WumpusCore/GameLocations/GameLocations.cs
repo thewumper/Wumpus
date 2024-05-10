@@ -21,18 +21,6 @@ namespace WumpusCore.GameLocations
         private ITopology topology;
         
         /// <summary>
-        /// All possible types of rooms.
-        /// </summary>
-        public enum RoomType
-        {
-            Flats,
-            Vats,
-            Bats,
-            Rats,
-            Acrobat
-        }
-        
-        /// <summary>
         /// Whether there is a coin in the hallway out from a given room
         /// </summary>
         public Dictionary<Directions, bool>[] hallwayCoins;
