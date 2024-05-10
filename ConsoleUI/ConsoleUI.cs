@@ -37,6 +37,15 @@ namespace ConsoleUI
                     case ControllerState.InBetweenRooms:
                         this.InHallway();
                         break;
+                    case ControllerState.Acrobat:
+                        this.Acrobat();
+                        break;
+                    case ControllerState.Rats:
+                        this.Rats();
+                        break;
+                    case ControllerState.BatTransition:
+                        this.Bats();
+                        break;
                 }
             }
         }
@@ -84,39 +93,48 @@ namespace ConsoleUI
             controller.StartGame();
         }
 
+        public void Rats()
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void Bats()
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void Acrobat()
+        {
+            throw new NotImplementedException();
+        }
+        
         public void InRoom()
         {
             IRoom location = controller.GetCurrentRoom();
-            switch (controller.GetState())
-            {
-                case ControllerState.InRoom:
-                    SlowWriteLine("You find yourselve in a gloomy stone cavern with a dim light coming from a torch on the wall.");
-                    ReportHazards();
-                    SlowWrite("The rooms has 3 passages exiting it: ");
-                    ReportDoors(location);
+            SlowWriteLine("You find yourselve in a gloomy stone cavern with a dim light coming from a torch on the wall.");
+            ReportHazards();
+            SlowWrite("The rooms has 3 passages exiting it: ");
+            ReportDoors(location);
 
-                    bool cancontinue = false;
-                    String response = "";
-                    while (!cancontinue)
-                    {
-                        SlowWriteLine("");
-                        SlowWriteLine("Where do you wanna go? ");
-                        response = Console.ReadLine();
-                        // test rather than relying on exceptions
-                        try
-                        {
-                            cancontinue = location.ExitDirections.Contains(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
-                        }
-                        catch
-                        {
-                            cancontinue = false;
-                            SlowWrite("You can't go that way.");
-                        }
-                    }
-                    controller.MoveInADirection(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
-                    break;
-                
+            bool cancontinue = false;
+            String response = "";
+            while (!cancontinue)
+            {
+                SlowWriteLine("");
+                SlowWriteLine("Where do you wanna go? ");
+                response = Console.ReadLine();
+                // test rather than relying on exceptions
+                try
+                {
+                    cancontinue = location.ExitDirections.Contains(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
+                }
+                catch
+                {
+                    cancontinue = false;
+                    SlowWrite("You can't go that way.");
+                }
             }
+            controller.MoveInADirection(DirectionHelper.GetDirectionFromShortName(response.ToUpper()));
         }
 
         public void InHallway()
