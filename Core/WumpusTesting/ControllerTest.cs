@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
+using WumpusCore.Trivia;
 
 namespace WumpusTesting
 {
@@ -24,7 +25,7 @@ namespace WumpusTesting
 
             using (StreamWriter outputFile = new StreamWriter("./questions.json"))
             {
-                outputFile.WriteLine("[{\"question\": \"Which is right\", choices : [\"correct\",\"wrong\",\"wrong\",\"wrong\"],\"answer\": 0}]");
+                outputFile.WriteLine("[{\"question\": \"0\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 0},{\"question\": \"1\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 1},{\"question\": \"2\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 2},{\"question\": \"3\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 3}]");
             }
 
             CreateNewController();
@@ -63,15 +64,9 @@ namespace WumpusTesting
                 // Go one room north
                 Controller.GlobalController.MoveInADirection(Directions.North);
                 Controller.GlobalController.MoveFromHallway();
-                try
-                {
-                    Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState( ));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+
+
+                Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState( ));
 
                 switch (Controller.GlobalController.GetState())
                 {
@@ -95,10 +90,34 @@ namespace WumpusTesting
                             Console.WriteLine("InRoom");
                             break;
                         }
+                        case ControllerState.CatDialouge:
+                        {
+                            Console.WriteLine("Cat");
+                            break;
+                        }
+                        case ControllerState.WumpusFight:
+                            Console.WriteLine("WumpusFight");
+                            break;
                         case ControllerState.VatRoom:
                         {
-                            Console.WriteLine("Vatroom");
+                            Controller.GlobalController.StartTrivia();
+                            AskableQuestion question = Controller.GlobalController.GetTriviaQuestion();
+
+                            int questionNum = Int32.Parse(question.questionText);
+
+                            int choice = Controller.Random.Next(0, 4);
+                            if (choice==questionNum)
+                            {
+                                // This should succeed
+                                Assert.IsTrue(Controller.GlobalController.SubmitTriviaAnswer(choice));
+                            }
+                            else
+                            {
+                                Assert.IsFalse(Controller.GlobalController.SubmitTriviaAnswer(choice));
+                            }
+
                             break;
+
                         }
                         default:
                             throw new Exception($"{Controller.GlobalController.GetState()} was not handled in the test (this is bad)");

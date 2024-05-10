@@ -120,22 +120,38 @@ namespace WumpusCore.Controller
 
             player.location = nextRoom.Id;
 
-            RoomType nextroomType =  gameLocations.GetRoomAt(nextRoom.Id);
-            if (nextroomType == RoomType.Flats)
+            List<RoomAnomalies> nextroomType =  GetAnomaliesInRoom(nextRoom.Id);
+            if (nextroomType.Count == 0)
             {
                 state = InRoom;
             }
-            else if (nextroomType == RoomType.Acrobat)
+            else if (nextroomType.Contains(RoomAnomalies.Acrobat))
             {
                 state = Acrobat;
             }
-            else if (nextroomType == RoomType.Bats)
+            else if (nextroomType.Contains(RoomAnomalies.Bats))
             {
                 state = BatTransition;
             }
-            else if (nextroomType == RoomType.Vats)
+            else if (nextroomType.Contains(RoomAnomalies.Vat))
             {
                 state = VatRoom;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Rat))
+            {
+                state = Rats;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Wumpus))
+            {
+                state = WumpusFight;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Cat))
+            {
+                state = CatDialouge;
+            }
+            else
+            {
+                throw new Exception("Somehow the room you're going to isn't handled here.");
             }
 
 
