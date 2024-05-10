@@ -11,5 +11,6 @@ namespace WumpusCore.Controller
         BatTransition,
         VatRoom,
         WumpusFight,
+        CatDialouge,
     }
 }

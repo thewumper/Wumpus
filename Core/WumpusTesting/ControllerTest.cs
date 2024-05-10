@@ -90,6 +90,14 @@ namespace WumpusTesting
                             Console.WriteLine("InRoom");
                             break;
                         }
+                        case ControllerState.CatDialouge:
+                        {
+                            Console.WriteLine("Cat");
+                            break;
+                        }
+                        case ControllerState.WumpusFight:
+                            Console.WriteLine("WumpusFight");
+                            break;
                         case ControllerState.VatRoom:
                         {
                             Controller.GlobalController.StartTrivia();

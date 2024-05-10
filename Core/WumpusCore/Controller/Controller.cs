@@ -145,6 +145,10 @@ namespace WumpusCore.Controller
             {
                 state = WumpusFight;
             }
+            else if (nextroomType.Contains(RoomAnomalies.Cat))
+            {
+                state = CatDialouge;
+            }
             else
             {
                 throw new Exception("Somehow the room you're going to isn't handled here.");
