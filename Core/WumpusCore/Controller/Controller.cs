@@ -1,21 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using WumpusCore.Entity;
+using WumpusCore.GameLocations;
 using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
-using WumpusCore.GameLocations;
 using WumpusCore.LuckyCat;
 using WumpusCore.Trivia;
 
 
 namespace WumpusCore.Controller
 {
+    /// <summary>
+    /// The overall controller for the Wumpus game. This should be your main interaction point for any UI implementation
+    /// </summary>
     public class Controller
     {
         private static Controller controllerReference;
         private IRoom nextRoom;
+
 
         public static Controller GlobalController
         {
@@ -37,6 +40,7 @@ namespace WumpusCore.Controller
         private ControllerState state = StartScreen;
       
         private ITopology topology;
+        public bool debug = false;
 
 
         private GameLocations.GameLocations gameLocations;
@@ -45,11 +49,11 @@ namespace WumpusCore.Controller
 
 
         /// <summary>
-        /// Instantiates a controller and setup the required stuff for global controller
+        /// Instantiates a controller and setup the required stuff for global controller.
         /// </summary>
-        /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format</param>
-        /// <param name="topologyDirectory">The directory to load map files from</param>
-        /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId</param>
+        /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
+        /// <param name="topologyDirectory">The directory to load map files from.</param>
+        /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
         public Controller(string triviaFile, string topologyDirectory, ushort mapId)
         {
             controllerReference = this;
@@ -57,35 +61,43 @@ namespace WumpusCore.Controller
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random,trivia);
 
-            gameLocations.AddEntity(new Player.Player(topology, gameLocations, 0));
-            gameLocations.AddEntity(new Cat(topology, gameLocations, 1));
+            gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations));
+            gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
+        }
+
+        /// <summary>
+        /// Gets the room type for the current room
+        /// </summary>
+        /// <returns>A RoomType enum with the current room type</returns>
+        public RoomType GetCurrentRoomType()
+        {
+            // You can only get the room type if you're in the room
+            ValidateState(new [] {InRoom});
+
+            return gameLocations.GetRoomAt(gameLocations.GetPlayer().location);
+        }
+        
+        /// <summary>
+        /// Gets the IRoom the current room
+        /// </summary>
+        /// <returns>An IRoom for the current room</returns>
+        public IRoom GetCurrentRoom()
+        {
+            // You can only get the room type if you're in the room
+            ValidateState(new [] {InRoom});
+
+            return topology.GetRoom(gameLocations.GetPlayer().location);
         }
 
 
         /// <summary>
-        /// Returns the room at the room number from topology (0 indexed)
+        /// Moves the player in a given direction.
         /// </summary>
-        /// <param name="roomNumber">The 0 indexed room number</param>
-        /// <returns>The room at the room number from topology</returns>
-        /// <exception cref="IndexOutOfRangeException"></exception>
-        public IRoom GetRoom(ushort roomNumber)
-        {
-            return topology.GetRoom(roomNumber);
-        }
-
-        public GameLocations.GameLocations.RoomType GetRoomType(ushort roomNumber)
-        {
-            return gameLocations.GetRoomAt(roomNumber);
-        }
-
-        public GameLocations.GameLocations.RoomType GetCurrentRoomType()
-        {
-            return GetRoomType((ushort)GetPlayerLocation());
-        }
-
+        /// <param name="direction">The direction to move the player in.</param>
         public void MoveInADirection(Directions direction)
         {
+            ValidateState(new [] {InRoom});
             state = InBetweenRooms;
 
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
@@ -97,10 +109,10 @@ namespace WumpusCore.Controller
         }
 
         /// <summary>
-        /// Moves a player from the hallway they are in  to the room they previously targets
+        /// Moves a player from the hallway they are in  to the room they previously targets.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>The new position of the player after moving.</returns>
+        /// <exception cref="InvalidOperationException">You need to move from a room.</exception>
         public int MoveFromHallway()
         {
             ValidateState(new [] {InBetweenRooms});
@@ -112,7 +124,41 @@ namespace WumpusCore.Controller
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
 
             player.location = nextRoom.Id;
-            state=InRoom;
+
+            List<RoomAnomalies> nextroomType =  GetAnomaliesInRoom(nextRoom.Id);
+            if (nextroomType.Count == 0)
+            {
+                state = InRoom;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Acrobat))
+            {
+                state = Acrobat;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Bats))
+            {
+                state = BatTransition;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Vat))
+            {
+                state = VatRoom;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Rat))
+            {
+                state = Rats;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Wumpus))
+            {
+                state = WumpusFight;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Cat))
+            {
+                state = CatDialouge;
+            }
+            else
+            {
+                throw new Exception("Somehow the room you're going to isn't handled here.");
+            }
+
 
             return player.location;
         }
@@ -120,21 +166,25 @@ namespace WumpusCore.Controller
         /// <summary>
         /// Get the location of the player from topology.
         /// </summary>
-        /// <returns>The location of the player</returns>
+        /// <returns>The location of the player.</returns>
         public int GetPlayerLocation()
         {
             return gameLocations.GetPlayer().location;
         }
-
+        
+        /// <summary>
+        /// Returns the current state of the controller.
+        /// </summary>
+        /// <returns>The current <see cref="ControllerState"/></returns>
         public ControllerState GetState()
         {
             return state;
         }
 
         /// <summary>
-        /// Returns a question that hasn't been asked yet
+        /// Returns a question that hasn't been asked yet.
         /// </summary>
-        /// <returns>A question that hasn't been used by trivia yet</returns>
+        /// <returns>A question that hasn't been used by trivia yet.</returns>
         public AnsweredQuestion GetUnaskedQuestion()
         {
             return trivia.PeekRandomQuestion();
@@ -151,53 +201,85 @@ namespace WumpusCore.Controller
         }
 
 
-        /// <summary>
-        /// Gives the hazards that are in the room the player is currently in.
-        /// </summary>
-        /// <returns>A `HazardType` enum</returns>
-        public List<HazardType> getRoomHazards()
+        public struct DirectionalHint
         {
-            var hazards = new List<HazardType>();
-            if (gameLocations.GetEntity(EntityType.Wumpus).location == GetPlayerLocation())
+            public Directions Direction;
+            public List<RoomAnomalies> Hazards;
+            public DirectionalHint(List<RoomAnomalies> hazards, Directions direction)
             {
-                hazards.Add(HazardType.Wumpus);
+                Hazards = hazards;
+                Direction = direction;
             }
-            HazardType? hazard = gameLocations.GetRoomAt((ushort)GetPlayerLocation()).ToHazard();
-            if (hazard != null)
-            {
-                hazards.Add((HazardType)hazard);
-            }
-            return hazards;
         }
+
         /// <summary>
-        /// Returns the hints for the sounding rooms
+        /// Returns the hazards currently around the player.
         /// </summary>
-        /// <returns>List containing a line of text for each hint</returns>
-        public List<string> GetHazardHints()
+        /// <returns>List containing the hazards that are around the player</returns>
+        public List<DirectionalHint> GetHazardHints()
         {
-            List<GameLocations.GameLocations.RoomType> rooms = gameLocations.GetAdjacentRoomTypes(GetPlayerLocation()).Values.ToList();
-            
-            List<string> hints = new List<string>();
-            foreach (GameLocations.GameLocations.RoomType roomType in rooms)
+
+            Dictionary<Directions, IRoom> rooms = topology.GetRoom((ushort)GetPlayerLocation()).AdjacentRooms;
+        
+            List<DirectionalHint> hints = new List<DirectionalHint>();
+
+            // Loop over all the keys
+            foreach (Directions directions in rooms.Keys)
             {
-                HazardType? hazardType = roomType.ToHazard();
-                if (hazardType != null)
-                {
-                    hints.Add(((HazardType)hazardType).GetHint());
-                }
+                hints.Add(new DirectionalHint(
+                    GetAnomaliesInRoom(rooms[directions].Id),directions));
             }
 
             return hints;
         }
+
+
+        public List<RoomAnomalies> GetAnomaliesInRoom(int roomnum)
+        {
+            List<RoomAnomalies> anomaliesList = new List<RoomAnomalies>();
+
+            if (gameLocations.GetCat().location == roomnum)
+            {
+                anomaliesList.Add(RoomAnomalies.Cat);
+            }
+
+            if (gameLocations.GetWumpus().location == roomnum)
+            {
+                anomaliesList.Add(RoomAnomalies.Wumpus);
+            }
+
+            RoomType room = gameLocations.GetRoomAt((ushort) roomnum);
+
+            switch (room)
+            {
+                case RoomType.Acrobat: anomaliesList.Add(RoomAnomalies.Acrobat);
+                    break;
+                case RoomType.Bats: anomaliesList.Add(RoomAnomalies.Bats);
+                    break;
+                case RoomType.Rats: anomaliesList.Add(RoomAnomalies.Rat);
+                    break;
+                case RoomType.Vats: anomaliesList.Add(RoomAnomalies.Vat);
+                    break;
+            }
+
+            return anomaliesList;
+        }
         
 
         /// <summary>
-        /// This is a debug method
+        /// This is a debug method.
         /// </summary>
-        /// <returns>The room number the wumpus is in</returns>
+        /// <returns>The room number the wumpus is in.</returns>
         public int GetWumpusLocation()
         {
             return gameLocations.GetWumpus().location;
+        }
+
+        public void StartTrivia()
+        {
+            ValidateState(new []{ ControllerState.VatRoom });
+
+            trivia.StartRound(3,2);
         }
 
 
@@ -206,35 +288,53 @@ namespace WumpusCore.Controller
             return trivia.GetQuestion();
         }
 
+        public bool SubmitTriviaAnswer(int choice)
+        {
+            bool correctness = trivia.SubmitAnswer(choice);
+
+            if (trivia.reportResult() == GameResult.Win)
+            {
+                state = InRoom;
+            }
+            else if (trivia.reportResult() == GameResult.Loss)
+            {
+                state = GameOver;
+            }
+
+            return correctness;
+        }
+
         public void StartGame()
         {
-            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
-            // being prepared to handle that controller state
-            ValidateState(new[] { StartScreen, InRoom });
+            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not.
+            // being prepared to handle that controller state.
+            ValidateState(new[] { StartScreen });
             this.state = InRoom;
         }
 
         public void EndGame()
         {
-            // Make sure you're on the start screen so that we don't run into weird issues with the internal state not
-            // being prepared to handle that controller state
-            ValidateState(new[] { StartScreen, InRoom });
+            // TODO! This will need to be rewritten
             this.state = StartScreen;
         }
         
         
 
         /// <summary>
-        /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states
+        /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states.
         /// </summary>
-        /// <param name="validStates">The list of states that you are allowed to be in to use the method</param>
-        /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function</exception>
+        /// <param name="validStates">The list of states that you are allowed to be in to use the method.</param>
+        /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function.</exception>
         private void ValidateState(ControllerState[] validStates)
         {
+            if (debug)
+            {
+                return;
+            }
             if (!validStates.Contains(state))
             {
                 throw new InvalidOperationException(
-                    $"You cannot go to that state from {state}. The only valid options are {validStates}");
+                    $"You cannot do that operation from {state}. The only valid options are {validStates}");
             }
         }
 
@@ -245,5 +345,17 @@ namespace WumpusCore.Controller
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Allows you to exit the bat state. Puts the player in a random room and changes the controller state to InRoom.
+        /// </summary>
+        public void ExitBat()
+        {
+            ValidateState(new []{BatTransition});
+
+            gameLocations.GetPlayer().location = gameLocations.GetEmptyRoom();
+            state = InRoom;
+        }
+
     }
 }

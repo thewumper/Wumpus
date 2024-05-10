@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
+using WumpusCore.Trivia;
 
 namespace WumpusTesting
 {
@@ -25,9 +25,14 @@ namespace WumpusTesting
 
             using (StreamWriter outputFile = new StreamWriter("./questions.json"))
             {
-                outputFile.WriteLine("[{\"question\": \"Which is right\", choices : [\"correct\",\"wrong\",\"wrong\",\"wrong\"],\"answer\": 0}]");
+                outputFile.WriteLine("[{\"question\": \"0\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 0},{\"question\": \"1\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 1},{\"question\": \"2\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 2},{\"question\": \"3\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 3}]");
             }
 
+            CreateNewController();
+        }
+
+        private static void CreateNewController()
+        {
             // This will just create it at global controller which is what we want. Resharper doesn't like this, but it's fine
             // ReSharper disable once ObjectCreationAsStatement
             new Controller("./questions.json","./",0);
@@ -40,24 +45,86 @@ namespace WumpusTesting
         }
 
         [TestMethod]
-        public void TestGettingARoom()
+        public void SimulateGames()
         {
-            var v1 = Controller.GlobalController.GetRoom(2).ExitDirections;
-            var v2 = new []
+            // Run through it 1000 times to make sure that stuff doesn't happen randomly
+            for (int i = 0; i < 1000; i++)
             {
-                Directions.North,
-                Directions.NorthEast,
-                Directions.SouthEast,
-                Directions.South,
-                Directions.SouthWest,
-                Directions.NorthWest,
-            };
-            CollectionAssert.AreEqual(v2,v1);
+                // Setup
+                Controller.Random = new Random(i);
 
-            CollectionAssert.AreEqual(
-                Controller.GlobalController.GetRoom(0).ExitDirections,
-                new [] { Directions.North }
-            );
+                // Start the game
+                Assert.AreEqual(Controller.GlobalController.GetState(), ControllerState.StartScreen);
+                Controller.GlobalController.StartGame();
+
+                // Verify that the player starts in an empty room
+                Assert.AreEqual(Controller.GlobalController.GetState(), ControllerState.InRoom);
+                Assert.AreEqual(Controller.GlobalController.GetAnomaliesInRoom(Controller.GlobalController.GetPlayerLocation()).Count, 0);
+
+                // Go one room north
+                Controller.GlobalController.MoveInADirection(Directions.North);
+                Controller.GlobalController.MoveFromHallway();
+
+
+                Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState( ));
+
+                switch (Controller.GlobalController.GetState())
+                {
+                        case ControllerState.Acrobat:
+                        {
+                            Console.WriteLine("Acrobat");
+                            break;
+                        }
+                        case ControllerState.Rats:
+                        {
+                            Console.WriteLine("Rats");
+                            break;
+                        }
+                        case ControllerState.BatTransition:
+                        {
+                            Console.WriteLine("Bats");
+                            break;
+                        }
+                        case ControllerState.InRoom:
+                        {
+                            Console.WriteLine("InRoom");
+                            break;
+                        }
+                        case ControllerState.CatDialouge:
+                        {
+                            Console.WriteLine("Cat");
+                            break;
+                        }
+                        case ControllerState.WumpusFight:
+                            Console.WriteLine("WumpusFight");
+                            break;
+                        case ControllerState.VatRoom:
+                        {
+                            Controller.GlobalController.StartTrivia();
+                            AskableQuestion question = Controller.GlobalController.GetTriviaQuestion();
+
+                            int questionNum = Int32.Parse(question.questionText);
+
+                            int choice = Controller.Random.Next(0, 4);
+                            if (choice==questionNum)
+                            {
+                                // This should succeed
+                                Assert.IsTrue(Controller.GlobalController.SubmitTriviaAnswer(choice));
+                            }
+                            else
+                            {
+                                Assert.IsFalse(Controller.GlobalController.SubmitTriviaAnswer(choice));
+                            }
+
+                            break;
+
+                        }
+                        default:
+                            throw new Exception($"{Controller.GlobalController.GetState()} was not handled in the test (this is bad)");
+                }
+
+                CreateNewController();
+            }
         }
     }
 }

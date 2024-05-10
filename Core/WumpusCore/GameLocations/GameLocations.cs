@@ -36,7 +36,7 @@ namespace WumpusCore.GameLocations
         /// Whether there is a coin in the hallway out from a given room
         /// </summary>
         public Dictionary<Directions, bool>[] hallwayCoins;
-        
+
         /// <summary>
         /// The trivia question engraved onto the wall in a given hallway
         /// </summary>
@@ -104,7 +104,7 @@ namespace WumpusCore.GameLocations
             
             rooms = new RoomType[numRooms];
             int hardHazards = (numVats + numBats);
-            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
+            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()),random);
             List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
             List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
 
@@ -129,7 +129,7 @@ namespace WumpusCore.GameLocations
                 for (int j = 0; j < 3; j++)
                 {
                     Directions direction = (Directions)j;
-                    
+
                     hallwayCoins[i][direction] = true;
                     hallwayCoins[i][direction.GetInverse()] = true;
 
@@ -217,11 +217,43 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// Gets a random empty room from the <see cref="rooms">rooms</see> array.
         /// </summary>
-        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array.</returns>
+        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array where the are no <see cref="Entity">entities</see></returns>
         /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
         public ushort GetEmptyRoom()
         {
-            return GetRoomOfType(RoomType.Flats);
+            List<ushort> positions = new List<ushort>();
+            for (ushort i = 0; i < rooms.Length; i++)
+            {
+
+                if (rooms[i] == RoomType.Flats && GetEntityInRoom(i).Count == 0)
+                {
+                    positions.Add(i);
+                }
+            }
+            if (positions.Count <= 0)
+            {
+                throw new InvalidOperationException("There are no empty rooms.");
+            }
+            return positions[Controller.Controller.Random.Next(0, positions.Count)];
+        }
+
+        /// <summary>
+        /// Gets the entity(s) in a room if there are any
+        /// </summary>
+        /// <param name="roomunm">The room number that you want to check</param>
+        /// <returns>A List of <see cref="Entity">entity(s)</see> or any empty list if there are no entities</returns>
+        public List<Entity.Entity> GetEntityInRoom(ushort roomunm)
+        {
+            List<Entity.Entity> list = new List<Entity.Entity>();
+            foreach (EntityType entity in entities.Keys)
+            {
+                if (entities[entity].location == roomunm)
+                {
+                    list.Add(entities[entity]);
+                }
+            }
+
+            return list;
         }
 
         /// <summary>

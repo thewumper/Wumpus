@@ -61,7 +61,7 @@ namespace WumpusCore.Player
         /// Gets the type of the room the player is currently in
         /// </summary>
         /// <returns>The type of the room the player is currently in</returns>
-        public GameLocations.GameLocations.RoomType GetRoomType()
+        public RoomType GetRoomType()
         {
             return gameLocations.GetRoomAt((ushort)(location - 1));
         }
@@ -141,7 +141,7 @@ namespace WumpusCore.Player
             else if (triviaOutcome == GameResult.Loss)
             {
                 LoseCoins(1);
-                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
+                gameLocations.SetRoom(location, RoomType.Acrobat);
                 gameLocations.SetTriviaRemaining(location, false);
             }
             else
@@ -164,7 +164,7 @@ namespace WumpusCore.Player
             else if (triviaOutcome == GameResult.Loss)
             {
                 LoseCoins(1);
-                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
+                gameLocations.SetRoom(location, RoomType.Acrobat);
                 gameLocations.SetTriviaRemaining(location, false);
             }
             else

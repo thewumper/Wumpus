@@ -162,7 +162,7 @@ public class MainUI : MonoBehaviour
     /// <summary>
     /// The ID of the moving variable in <see cref="movingAnimator"/>.
     /// </summary>
-    private int movingID;
+    private int fadingID;
     
     /// <summary>
     /// The image used to fade in and out.
@@ -211,7 +211,7 @@ public class MainUI : MonoBehaviour
         wumpus.SetActive(false);
         
         // Initializes the movingID.
-        movingID = Animator.StringToHash("moving");
+        fadingID = Animator.StringToHash("fading");
         
         // Initializes the roomText text.
         roomText.SetText($"Room: {RoomNum}");
@@ -240,8 +240,17 @@ public class MainUI : MonoBehaviour
 
     void LateUpdate()
     {
+        switch (controller.GetState())
+        {
+            case ControllerState.InBetweenRooms:
+                return;
+            case ControllerState.BatTransition:
+                pLock = true;
+                movingAnimator.SetBool(fadingID, true);
+                break;
+        }
         // Makes an IRoom which is the room that the player is currently in.
-        IRoom room = controller.GetRoom(RoomNum);
+        IRoom room = controller.GetCurrentRoom();
         // Makes the roomText show which room the player is actually in.
         roomText.SetText($"Room: {RoomNum}");
         // Makes only the doors that are in the room visible.
@@ -272,20 +281,28 @@ public class MainUI : MonoBehaviour
         }
         
         // All hazards in the player's current room.
-        List<HazardType> hazards = controller.getRoomHazards();
+        List<RoomAnomalies> hazards = controller.GetAnomaliesInRoom(RoomNum);
         // For each hazard in the room.
-        foreach (HazardType hazard in hazards)
+        foreach (RoomAnomalies hazard in hazards)
         {
             // Make the hazard visible.
             switch (hazard)
             {
-                case HazardType.Wumpus:
+                case RoomAnomalies.Wumpus:
                     wumpus.SetActive(true);
                     break;
             }
         }
-        List<String> hints = controller.GetHazardHints();
-        if (!(hints.Count <= 0)) roomHintText.SetText(string.Join('\n', hints));
+        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
+        List<string> hintString = new List<string>();
+        foreach (Controller.DirectionalHint hint in hints)
+        {
+            foreach (RoomAnomalies anomaly in hint.Hazards)
+            {
+                hintString.Add("You hear " + anomaly);
+            }
+        }
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
         else roomHintText.SetText("You hear nothing.");
         roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
     }
@@ -315,7 +332,7 @@ public class MainUI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
-                    movingAnimator.SetBool(movingID, true);
+                    movingAnimator.SetBool(fadingID, true);
                     pLock = true;
                 }
             }
@@ -341,37 +358,24 @@ public class MainUI : MonoBehaviour
         // Makes the coinsText show the actual amount of coins that the player currently has.
         coinsText.SetText(controller.GetCoins().ToString());
         
-        // If the player is moving.
-        if (movingAnimator.GetBool(movingID))
+        // If we are fading.
+        if (movingAnimator.GetBool(fadingID))
         {
             // If the screen has fully faded to black.
             if (black.color.a.Equals(1))
             {
-                // Move rooms.
-                controller.MoveInADirection(moveDir);
-                movingAnimator.SetBool(movingID, false);
-                // Unlock the player.
-                pLock = false;
-                // If we are in a hallway.
-                if (controller.GetState() == ControllerState.InBetweenRooms)
-                {
-                    // Go to the hallway, and do nothing else.
-                    sceneController.GotoCorrectScene();
-                    return;
-                }
-                // If not in a hallway, move to the next room.
-                RoomNum = (ushort) controller.MoveFromHallway();
-                // Reset camera position.
-                cam.transform.position = new Vector3(0, cam.transform.position.y, 0);
+               MoveRooms();
             }
             // If the screen has not fully faded to black.
             else
             {
+                if (controller.GetState() == ControllerState.BatTransition) return;
                 // Move the camera toward the doorway.
                 cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
     }
+    
     /// <summary>
     /// Shows the <see cref="interactIcon"/> with the given sprite.
     /// </summary>
@@ -388,5 +392,13 @@ public class MainUI : MonoBehaviour
     private void HideInteract()
     {
         interactIcon.SetActive(false);
+    }
+
+    private void MoveRooms()
+    {
+        // Move rooms.
+        controller.MoveInADirection(moveDir);
+        movingAnimator.SetBool(fadingID, false);
+        sceneController.GotoCorrectScene();
     }
 }
