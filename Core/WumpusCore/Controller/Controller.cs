@@ -121,25 +121,29 @@ namespace WumpusCore.Controller
             player.location = nextRoom.Id;
 
             List<RoomAnomalies> nextroomType =  GetAnomaliesInRoom(nextRoom.Id);
-            if (nextroomType == )
+            if (nextroomType.Count == 0)
             {
                 state = InRoom;
             }
-            else if (nextroomType == RoomType.Acrobat)
+            else if (nextroomType.Contains(RoomAnomalies.Acrobat))
             {
                 state = Acrobat;
             }
-            else if (nextroomType == RoomType.Bats)
+            else if (nextroomType.Contains(RoomAnomalies.Bats))
             {
                 state = BatTransition;
             }
-            else if (nextroomType == RoomType.Vats)
+            else if (nextroomType.Contains(RoomAnomalies.Vat))
             {
                 state = VatRoom;
             }
-            else if (nextroomType == RoomType.Rats)
+            else if (nextroomType.Contains(RoomAnomalies.Rat))
             {
                 state = Rats;
+            }
+            else if (nextroomType.Contains(RoomAnomalies.Wumpus))
+            {
+                state = WumpusFight;
             }
             else
             {
