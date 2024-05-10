@@ -36,7 +36,11 @@ public class HallUI : MonoBehaviour
     /// </summary>
     private const float camSpeed = 4f;
     /// <summary>
-    /// Whether the player can move or look around.
+    /// The position the camera is supposed to stop moving at in the scene.
+    /// </summary>
+    private const int camStartPos = 0;
+    /// <summary>
+    /// Whether or not the player can move or look around.
     /// </summary>
     private bool pLock;
     
@@ -75,7 +79,7 @@ public class HallUI : MonoBehaviour
     /// <summary>
     /// The ID of the moving variable in <see cref="movingAnimator"/>.
     /// </summary>
-    private int movingID;
+    private int fadingID;
 
     /// <summary>
     /// The image used to fade in and out.
@@ -108,7 +112,7 @@ public class HallUI : MonoBehaviour
     void Start()
     {
         // Initializes the movingID.
-        movingID = Animator.StringToHash("moving");
+        fadingID = Animator.StringToHash("fading");
 
         AnsweredQuestion q = controller.GetUnaskedQuestion();
         hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
@@ -138,7 +142,7 @@ public class HallUI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
-                    movingAnimator.SetBool(movingID, true);
+                    movingAnimator.SetBool(fadingID, true);
                     pLock = true;
                 }
             }
@@ -159,15 +163,21 @@ public class HallUI : MonoBehaviour
             HideInteract();
         }
         
+        // move forward when just starting in hallway.
+        if (cam.transform.position.z < camStartPos)
+        {
+            cam.transform.position += Vector3.forward * (Time.deltaTime * camSpeed);
+        }
+
         // If the player is moving.
-        if (movingAnimator.GetBool(movingID))
+        if (movingAnimator.GetBool(fadingID) && cam.transform.position.z >= camStartPos)
         {
             // If the screen has fully faded to black.
             if (black.color.a.Equals(1))
             {
                 // Move from the Hallway.
                 controller.MoveFromHallway();
-                movingAnimator.SetBool(movingID, false);
+                movingAnimator.SetBool(fadingID, false);
                 // Unlock the player.
                 pLock = false;
                 // Reset camera position.
