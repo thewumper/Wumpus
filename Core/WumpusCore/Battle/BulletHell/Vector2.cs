@@ -6,6 +6,11 @@ namespace WumpusCore.Battle.BulletHell
     public class Vector2
     {
         /// <summary>
+        /// A Vector where all components are zero
+        /// </summary>
+        public static readonly Vector2 Zero = new Vector2(0, 0);
+        
+        /// <summary>
         /// The vector's X coordinate
         /// </summary>
         public double x;

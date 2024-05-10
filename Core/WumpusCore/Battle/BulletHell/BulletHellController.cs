@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace WumpusCore.Battle.BulletHell
 {
@@ -9,7 +10,12 @@ namespace WumpusCore.Battle.BulletHell
         /// <summary>
         /// All currently present bullets
         /// </summary>
-        public List<Bullet> Bullets;
+        public List<Bullet> Bullets { get; private set; }
+
+        /// <summary>
+        /// All currently present bullet spawners
+        /// </summary>
+        public List<ISpawner> Spawners { get; private set; }
 
         private Stopwatch previousTick;
 
@@ -18,6 +24,16 @@ namespace WumpusCore.Battle.BulletHell
             Bullets = new List<Bullet>();
             previousTick = new Stopwatch();
             previousTick.Start();
+        }
+
+        private void AddBullet(Bullet bullet)
+        {
+            Bullets.Add(bullet);
+        }
+
+        public void AddSpawner(ISpawner spawner)
+        {
+            Spawners.Add(spawner);
         }
 
         /// <summary>
@@ -30,6 +46,11 @@ namespace WumpusCore.Battle.BulletHell
             foreach (Bullet bullet in Bullets)
             {
                 bullet.Tick(seconds);
+            }
+
+            foreach (ISpawner spawner in Spawners)
+            {
+                spawner.Tick(seconds);
             }
         }
 
