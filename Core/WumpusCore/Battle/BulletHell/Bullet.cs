@@ -16,12 +16,12 @@ namespace WumpusCore.Battle.BulletHell
         public Vector2 Position { get; private set; }
         
         /// <summary>
-        /// The direction the vector is moving in space
+        /// The direction the bullet is moving in space
         /// </summary>
         public Vector2 Velocity { get; private set; }
 
         /// <summary>
-        /// The direction the vector is curving in its motion
+        /// The direction the bullet is curving in its motion
         /// </summary>
         public Vector2 Acceleration { get; private set; }
 
