@@ -85,7 +85,16 @@ namespace WumpusTesting
             {
                 case ControllerState.Acrobat:
                 {
-                    Controller.GlobalController.ExitAcrobat(true);
+                    if (Controller.Random.Next(0,2) == 1)
+                    {
+                        Controller.GlobalController.ExitAcrobat(true);
+                        Assert.AreEqual(Controller.GlobalController.GetState(),ControllerState.InRoom);
+                    }
+                    else
+                    {
+                        Controller.GlobalController.ExitAcrobat(false);
+                        Assert.AreEqual(Controller.GlobalController.GetState(),ControllerState.GameOver);
+                    }
                     break;
                 }
                 case ControllerState.Rats:
