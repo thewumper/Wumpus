@@ -3,7 +3,7 @@ namespace WumpusCore.Battle.BulletHell
     /// <summary>
     /// A hazardous object in 2d space
     /// </summary>
-    public class Bullet: IDisplayable
+    public class Bullet: IEntity
     {
         /// <summary>
         /// Represents the type of bullet
@@ -61,7 +61,6 @@ namespace WumpusCore.Battle.BulletHell
         {
             Position.Increment(Velocity);
             Velocity.Increment(Acceleration);
-            
         }
     }
 }

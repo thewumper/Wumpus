@@ -48,6 +48,7 @@
         <Compile Include="Battle\BattleStructure.cs" />
         <Compile Include="Battle\BulletHell\Bullet.cs" />
         <Compile Include="Battle\BulletHell\IDisplayable.cs" />
+        <Compile Include="Battle\BulletHell\IEntity.cs" />
         <Compile Include="Battle\BulletHell\ISpawner.cs" />
         <Compile Include="Battle\BulletHell\Vector2.cs" />
         <Compile Include="Battle\IBattleTypeController.cs" />

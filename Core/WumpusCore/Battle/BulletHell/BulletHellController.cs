@@ -16,6 +16,11 @@ namespace WumpusCore.Battle.BulletHell
         /// All currently present bullet spawners
         /// </summary>
         public List<ISpawner> Spawners { get; private set; }
+        
+        /// <summary>
+        /// The effects that should be displayed
+        /// </summary>
+        public Stack<IEntity> Effects { get; private set; }
 
         private Stopwatch previousTick;
 
