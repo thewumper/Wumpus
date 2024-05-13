@@ -27,7 +27,7 @@ namespace WumpusUnity
         {
             get
             {
-                if (controllerReference==null)
+                if (controllerReference == null)
                 {
                     controllerReference = new SceneController();
                 }
@@ -74,6 +74,8 @@ namespace WumpusUnity
                     return "Rat";
                 case ControllerState.BatTransition:
                     return "Bat";
+                case ControllerState.Acrobat:
+                    return "Acrobat";
                 default:
                     return "Main";
             }
