@@ -70,7 +70,7 @@ namespace WumpusCore.Player
         /// Gets the type of the room the player is currently in
         /// </summary>
         /// <returns>The type of the room the player is currently in</returns>
-        public GameLocations.GameLocations.RoomType GetRoomType()
+        public RoomType GetRoomType()
         {
             return gameLocations.GetRoomAt((ushort)(location - 1));
         }
@@ -114,12 +114,25 @@ namespace WumpusCore.Player
             return gameLocations.hallwayCoins[location][direction];
         }
 
+        /// <summary>
+        /// Whether trivia can be played in a room to earn items or knowledge
+        /// </summary>
         public bool TriviaAvailable
         {
             get
             {
                 return gameLocations.GetTriviaAvailable(location);
             }
+        }
+
+        /// <summary>
+        /// Returns the trivia hint in the given hallway from Player's current position
+        /// </summary>
+        /// <param name="direction">The direction of the hallway from the current position</param>
+        /// <returns>The question and answer in the hallway</returns>
+        public AnsweredQuestion GetHallwayHint(Directions direction)
+        {
+            return gameLocations.hallwayTrivia[location][direction];
         }
 
         /// <summary>
@@ -137,7 +150,7 @@ namespace WumpusCore.Player
             else if (triviaOutcome == GameResult.Loss)
             {
                 LoseCoins(1);
-                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
+                gameLocations.SetRoom(location, RoomType.Acrobat);
                 gameLocations.SetTriviaRemaining(location, false);
             }
             else
@@ -160,7 +173,7 @@ namespace WumpusCore.Player
             else if (triviaOutcome == GameResult.Loss)
             {
                 LoseCoins(1);
-                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
+                gameLocations.SetRoom(location, RoomType.Acrobat);
                 gameLocations.SetTriviaRemaining(location, false);
             }
             else

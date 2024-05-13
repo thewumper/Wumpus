@@ -1,0 +1,602 @@
+[
+  {
+    "question": "What is the capital of Australia?",
+    "choices": [
+      "Sydney",
+      "Melbourne",
+      "Canberra",
+      "Brisbane"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which planet is known as the Red Planet?",
+    "choices": [
+      "Mars",
+      "Jupiter",
+      "Venus",
+      "Saturn"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the largest mammal on Earth?",
+    "choices": [
+      "Elephant",
+      "Blue Whale",
+      "Giraffe",
+      "Hippopotamus"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In computing, what does CPU stand for?",
+    "choices": [
+      "Central Processing Unit",
+      "Computer Power Unit",
+      "Central Program Unit",
+      "Central Peripheral Unit"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which scientist developed the theory of general relativity?",
+    "choices": [
+      "Isaac Newton",
+      "Albert Einstein",
+      "Stephen Hawking",
+      "Galileo Galilei"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What is the chemical symbol for gold?",
+    "choices": [
+      "Go",
+      "Au",
+      "Ag",
+      "Fe"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which programming language was created by Guido van Rossum?",
+    "choices": [
+      "Java",
+      "C++",
+      "Python",
+      "Ruby"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What is the largest ocean on Earth?",
+    "choices": [
+      "Atlantic Ocean",
+      "Indian Ocean",
+      "Southern Ocean",
+      "Pacific Ocean"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "Who wrote 'Romeo and Juliet'?",
+    "choices": [
+      "Charles Dickens",
+      "William Shakespeare",
+      "Jane Austen",
+      "Emily Brontë"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which gas do plants primarily absorb during photosynthesis?",
+    "choices": [
+      "Oxygen",
+      "Carbon Monoxide",
+      "Nitrogen",
+      "Carbon Dioxide"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "What is the largest planet in our solar system?",
+    "choices": [
+      "Mars",
+      "Jupiter",
+      "Venus",
+      "Saturn"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Who painted the Mona Lisa?",
+    "choices": [
+      "Pablo Picasso",
+      "Leonardo da Vinci",
+      "Vincent van Gogh",
+      "Claude Monet"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In which year did the Titanic sink?",
+    "choices": [
+      "1912",
+      "1905",
+      "1920",
+      "1899"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the capital of Japan?",
+    "choices": [
+      "Seoul",
+      "Beijing",
+      "Tokyo",
+      "Bangkok"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which element has the chemical symbol 'H'?",
+    "choices": [
+      "Helium",
+      "Hydrogen",
+      "Hafnium",
+      "Hassium"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Who is known as the 'Father of Modern Physics'?",
+    "choices": [
+      "Niels Bohr",
+      "Max Planck",
+      "Isaac Newton",
+      "Albert Einstein"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "Which ocean is the saltiest?",
+    "choices": [
+      "Atlantic Ocean",
+      "Indian Ocean",
+      "Southern Ocean",
+      "Pacific Ocean"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What is the capital of France?",
+    "choices": [
+      "Berlin",
+      "Madrid",
+      "Rome",
+      "Paris"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "Which country is known as the 'Land of the Rising Sun'?",
+    "choices": [
+      "China",
+      "South Korea",
+      "Japan",
+      "Vietnam"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Who wrote 'To Kill a Mockingbird'?",
+    "choices": [
+      "Harper Lee",
+      "J.K. Rowling",
+      "Ernest Hemingway",
+      "F. Scott Fitzgerald"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the capital of Brazil?",
+    "choices": [
+      "Buenos Aires",
+      "Rio de Janeiro",
+      "Brasília",
+      "São Paulo"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which planet is known as the 'Evening Star'?",
+    "choices": [
+      "Mars",
+      "Jupiter",
+      "Venus",
+      "Saturn"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Who discovered penicillin?",
+    "choices": [
+      "Alexander Fleming",
+      "Marie Curie",
+      "Louis Pasteur",
+      "Joseph Lister"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the currency of Canada?",
+    "choices": [
+      "Euro",
+      "Dollar",
+      "Pound",
+      "Yen"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In which year did World War II end?",
+    "choices": [
+      "1945",
+      "1939",
+      "1950",
+      "1940"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Who is the author of '1984'?",
+    "choices": [
+      "Aldous Huxley",
+      "George Orwell",
+      "Ray Bradbury",
+      "J.K. Rowling"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which gas makes up the majority of Earth's atmosphere?",
+    "choices": [
+      "Oxygen",
+      "Carbon Monoxide",
+      "Nitrogen",
+      "Carbon Dioxide"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Who founded Microsoft?",
+    "choices": [
+      "Steve Jobs",
+      "Bill Gates",
+      "Mark Zuckerberg",
+      "Elon Musk"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What is the smallest prime number?",
+    "choices": [
+      "Zero",
+      "One",
+      "Two",
+      "Three"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "In which year did the United States declare its independence?",
+    "choices": [
+      "1776",
+      "1789",
+      "1800",
+      "1750"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Who wrote 'The Great Gatsby'?",
+    "choices": [
+      "J.D. Salinger",
+      "F. Scott Fitzgerald",
+      "Ernest Hemingway",
+      "Virginia Woolf"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What is the main ingredient in guacamole?",
+    "choices": [
+      "Tomato",
+      "Avocado",
+      "Onion",
+      "Cilantro"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which country is known as the 'Land of the Midnight Sun'?",
+    "choices": [
+      "Norway",
+      "Finland",
+      "Sweden",
+      "Iceland"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Who is the Greek god of the sea?",
+    "choices": [
+      "Zeus",
+      "Poseidon",
+      "Hades",
+      "Apollo"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What is the largest bird in the world?",
+    "choices": [
+      "Eagle",
+      "Ostrich",
+      "Flamingo",
+      "Penguin"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which element has the chemical symbol 'O'?",
+    "choices": [
+      "Osmium",
+      "Oxygen",
+      "Oganesson",
+      "Olivine"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Who was the first woman to win a Nobel Prize?",
+    "choices": [
+      "Marie Curie",
+      "Rosalind Franklin",
+      "Jane Goodall",
+      "Dorothy Crowfoot Hodgkin"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the speed of light in a vacuum?",
+    "choices": [
+      "299,792 km/s",
+      "150,000 km/s",
+      "450,000 km/s",
+      "600,000 km/s"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which continent is known as the 'Dark Continent'?",
+    "choices": [
+      "Antarctica",
+      "Africa",
+      "South America",
+      "Asia"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Who painted 'Starry Night'?",
+    "choices": [
+      "Vincent van Gogh",
+      "Pablo Picasso",
+      "Claude Monet",
+      "Leonardo da Vinci"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the capital of China?",
+    "choices": [
+      "Beijing",
+      "Shanghai",
+      "Hong Kong",
+      "Tokyo"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which planet is known as the 'Red Planet'?",
+    "choices": [
+      "Mars",
+      "Jupiter",
+      "Venus",
+      "Saturn"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Who wrote 'Pride and Prejudice'?",
+    "choices": [
+      "Emily Brontë",
+      "Jane Austen",
+      "Charlotte Brontë",
+      "Agatha Christie"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What is the capital of South Korea?",
+    "choices": [
+      "Seoul",
+      "Tokyo",
+      "Beijing",
+      "Bangkok"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which gas is responsible for the color of the Earth's sky?",
+    "choices": [
+      "Oxygen",
+      "Carbon Monoxide",
+      "Nitrogen",
+      "Carbon Dioxide"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Who discovered the law of gravity?",
+    "choices": [
+      "Isaac Newton",
+      "Galileo Galilei",
+      "Albert Einstein",
+      "Stephen Hawking"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the currency of Japan?",
+    "choices": [
+      "Yuan",
+      "Won",
+      "Yen",
+      "Ringgit"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which river is the longest in the world?",
+    "choices": [
+      "Nile",
+      "Amazon",
+      "Yangtze",
+      "Mississippi"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the chemical symbol for water?",
+    "choices": [
+      "Wo",
+      "Wa",
+      "H2O",
+      "O2"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Who is known as the 'Queen of Pop'?",
+    "choices": [
+      "Madonna",
+      "Beyoncé",
+      "Lady Gaga",
+      "Taylor Swift"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which country is known as the 'Land of the Rising Sun'?",
+    "choices": [
+      "China",
+      "South Korea",
+      "Japan",
+      "Vietnam"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What is the capital of Italy?",
+    "choices": [
+      "Madrid",
+      "Paris",
+      "Rome",
+      "Berlin"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which element has the chemical symbol 'K'?",
+    "choices": [
+      "Krypton",
+      "Kryptonite",
+      "Potassium",
+      "Kryptonate"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Who is the author of 'The Catcher in the Rye'?",
+    "choices": [
+      "J.D. Salinger",
+      "F. Scott Fitzgerald",
+      "Ernest Hemingway",
+      "Virginia Woolf"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the capital of Russia?",
+    "choices": [
+      "Warsaw",
+      "Bucharest",
+      "Moscow",
+      "Prague"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which planet is known as the 'Morning Star'?",
+    "choices": [
+      "Mars",
+      "Jupiter",
+      "Venus",
+      "Saturn"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What is the currency of Australia?",
+    "choices": [
+      "Pound",
+      "Euro",
+      "Dollar",
+      "Yen"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Who developed the theory of evolution by natural selection?",
+    "choices": [
+      "Charles Darwin",
+      "Gregor Mendel",
+      "Louis Pasteur",
+      "Alfred Russel Wallace"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which country is known as the 'Land of the Long White Cloud'?",
+    "choices": [
+      "Ireland",
+      "New Zealand",
+      "Scotland",
+      "Australia"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What is the chemical symbol for iron?",
+    "choices": [
+      "Fe",
+      "Au",
+      "Ag",
+      "Cu"
+    ],
+    "answer": 0
+  }
+]

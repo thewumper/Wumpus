@@ -23,6 +23,7 @@
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
         <DocumentationFile>..\..\Unity\Assets\DLL\WumpusCore.xml</DocumentationFile>
+        <DocumentationFile>..\..\Unity\Assets\DLL\WumpusCore.xml</DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,7 +57,7 @@
         <Compile Include="Battle\InputZone.cs" />
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
-        <Compile Include="Controller\HazardType.cs" />
+        <Compile Include="Controller\RoomAnomalies.cs"/>
         <Compile Include="HighScore\SaveFile.cs" />
         <Compile Include="Entity\Entity.cs" />
         <Compile Include="Entity\EntityType.cs" />
@@ -78,9 +79,7 @@
         <Compile Include="HighScore\HighScore.cs" />
         <Compile Include="GameLocations\GameLocations.cs" />
 		<Compile Include="Wumpus\Wumpus.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include=".gitignore" />
+        <Compile Include="GameLocations\RoomType.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
