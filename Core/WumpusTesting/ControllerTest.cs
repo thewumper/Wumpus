@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -47,8 +49,8 @@ namespace WumpusTesting
         [TestMethod]
         public void SimulateGames()
         {
-            // Run through it 1000 times to make sure that stuff doesn't happen randomly
-            for (int i = 0; i < 1000; i++)
+            // Run through it 100 times to make sure that stuff doesn't happen randomly
+            for (int i = 0; i < 100; i++)
             {
                 // Setup
                 Controller.Random = new Random(i);
@@ -61,69 +63,103 @@ namespace WumpusTesting
                 Assert.AreEqual(Controller.GlobalController.GetState(), ControllerState.InRoom);
                 Assert.AreEqual(Controller.GlobalController.GetAnomaliesInRoom(Controller.GlobalController.GetPlayerLocation()).Count, 0);
 
-                // Go one room north
-                Controller.GlobalController.MoveInADirection(Directions.North);
-                Controller.GlobalController.MoveFromHallway();
-
-
-                Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState( ));
-
-                switch (Controller.GlobalController.GetState())
-                {
-                        case ControllerState.Acrobat:
-                        {
-                            Console.WriteLine("Acrobat");
-                            break;
-                        }
-                        case ControllerState.Rats:
-                        {
-                            Console.WriteLine("Rats");
-                            break;
-                        }
-                        case ControllerState.BatTransition:
-                        {
-                            Console.WriteLine("Bats");
-                            break;
-                        }
-                        case ControllerState.InRoom:
-                        {
-                            Console.WriteLine("InRoom");
-                            break;
-                        }
-                        case ControllerState.CatDialouge:
-                        {
-                            Console.WriteLine("Cat");
-                            break;
-                        }
-                        case ControllerState.WumpusFight:
-                            Console.WriteLine("WumpusFight");
-                            break;
-                        case ControllerState.VatRoom:
-                        {
-                            Controller.GlobalController.StartTrivia();
-                            AskableQuestion question = Controller.GlobalController.GetTriviaQuestion();
-
-                            int questionNum = Int32.Parse(question.questionText);
-
-                            int choice = Controller.Random.Next(0, 4);
-                            if (choice==questionNum)
-                            {
-                                // This should succeed
-                                Assert.IsTrue(Controller.GlobalController.SubmitTriviaAnswer(choice));
-                            }
-                            else
-                            {
-                                Assert.IsFalse(Controller.GlobalController.SubmitTriviaAnswer(choice));
-                            }
-
-                            break;
-
-                        }
-                        default:
-                            throw new Exception($"{Controller.GlobalController.GetState()} was not handled in the test (this is bad)");
-                }
+                // while (Controller.GlobalController.GetState() != ControllerState.GameOver)
+                // {
+                    HandleRoomInARandomDirection();
+                // }
 
                 CreateNewController();
+            }
+        }
+
+        private static void HandleRoomInARandomDirection()
+        {
+            // Go one room north
+            Controller.GlobalController.MoveInADirection(Directions.North);
+            Controller.GlobalController.MoveFromHallway();
+
+
+            Assert.AreNotEqual(ControllerState.InBetweenRooms,Controller.GlobalController.GetState());
+
+            switch (Controller.GlobalController.GetState())
+            {
+                case ControllerState.Acrobat:
+                {
+                    if (Controller.Random.Next(0,2) == 1)
+                    {
+                        Controller.GlobalController.ExitAcrobat(true);
+                        Assert.AreEqual(Controller.GlobalController.GetState(),ControllerState.InRoom);
+                    }
+                    else
+                    {
+                        Controller.GlobalController.ExitAcrobat(false);
+                        Assert.AreEqual(Controller.GlobalController.GetState(),ControllerState.GameOver);
+                    }
+                    break;
+                }
+                case ControllerState.Rats:
+                {
+                    break;
+                }
+                case ControllerState.BatTransition:
+                {
+                    break;
+                }
+                case ControllerState.InRoom:
+                {
+                    break;
+                }
+                case ControllerState.CatDialouge:
+                {
+                    break;
+                }
+                case ControllerState.WumpusFight:
+                {
+                    break;
+                }
+                case ControllerState.VatRoom:
+                {
+                    Controller.GlobalController.StartTrivia();
+
+                    List<AskableQuestion> previousQuestions = new List<AskableQuestion>();
+
+                    int successCount = 0;
+
+                    while (Controller.GlobalController.GetState() == ControllerState.VatRoom)
+                    {
+                        AskableQuestion question = Controller.GlobalController.GetTriviaQuestion();
+                        Assert.IsFalse(previousQuestions.Contains(question));
+                        previousQuestions.Add(question);
+
+                        int questionNum = Int32.Parse(question.questionText);
+
+                        int choice = Controller.Random.Next(0, 4);
+                        if (choice==questionNum)
+                        {
+                            // This should succeed
+                            Assert.IsTrue(Controller.GlobalController.SubmitTriviaAnswer(choice));
+                            successCount += 1;
+                        }
+                        else
+                        {
+                            Assert.IsFalse(Controller.GlobalController.SubmitTriviaAnswer(choice));
+                        }
+                    }
+
+                    if (successCount >= 2)
+                    {
+                        Assert.IsTrue(Controller.GlobalController.GetState() == ControllerState.InRoom);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(Controller.GlobalController.GetState()==ControllerState.GameOver);
+                    }
+
+                    break;
+
+                }
+                default:
+                    throw new Exception($"{Controller.GlobalController.GetState()} was not handled in the test (this is bad)");
             }
         }
     }

@@ -357,5 +357,16 @@ namespace WumpusCore.Controller
             state = InRoom;
         }
 
+        public void ExitAcrobat(bool success)
+        {
+            if (success)
+            {
+                state = InRoom;
+            }
+            else
+            {
+                state = GameOver;
+            }
+        }
     }
 }
