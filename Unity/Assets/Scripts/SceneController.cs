@@ -74,6 +74,8 @@ namespace WumpusUnity
                     return "Rat";
                 case ControllerState.BatTransition:
                     return "Bat";
+                case ControllerState.GameOver:
+                    return "Game Over";
                 default:
                     return "Main";
             }

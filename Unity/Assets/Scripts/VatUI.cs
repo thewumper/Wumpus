@@ -38,13 +38,11 @@ public class VatUI : MonoBehaviour
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
         sceneController = SceneController.GlobalSceneController;
-        
-        controller.debug = true;
     }
 
     private void Start()
     { 
-        controller.StartTrivia();
+        if (!controller.hasNextTriviaQuestion()) controller.StartTrivia();
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -62,6 +60,14 @@ public class VatUI : MonoBehaviour
     {
         controller.SubmitTriviaAnswer(choice);
         Debug.Log(controller.GetState());
-        sceneController.GotoCorrectScene();
+        if (controller.GetState() != ControllerState.VatRoom) sceneController.GotoCorrectScene();
+        
+        question = controller.GetTriviaQuestion();
+        questionText.SetText(question.questionText);
+        
+        b1Text.SetText(question.choices[0]);
+        b2Text.SetText(question.choices[1]);
+        b3Text.SetText(question.choices[2]);
+        b4Text.SetText(question.choices[3]);
     }
 }
