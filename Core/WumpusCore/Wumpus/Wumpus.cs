@@ -59,7 +59,7 @@ namespace WumpusCore.Wumpus
         /// <summary>
         /// Sets the state of the Wump
         /// </summary>
-        /// <param name="newState">The new state of the Wump.  0 for sleep, 1 for fleeing arrow shoot, 2 for fleeing combat, 3 for in combat, 4 for ded</param>
+        /// <param name="newState">The new state of the Wump.</param>
         public void setState(State newState)
         {
             this.WumpState = (State)newState;
