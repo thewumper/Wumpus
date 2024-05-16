@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -68,6 +67,13 @@ public class MainUI : MonoBehaviour
             southDoor.SetActive(false);
             southWestDoor.SetActive(false);
             northWestDoor.SetActive(false);
+            
+            mmNorth.SetActive(false);
+            mmNorthEast.SetActive(false);
+            mmSouthEast.SetActive(false);
+            mmSouth.SetActive(false);
+            mmSouthWest.SetActive(false);
+            mmNorthWest.SetActive(false);
 
             roomNum = value;
         }
@@ -179,6 +185,22 @@ public class MainUI : MonoBehaviour
     /// </summary>
     private Directions moveDir;
 
+    [SerializeField] 
+    private GameObject mmNorth;
+    [SerializeField] 
+    private GameObject mmNorthEast;
+    [SerializeField] 
+    private GameObject mmSouthEast;
+    [SerializeField] 
+    private GameObject mmSouth;
+    [SerializeField] 
+    private GameObject mmSouthWest;
+    [SerializeField] 
+    private GameObject mmNorthWest;
+
+    [SerializeField] 
+    private GameObject mmDirection;
+
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -261,21 +283,27 @@ public class MainUI : MonoBehaviour
             {
                 case "N":
                     northDoor.SetActive(true);
+                    mmNorth.SetActive(true);
                     break;
                 case "NE":
                     northEastDoor.SetActive(true);
+                    mmNorthEast.SetActive(true);
                     break;
                 case "SE":
                     southEastDoor.SetActive(true);
+                    mmSouthEast.SetActive(true);
                     break;
                 case "S":
                     southDoor.SetActive(true);
+                    mmSouth.SetActive(true);
                     break;
                 case "SW":
                     southWestDoor.SetActive(true);
+                    mmSouthWest.SetActive(true);
                     break;
                 case "NW":
                     northWestDoor.SetActive(true);
+                    mmNorthWest.SetActive(true);
                     break;
             }
         }
@@ -328,6 +356,7 @@ public class MainUI : MonoBehaviour
             {
                 moveDir = hit.transform.GetComponent<Door>().GetDir();
                 directionText.SetText(moveDir.ToString());
+                SetMinimapDirection(moveDir);
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -392,6 +421,36 @@ public class MainUI : MonoBehaviour
     private void HideInteract()
     {
         interactIcon.SetActive(false);
+    }
+
+    private void SetMinimapDirection(Directions dir)
+    {
+        int angle;
+        switch (dir)
+        {
+            case Directions.North:
+                angle = 90;
+                break;
+            case Directions.NorthEast:
+                angle = 40;
+                break;
+            case Directions.SouthEast:
+                angle = 320;
+                break;
+            case Directions.South:
+                angle = 270;
+                break;
+            case Directions.SouthWest:
+                angle = 230;
+                break;
+            case Directions.NorthWest:
+                angle = 130;
+                break; 
+            default:
+                angle = 0;
+                break;
+        }
+        mmDirection.transform.SetPositionAndRotation(mmDirection.transform.position, Quaternion.Euler(0, 0, angle));
     }
 
     private void MoveRooms()
