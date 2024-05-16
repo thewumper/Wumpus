@@ -154,8 +154,6 @@ namespace WumpusCore.Controller
                 throw new Exception("Somehow the room you're going to isn't handled here.");
             }
 
-
-            return player.location;
         }
 
         /// <summary>
@@ -275,6 +273,16 @@ namespace WumpusCore.Controller
             ValidateState(new []{ ControllerState.VatRoom });
 
             trivia.StartRound(3,2);
+        }
+
+        public bool hasNextTriviaQuestion()
+        {
+            if (trivia.reportResult() == GameResult.InProgress)
+            {
+                return true;
+            }
+
+            return false;
         }
 
 
