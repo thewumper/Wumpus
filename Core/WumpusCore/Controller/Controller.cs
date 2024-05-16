@@ -38,6 +38,7 @@ namespace WumpusCore.Controller
         private ControllerState state = StartScreen;
         private ITopology topology;
         public bool debug = false;
+        private List<RoomAnomalies> currentRoomHandledAmomalies = new List<RoomAnomalies>();
 
 
         private GameLocations.GameLocations gameLocations;
@@ -94,6 +95,7 @@ namespace WumpusCore.Controller
         {
             ValidateState(new [] {InRoom});
             state = InBetweenRooms;
+            currentRoomHandledAmomalies.Clear();
 
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
 
@@ -120,36 +122,42 @@ namespace WumpusCore.Controller
 
             player.location = nextRoom.Id;
 
-            List<RoomAnomalies> nextroomType =  GetAnomaliesInRoom(nextRoom.Id);
-            if (nextroomType.Count == 0)
-            {
-                state = InRoom;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Acrobat))
+            SetCorrectStateForRoom(nextRoom.Id);
+
+            return player.location;
+        }
+
+        private void SetCorrectStateForRoom(int roomId)
+        {
+            List<RoomAnomalies> anomaliesInRoom =  GetAnomaliesInRoom(roomId);
+            if (anomaliesInRoom.Contains(RoomAnomalies.Acrobat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Acrobat))
             {
                 state = Acrobat;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Bats))
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Bats))
             {
                 state = BatTransition;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Vat))
+            } else
+
+            if (anomaliesInRoom.Contains(RoomAnomalies.Vat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Vat))
             {
                 state = VatRoom;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Rat))
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Rat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Rat))
             {
                 state = Rats;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Wumpus))
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Wumpus) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Wumpus))
             {
                 state = WumpusFight;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Cat))
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Acrobat))
             {
                 state = CatDialouge;
-            }
-            else
+            } else if ((anomaliesInRoom.Count == currentRoomHandledAmomalies.Count) || anomaliesInRoom.Count == 0)
+            {
+                state = InRoom;
+            } else
             {
                 throw new Exception("Somehow the room you're going to isn't handled here.");
             }
