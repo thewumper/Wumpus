@@ -3,8 +3,13 @@ Shader "Hidden/Pixalization shader"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _width ("_width", Integer) = 100
-        _height ("_height", Integer) = 100
+        _Width ("Width", Integer) = 100
+        _Height ("Height", Integer) = 100
+        _DistortionSpeed ("Distortion", Float) = 1.0
+        _DistortionMagnitude ("Distortion Magnitude", Float) = 5.0
+        _DistortionMinTime ("Distortion Min", Float) = 1.0
+        _DistortionMaxTime ("Distortion Min", Float) = 3.0
+
     }
     SubShader
     {
@@ -40,10 +45,21 @@ Shader "Hidden/Pixalization shader"
             }
 
             sampler2D _MainTex;
-
+            float _Width;
+            float _Height;
+            float _DistortionSpeed;
+            float _DistortionMagnitude;
+            float _DistortionMinTime;
+            float _DistortionMaxTime;
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv);
+                float2 uv = i.uv;
+                float4 loopedTime = _Time % (_DistortionMaxTime - _DistortionMinTime) + _DistortionMinTime;
+                float2 newRes = float2 (_Width, _Height) + (sin(loopedTime * _DistortionSpeed) * _DistortionMagnitude).xy;
+                uv = uv*newRes;
+                uv = floor(uv);
+                uv /= newRes;
+                fixed4 col = tex2D(_MainTex, uv);
                 return col;
             }
             ENDCG
