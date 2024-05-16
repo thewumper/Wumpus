@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
@@ -99,13 +100,19 @@ namespace WumpusTesting
                 }
                 case ControllerState.Rats:
                 {
-                    controller.GetCoins();
+                    // int previousCoins = controller.GetCoins();
+                    //
+                    // Thread.Sleep(1000);
+                    //
+                    // Assert.IsTrue(previousCoins < controller.GetCoins());
 
+                    controller.ExitRat();
 
                     break;
                 }
                 case ControllerState.BatTransition:
                 {
+                    controller.ExitBat();
                     break;
                 }
                 case ControllerState.InRoom:
@@ -114,10 +121,14 @@ namespace WumpusTesting
                 }
                 case ControllerState.CatDialouge:
                 {
+                    controller.ExitCat();
+
                     break;
                 }
                 case ControllerState.WumpusFight:
                 {
+                    controller.ExitWumpus();
+
                     break;
                 }
                 case ControllerState.VatRoom:

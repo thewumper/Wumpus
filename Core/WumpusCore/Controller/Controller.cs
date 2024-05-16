@@ -406,5 +406,23 @@ namespace WumpusCore.Controller
                 state = GameOver;
             }
         }
+
+        public void ExitRat()
+        {
+            currentRoomHandledAmomalies.Add(RoomAnomalies.Rat);
+            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
+        }
+
+        public void ExitCat()
+        {
+            currentRoomHandledAmomalies.Add(RoomAnomalies.Cat);
+            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
+        }
+
+        public void ExitWumpus()
+        {
+            currentRoomHandledAmomalies.Add(RoomAnomalies.Wumpus);
+            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
+        }
     }
 }
