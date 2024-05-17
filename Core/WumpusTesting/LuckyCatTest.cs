@@ -43,23 +43,23 @@ namespace WumpusTesting
 			ushort coins2 = coins;
 			Console.WriteLine("Start Coins: " + coins + ", Checking with: " + coins2);
 			
-			bool tamed = true;
-			cat.Tame(coins, tamed);
+			cat.SetTamed(true);
+			cat.Tame(coins, cat.GetTamed());
 			Assert.AreEqual(coins2, coins);
 			Console.WriteLine(coins + ", " + coins2);
-			
-			tamed = false;
-			cat.Tame(coins, tamed);
+
+			cat.SetTamed(false);
+			cat.Tame(coins, cat.GetTamed());
 			if (coins < 20)
 			{
 				Assert.AreEqual(coins2, coins);
-				Assert.AreEqual(false, tamed);
+				Assert.AreEqual(false, cat.GetTamed());
                 Console.WriteLine(coins + ", " + coins2);
             }
 			else if (coins >= 20)
 			{
 				Assert.AreEqual((coins2 - 20), coins);
-				Assert.AreEqual(true, tamed);
+				Assert.AreEqual(true, cat.GetTamed());
                 Console.WriteLine(coins + ", " + coins2);
             }
 		}
@@ -67,13 +67,13 @@ namespace WumpusTesting
 		[TestMethod]
 		public void PetTest()
 		{
-			bool tamed = cat.Tame(10, false);
-			Assert.AreEqual(false, tamed);
-			cat.Pet(tamed);
+			cat.Tame(10, cat.GetTamed());
+			Assert.AreEqual(false, cat.GetTamed());
+			cat.Pet();
 
-			tamed = cat.Tame(20, false);
-			Assert.AreEqual(true, tamed);
-			cat.Pet(tamed);
+			cat.Tame(20, cat.GetTamed());
+			Assert.AreEqual(true, cat.GetTamed());
+			cat.Pet();
 		}
 	}
 }

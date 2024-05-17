@@ -14,7 +14,15 @@ namespace WumpusCore.LuckyCat
         /// Is the cat tamed
         /// </summary>
         private bool tamed;
-        
+        public bool GetTamed()
+        {
+            return this.tamed;
+        }
+
+        public void SetTamed(bool input)
+        {
+            this.tamed = input;
+        }
         /// <summary>
         /// The amount of coins the player has
         /// Used to check for taming cat
@@ -50,27 +58,27 @@ namespace WumpusCore.LuckyCat
         /// Attempts to Tame the Lucky Cat
         /// </summary>
         /// <returns>The state of cat tame, successful or not</returns>
-        public bool Tame(ushort coins, bool tamed)
+        public void Tame(ushort coins, bool tamed)
         {
             if (!tamed && coins >= 20)
             {
                 coins -= 20;
                 Console.WriteLine("You tame'd the kitty cat");
-                return true;
+                SetTamed(true);
             }
             else if (!tamed && coins < 20 )
             {
                 Console.WriteLine("Failed to tame'd the kitty cat.");
-                return false;
+                SetTamed(false);
             }
             else if ( tamed )
             {
                 Console.WriteLine("Kitty cat already tame'd idoit");
-                return true;
+                SetTamed(true);
             }
             else 
-            { 
-                return false; 
+            {
+                SetTamed(false); 
             }
 
         }
@@ -79,9 +87,9 @@ namespace WumpusCore.LuckyCat
         /// Pets the cat
         /// </summary>
         /// <returns> Meow Sound Effect ID </returns>
-        public catSound Pet(bool tamed)
+        public catSound Pet()
         {
-            if (tamed && AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) == 0) 
+            if (GetTamed() && AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) == 0) 
             { 
             // (You pet the cat, yippee)
             return catSound.Mew;
