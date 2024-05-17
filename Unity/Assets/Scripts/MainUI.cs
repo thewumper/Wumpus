@@ -201,9 +201,6 @@ public class MainUI : MonoBehaviour
 
     [SerializeField] 
     private GameObject mmDirection;
-    
-    [SerializeField]
-    private float mmRotateSpeed = .05f;
 
     private void Awake()
     {
@@ -230,6 +227,11 @@ public class MainUI : MonoBehaviour
         
         cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
         Debug.Log(PersistentData.Instance.EulerAngle);
+        mmDirection.transform.eulerAngles = new Vector3(
+            mmDirection.transform.eulerAngles.x, 
+            mmDirection.transform.eulerAngles.y, 
+            180 - PersistentData.Instance.EulerAngle.y);
+        
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
         
@@ -349,6 +351,11 @@ public class MainUI : MonoBehaviour
 
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
             PersistentData.Instance.EulerAngle = cam.transform.eulerAngles;
+
+            mmDirection.transform.eulerAngles = new Vector3(
+                mmDirection.transform.eulerAngles.x, 
+                mmDirection.transform.eulerAngles.y, 
+                180 - PersistentData.Instance.EulerAngle.y);
         }
         // Used for checking what the player is currently looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
@@ -406,7 +413,6 @@ public class MainUI : MonoBehaviour
                 cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
-        SetMinimapDirection();
     }
     
     /// <summary>
@@ -425,38 +431,6 @@ public class MainUI : MonoBehaviour
     private void HideInteract()
     {
         interactIcon.SetActive(false);
-    }
-
-    private void SetMinimapDirection()
-    {
-        int angle;
-        switch (moveDir)
-        {
-            case Directions.North:
-                angle = 90;
-                break;
-            case Directions.NorthEast:
-                angle = 40;
-                break;
-            case Directions.SouthEast:
-                angle = 320;
-                break;
-            case Directions.South:
-                angle = 270;
-                break;
-            case Directions.SouthWest:
-                angle = 230;
-                break;
-            case Directions.NorthWest:
-                angle = 130;
-                break; 
-            default:
-                angle = 90;
-                break;
-        }
-
-        Quaternion mmRotation = Quaternion.Lerp(mmDirection.transform.rotation, Quaternion.Euler(0, 0, angle), mmRotateSpeed);
-        mmDirection.transform.SetPositionAndRotation(mmDirection.transform.position, mmRotation);
     }
 
     private void MoveRooms()
