@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -200,6 +201,9 @@ public class MainUI : MonoBehaviour
 
     [SerializeField] 
     private GameObject mmDirection;
+    
+    [SerializeField]
+    private float mmRotateSpeed = .05f;
 
     private void Awake()
     {
@@ -356,7 +360,6 @@ public class MainUI : MonoBehaviour
             {
                 moveDir = hit.transform.GetComponent<Door>().GetDir();
                 directionText.SetText(moveDir.ToString());
-                SetMinimapDirection(moveDir);
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -403,6 +406,7 @@ public class MainUI : MonoBehaviour
                 cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
+        SetMinimapDirection();
     }
     
     /// <summary>
@@ -423,10 +427,10 @@ public class MainUI : MonoBehaviour
         interactIcon.SetActive(false);
     }
 
-    private void SetMinimapDirection(Directions dir)
+    private void SetMinimapDirection()
     {
         int angle;
-        switch (dir)
+        switch (moveDir)
         {
             case Directions.North:
                 angle = 90;
@@ -447,10 +451,12 @@ public class MainUI : MonoBehaviour
                 angle = 130;
                 break; 
             default:
-                angle = 0;
+                angle = 90;
                 break;
         }
-        mmDirection.transform.SetPositionAndRotation(mmDirection.transform.position, Quaternion.Euler(0, 0, angle));
+
+        Quaternion mmRotation = Quaternion.Lerp(mmDirection.transform.rotation, Quaternion.Euler(0, 0, angle), mmRotateSpeed);
+        mmDirection.transform.SetPositionAndRotation(mmDirection.transform.position, mmRotation);
     }
 
     private void MoveRooms()
