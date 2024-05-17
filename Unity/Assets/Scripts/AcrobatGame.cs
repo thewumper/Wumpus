@@ -106,7 +106,7 @@ public class AcrobatGame : MonoBehaviour
             if (pair.time >= maxTargetTime)
             {
                 RemoveTarget(pair);
-                SpawnTarget(pair.obj.name + "-1"); // This will create bad names really fast. Oh well
+                SpawnTarget(pair.obj.name); // This will create bad names really fast. Oh well
                 score -= targetExplodePenalty;
             }
             else
