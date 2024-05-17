@@ -33,15 +33,21 @@ namespace WumpusCore.Controller
                 return controllerReference;
             }
         }
-
+      
+        // TODO: Add documentation, and/or move all of this into constructor. Code is illegible
         public static Random Random = new Random();
+        
         private ControllerState state = StartScreen;
+      
         private ITopology topology;
         public bool debug = false;
+        private List<RoomAnomalies> currentRoomHandledAmomalies = new List<RoomAnomalies>();
 
 
         private GameLocations.GameLocations gameLocations;
+
         private Trivia.Trivia trivia;
+
 
         /// <summary>
         /// Instantiates a controller and setup the required stuff for global controller.
@@ -49,16 +55,32 @@ namespace WumpusCore.Controller
         /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
         /// <param name="topologyDirectory">The directory to load map files from.</param>
         /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
-        public Controller(string triviaFile, string topologyDirectory, ushort mapId)
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2)
+        {
+        }
+
+        /// <summary>
+        /// Construct a controller with parameters for gamelocations data
+        /// </summary>
+        /// <param name="triviaFile"></param>
+        /// <param name="topologyDirectory"></param>
+        /// <param name="mapId"></param>
+        /// <param name="numVats"></param>
+        /// <param name="numBats"></param>
+        /// <param name="numRats"></param>
+        /// <param name="numAcrobats"></param>
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId, int numVats, int numBats, int numRats,
+            int numAcrobats)
         {
             controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
-            gameLocations = new GameLocations.GameLocations(topology.RoomCount,2,1,1,2,topology,Controller.Random);
+            gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,topology,Controller.Random,trivia);
 
             gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
+
         }
 
         /// <summary>
@@ -94,6 +116,7 @@ namespace WumpusCore.Controller
         {
             ValidateState(new [] {InRoom});
             state = InBetweenRooms;
+            currentRoomHandledAmomalies.Clear();
 
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
 
@@ -120,42 +143,51 @@ namespace WumpusCore.Controller
 
             player.location = nextRoom.Id;
 
-            List<RoomAnomalies> nextroomType =  GetAnomaliesInRoom(nextRoom.Id);
-            if (nextroomType.Count == 0)
-            {
-                state = InRoom;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Acrobat))
-            {
-                state = Acrobat;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Bats))
-            {
-                state = BatTransition;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Vat))
-            {
-                state = VatRoom;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Rat))
-            {
-                state = Rats;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Wumpus))
-            {
-                state = WumpusFight;
-            }
-            else if (nextroomType.Contains(RoomAnomalies.Cat))
-            {
-                state = CatDialouge;
-            }
-            else
-            {
-                throw new Exception("Somehow the room you're going to isn't handled here.");
-            }
-
+            SetCorrectStateForRoom(nextRoom.Id);
 
             return player.location;
+        }
+
+        private void SetCorrectStateForRoom(int roomId)
+        {
+            List<RoomAnomalies> anomaliesInRoom =  GetAnomaliesInRoom(roomId);
+
+
+            // This if else block will determine the ordering that you deal with anomalies
+            // This includes if you get sent away by the bats before fighting the wumpus
+            // Or in which order the cat gets handled
+            if (anomaliesInRoom.Contains(RoomAnomalies.Wumpus) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Wumpus))
+            {
+                state = WumpusFight;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Acrobat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Acrobat))
+            {
+                state = Acrobat;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Vat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Vat))
+            {
+                state = VatRoom;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Rat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Rat))
+            {
+                state = Rats;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Acrobat))
+            {
+                state = CatDialouge;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomalies.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Bats))
+            {
+                state = BatTransition;
+            } else
+            if ((anomaliesInRoom.Count == currentRoomHandledAmomalies.Count) || anomaliesInRoom.Count == 0)
+            {
+                state = InRoom;
+            } else
+            {
+                throw new Exception("Somehow something in the room you're going to isn't handled here.");
+            }
+
         }
 
         /// <summary>
@@ -277,6 +309,16 @@ namespace WumpusCore.Controller
             trivia.StartRound(3,2);
         }
 
+        public bool hasNextTriviaQuestion()
+        {
+            if (trivia.reportResult() == GameResult.InProgress)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
 
         public Trivia.AskableQuestion GetTriviaQuestion()
         {
@@ -342,15 +384,27 @@ namespace WumpusCore.Controller
         }
 
         /// <summary>
-        /// Allows you to exit the bat state. Puts the player in a random room and changes the controller state to InRoom.
+        /// Allows you to exit the bat state. Puts the player in a random room and changes the controller state to whatever is in that room.
         /// </summary>
         public void ExitBat()
         {
             ValidateState(new []{BatTransition});
 
             gameLocations.GetPlayer().location = gameLocations.GetEmptyRoom();
-            state = InRoom;
+
+            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
         }
 
+        public void ExitAcrobat(bool success)
+        {
+            if (success)
+            {
+                state = InRoom;
+            }
+            else
+            {
+                state = GameOver;
+            }
+        }
     }
 }
