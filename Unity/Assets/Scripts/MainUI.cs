@@ -281,14 +281,14 @@ public class MainUI : MonoBehaviour
         }
         
         // All hazards in the player's current room.
-        List<RoomAnomalies> hazards = controller.GetAnomaliesInRoom(RoomNum);
+        List<RoomAnomaly> hazards = controller.GetAnomaliesInRoom(RoomNum);
         // For each hazard in the room.
-        foreach (RoomAnomalies hazard in hazards)
+        foreach (RoomAnomaly hazard in hazards)
         {
             // Make the hazard visible.
             switch (hazard)
             {
-                case RoomAnomalies.Wumpus:
+                case RoomAnomaly.Wumpus:
                     wumpus.SetActive(true);
                     break;
             }
@@ -297,7 +297,7 @@ public class MainUI : MonoBehaviour
         List<string> hintString = new List<string>();
         foreach (Controller.DirectionalHint hint in hints)
         {
-            foreach (RoomAnomalies anomaly in hint.Hazards)
+            foreach (RoomAnomaly anomaly in hint.Hazards)
             {
                 hintString.Add("You hear " + anomaly);
             }
