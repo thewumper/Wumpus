@@ -16,38 +16,67 @@ namespace WumpusCore.Controller
     /// </summary>
     public class Controller
     {
-        private static Controller controllerReference;
+        private static Controller _controllerReference;
         private IRoom nextRoom;
+        private DateTime ratStartTime;
+        private ControllerState state = StartScreen;
+        private ITopology topology;
+        private List<RoomAnomaly> currentRoomHandledAmomalies = new List<RoomAnomaly>();
+        private GameLocations.GameLocations gameLocations;
+        private Trivia.Trivia trivia;
+        private RoomAnomaly gameOverCause;
 
+        /// <summary>
+        /// The <c>RoomAnomaly</c> that causes the game to end.
+        /// The property is only valid in the <c>GameOver</c> state.
+        /// </summary>
+        public RoomAnomaly GameOverCause
+        {
+            get
+            {
+                ValidateState(new [] {GameOver});
+                return gameOverCause;
+            }
+            private set
+            {
+                gameOverCause = value;
+            }
+        }
 
+        /// <summary>
+        /// The random object that should be used by all
+        /// classes and tests related to Wumpus
+        /// </summary>
+        public static Random Random = new Random();
+
+        /// <summary>
+        /// A debug flag allows you to bypass room travel restrictions.
+        /// Useful for testing different parts of a frontend without having
+        /// to start from the main menu every time.
+        /// </summary>
+        public bool Debug = false;
+
+        /// <summary>
+        /// Gets the reference to the global controller
+        /// uses the internal <c>_controllerReference</c> variable
+        ///
+        /// You must use one of the <c>Controller</c> constructors
+        /// before there will be a global controller to reference.
+        /// </summary>
+        /// <exception cref="NullReferenceException">You must construct a controller once before the global controller is set</exception>
         public static Controller GlobalController
         {
             get
             {
-                if (controllerReference == null)
+                if (_controllerReference == null)
                 {
                     throw new NullReferenceException(
                         "You have to initialize a controller before you can grab a global controller");
                 }
 
-                return controllerReference;
+                return _controllerReference;
             }
         }
-      
-        // TODO: Add documentation, and/or move all of this into constructor. Code is illegible
-        public static Random Random = new Random();
-        
-        private ControllerState state = StartScreen;
-      
-        private ITopology topology;
-        public bool debug = false;
-        private List<RoomAnomalies> currentRoomHandledAmomalies = new List<RoomAnomalies>();
-
-
-        private GameLocations.GameLocations gameLocations;
-
-        private Trivia.Trivia trivia;
-
 
         /// <summary>
         /// Instantiates a controller and setup the required stuff for global controller.
@@ -58,6 +87,7 @@ namespace WumpusCore.Controller
         public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2)
         {
         }
+
 
         /// <summary>
         /// Construct a controller with parameters for gamelocations data
@@ -72,7 +102,7 @@ namespace WumpusCore.Controller
         public Controller(string triviaFile, string topologyDirectory, ushort mapId, int numVats, int numBats, int numRats,
             int numAcrobats)
         {
-            controllerReference = this;
+            _controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,topology,Controller.Random,trivia);
@@ -150,33 +180,34 @@ namespace WumpusCore.Controller
 
         private void SetCorrectStateForRoom(int roomId)
         {
-            List<RoomAnomalies> anomaliesInRoom =  GetAnomaliesInRoom(roomId);
+            List<RoomAnomaly> anomaliesInRoom =  GetAnomaliesInRoom(roomId);
 
 
             // This if else block will determine the ordering that you deal with anomalies
             // This includes if you get sent away by the bats before fighting the wumpus
             // Or in which order the cat gets handled
-            if (anomaliesInRoom.Contains(RoomAnomalies.Wumpus) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Wumpus))
+            if (anomaliesInRoom.Contains(RoomAnomaly.Wumpus) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Wumpus))
             {
                 state = WumpusFight;
             } else
-            if (anomaliesInRoom.Contains(RoomAnomalies.Acrobat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Acrobat))
+            if (anomaliesInRoom.Contains(RoomAnomaly.Acrobat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
                 state = Acrobat;
             } else
-            if (anomaliesInRoom.Contains(RoomAnomalies.Vat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Vat))
+            if (anomaliesInRoom.Contains(RoomAnomaly.Vat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Vat))
             {
                 state = VatRoom;
             } else
-            if (anomaliesInRoom.Contains(RoomAnomalies.Rat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Rat))
+            if (anomaliesInRoom.Contains(RoomAnomaly.Rat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Rat))
             {
                 state = Rats;
+                ratStartTime = DateTime.Now;
             } else
-            if (anomaliesInRoom.Contains(RoomAnomalies.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Acrobat))
+            if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
                 state = CatDialouge;
             } else
-            if (anomaliesInRoom.Contains(RoomAnomalies.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomalies.Bats))
+            if (anomaliesInRoom.Contains(RoomAnomaly.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Bats))
             {
                 state = BatTransition;
             } else
@@ -231,8 +262,8 @@ namespace WumpusCore.Controller
         public struct DirectionalHint
         {
             public Directions Direction;
-            public List<RoomAnomalies> Hazards;
-            public DirectionalHint(List<RoomAnomalies> hazards, Directions direction)
+            public List<RoomAnomaly> Hazards;
+            public DirectionalHint(List<RoomAnomaly> hazards, Directions direction)
             {
                 Hazards = hazards;
                 Direction = direction;
@@ -261,31 +292,31 @@ namespace WumpusCore.Controller
         }
 
 
-        public List<RoomAnomalies> GetAnomaliesInRoom(int roomnum)
+        public List<RoomAnomaly> GetAnomaliesInRoom(int roomnum)
         {
-            List<RoomAnomalies> anomaliesList = new List<RoomAnomalies>();
+            List<RoomAnomaly> anomaliesList = new List<RoomAnomaly>();
 
             if (gameLocations.GetCat().location == roomnum)
             {
-                anomaliesList.Add(RoomAnomalies.Cat);
+                anomaliesList.Add(RoomAnomaly.Cat);
             }
 
             if (gameLocations.GetWumpus().location == roomnum)
             {
-                anomaliesList.Add(RoomAnomalies.Wumpus);
+                anomaliesList.Add(RoomAnomaly.Wumpus);
             }
 
             RoomType room = gameLocations.GetRoomAt((ushort) roomnum);
 
             switch (room)
             {
-                case RoomType.Acrobat: anomaliesList.Add(RoomAnomalies.Acrobat);
+                case RoomType.Acrobat: anomaliesList.Add(RoomAnomaly.Acrobat);
                     break;
-                case RoomType.Bats: anomaliesList.Add(RoomAnomalies.Bats);
+                case RoomType.Bats: anomaliesList.Add(RoomAnomaly.Bats);
                     break;
-                case RoomType.Rats: anomaliesList.Add(RoomAnomalies.Rat);
+                case RoomType.Rats: anomaliesList.Add(RoomAnomaly.Rat);
                     break;
-                case RoomType.Vats: anomaliesList.Add(RoomAnomalies.Vat);
+                case RoomType.Vats: anomaliesList.Add(RoomAnomaly.Vat);
                     break;
             }
 
@@ -349,10 +380,10 @@ namespace WumpusCore.Controller
             this.state = InRoom;
         }
 
-        public void EndGame()
+        public void EndGame(RoomAnomaly gameEndCause)
         {
-            // TODO! This will need to be rewritten
             this.state = StartScreen;
+            GameOverCause = gameEndCause;
         }
         
         
@@ -364,7 +395,7 @@ namespace WumpusCore.Controller
         /// <exception cref="InvalidOperationException">Thrown if you are not in the valid states to call the function.</exception>
         private void ValidateState(ControllerState[] validStates)
         {
-            if (debug)
+            if (Debug)
             {
                 return;
             }
@@ -405,6 +436,60 @@ namespace WumpusCore.Controller
             {
                 state = GameOver;
             }
+        }
+
+        public void ExitRat()
+        {
+            RatRoomStats stats = GetRatRoomStats();
+            if (stats.RemainingCoins < 0)
+            {
+                EndGame(RoomAnomaly.Rat);
+                return;
+            }
+
+            currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
+            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
+
+        }
+
+        public void ExitCat()
+        {
+            currentRoomHandledAmomalies.Add(RoomAnomaly.Cat);
+            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
+        }
+
+        public void ExitWumpus()
+        {
+            currentRoomHandledAmomalies.Add(RoomAnomaly.Wumpus);
+            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
+        }
+
+
+        /// <summary>
+        /// Gets the information that needs to be displayed in a rat room
+        /// Required you to be in a Rat Room
+        /// </summary>
+        /// <returns>A <c>RatRoomStats</c> object containing the correct info</returns>
+        public RatRoomStats GetRatRoomStats()
+        {
+            DateTime currentTime = DateTime.Now;
+            double timeDiff =  DateTime.Now.Subtract(ratStartTime).TotalSeconds;
+
+            int ratDamage = CalculateRatDamage(timeDiff);
+
+            return new RatRoomStats((int)timeDiff, gameLocations.GetPlayer().Coins,
+                gameLocations.GetPlayer().Coins - ratDamage, ratDamage);
+        }
+
+        /// <summary>
+        /// Calculate the amount of damage that a rat does to the player after some number of seconds
+        /// Currently uses a 2^x function, where x is the number of seconds.
+        /// </summary>
+        /// <param name="timeDiffSeconds">The number of seconds since the player has entered the rat room</param>
+        /// <returns>The damage that the rat has done after being run through some function.</returns>
+        private int CalculateRatDamage(double timeDiffSeconds)
+        {
+            return (int) Math.Pow(2,(int) timeDiffSeconds);
         }
     }
 }

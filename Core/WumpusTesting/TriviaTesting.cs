@@ -10,7 +10,7 @@ namespace WumpusTesting
     {
         public Trivia makeTrivia()
         {
-            string path = Path.GetFullPath("Questions.json");
+            string path = Path.GetFullPath("./Questions.json");
             Trivia trivia = new Trivia(path);
             if (trivia.Count == 0)
             {
