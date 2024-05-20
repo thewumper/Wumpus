@@ -34,6 +34,7 @@ public class AcrobatGame : MonoBehaviour
     [SerializeField] private int targetMissPenalty;
     [SerializeField] private int targetHitBonus;
     [SerializeField] private Camera camera;
+    [SerializeField] private GameObject wumpus;
 
     private List<TargetPair> targets;
 
@@ -67,7 +68,14 @@ public class AcrobatGame : MonoBehaviour
             }
             if (Physics.Raycast(new Ray(camera.transform.position, camera.transform.forward), out var hit))
             {
-                if (hit.transform.CompareTag("Target"))
+                if (hit.transform.gameObject == wumpus)
+                {
+                    Rigidbody wumpusRigidbody = wumpus.GetComponent<Rigidbody>();
+                    
+                    wumpusRigidbody.isKinematic = false;
+                    wumpusRigidbody.AddForce(camera.transform.forward * 10000);
+                }
+                else if (hit.transform.CompareTag("Target"))
                 {
                     foreach (var targetPair in targets.Where(targetPair => targetPair.obj == hit.transform.gameObject))
                     {
