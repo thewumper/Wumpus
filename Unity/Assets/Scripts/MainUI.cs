@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -68,6 +68,13 @@ public class MainUI : MonoBehaviour
             southDoor.SetActive(false);
             southWestDoor.SetActive(false);
             northWestDoor.SetActive(false);
+            
+            mmNorth.SetActive(false);
+            mmNorthEast.SetActive(false);
+            mmSouthEast.SetActive(false);
+            mmSouth.SetActive(false);
+            mmSouthWest.SetActive(false);
+            mmNorthWest.SetActive(false);
 
             roomNum = value;
         }
@@ -179,6 +186,22 @@ public class MainUI : MonoBehaviour
     /// </summary>
     private Directions moveDir;
 
+    [SerializeField] 
+    private GameObject mmNorth;
+    [SerializeField] 
+    private GameObject mmNorthEast;
+    [SerializeField] 
+    private GameObject mmSouthEast;
+    [SerializeField] 
+    private GameObject mmSouth;
+    [SerializeField] 
+    private GameObject mmSouthWest;
+    [SerializeField] 
+    private GameObject mmNorthWest;
+
+    [SerializeField] 
+    private GameObject mmDirection;
+
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -204,6 +227,11 @@ public class MainUI : MonoBehaviour
         
         cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
         Debug.Log(PersistentData.Instance.EulerAngle);
+        mmDirection.transform.eulerAngles = new Vector3(
+            mmDirection.transform.eulerAngles.x, 
+            mmDirection.transform.eulerAngles.y, 
+            PersistentData.Instance.EulerAngle.y);
+        
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
         
@@ -261,21 +289,27 @@ public class MainUI : MonoBehaviour
             {
                 case "N":
                     northDoor.SetActive(true);
+                    mmNorth.SetActive(true);
                     break;
                 case "NE":
                     northEastDoor.SetActive(true);
+                    mmNorthEast.SetActive(true);
                     break;
                 case "SE":
                     southEastDoor.SetActive(true);
+                    mmSouthEast.SetActive(true);
                     break;
                 case "S":
                     southDoor.SetActive(true);
+                    mmSouth.SetActive(true);
                     break;
                 case "SW":
                     southWestDoor.SetActive(true);
+                    mmSouthWest.SetActive(true);
                     break;
                 case "NW":
                     northWestDoor.SetActive(true);
+                    mmNorthWest.SetActive(true);
                     break;
             }
         }
@@ -317,6 +351,11 @@ public class MainUI : MonoBehaviour
 
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
             PersistentData.Instance.EulerAngle = cam.transform.eulerAngles;
+
+            mmDirection.transform.eulerAngles = new Vector3(
+                mmDirection.transform.eulerAngles.x, 
+                mmDirection.transform.eulerAngles.y, 
+                180 - PersistentData.Instance.EulerAngle.y);
         }
         // Used for checking what the player is currently looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
