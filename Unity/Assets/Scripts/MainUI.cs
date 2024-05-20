@@ -230,7 +230,7 @@ public class MainUI : MonoBehaviour
         mmDirection.transform.eulerAngles = new Vector3(
             mmDirection.transform.eulerAngles.x, 
             mmDirection.transform.eulerAngles.y, 
-            180 - PersistentData.Instance.EulerAngle.y);
+            PersistentData.Instance.EulerAngle.y);
         
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
