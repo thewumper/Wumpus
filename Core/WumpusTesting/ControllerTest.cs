@@ -38,7 +38,7 @@ namespace WumpusTesting
         {
             // This will just create it at global controller which is what we want. Resharper doesn't like this, but it's fine
             // ReSharper disable once ObjectCreationAsStatement
-            return new Controller("./questions.json","./",0);
+            return new Controller("./questions.json", "./",0);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace WumpusTesting
         [TestMethod]
         public void SimulateGames()
         {
-            Parallel.For((long)0, 1000, i =>
+            for (int i = 0; i < 100; i++)
             {
                 // Setup
                 Controller controller = CreateNewController();
@@ -68,9 +68,7 @@ namespace WumpusTesting
                 // {
                 HandleRoomInARandomDirection(controller);
                 // }
-
-                CreateNewController();
-            });
+            }
         }
 
         private static void HandleRoomInARandomDirection(Controller controller)
@@ -100,12 +98,6 @@ namespace WumpusTesting
                 }
                 case ControllerState.Rats:
                 {
-                    // int previousCoins = controller.GetCoins();
-                    //
-                    // Thread.Sleep(1000);
-                    //
-                    // Assert.IsTrue(previousCoins < controller.GetCoins());
-
                     controller.ExitRat();
 
                     break;

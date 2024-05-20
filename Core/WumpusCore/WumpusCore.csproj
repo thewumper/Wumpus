@@ -47,7 +47,8 @@
     <ItemGroup>
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
-        <Compile Include="Controller\RoomAnomalies.cs"/>
+        <Compile Include="Controller\RatRoomStats.cs" />
+        <Compile Include="Controller\RoomAnomaly.cs" />
         <Compile Include="HighScore\SaveFile.cs" />
         <Compile Include="Entity\Entity.cs" />
         <Compile Include="Entity\EntityType.cs" />

@@ -3,7 +3,7 @@ using WumpusCore.GameLocations;
 namespace WumpusCore.Controller
 {
 
-    public enum RoomAnomalies
+    public enum RoomAnomaly
     {
         Wumpus,
         Vat,
