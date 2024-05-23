@@ -120,26 +120,5 @@ namespace WumpusCore.LuckyCat
             else { return catSound.Silent; } 
 
         }
-
-        /// <summary>
-        /// Plays the mewing audio file if player is nearby the cat
-        /// Will depend on audio manager for sound
-        /// </summary>
-        public int Mew()
-        {          
-
-            if (AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) < AudibleMewingRadius)
-            {
-                return 69;
-            }
-            
-            else if (AccessibleDistanceToEntity(gameLocations.GetEntity(EntityType.Player)) == AudibleMewingRadius)
-            {
-                return 70;
-            }
-
-            else { return 0; } 
-
-        }
     }
 }
