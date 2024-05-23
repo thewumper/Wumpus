@@ -15,7 +15,11 @@ namespace WumpusUnity
         private float speed;
         [SerializeField] private float minTime;
         [SerializeField] private float maxTime;
-        
+        [SerializeField] private float OverallDistortionSpeed;
+        [SerializeField] private float OverallDistortionMag;
+        [SerializeField] private float overallDistortionFreq;
+
+        [SerializeField] private bool doDistortionPrePixelazation;
         [SerializeField]
         private Shader shader;
         private Material material;
@@ -25,6 +29,13 @@ namespace WumpusUnity
         private static readonly int DistortionMagnitude = Shader.PropertyToID("_DistortionMagnitude");
         private static readonly int DistortionMinTime = Shader.PropertyToID("_DistortionMinTime");
         private static readonly int DistortionMaxTime = Shader.PropertyToID("_DistortionMaxTime");
+
+        private static readonly int Lines = Shader.PropertyToID("_ScanLines");
+        private static readonly int LineWidth = Shader.PropertyToID("_ScanLineWidth");
+        private static readonly int DistortionMag = Shader.PropertyToID("_OverallDistortionMag");
+        private static readonly int DistortionFreq = Shader.PropertyToID("_OverallDistortionFrequency");
+        private static readonly int OverallDistortionChangeRate = Shader.PropertyToID("_OverallDistortionChangeRate");
+        private static readonly int DoDistortionAfterPixelization = Shader.PropertyToID("_DoDistortionAfterPixelization");
 
         public ShaderApplication(float maxTime)
         {
@@ -44,11 +55,16 @@ namespace WumpusUnity
             material.SetFloat(DistortionMagnitude,magnitude);
             material.SetFloat(DistortionMinTime,minTime);
             material.SetFloat(DistortionMaxTime,maxTime);
+            material.SetFloat(DistortionMag,OverallDistortionMag);
+            material.SetFloat(DistortionFreq,overallDistortionFreq);
+
+            material.SetFloat(OverallDistortionChangeRate,OverallDistortionSpeed);
+            material.SetInteger(DoDistortionAfterPixelization,(doDistortionPrePixelazation) ? 1 : 0);
+
         }
 
         public void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
-  
             Graphics.Blit(source,destination,material);
         }
     }

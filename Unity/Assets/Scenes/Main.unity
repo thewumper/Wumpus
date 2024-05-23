@@ -228,8 +228,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e2c511571fc7b34d9de1b3b8a1c8e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 640
-  height: 340
+  width: 320
+  height: 280
+  magnitude: 0
+  speed: 0
+  minTime: 2
+  maxTime: 3
+  OverallDistortionSpeed: 0.3
+  OverallDistortionMag: 6
+  overallDistortionFreq: 25
+  doDistortionPrePixelazation: 0
   shader: {fileID: 4800000, guid: 56e7faa0cbb6fd647a9f51324add74ed, type: 3}
 --- !u!1 &210612753
 GameObject:
