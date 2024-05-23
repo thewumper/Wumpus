@@ -26,7 +26,7 @@ public class MainMenuUI : MonoBehaviour
         topologyDir = Application.dataPath + "/Maps";
         
         // Initializes the Controller.
-        controller = new Controller(triviaNormal, topologyDir, 0,0,0,0,20);
+        controller = new Controller(triviaNormal, topologyDir, 0);
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
     }
