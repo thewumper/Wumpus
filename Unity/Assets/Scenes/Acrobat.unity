@@ -1213,6 +1213,7 @@ MonoBehaviour:
   targetHitBonus: 10
   camera: {fileID: 1495926873}
   wumpus: {fileID: 834527482}
+  wumpusFiringSpeed: 10000
 --- !u!1001 &1548692855
 PrefabInstance:
   m_ObjectHideFlags: 0

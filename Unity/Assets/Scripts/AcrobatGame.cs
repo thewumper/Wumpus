@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using WumpusCore;
+using WumpusCore.Controller;
 using Random = UnityEngine.Random;
 
 
@@ -35,6 +37,7 @@ public class AcrobatGame : MonoBehaviour
     [SerializeField] private int targetHitBonus;
     [SerializeField] private Camera camera;
     [SerializeField] private GameObject wumpus;
+    [SerializeField] private float wumpusFiringSpeed;
 
     private List<TargetPair> targets;
 
@@ -73,7 +76,7 @@ public class AcrobatGame : MonoBehaviour
                     Rigidbody wumpusRigidbody = wumpus.GetComponent<Rigidbody>();
                     
                     wumpusRigidbody.isKinematic = false;
-                    wumpusRigidbody.AddForce(camera.transform.forward * 10000);
+                    wumpusRigidbody.AddForce(camera.transform.forward * wumpusFiringSpeed);
                 }
                 else if (hit.transform.CompareTag("Target"))
                 {
@@ -105,7 +108,8 @@ public class AcrobatGame : MonoBehaviour
         totalDuration += !finished ? Time.deltaTime : 0;
         if (totalDuration >= maxTime)
         {
-            targets.ToList().ForEach((RemoveTarget));
+            totalDuration = maxTime;
+            targets.ToList().ForEach(RemoveTarget);
             finished = true;
         }
         foreach (TargetPair pair in targets.ToList())
