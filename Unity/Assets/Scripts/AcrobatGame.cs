@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using WumpusCore;
 using WumpusCore.Controller;
+using WumpusUnity;
 using Random = UnityEngine.Random;
 
 
@@ -29,6 +30,7 @@ public class AcrobatGame : MonoBehaviour
     [SerializeField] private float maxTargetTime;
     [SerializeField] private float maxTime;
     [SerializeField] private float numTargets;
+    [SerializeField] private int minPassingScore;
     [SerializeField] private GameObject target;
     [SerializeField] private Rect spawnArea;
     [SerializeField] private float zDepth;
@@ -73,6 +75,8 @@ public class AcrobatGame : MonoBehaviour
             {
                 if (hit.transform.gameObject == wumpus)
                 {
+                    score += targetHitBonus;
+
                     Rigidbody wumpusRigidbody = wumpus.GetComponent<Rigidbody>();
                     
                     wumpusRigidbody.isKinematic = false;
@@ -111,6 +115,10 @@ public class AcrobatGame : MonoBehaviour
             totalDuration = maxTime;
             targets.ToList().ForEach(RemoveTarget);
             finished = true;
+
+            // Success if score is greater than the minimum passing score
+            Controller.GlobalController.ExitAcrobat(score > minPassingScore);
+            SceneController.GlobalSceneController.GotoCorrectScene();
         }
         foreach (TargetPair pair in targets.ToList())
         {
