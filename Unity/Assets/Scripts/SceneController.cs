@@ -76,6 +76,8 @@ namespace WumpusUnity
                     return "Bat";
                 case ControllerState.Acrobat:
                     return "Acrobat";
+                case ControllerState.GameOver:
+                    return "Game Over";
                 default:
                     return "Main";
             }

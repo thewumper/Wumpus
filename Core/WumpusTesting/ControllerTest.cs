@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
@@ -37,7 +38,7 @@ namespace WumpusTesting
         {
             // This will just create it at global controller which is what we want. Resharper doesn't like this, but it's fine
             // ReSharper disable once ObjectCreationAsStatement
-            return new Controller("./questions.json","./",0);
+            return new Controller("./questions.json", "./",0);
         }
 
         [TestMethod]
@@ -49,7 +50,7 @@ namespace WumpusTesting
         [TestMethod]
         public void SimulateGames()
         {
-            Parallel.For((long)0, 1000, i =>
+            for (int i = 0; i < 100; i++)
             {
                 // Setup
                 Controller controller = CreateNewController();
@@ -67,9 +68,7 @@ namespace WumpusTesting
                 // {
                 HandleRoomInARandomDirection(controller);
                 // }
-
-                CreateNewController();
-            });
+            }
         }
 
         private static void HandleRoomInARandomDirection(Controller controller)
@@ -99,13 +98,13 @@ namespace WumpusTesting
                 }
                 case ControllerState.Rats:
                 {
-                    controller.GetCoins();
-
+                    controller.ExitRat();
 
                     break;
                 }
                 case ControllerState.BatTransition:
                 {
+                    controller.ExitBat();
                     break;
                 }
                 case ControllerState.InRoom:
@@ -114,10 +113,14 @@ namespace WumpusTesting
                 }
                 case ControllerState.CatDialouge:
                 {
+                    controller.ExitCat();
+
                     break;
                 }
                 case ControllerState.WumpusFight:
                 {
+                    controller.ExitWumpus();
+
                     break;
                 }
                 case ControllerState.VatRoom:

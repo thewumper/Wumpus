@@ -1,5 +1,7 @@
 using System;
 using System.Data;
+using System.IO;
+using System.Net;
 
 namespace WumpusCore.Trivia
 {
@@ -30,7 +32,12 @@ namespace WumpusCore.Trivia
         {
             questions = new Questions(filePath);
         }
-        
+
+        public Trivia(FileStream file)
+        {
+            questions = new Questions(file);
+        }
+
         /// <summary>
         /// Initialize a Trivia object from multiple question files
         /// </summary>
