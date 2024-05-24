@@ -7,11 +7,12 @@ TagManager:
   - door
   - hallDoor
   - unmoveableDoor
+  - Target
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Battle Room Collider
   - Water
   - UI
   - 
