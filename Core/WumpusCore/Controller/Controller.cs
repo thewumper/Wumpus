@@ -86,7 +86,7 @@ namespace WumpusCore.Controller
         /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
         /// <param name="topologyDirectory">The directory to load map files from.</param>
         /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
-        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2)
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,0)
         {
         }
 
@@ -102,7 +102,7 @@ namespace WumpusCore.Controller
         /// <param name="numRats"></param>
         /// <param name="numAcrobats"></param>
         public Controller(string triviaFile, string topologyDirectory, ushort mapId, int numVats, int numBats, int numRats,
-            int numAcrobats)
+            int numAcrobats, int startingCoins)
         {
             _controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
@@ -112,7 +112,7 @@ namespace WumpusCore.Controller
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
 
-
+            gameLocations.GetPlayer().GainCoins((uint) startingCoins);
         }
 
         /// <summary>
@@ -491,6 +491,23 @@ namespace WumpusCore.Controller
         private int CalculateRatDamage(int timeDiffSeconds)
         {
             return (int) Math.Pow(2,timeDiffSeconds);
+        }
+
+        private bool AttemptToTameCat(int coinInput)
+        {
+            ValidateState(new []{ CatDialouge });
+            if (coinInput>gameLocations.GetPlayer().Coins)
+            {
+                throw new InvalidOperationException("You can't tame a cat with more coins than you have");
+            }
+
+            // The cat cannot be guaranteed to be tamed but instead it uses
+            // a modified sigmoid function to determine your chance of taming
+            // the cat as a function of the coins you put in
+
+            // The function is 1/(1+e^{-x/2+3})
+
+            return false;
         }
     }
 }
