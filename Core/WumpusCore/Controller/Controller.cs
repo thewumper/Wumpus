@@ -144,7 +144,7 @@ namespace WumpusCore.Controller
         /// <param name="direction">The direction to move the player in.</param>
         public void MoveInADirection(Directions direction)
         {
-            ValidateState(new [] {InRoom});
+            ValidateState(new [] {InRoom, Rats});
             state = InBetweenRooms;
             currentRoomHandledAmomalies.Clear();
 
