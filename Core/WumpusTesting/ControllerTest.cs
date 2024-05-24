@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,8 +20,7 @@ namespace WumpusTesting
             using (StreamWriter outputFile = new StreamWriter("./map0.wmp"))
             {
 
-                outputFile.WriteLine("N");
-                for (int i = 0; i < 29; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     outputFile.WriteLine("N,NE,SE,S,SW,NW");
                 }
@@ -98,7 +98,22 @@ namespace WumpusTesting
                 }
                 case ControllerState.Rats:
                 {
+                    int timeInRoom = Controller.Random.Next(0, 11);
+                    controller.ratTimeStopwatch = new FakeStopwatch(new TimeSpan(0, 0, timeInRoom));
+
+                    RatRoomStats stats = controller.GetRatRoomStats();
+
                     controller.ExitRat();
+                    if (stats.RemainingCoins <0)
+                    {
+                        Assert.AreEqual(controller.GetState(),ControllerState.GameOver);
+                    }
+                    else
+                    {
+
+                        Assert.IsTrue(controller.GetState() != ControllerState.GameOver && controller.GetState() != ControllerState.Rats);
+                        Assert.IsTrue(controller.GetCoins() < stats.StartingCoins);
+                    }
 
                     break;
                 }

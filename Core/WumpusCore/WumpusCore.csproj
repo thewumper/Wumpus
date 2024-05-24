@@ -49,6 +49,9 @@
         <Compile Include="Controller\ControllerState.cs" />
         <Compile Include="Controller\RatRoomStats.cs" />
         <Compile Include="Controller\RoomAnomaly.cs" />
+        <Compile Include="Controller\ControlllerStopwatch\FakeStopwatch.cs" />
+        <Compile Include="Controller\ControlllerStopwatch\IStopwatch.cs" />
+        <Compile Include="Controller\ControlllerStopwatch\RealStopwatch.cs" />
         <Compile Include="HighScore\SaveFile.cs" />
         <Compile Include="Entity\Entity.cs" />
         <Compile Include="Entity\EntityType.cs" />
