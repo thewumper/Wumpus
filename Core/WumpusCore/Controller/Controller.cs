@@ -109,7 +109,7 @@ namespace WumpusCore.Controller
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,topology,Controller.Random,trivia);
             gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
-            gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations));
+            gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
 
 
