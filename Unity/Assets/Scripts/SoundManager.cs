@@ -1,21 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
-public class SoundManager
+public class SoundManager : MonoBehaviour
 {
-    private AudioClip wumpusClip;
-    private AudioClip luckyCatClip;
-    private AudioClip batsClip;
-    private AudioClip ratsClip;
-    
-    /// <summary>
-    /// Manages everything to do with audio playing.
-    /// </summary>
-    /// <param name="wumpusClip">The <see cref="AudioClip"/> clip to play for a wumpus.</param>
-    public SoundManager(AudioClip wumpusClip)
-    {
-        this.wumpusClip = wumpusClip;
-    }
+    [SerializeField] private AudioClip wumpusClip;
+    [SerializeField] private AudioClip luckyCatClip;
+    [SerializeField] private AudioClip batsClip;
+    [SerializeField] private AudioClip ratsClip;
+    [SerializeField] private AudioClip acrobatClip;
+    [SerializeField] private AudioClip vatClip;
     
     /// <summary>
     /// Contains all possible types of sounds.

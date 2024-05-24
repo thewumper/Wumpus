@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
 
+[RequireComponent(typeof(SoundManager))]
 public class MainUI : MonoBehaviour
 {
     /// <summary>
@@ -20,6 +20,9 @@ public class MainUI : MonoBehaviour
     /// </summary>
     private SceneController sceneController;
     
+    /// <summary>
+    /// Reference to the SoundManager.
+    /// </summary>
     private SoundManager soundManager;
     
     /// <summary>
@@ -217,6 +220,9 @@ public class MainUI : MonoBehaviour
         
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
+
+        // Gets the SoundManager component.
+        soundManager = GetComponent<SoundManager>();
     }
 
     void Start()
@@ -243,9 +249,6 @@ public class MainUI : MonoBehaviour
         
         // Initializes the roomText text.
         roomText.SetText($"Room: {RoomNum}");
-        
-        // Initializes the SoundManager
-        soundManager = new SoundManager(wumpusClip);
         
         // Initializes the RoomNum with the Player's location.
         RoomNum = (ushort) controller.GetPlayerLocation();
