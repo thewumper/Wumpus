@@ -41,6 +41,15 @@ namespace WumpusCore.Trivia
             initQuestions(questionsArray);
         }
 
+        public Questions(FileStream file)
+        {
+            remainingQuestions = new Stack<AnsweredQuestion>();
+
+            JArray questionsArray = JArray.Parse(new StreamReader(file).ReadToEnd());
+
+            initQuestions(questionsArray);
+        }
+
         /// <summary>
         /// Pulls all questions from specified files and overwrites the question list with the new questions, randomly ordered.
         /// Questions should be stored in JSON format.

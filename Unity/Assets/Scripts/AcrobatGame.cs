@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using WumpusCore;
+using WumpusCore.Controller;
+using WumpusUnity;
 using Random = UnityEngine.Random;
 
 
@@ -27,6 +30,7 @@ public class AcrobatGame : MonoBehaviour
     [SerializeField] private float maxTargetTime;
     [SerializeField] private float maxTime;
     [SerializeField] private float numTargets;
+    [SerializeField] private int minPassingScore;
     [SerializeField] private GameObject target;
     [SerializeField] private Rect spawnArea;
     [SerializeField] private float zDepth;
@@ -34,6 +38,8 @@ public class AcrobatGame : MonoBehaviour
     [SerializeField] private int targetMissPenalty;
     [SerializeField] private int targetHitBonus;
     [SerializeField] private Camera camera;
+    [SerializeField] private GameObject wumpus;
+    [SerializeField] private float wumpusFiringSpeed;
 
     private List<TargetPair> targets;
 
@@ -67,7 +73,16 @@ public class AcrobatGame : MonoBehaviour
             }
             if (Physics.Raycast(new Ray(camera.transform.position, camera.transform.forward), out var hit))
             {
-                if (hit.transform.CompareTag("Target"))
+                if (hit.transform.gameObject == wumpus)
+                {
+                    score += targetHitBonus;
+
+                    Rigidbody wumpusRigidbody = wumpus.GetComponent<Rigidbody>();
+                    
+                    wumpusRigidbody.isKinematic = false;
+                    wumpusRigidbody.AddForce(camera.transform.forward * wumpusFiringSpeed);
+                }
+                else if (hit.transform.CompareTag("Target"))
                 {
                     foreach (var targetPair in targets.Where(targetPair => targetPair.obj == hit.transform.gameObject))
                     {
@@ -97,8 +112,13 @@ public class AcrobatGame : MonoBehaviour
         totalDuration += !finished ? Time.deltaTime : 0;
         if (totalDuration >= maxTime)
         {
-            targets.ToList().ForEach((RemoveTarget));
+            totalDuration = maxTime;
+            targets.ToList().ForEach(RemoveTarget);
             finished = true;
+
+            // Success if score is greater than the minimum passing score
+            Controller.GlobalController.ExitAcrobat(score > minPassingScore);
+            SceneController.GlobalSceneController.GotoCorrectScene();
         }
         foreach (TargetPair pair in targets.ToList())
         {
@@ -106,7 +126,7 @@ public class AcrobatGame : MonoBehaviour
             if (pair.time >= maxTargetTime)
             {
                 RemoveTarget(pair);
-                SpawnTarget(pair.obj.name + "-1"); // This will create bad names really fast. Oh well
+                SpawnTarget(pair.obj.name); // This will create bad names really fast. Oh well
                 score -= targetExplodePenalty;
             }
             else

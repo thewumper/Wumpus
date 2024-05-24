@@ -10,7 +10,7 @@ namespace ConsoleUI
     {
         public static void Main(string[] args)
         {
-            Controller controller = new Controller("../../../Questions.json", "../../../", 0);
+            Controller controller = new Controller("Trivia/Questions.json", "Maps/", 0);
             ConsoleUI ui = new ConsoleUI();
             ui.StartGame(controller);
         }

@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WumpusCore.Controller;
 using WumpusCore.Entity;
 using WumpusCore.LuckyCat;
 using WumpusCore.Topology;
+using WumpusCore.Trivia;
 
 namespace WumpusCore.GameLocations
 {
@@ -18,15 +19,25 @@ namespace WumpusCore.GameLocations
         /// How all the rooms connect to each other
         /// </summary>
         private ITopology topology;
-
-
-        // Whether there is a coin in the hallway out from a given room
+        
+        /// <summary>
+        /// Whether there is a coin in the hallway out from a given room
+        /// </summary>
         public Dictionary<Directions, bool>[] hallwayCoins;
 
+        /// <summary>
+        /// The trivia question engraved onto the wall in a given hallway
+        /// </summary>
+        public readonly Dictionary<Directions, AnsweredQuestion>[] hallwayTrivia;
 
-
+        // Whether the player can do trivia in a room to earn secrets, arrows, etc
         private bool[] triviaRemaining;
 
+        /// <summary>
+        /// Gets whether or not the player can earn arrows or secrets in a given room
+        /// </summary>
+        /// <param name="index">The index of the room</param>
+        /// <returns>Whether the player can earn trivia-based rewards in the room</returns>
         public bool GetTriviaAvailable(int index)
         {
             // Trivia is not available in hazard rooms
@@ -37,6 +48,11 @@ namespace WumpusCore.GameLocations
             return false;
         }
 
+        /// <summary>
+        /// Sets whether the player can earn trivia-based rewards in the room
+        /// </summary>
+        /// <param name="index">The room to change</param>
+        /// <param name="remaining">The new value of whether or not trivia can still be done</param>
         public void SetTriviaRemaining(int index, bool remaining)
         {
             triviaRemaining[index] = remaining;
@@ -65,7 +81,8 @@ namespace WumpusCore.GameLocations
         /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
         /// <param name="topology">The topology structure</param>
         /// <param name="random">A random object</param>
-        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, ITopology topology, Random random)
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, ITopology topology, Random random, Trivia.Trivia trivia)
+
         {
             this.topology = topology;
             if (numVats + numRats + numAcrobats + numBats >= numRooms)
@@ -84,14 +101,31 @@ namespace WumpusCore.GameLocations
             UseListPopulateHazards(validRooms, RoomType.Rats, numRats);
             UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats);
             
+            // Populate hallways with coins
+            // Populate rooms with trivia options
+            // Populate hallways with trivia answers
             hallwayCoins = new Dictionary<Directions, bool>[numRooms];
             triviaRemaining = new bool[numRooms];
+            hallwayTrivia = new Dictionary<Directions, AnsweredQuestion>[numRooms];
             for (int i = 0; i < rooms.Length; i++)
             {
                 hallwayCoins[i] = new Dictionary<Directions, bool>();
-                for (int j = 0; j < 6; j++)
+                hallwayTrivia[i] = new Dictionary<Directions, AnsweredQuestion>();
+            }
+            for (int i = 0; i < rooms.Length; i++)
+            {
+                for (int j = 0; j < 3; j++)
                 {
-                    hallwayCoins[i][(Directions)j] = true;
+                    Directions direction = (Directions)j;
+
+                    hallwayCoins[i][direction] = true;
+                    hallwayCoins[i][direction.GetInverse()] = true;
+
+                    AnsweredQuestion knowledge = trivia.PeekRandomQuestion();
+                    hallwayTrivia[i][direction] = knowledge;
+                    // Set the opposite direction hallway from the room on the other side
+                    int oppositeRoom = topology.GetRoom((ushort)i).AdjacentRooms[direction].Id;
+                    hallwayTrivia[oppositeRoom][direction.GetInverse()] = knowledge;
                 }
 
                 triviaRemaining[i] = true;
@@ -159,6 +193,10 @@ namespace WumpusCore.GameLocations
             return (Cat)GetEntity(EntityType.Cat);
         }
 
+        /// <summary>
+        /// Get the wumpus entity
+        /// </summary>
+        /// <returns>The Wumpus</returns>
         public Wumpus.Wumpus GetWumpus()
         {
             return (Wumpus.Wumpus)GetEntity(EntityType.Wumpus);
@@ -259,7 +297,7 @@ namespace WumpusCore.GameLocations
 
             return adjacentRooms;
         }
-
-
+        
+        
     }
 }

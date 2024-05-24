@@ -26,8 +26,16 @@ namespace WumpusCore.Player
         /// Number of moves made so far
         /// </summary>
         public int TurnsTaken { get; private set; }
-        
-        
+
+        /// <summary>
+        /// Player's health
+        /// </summary>
+        public int Health;
+
+        /// <summary>
+        /// Limit of player's health
+        /// </summary>
+        public int HealthMax;
         
         /// <summary>
         /// Stores everything to do with the player.
@@ -37,6 +45,7 @@ namespace WumpusCore.Player
         {   
             Coins = 0;
             Arrows = 3;
+            Health = 100;
         }
         
         /// <summary>
@@ -105,12 +114,25 @@ namespace WumpusCore.Player
             return gameLocations.hallwayCoins[location][direction];
         }
 
+        /// <summary>
+        /// Whether trivia can be played in a room to earn items or knowledge
+        /// </summary>
         public bool TriviaAvailable
         {
             get
             {
                 return gameLocations.GetTriviaAvailable(location);
             }
+        }
+
+        /// <summary>
+        /// Returns the trivia hint in the given hallway from Player's current position
+        /// </summary>
+        /// <param name="direction">The direction of the hallway from the current position</param>
+        /// <returns>The question and answer in the hallway</returns>
+        public AnsweredQuestion GetHallwayHint(Directions direction)
+        {
+            return gameLocations.hallwayTrivia[location][direction];
         }
 
         /// <summary>
