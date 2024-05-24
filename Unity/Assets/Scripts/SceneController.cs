@@ -71,7 +71,7 @@ namespace WumpusUnity
                 case ControllerState.VatRoom:
                     return "Vat";
                 case ControllerState.Rats:
-                    return "Rat";
+                    return "Rats";
                 case ControllerState.BatTransition:
                     return "Bat";
                 case ControllerState.Acrobat:
