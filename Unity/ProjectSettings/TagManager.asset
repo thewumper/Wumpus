@@ -7,6 +7,7 @@ TagManager:
   - door
   - hallDoor
   - unmoveableDoor
+  - Target
   layers:
   - Default
   - TransparentFX

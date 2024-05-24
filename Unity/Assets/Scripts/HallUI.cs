@@ -122,6 +122,7 @@ public class HallUI : MonoBehaviour
 
     void Update()
     {
+        
         // If the player isn't locked.
         if (!pLock)
         {
