@@ -45,6 +45,16 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Battle\BattleType.cs" />
+        <Compile Include="Battle\BattleStructure.cs" />
+        <Compile Include="Battle\BulletHell\Bullet.cs" />
+        <Compile Include="Battle\BulletHell\IDisplayable.cs" />
+        <Compile Include="Battle\BulletHell\IEntity.cs" />
+        <Compile Include="Battle\BulletHell\ISpawner.cs" />
+        <Compile Include="Battle\BulletHell\Vector2.cs" />
+        <Compile Include="Battle\IBattleTypeController.cs" />
+        <Compile Include="Battle\BulletHell\BulletHellController.cs" />
+        <Compile Include="Battle\InputZone.cs" />
         <Compile Include="Controller\Controller.cs" />
         <Compile Include="Controller\ControllerState.cs" />
         <Compile Include="Controller\RatRoomStats.cs" />
