@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using WumpusCore.Controller.Stopwatch;
 using WumpusCore.Entity;
 using WumpusCore.GameLocations;
 using WumpusCore.Topology;
@@ -18,7 +20,7 @@ namespace WumpusCore.Controller
     {
         private static Controller _controllerReference;
         private IRoom nextRoom;
-        private DateTime ratStartTime;
+        internal IStopwatch ratTimeStopwatch = new RealStopwatch();
         private ControllerState state = StartScreen;
         private ITopology topology;
         private List<RoomAnomaly> currentRoomHandledAmomalies = new List<RoomAnomaly>();
@@ -106,10 +108,10 @@ namespace WumpusCore.Controller
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,topology,Controller.Random,trivia);
-
             gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
-            gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations));
+            gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
+
 
         }
 
@@ -201,7 +203,7 @@ namespace WumpusCore.Controller
             if (anomaliesInRoom.Contains(RoomAnomaly.Rat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Rat))
             {
                 state = Rats;
-                ratStartTime = DateTime.Now;
+                ratTimeStopwatch.Restart();
             } else
             if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
@@ -277,15 +279,15 @@ namespace WumpusCore.Controller
         public List<DirectionalHint> GetHazardHints()
         {
 
-            Dictionary<Directions, IRoom> rooms = topology.GetRoom((ushort)GetPlayerLocation()).AdjacentRooms;
-        
+            Dictionary<Directions, IRoom> exitRooms = topology.GetRoom((ushort)GetPlayerLocation()).ExitRooms;
+
             List<DirectionalHint> hints = new List<DirectionalHint>();
 
             // Loop over all the keys
-            foreach (Directions directions in rooms.Keys)
+            foreach (Directions directions in exitRooms.Keys)
             {
                 hints.Add(new DirectionalHint(
-                    GetAnomaliesInRoom(rooms[directions].Id),directions));
+                    GetAnomaliesInRoom(exitRooms[directions].Id),directions));
             }
 
             return hints;
@@ -382,7 +384,7 @@ namespace WumpusCore.Controller
 
         public void EndGame(RoomAnomaly gameEndCause)
         {
-            this.state = StartScreen;
+            this.state = GameOver;
             GameOverCause = gameEndCause;
         }
         
@@ -472,12 +474,11 @@ namespace WumpusCore.Controller
         /// <returns>A <c>RatRoomStats</c> object containing the correct info</returns>
         public RatRoomStats GetRatRoomStats()
         {
-            DateTime currentTime = DateTime.Now;
-            double timeDiff =  DateTime.Now.Subtract(ratStartTime).TotalSeconds;
+            int timeDiff = ratTimeStopwatch.GetElapsed().Seconds;
 
             int ratDamage = CalculateRatDamage(timeDiff);
 
-            return new RatRoomStats((int)timeDiff, gameLocations.GetPlayer().Coins,
+            return new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins,
                 gameLocations.GetPlayer().Coins - ratDamage, ratDamage);
         }
 
@@ -487,9 +488,9 @@ namespace WumpusCore.Controller
         /// </summary>
         /// <param name="timeDiffSeconds">The number of seconds since the player has entered the rat room</param>
         /// <returns>The damage that the rat has done after being run through some function.</returns>
-        private int CalculateRatDamage(double timeDiffSeconds)
+        private int CalculateRatDamage(int timeDiffSeconds)
         {
-            return (int) Math.Pow(2,(int) timeDiffSeconds);
+            return (int) Math.Pow(2,timeDiffSeconds);
         }
     }
 }
