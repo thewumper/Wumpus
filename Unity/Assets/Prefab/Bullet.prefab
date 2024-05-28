@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6121099187557548285}
   - component: {fileID: 7485975346368408358}
   - component: {fileID: 6666382070691799842}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
   m_SpriteSortPoint: 0
 --- !u!58 &9190281045607093922
 CircleCollider2D:
@@ -126,7 +126,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.155
+  m_Radius: 0.145
 --- !u!114 &8887067799569784478
 MonoBehaviour:
   m_ObjectHideFlags: 0

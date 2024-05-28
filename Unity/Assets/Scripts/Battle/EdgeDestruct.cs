@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class EdgeDestruct : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.name == "Room")
         {
