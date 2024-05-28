@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private new SpriteRenderer renderer;
 
-    private void Awake()
+    void Start()
     {
         rigidbody.velocity = Vector2.zero;
         _acceleration = Vector2.zero;
@@ -53,7 +53,6 @@ public class PlayerController : MonoBehaviour
         rigidbody.inertia = float.MaxValue;
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Normalize input and scale by dT
