@@ -116,7 +116,9 @@ namespace WumpusTesting
                 }
                 case ControllerState.BatTransition:
                 {
+                    int initialLoc = controller.GetPlayerLocation();
                     controller.ExitBat();
+                    Assert.AreNotEqual(initialLoc, controller.GetPlayerLocation());
                     break;
                 }
                 case ControllerState.InRoom:
@@ -125,13 +127,23 @@ namespace WumpusTesting
                 }
                 case ControllerState.CatDialouge:
                 {
-                    controller.ExitCat();
+                    int choice = Controller.Random.Next(0, 2);
+
+
+                    if (choice == 0)
+                    {
+                        int previousCoins = controller.GetCoins();
+                        controller.AttemptToTameCat(controller.GetCoins());
+
+                        Assert.IsTrue(controller.GetCoins() < previousCoins);
+                    }
 
                     break;
                 }
                 case ControllerState.WumpusFight:
                 {
-                    controller.ExitWumpus();
+                    int result = Controller.Random.Next(0, 2);
+                    controller.ExitWumpusFight(result == 0);
 
                     break;
                 }
@@ -152,7 +164,7 @@ namespace WumpusTesting
                         int questionNum = Int32.Parse(question.questionText);
 
                         int choice = Controller.Random.Next(0, 4);
-                        if (choice==questionNum)
+                        if (choice == questionNum)
                         {
                             // This should succeed
                             Assert.IsTrue(controller.SubmitTriviaAnswer(choice));

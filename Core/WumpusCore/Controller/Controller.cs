@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using WumpusCore.Controller.Stopwatch;
 using WumpusCore.Entity;
@@ -26,22 +25,22 @@ namespace WumpusCore.Controller
         private List<RoomAnomaly> currentRoomHandledAmomalies = new List<RoomAnomaly>();
         private GameLocations.GameLocations gameLocations;
         private Trivia.Trivia trivia;
-        private RoomAnomaly gameOverCause;
+        private RoomAnomaly gameEndCause;
 
         /// <summary>
         /// The <c>RoomAnomaly</c> that causes the game to end.
         /// The property is only valid in the <c>GameOver</c> state.
         /// </summary>
-        public RoomAnomaly GameOverCause
+        public RoomAnomaly GameEndCause
         {
             get
             {
                 ValidateState(new [] {GameOver});
-                return gameOverCause;
+                return gameEndCause;
             }
             private set
             {
-                gameOverCause = value;
+                gameEndCause = value;
             }
         }
 
@@ -152,10 +151,9 @@ namespace WumpusCore.Controller
 
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
 
-            nextRoom = topology.GetRoom (player.location).ExitRooms[direction];
+            nextRoom = topology.GetRoom(player.location).ExitRooms[direction];
 
-
-            player.location = topology.GetRoom(player.location).ExitRooms[direction].Id;
+            gameLocations.GetPlayer().MoveInDirection(direction);
         }
 
         /// <summary>
@@ -192,6 +190,10 @@ namespace WumpusCore.Controller
             {
                 state = WumpusFight;
             } else
+            if (anomaliesInRoom.Contains(RoomAnomaly.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Bats))
+            {
+                state = BatTransition;
+            } else
             if (anomaliesInRoom.Contains(RoomAnomaly.Acrobat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
                 state = Acrobat;
@@ -208,10 +210,6 @@ namespace WumpusCore.Controller
             if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
                 state = CatDialouge;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Bats))
-            {
-                state = BatTransition;
             } else
             if ((anomaliesInRoom.Count == currentRoomHandledAmomalies.Count) || anomaliesInRoom.Count == 0)
             {
@@ -382,13 +380,20 @@ namespace WumpusCore.Controller
             this.state = InRoom;
         }
 
-        public void EndGame(RoomAnomaly gameEndCause)
+        public void EndGame(bool success, RoomAnomaly gameEndCause)
         {
-            this.state = GameOver;
-            GameOverCause = gameEndCause;
+            if (success)
+            {
+                this.state = WonGame;
+
+            }
+            else
+            {
+                this.state = GameOver;
+            }
+            GameEndCause = gameEndCause;
         }
-        
-        
+
 
         /// <summary>
         /// Meant to be used as validation for methods to prevent UI from getting any funny ideas. Throws an invalid operations exception if the current state is not in the valid states.
@@ -445,13 +450,12 @@ namespace WumpusCore.Controller
             RatRoomStats stats = GetRatRoomStats();
             if (stats.RemainingCoins < 0)
             {
-                EndGame(RoomAnomaly.Rat);
+                EndGame(false,RoomAnomaly.Rat);
                 return;
             }
 
             currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
             SetCorrectStateForRoom(gameLocations.GetPlayer().location);
-
         }
 
         public void ExitCat()
@@ -460,10 +464,9 @@ namespace WumpusCore.Controller
             SetCorrectStateForRoom(gameLocations.GetPlayer().location);
         }
 
-        public void ExitWumpus()
+        public void ExitWumpusFight(bool won)
         {
-            currentRoomHandledAmomalies.Add(RoomAnomaly.Wumpus);
-            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
+            EndGame(won,RoomAnomaly.Wumpus);
         }
 
 
@@ -493,7 +496,7 @@ namespace WumpusCore.Controller
             return (int) Math.Pow(2,timeDiffSeconds);
         }
 
-        private bool AttemptToTameCat(int coinInput)
+        public bool AttemptToTameCat(int coinInput)
         {
             ValidateState(new []{ CatDialouge });
             if (coinInput>gameLocations.GetPlayer().Coins)
@@ -501,13 +504,35 @@ namespace WumpusCore.Controller
                 throw new InvalidOperationException("You can't tame a cat with more coins than you have");
             }
 
-            // The cat cannot be guaranteed to be tamed but instead it uses
+            // The cat cannot be guaranteed to be tamed, but instead it uses
             // a modified sigmoid function to determine your chance of taming
             // the cat as a function of the coins you put in
 
-            // The function is 1/(1+e^{-x/2+3})
+            // The function is 1/(1+e^{-x/2+3})*100 (%)
+            // there isn't anything specific about that function
+            // other than it looks decent in Desmos
+            // 0 coins gives a ~4.7% chance to tame
+            // 10 coins gives a ~90% change to tame
+            // 18 coins gives a 99% change to tame
+            // You just won't ever have a 100% chance of taming
+            gameLocations.GetPlayer().LoseCoins((uint) coinInput);
 
+            int threshold = Random.Next(0, 100);
+            int value = (int)(1 / (1 + Math.Pow(Math.E, -coinInput / 2.0 + 3)) * 100);
+
+            gameLocations.GetCat().location = gameLocations.GetEmptyRoom();
+
+            if (value >= threshold)
+            {
+                return true;
+            }
             return false;
+        }
+
+        bool isNextRoomAWumpus()
+        {
+            ValidateState(new []{InBetweenRooms});
+            return gameLocations.GetWumpus().location==nextRoom.Id;
         }
     }
 }
