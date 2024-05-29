@@ -111,7 +111,7 @@ namespace WumpusCore.Topology
                     IRoom node = nodesInSolution[index];
                     solution.Add(node);
                     nodesInSolution.RemoveAt(index);
-                    if (!IsNodeRemovalValid(solution))
+                    if (!IsNodeRemovalValid(solution)) // TODO: Check after
                     {
                         validSolution = false;
                         break;

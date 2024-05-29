@@ -268,7 +268,7 @@ namespace WumpusCore.Topology
             /// Setup the connnections in this room, please only call once
             /// </summary>
             /// <param name="topology"></param>
-            public void InitializeConnections(Topology topology)
+            internal void InitializeConnections(Topology topology)
             {
                 ExitRooms = new Dictionary<Directions, IRoom>();
                 foreach (var direction in ExitDirections)
