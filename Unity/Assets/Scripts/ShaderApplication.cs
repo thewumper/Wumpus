@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WumpusUnity
 {
@@ -15,13 +16,79 @@ namespace WumpusUnity
         private float speed;
         [SerializeField] private float minTime;
         [SerializeField] private float maxTime;
-        [SerializeField] private float OverallDistortionSpeed;
-        [SerializeField] private float OverallDistortionMag;
+        [FormerlySerializedAs("OverallDistortionSpeed")] [SerializeField] private float overallDistortionSpeed;
+        [FormerlySerializedAs("OverallDistortionMag")] [SerializeField] private float overallDistortionMag;
         [SerializeField] private float overallDistortionFreq;
-
         [SerializeField] private bool doDistortionPrePixelazation;
-        [SerializeField]
-        private Shader shader;
+        [SerializeField] private int posterzationBands;
+        [SerializeField] private Shader shader;
+
+        public int Width1
+        {
+            get => width;
+            set => width = value;
+        }
+
+        public int Height1
+        {
+            get => height;
+            set => height = value;
+        }
+
+        public float Magnitude
+        {
+            get => magnitude;
+            set => magnitude = value;
+        }
+
+        public float Speed
+        {
+            get => speed;
+            set => speed = value;
+        }
+
+        public float MinTime
+        {
+            get => minTime;
+            set => minTime = value;
+        }
+
+        public float MaxTime
+        {
+            get => maxTime;
+            set => maxTime = value;
+        }
+
+        public float OverallDistortionSpeed
+        {
+            get => overallDistortionSpeed;
+            set => overallDistortionSpeed = value;
+        }
+
+        public float OverallDistortionMag
+        {
+            get => overallDistortionMag;
+            set => overallDistortionMag = value;
+        }
+
+        public float OverallDistortionFreq
+        {
+            get => overallDistortionFreq;
+            set => overallDistortionFreq = value;
+        }
+
+        public bool DoDistortionPrePixelazation
+        {
+            get => doDistortionPrePixelazation;
+            set => doDistortionPrePixelazation = value;
+        }
+
+        public int PosterzationBands1
+        {
+            get => posterzationBands;
+            set => posterzationBands = value;
+        }
+
         private Material material;
         private static readonly int Width = Shader.PropertyToID("_Width");
         private static readonly int Height = Shader.PropertyToID("_Height");
@@ -36,6 +103,7 @@ namespace WumpusUnity
         private static readonly int DistortionFreq = Shader.PropertyToID("_OverallDistortionFrequency");
         private static readonly int OverallDistortionChangeRate = Shader.PropertyToID("_OverallDistortionChangeRate");
         private static readonly int DoDistortionAfterPixelization = Shader.PropertyToID("_DoDistortionAfterPixelization");
+        private static readonly int PosterzationBands = Shader.PropertyToID("_PosterzationBands");
 
         public ShaderApplication(float maxTime)
         {
@@ -55,12 +123,11 @@ namespace WumpusUnity
             material.SetFloat(DistortionMagnitude,magnitude);
             material.SetFloat(DistortionMinTime,minTime);
             material.SetFloat(DistortionMaxTime,maxTime);
-            material.SetFloat(DistortionMag,OverallDistortionMag);
+            material.SetFloat(DistortionMag,overallDistortionMag);
             material.SetFloat(DistortionFreq,overallDistortionFreq);
-
-            material.SetFloat(OverallDistortionChangeRate,OverallDistortionSpeed);
+            material.SetFloat(OverallDistortionChangeRate,overallDistortionSpeed);
             material.SetInteger(DoDistortionAfterPixelization,(doDistortionPrePixelazation) ? 1 : 0);
-
+            material.SetInteger(PosterzationBands,posterzationBands);
         }
 
         public void OnRenderImage(RenderTexture source, RenderTexture destination)

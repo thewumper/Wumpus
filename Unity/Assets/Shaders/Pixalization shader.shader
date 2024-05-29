@@ -13,6 +13,8 @@ Shader "Hidden/Pixalization shader"
         _OverallDistortionFrequency ("Overall distortion frequency", Float) = 0.1
         _OverallDistortionChangeRate ("Overall distortion change", Float) = 0.3
         _DoDistortionAfterPixelization ("Distortion first", Integer) = 0
+        _PosterzationBands ("Posterzation Bands", Integer) = 100
+
     }
     SubShader
     {
@@ -58,6 +60,7 @@ Shader "Hidden/Pixalization shader"
             float _OverallDistortionChangeRate;
             int _DoDistortionAfterPixelization;
             float _OverallDistortionFrequency;
+            int _PosterzationBands;
             fixed4 frag (v2f i) : SV_Target
             {
                 float2 uv = i.uv;
@@ -80,8 +83,8 @@ Shader "Hidden/Pixalization shader"
                 uv /= newRes;
 
                 fixed4 col = tex2D(_MainTex, uv);
+                col.rgb = floor((col.rgb * _PosterzationBands)) / _PosterzationBands;
                 
-
                 return col;
             }
             ENDCG

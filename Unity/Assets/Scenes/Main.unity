@@ -234,6 +234,7 @@ MonoBehaviour:
   OverallDistortionMag: 0.4
   overallDistortionFreq: 25
   doDistortionPrePixelazation: 0
+  posterzationBands: 75
   shader: {fileID: 4800000, guid: 56e7faa0cbb6fd647a9f51324add74ed, type: 3}
 --- !u!1 &210612753
 GameObject:
