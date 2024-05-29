@@ -23,14 +23,6 @@ namespace WumpusCore.Topology
         }
 
         /// <summary>
-        /// Creates a graph repersenation of a set of nodes
-        /// </summary>
-        /// <param name="nodes">The nodes in the graph</param>
-        public Graph(List<IRoom> nodes) : this(nodes, new Random())
-        {
-        }
-
-        /// <summary>
         /// Checks if removing a set of nodes disconnects the graph
         /// </summary>
         /// <param name="room">The node to try to remove</param>

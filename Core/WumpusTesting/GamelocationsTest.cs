@@ -37,7 +37,7 @@ namespace WumpusTesting
         public void TestGameLocationsInitalization()
         {
             Trivia trivia = makeTrivia();
-            GameLocations gl = new GameLocations(30,5,5,5,5,new Topology("test1.map"),new Random(), trivia);
+            GameLocations gl = new GameLocations(30,5,5,5,5,1,1,new Topology("test1.map"),new Random(), trivia);
             gl.GetRoomAt(0);
         }
     }

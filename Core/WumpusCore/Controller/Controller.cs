@@ -24,8 +24,8 @@ namespace WumpusCore.Controller
         private ITopology topology;
         private List<RoomAnomaly> currentRoomHandledAmomalies = new List<RoomAnomaly>();
         private GameLocations.GameLocations gameLocations;
-        private Trivia.Trivia trivia;
-        private RoomAnomaly gameEndCause;
+        internal Trivia.Trivia trivia;
+        internal RoomAnomaly gameEndCause;
 
         /// <summary>
         /// The <c>RoomAnomaly</c> that causes the game to end.
@@ -85,7 +85,7 @@ namespace WumpusCore.Controller
         /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
         /// <param name="topologyDirectory">The directory to load map files from.</param>
         /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
-        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,0)
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,1,1,0)
         {
         }
 
@@ -100,13 +100,16 @@ namespace WumpusCore.Controller
         /// <param name="numBats"></param>
         /// <param name="numRats"></param>
         /// <param name="numAcrobats"></param>
+        /// <param name="numGunRooms"></param>
+        /// <param name="numAmmoRooms"></param>
+        /// <param name="startingCoins"></param>
         public Controller(string triviaFile, string topologyDirectory, ushort mapId, int numVats, int numBats, int numRats,
-            int numAcrobats, int startingCoins)
+            int numAcrobats, int numAmmoRooms, int numGunRooms, int startingCoins)
         {
             _controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
-            gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,topology,Controller.Random,trivia);
+            gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,numAmmoRooms,numGunRooms,topology,Controller.Random,trivia);
             gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
@@ -132,9 +135,6 @@ namespace WumpusCore.Controller
         /// <returns>An IRoom for the current room</returns>
         public IRoom GetCurrentRoom()
         {
-            // You can only get the room type if you're in the room
-            ValidateState(new [] {InRoom});
-
             return topology.GetRoom(gameLocations.GetPlayer().location);
         }
 
@@ -145,7 +145,13 @@ namespace WumpusCore.Controller
         /// <param name="direction">The direction to move the player in.</param>
         public void MoveInADirection(Directions direction)
         {
-            ValidateState(new [] {InRoom, Rats});
+            ValidateState(new [] {InRoom, Rats, CatDialouge});
+
+            // if (state == CatDialouge)
+            // {
+            //     gameLocations.GetCat().location = gameLocations.GetEmptyRoom();
+            // }
+
             state = InBetweenRooms;
             currentRoomHandledAmomalies.Clear();
 
@@ -211,6 +217,14 @@ namespace WumpusCore.Controller
             {
                 state = CatDialouge;
             } else
+            if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
+            {
+                state = GunRoom;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
+            {
+                state = AmmoRoom;
+            } else
             if ((anomaliesInRoom.Count == currentRoomHandledAmomalies.Count) || anomaliesInRoom.Count == 0)
             {
                 state = InRoom;
@@ -271,9 +285,9 @@ namespace WumpusCore.Controller
         }
 
         /// <summary>
-        /// Returns the hazards currently around the player.
+        /// Returns the audible/hinted hazards currently around the player.
         /// </summary>
-        /// <returns>List containing the hazards that are around the player</returns>
+        /// <returns>List containing the hazards that are around the player that they should be hinted about/hear</returns>
         public List<DirectionalHint> GetHazardHints()
         {
 
@@ -285,7 +299,7 @@ namespace WumpusCore.Controller
             foreach (Directions directions in exitRooms.Keys)
             {
                 hints.Add(new DirectionalHint(
-                    GetAnomaliesInRoom(exitRooms[directions].Id),directions));
+                    GetAudibleAnomaliesInRom(exitRooms[directions].Id),directions));
             }
 
             return hints;
@@ -318,9 +332,21 @@ namespace WumpusCore.Controller
                     break;
                 case RoomType.Vats: anomaliesList.Add(RoomAnomaly.Vat);
                     break;
+                case RoomType.GunRoom: anomaliesList.Add(RoomAnomaly.Gun);
+                    break;
+                case RoomType.AmmoRoom: anomaliesList.Add(RoomAnomaly.Ammo);
+                    break;
             }
 
             return anomaliesList;
+        }
+
+        private List<RoomAnomaly> GetAudibleAnomaliesInRom(int roomnum)
+        {
+            List<RoomAnomaly> allAnomalies = GetAnomaliesInRoom(roomnum);
+            allAnomalies.Remove(RoomAnomaly.Gun);
+            allAnomalies.Remove(RoomAnomaly.Ammo);
+            return allAnomalies;
         }
         
 
@@ -453,6 +479,7 @@ namespace WumpusCore.Controller
                 EndGame(false,RoomAnomaly.Rat);
                 return;
             }
+            gameLocations.GetPlayer().LoseCoins((uint) stats.DamageDelt);
 
             currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
             SetCorrectStateForRoom(gameLocations.GetPlayer().location);

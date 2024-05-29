@@ -38,7 +38,7 @@ namespace WumpusTesting
         {
             Topology topology = new Topology("test1.map");
             Trivia trivia = makeTrivia();
-            GameLocations gameLocations = new GameLocations(30,0,0,0,0,topology,new Random(), trivia);
+            GameLocations gameLocations = new GameLocations(30,0,0,0,0,0,0,topology,new Random(), trivia);
             return new Player(topology, gameLocations, 15);
         }
         
