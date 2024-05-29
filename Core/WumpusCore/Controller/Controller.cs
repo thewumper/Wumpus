@@ -529,7 +529,7 @@ namespace WumpusCore.Controller
             return false;
         }
 
-        bool isNextRoomAWumpus()
+        public bool isNextRoomAWumpus()
         {
             ValidateState(new []{InBetweenRooms});
             return gameLocations.GetWumpus().location==nextRoom.Id;
