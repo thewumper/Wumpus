@@ -20,7 +20,7 @@ namespace WumpusUnity
         [SerializeField] private float overallDistortionFreq;
         [SerializeField] private bool doDistortionPrePixelazation;
         [SerializeField] private int posterzationBands;
-
+        [SerializeField] private bool doDistortionPrePixelazation;
         [SerializeField]
         private Shader shader;
         private Material material;
@@ -38,7 +38,6 @@ namespace WumpusUnity
         private static readonly int OverallDistortionChangeRate = Shader.PropertyToID("_OverallDistortionChangeRate");
         private static readonly int DoDistortionAfterPixelization = Shader.PropertyToID("_DoDistortionAfterPixelization");
         private static readonly int PosterzationBands = Shader.PropertyToID("_PosterzationBands");
-
 
         public ShaderApplication(float maxTime)
         {
@@ -63,6 +62,8 @@ namespace WumpusUnity
             material.SetFloat(OverallDistortionChangeRate,OverallDistortionSpeed);
             material.SetInteger(DoDistortionAfterPixelization,(doDistortionPrePixelazation) ? 1 : 0);
             material.SetInteger(PosterzationBands,posterzationBands);
+            material.SetFloat(OverallDistortionChangeRate,OverallDistortionSpeed);
+            material.SetInteger(DoDistortionAfterPixelization,(doDistortionPrePixelazation) ? 1 : 0);
         }
 
         public void OnRenderImage(RenderTexture source, RenderTexture destination)

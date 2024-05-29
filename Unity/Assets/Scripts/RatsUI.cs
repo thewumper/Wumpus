@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using WumpusCore.Controller;
@@ -26,7 +27,7 @@ public class RatsUI : MonoBehaviour
     [SerializeField] private GameObject damageText;
     [SerializeField] private GameObject canvas;
     private List<GameObject> damageObjects = new();
-    private float dmgSpeed = 2f;
+    private float dmgSpeed = 20f;
     
     private void Awake()
     {
@@ -64,21 +65,21 @@ public class RatsUI : MonoBehaviour
             dmg.GetComponent<TMP_Text>().text = stats.DamageDelt.ToString();
             damageObjects.Add(dmg);
         }
-
-        foreach (GameObject obj in damageObjects)
+        
+        for (int i = 0; i < damageObjects.Count; i++)
         {
-            Transform objTransform = obj.transform;
-            Vector3 objPos = objTransform.position;
-            if (objPos.y >= 30)
+            GameObject obj = damageObjects[i];
+            RectTransform objTransform = obj.GetComponent<RectTransform>();
+            if (objTransform.anchoredPosition.y >= 30)
             {
                 damageObjects.Remove(obj);
                 Destroy(obj);
                 continue;
             }
             Vector3 targetPos = new Vector3(
-                objPos.x,
-                objPos.y + dmgSpeed * Time.deltaTime, 
-                objPos.z);
+                objTransform.position.x,
+                objTransform.position.y + dmgSpeed * Time.deltaTime, 
+                objTransform.position.z);
             objTransform.SetPositionAndRotation(targetPos, objTransform.rotation);
         }
     }

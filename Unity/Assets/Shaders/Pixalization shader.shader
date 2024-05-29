@@ -14,6 +14,7 @@ Shader "Hidden/Pixalization shader"
         _OverallDistortionChangeRate ("Overall distortion change", Float) = 0.3
         _DoDistortionAfterPixelization ("Distortion first", Integer) = 0
         _PosterzationBands ("Posterzation Bands", Integer) = 100
+
     }
     SubShader
     {
@@ -83,6 +84,7 @@ Shader "Hidden/Pixalization shader"
 
                 fixed4 col = tex2D(_MainTex, uv);
                 col.rgb = floor((col.rgb * _PosterzationBands)) / _PosterzationBands;
+                
                 return col;
             }
             ENDCG

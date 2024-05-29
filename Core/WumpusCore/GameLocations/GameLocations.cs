@@ -135,7 +135,7 @@ namespace WumpusCore.GameLocations
         private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
         {
             int listSize = list.Count;
-            for (int i = listSize - 1; i >= listSize - num; i--)            {
+            for (int i = listSize - 1; i >= listSize - num; i--) {
                 var location = list[i];
                 list.Remove(location);
                 rooms[location.Id] = type;
