@@ -221,8 +221,9 @@ public class MainUI : MonoBehaviour
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
 
-        // Gets the SoundManager component.
+        // Initializes the SoundManager
         soundManager = GetComponent<SoundManager>();
+        soundManager.Init(northDoor, northEastDoor, southEastDoor, southDoor, southWestDoor, northWestDoor);
     }
 
     void Start()
@@ -264,8 +265,9 @@ public class MainUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
-        soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
-        
+        // Get the sounds properly working
+        soundManager.UpdateSoundState();
+
         Debug.Log(controller.GetWumpusLocation());
     }
 
@@ -441,6 +443,7 @@ public class MainUI : MonoBehaviour
         // Move rooms.
         controller.MoveInADirection(moveDir);
         movingAnimator.SetBool(fadingID, false);
+        soundManager.UpdateSoundState();
         sceneController.GotoCorrectScene();
     }
 }

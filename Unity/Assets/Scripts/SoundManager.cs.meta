@@ -3,7 +3,19 @@ guid: f115dcbcbc1cf9444baf86d3361b29d0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - northDoor: {instanceID: 0}
+  - northEastDoor: {instanceID: 0}
+  - southEastDoor: {instanceID: 0}
+  - southDoor: {instanceID: 0}
+  - southWestDoor: {instanceID: 0}
+  - northWestDoor: {instanceID: 0}
+  - wumpusClip: {fileID: 8300000, guid: 9061384c0cf23db4ca3cdab3bbbd7b61, type: 3}
+  - luckyCatClip: {fileID: 8300000, guid: f167b05b86604514f9ba4b14ee049240, type: 3}
+  - batClip: {fileID: 8300000, guid: b43ae4e3f8a95b940bccaefe531c43e7, type: 3}
+  - ratClip: {fileID: 8300000, guid: 68c7f50c159dd0642ac7b77d500d043d, type: 3}
+  - acrobatClip: {fileID: 8300000, guid: 1e79f474295bde94aa22cbf6d5bbf3c6, type: 3}
+  - vatClip: {fileID: 8300000, guid: 1e7083d2b087dfb46ad5bd363af4cac2, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
