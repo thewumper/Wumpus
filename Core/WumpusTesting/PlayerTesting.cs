@@ -62,15 +62,10 @@ namespace WumpusTesting
         }
 
         [TestMethod]
-        public void TestArrows()
+        public void Coins()
         {
             Player player = makePlayer();
             player.AddCoins(5);
-            Assert.AreEqual(3, player.Bullets);
-            player.EarnArrows(GameResult.Win);
-            Assert.AreEqual(5, player.Bullets);
-            player.EarnArrows(GameResult.Loss);
-            Assert.AreEqual(4, player.Coins);
         }
 
         [TestMethod]

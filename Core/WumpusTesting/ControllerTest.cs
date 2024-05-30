@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
+using WumpusCore.GameLocations;
 using WumpusCore.Topology;
 using WumpusCore.Trivia;
 
@@ -160,7 +161,7 @@ namespace WumpusTesting
 
                     int successCount = 0;
 
-                    while (controller.GetState() == ControllerState.VatRoom)
+                    while (controller.GetState() == ControllerState.Trivia)
                     {
                         AskableQuestion question = controller.GetTriviaQuestion();
                         Assert.IsFalse(previousQuestions.Contains(question));
@@ -194,8 +195,61 @@ namespace WumpusTesting
                     controller.trivia.questions = new Questions("./questions.json");
 
                     break;
-
                 }
+                case ControllerState.GunRoom:
+                case ControllerState.AmmoRoom:
+                    controller.StartTrivia();
+
+                    bool hasGun = controller.DoesPlayerHaveGun();
+                    int ammoCount = controller.GetArrowCount();
+
+
+                    List<AskableQuestion> questions = new List<AskableQuestion>();
+
+                    int successfullyAnswered  = 0;
+
+                    while (controller.GetState() == ControllerState.Trivia)
+                    {
+                        AskableQuestion question = controller.GetTriviaQuestion();
+                        Assert.IsFalse(questions.Contains(question));
+                        questions.Add(question);
+
+                        int questionNum = Int32.Parse(question.questionText);
+
+                        int choice = Controller.Random.Next(0, 4);
+                        if (choice == questionNum)
+                        {
+                            // This should succeed
+                            Assert.IsTrue(controller.SubmitTriviaAnswer(choice));
+                            successfullyAnswered += 1;
+                        }
+                        else
+                        {
+                            Assert.IsFalse(controller.SubmitTriviaAnswer(choice));
+                        }
+                    }
+
+                    if (successfullyAnswered >= 2)
+                    {
+                        if (controller.GetCurrentRoomType() == RoomType.GunRoom)
+                        {
+                            Assert.IsTrue(controller.DoesPlayerHaveGun());
+                        }
+                        else if (controller.GetCurrentRoomType() == RoomType.AmmoRoom)
+                        {
+                            Assert.IsTrue(controller.GetArrowCount() > ammoCount);
+                        }
+                    }
+                    else
+                    {
+                        Assert.IsTrue(controller.GetArrowCount() == ammoCount);
+                        Assert.IsTrue(controller.DoesPlayerHaveGun() == hasGun);
+                    }
+
+                    // This resets the trivia questions back to the original array
+                    controller.trivia.questions = new Questions("./questions.json");
+
+                    break;
                 default:
                     throw new Exception($"{controller.GetState()} was not handled in the test (this is bad)");
             }

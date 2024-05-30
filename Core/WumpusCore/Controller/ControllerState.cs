@@ -15,5 +15,6 @@ namespace WumpusCore.Controller
         WonGame,
         GunRoom,
         AmmoRoom,
+        Trivia
     }
 }

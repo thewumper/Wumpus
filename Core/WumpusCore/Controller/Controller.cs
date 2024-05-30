@@ -124,7 +124,6 @@ namespace WumpusCore.Controller
         public RoomType GetCurrentRoomType()
         {
             // You can only get the room type if you're in the room
-            ValidateState(new [] {InRoom});
 
             return gameLocations.GetRoomAt(gameLocations.GetPlayer().location);
         }
@@ -224,6 +223,14 @@ namespace WumpusCore.Controller
             if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
                 state = AmmoRoom;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomaly.Ammo) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Ammo))
+            {
+                state = AmmoRoom;
+            } else
+            if (anomaliesInRoom.Contains(RoomAnomaly.Gun) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Gun))
+            {
+                state = GunRoom;
             } else
             if ((anomaliesInRoom.Count == currentRoomHandledAmomalies.Count) || anomaliesInRoom.Count == 0)
             {
@@ -361,7 +368,9 @@ namespace WumpusCore.Controller
 
         public void StartTrivia()
         {
-            ValidateState(new []{ ControllerState.VatRoom });
+            ValidateState(new []{ VatRoom, GunRoom, AmmoRoom });
+
+            state = ControllerState.Trivia;
 
             trivia.StartRound(3,2);
         }
@@ -389,13 +398,41 @@ namespace WumpusCore.Controller
             if (trivia.reportResult() == GameResult.Win)
             {
                 state = InRoom;
+                if (GetCurrentRoomType() != RoomType.Vats)
+                {
+                    CollectItemsInRoom();
+                }
             }
             else if (trivia.reportResult() == GameResult.Loss)
             {
-                state = GameOver;
+                if (GetCurrentRoomType() != RoomType.Vats)
+                {
+                    state = InRoom;
+                }
+                else
+                {
+                    state = GameOver;
+                }
             }
 
             return correctness;
+        }
+
+        private void CollectItemsInRoom()
+        {
+            ValidateState(new []{GunRoom, AmmoRoom, InRoom});
+
+            if (GetCurrentRoomType() == RoomType.AmmoRoom)
+            {
+                gameLocations.GetPlayer().GainArrows(3);
+                return;
+            }
+
+            if (GetCurrentRoomType() == RoomType.GunRoom)
+            {
+                gameLocations.GetPlayer().GainGun();
+                return;
+            }
         }
 
         public void StartGame()
@@ -439,13 +476,6 @@ namespace WumpusCore.Controller
             }
         }
 
-        /// <summary>
-        /// Called when the player successfully earns a secret. Generate a new secret and give it to the player.
-        /// </summary>
-        public void GenerateSecret()
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Allows you to exit the bat state. Puts the player in a random room and changes the controller state to whatever is in that room.
@@ -467,7 +497,7 @@ namespace WumpusCore.Controller
             }
             else
             {
-                state = GameOver;
+                EndGame(false,WinLossConditions.Acrobat);
             }
         }
 
@@ -572,6 +602,11 @@ namespace WumpusCore.Controller
         {
             ValidateState(new []{InBetweenRooms});
             return gameLocations.GetWumpus().location==nextRoom.Id;
+        }
+
+        public bool DoesPlayerHaveGun()
+        {
+            return gameLocations.GetPlayer().HasGun;
         }
     }
 }
