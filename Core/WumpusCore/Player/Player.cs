@@ -20,7 +20,7 @@ namespace WumpusCore.Player
         /// <summary>
         /// The amount of arrows the player currently has.
         /// </summary>
-        public int Arrows { get; private set; }
+        public int Bullets { get; private set; }
         
         /// <summary>
         /// Number of moves made so far
@@ -28,15 +28,10 @@ namespace WumpusCore.Player
         public int TurnsTaken { get; private set; }
 
         /// <summary>
-        /// Player's health
+        /// If the player has collected the gun yet
         /// </summary>
-        public int Health;
+        public bool HasGun { get; private set; }
 
-        /// <summary>
-        /// Limit of player's health
-        /// </summary>
-        public int HealthMax;
-        
         /// <summary>
         /// Stores everything to do with the player.
         /// </summary>
@@ -44,8 +39,8 @@ namespace WumpusCore.Player
             : base(topology, parent, location, EntityType.Player)
         {   
             Coins = 0;
-            Arrows = 3;
-            Health = 100;
+            Bullets = 0;
+            HasGun = false;
         }
         
         /// <summary>
@@ -144,7 +139,7 @@ namespace WumpusCore.Player
         {
             if (triviaOutcome == GameResult.Win)
             {
-                Arrows += 2;
+                Bullets += 2;
                 gameLocations.SetTriviaRemaining(location, false);
             }
             else if (triviaOutcome == GameResult.Loss)

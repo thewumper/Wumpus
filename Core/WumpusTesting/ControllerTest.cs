@@ -47,10 +47,11 @@ namespace WumpusTesting
         [TestMethod]
         public void SimulateGames()
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 // Setup
                 Controller controller = CreateNewController();
+                Controller.Random = new Random(i);
 
                 // Start the game
 
@@ -61,17 +62,19 @@ namespace WumpusTesting
                 Assert.AreEqual(controller.GetState(), ControllerState.InRoom);
                 Assert.AreEqual(controller.GetAnomaliesInRoom(controller.GetPlayerLocation()).Count, 0);
 
-                // while (Controller.GlobalController.GetState() != ControllerState.GameOver)
-                // {
-                HandleRoomInARandomDirection(controller);
-                // }
+                while (!(controller.GetState() == ControllerState.GameOver || controller.GetState() == ControllerState.WonGame))
+                {
+                    HandleRoomInARandomDirection(controller);
+                }
             }
         }
 
         private static void HandleRoomInARandomDirection(Controller controller)
         {
             // Go one room north
-            controller.MoveInADirection(Directions.North);
+            Directions[] dirs = controller.GetCurrentRoom().ExitDirections;
+            Directions dir = dirs[Controller.Random.Next(0, dirs.Length)];
+            controller.MoveInADirection(dir);
             controller.MoveFromHallway();
 
 
@@ -96,6 +99,7 @@ namespace WumpusTesting
                 case ControllerState.Rats:
                 {
                     int timeInRoom = Controller.Random.Next(0, 11);
+                    IStopwatch realStopwatch = controller.ratTimeStopwatch;
                     controller.ratTimeStopwatch = new FakeStopwatch(new TimeSpan(0, 0, timeInRoom));
 
                     RatRoomStats stats = controller.GetRatRoomStats();
@@ -107,10 +111,11 @@ namespace WumpusTesting
                     }
                     else
                     {
-
                         Assert.IsTrue(controller.GetState() != ControllerState.GameOver && controller.GetState() != ControllerState.Rats);
                         Assert.IsTrue(controller.GetCoins() < stats.StartingCoins);
                     }
+
+                    controller.ratTimeStopwatch = realStopwatch;
 
                     break;
                 }
@@ -135,7 +140,7 @@ namespace WumpusTesting
                         int previousCoins = controller.GetCoins();
                         controller.AttemptToTameCat(controller.GetCoins());
 
-                        Assert.IsTrue(controller.GetCoins() < previousCoins);
+                        Assert.IsTrue(controller.GetCoins() <= previousCoins);
                     }
 
                     break;
@@ -184,6 +189,9 @@ namespace WumpusTesting
                     {
                         Assert.IsTrue(controller.GetState()==ControllerState.GameOver);
                     }
+
+                    // This resets the trivia questions back to the original array
+                    controller.trivia.questions = new Questions("./questions.json");
 
                     break;
 

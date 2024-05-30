@@ -9,6 +9,8 @@ namespace WumpusCore.GameLocations
         Vats,
         Bats,
         Rats,
-        Acrobat
+        Acrobat,
+        AmmoRoom,
+        GunRoom
     }
 }
