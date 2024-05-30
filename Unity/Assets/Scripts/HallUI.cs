@@ -126,8 +126,7 @@ public class HallUI : MonoBehaviour
         // Initializes the movingID.
         fadingID = Animator.StringToHash("fading");
 
-        //isCutscene = Controller.GlobalController.isNextRoomAWumpus();
-        isCutscene = true;
+        isCutscene = Controller.GlobalController.isNextRoomAWumpus();
         
         AnsweredQuestion q = controller.GetUnaskedQuestion();
         hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
