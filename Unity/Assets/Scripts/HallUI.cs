@@ -231,24 +231,27 @@ public class HallUI : MonoBehaviour
         {
             message.gameObject.SetActive(true);
         }
+        hint.gameObject.SetActive(false);
+        for (int i = 0; i < automove.Length; i++)
+        {
+            StartCoroutine(LightGoesOut(i));
+        }
         
     }
     private void DoCutscene()
     {
         cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
-        for (int i = 0; i < automove.Length; i++)
+        if (cam.transform.position.z >= automove[^1].transform.position.z)
         {
-            StartCoroutine(LightGoesOut(i));
+            isCutscene = false;
         }
     }
 
     private IEnumerator LightGoesOut(int light)
     {
-        if (!ceilingLights[light].GetComponent<LightFlicker>())
-        {
-            ceilingLights[light].gameObject.AddComponent<LightFlicker>();
-        }
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(light * 7);
+        ceilingLights[light].gameObject.AddComponent<LightFlicker>();
+        yield return new WaitForSeconds(5);
         ceilingLights[light].enabled = false;
     }
 
