@@ -7,11 +7,11 @@ public class MovementController : MonoBehaviour
     /// <summary>
     /// Higher values mean more slippery floors
     /// </summary>
-    [Range(0f, 1f)] [SerializeField] private float velocityFalloff = .85f;
+    [Range(0f, 1f)] [SerializeField] public float velocityFalloff = .85f;
 
-    [SerializeField] private Vector2 startingPosition;
-    [SerializeField] private Vector2 startingVelocity;
-    [SerializeField] private Vector2 acceleration;
+    [SerializeField] public Vector2 startingPosition;
+    [SerializeField] public Vector2 startingVelocity;
+    [SerializeField] public Vector2 acceleration;
     
     void Start()
     {
@@ -25,5 +25,6 @@ public class MovementController : MonoBehaviour
     {
         rigidbody.velocity += acceleration * Time.deltaTime;
         rigidbody.velocity *= (float)Math.Pow(velocityFalloff, Time.deltaTime);
+        Debug.Log(rigidbody.position);
     }
 }
