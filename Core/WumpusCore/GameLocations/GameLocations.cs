@@ -30,6 +30,12 @@ namespace WumpusCore.GameLocations
         /// </summary>
         public readonly Dictionary<Directions, AnsweredQuestion>[] hallwayTrivia;
 
+        /// <summary>
+        /// The list of room numbers that you have collected
+        /// the weapon/ammo from
+        /// </summary>
+        public List<ushort> RoomsWithCollectedItems;
+
         // Whether the player can do trivia in a room to earn secrets, arrows, etc
         private bool[] triviaRemaining;
 
@@ -301,7 +307,36 @@ namespace WumpusCore.GameLocations
 
             return adjacentRooms;
         }
-        
-        
+
+        /// <summary>
+        /// Gets the status of items in a room
+        /// </summary>
+        /// <param name="roomid">The room that you want to check</param>
+        /// <returns>true if the room contains an uncollected item, false if the room does not</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the room of not of type <c>GunRoom</c> or <c>AmmoRoom</c></exception>
+        public bool DoesRoomHaveUncollectedItems(ushort roomid)
+        {
+            if (!(GetRoomAt(roomid) == RoomType.AmmoRoom || GetRoomAt(roomid) == RoomType.GunRoom))
+            {
+                throw new InvalidOperationException(
+                    "You cannot check if there's uncollected items if the room doesn't even contain items");
+            }
+
+            if (RoomsWithCollectedItems.Contains(roomid))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Marks a room as having the items collected from it
+        /// </summary>
+        /// <param name="roomid">The room id that you want to set</param>
+        public void CollectItemFromRoom(ushort roomid)
+        {
+            RoomsWithCollectedItems.Add(roomid);
+        }
     }
 }

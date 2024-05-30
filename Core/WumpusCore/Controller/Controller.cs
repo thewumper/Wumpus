@@ -17,6 +17,12 @@ namespace WumpusCore.Controller
     /// </summary>
     public class Controller
     {
+        /// <summary>
+        /// The interface for all things related to the vat room
+        /// </summary>
+        public VatroomController VatRoom = new VatroomController();
+
+
         private static Controller _controllerReference;
         private IRoom nextRoom;
         internal IStopwatch ratTimeStopwatch = new RealStopwatch();
@@ -206,7 +212,7 @@ namespace WumpusCore.Controller
             } else
             if (anomaliesInRoom.Contains(RoomAnomaly.Vat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Vat))
             {
-                state = VatRoom;
+                state = ControllerState.VatRoom;
             } else
             if (anomaliesInRoom.Contains(RoomAnomaly.Rat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Rat))
             {
@@ -361,7 +367,7 @@ namespace WumpusCore.Controller
 
         public void StartTrivia()
         {
-            ValidateState(new []{ ControllerState.VatRoom });
+            ValidateState(new [] { ControllerState.VatRoom });
 
             trivia.StartRound(3,2);
         }
@@ -573,5 +579,7 @@ namespace WumpusCore.Controller
             ValidateState(new []{InBetweenRooms});
             return gameLocations.GetWumpus().location==nextRoom.Id;
         }
+
+
     }
 }

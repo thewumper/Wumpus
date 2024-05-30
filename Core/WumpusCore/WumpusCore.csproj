@@ -62,6 +62,7 @@
         <Compile Include="Controller\ControlllerStopwatch\FakeStopwatch.cs" />
         <Compile Include="Controller\ControlllerStopwatch\IStopwatch.cs" />
         <Compile Include="Controller\ControlllerStopwatch\RealStopwatch.cs" />
+        <Compile Include="Controller\VatroomController.cs" />
         <Compile Include="Controller\WinLossConditions.cs" />
         <Compile Include="HighScore\SaveFile.cs" />
         <Compile Include="Entity\Entity.cs" />
