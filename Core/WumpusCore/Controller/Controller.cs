@@ -25,13 +25,13 @@ namespace WumpusCore.Controller
         private List<RoomAnomaly> currentRoomHandledAmomalies = new List<RoomAnomaly>();
         private GameLocations.GameLocations gameLocations;
         internal Trivia.Trivia trivia;
-        internal RoomAnomaly gameEndCause;
+        internal WinLossConditions gameEndCause;
 
         /// <summary>
         /// The <c>RoomAnomaly</c> that causes the game to end.
         /// The property is only valid in the <c>GameOver</c> state.
         /// </summary>
-        public RoomAnomaly GameEndCause
+        public WinLossConditions GameEndCause
         {
             get
             {
@@ -269,7 +269,7 @@ namespace WumpusCore.Controller
 
         public int GetArrowCount()
         {
-            return gameLocations.GetPlayer().Arrows;
+            return gameLocations.GetPlayer().Bullets;
         }
 
 
@@ -406,7 +406,7 @@ namespace WumpusCore.Controller
             this.state = InRoom;
         }
 
-        public void EndGame(bool success, RoomAnomaly gameEndCause)
+        public void EndGame(bool success, WinLossConditions gameEndCause)
         {
             if (success)
             {
@@ -476,7 +476,7 @@ namespace WumpusCore.Controller
             RatRoomStats stats = GetRatRoomStats();
             if (stats.RemainingCoins < 0)
             {
-                EndGame(false,RoomAnomaly.Rat);
+                EndGame(false, WinLossConditions.Rats);
                 return;
             }
             gameLocations.GetPlayer().LoseCoins((uint) stats.DamageDelt);
@@ -493,7 +493,7 @@ namespace WumpusCore.Controller
 
         public void ExitWumpusFight(bool won)
         {
-            EndGame(won,RoomAnomaly.Wumpus);
+            EndGame(won,WinLossConditions.WumpusFight);
         }
 
 
@@ -540,7 +540,7 @@ namespace WumpusCore.Controller
             // other than it looks decent in Desmos
             // 0 coins gives a ~4.7% chance to tame
             // 10 coins gives a ~90% change to tame
-            // 18 coins gives a 99% change to tame
+            // 18+ coins gives a 99% change to tame
             // You just won't ever have a 100% chance of taming
             gameLocations.GetPlayer().LoseCoins((uint) coinInput);
 
@@ -553,6 +553,18 @@ namespace WumpusCore.Controller
             {
                 return true;
             }
+            return false;
+        }
+
+        public bool ShootGun(Directions shootingDir)
+        {
+            if (GetAnomaliesInRoom(topology.GetRoom(gameLocations.GetPlayer().location).AdjacentRooms[shootingDir].Id).Contains(RoomAnomaly.Wumpus) && topology.GetRoom(gameLocations.GetPlayer().location).ExitDirections.Contains(shootingDir))
+            {
+                EndGame(true,WinLossConditions.ShotWumpus);
+                return true;
+            }
+
+            gameLocations.GetWumpus().move(Random);
             return false;
         }
 
