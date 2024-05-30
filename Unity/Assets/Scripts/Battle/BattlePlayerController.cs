@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ValueBar playerHealth;
     [SerializeField] private ValueBar enemyHealth;
 
+    [SerializeField] private bool destroyOnContact;
     [Range(0f, 1f)] [SerializeField] private float minOpacity;
     [SerializeField] private float totalImmunityTime;
     private float _remainingImmunityTime;
@@ -133,7 +134,10 @@ public class PlayerController : MonoBehaviour
         {
             playerHealth.value -= collision.gameObject.GetComponent<Damage>().damage;
             _remainingImmunityTime = totalImmunityTime;
-            Debug.Log(playerHealth.value);
+            if (destroyOnContact)
+            {
+                Destroy(collision.gameObject);
+            }
             if (playerHealth.value <= 0f)
             {
                 OnDeath();

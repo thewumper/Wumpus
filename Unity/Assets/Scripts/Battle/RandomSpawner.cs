@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using WumpusUnity.Battle;
 
-public class RandomSpawner : MonoBehaviour
+public class RandomSpawner : SpawnerMode
 {
-    [SerializeField] private GameObject room;
-    [SerializeField] private new Rigidbody2D rigidbody;
-    [SerializeField] private GameObject prefab;
     /// <summary>
     /// Objects' velocities
     /// </summary>
@@ -20,6 +18,11 @@ public class RandomSpawner : MonoBehaviour
 
     private float timeSinceLastOutput;
 
+    private void OnEnable()
+    {
+        timeSinceLastOutput = 0f;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -28,16 +31,16 @@ public class RandomSpawner : MonoBehaviour
         {
             timeSinceLastOutput = 0f;
             
-            GameObject obj = Instantiate(prefab, rigidbody.position, Quaternion.identity);
-            obj.transform.SetParent(room.transform);
+            GameObject obj = Instantiate(Prefab, Rigidbody.position, Quaternion.identity);
+            obj.transform.SetParent(Room.transform);
             obj.transform.localScale = new Vector3(1f, 1f, 1f);
 
             float x = (float)UnityEngine.Random.value - 0.5f;
             float y = (float)UnityEngine.Random.value - 0.5f;
             MovementController controller = obj.GetComponent<MovementController>();
             controller.velocityFalloff = 1f;
-            controller.startingPosition = rigidbody.position;
-            controller.startingVelocity = rigidbody.velocity + new Vector2(x, y).normalized * outputSpeed;
+            controller.startingPosition = Rigidbody.position;
+            controller.startingVelocity = Rigidbody.velocity + new Vector2(x, y).normalized * outputSpeed;
             controller.acceleration = Vector2.zero;
         }
     }
