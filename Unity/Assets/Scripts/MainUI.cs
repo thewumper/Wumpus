@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
 
+[RequireComponent(typeof(SoundManager))]
 public class MainUI : MonoBehaviour
 {
     /// <summary>
@@ -20,6 +20,9 @@ public class MainUI : MonoBehaviour
     /// </summary>
     private SceneController sceneController;
     
+    /// <summary>
+    /// Reference to the SoundManager.
+    /// </summary>
     private SoundManager soundManager;
     
     /// <summary>
@@ -217,6 +220,10 @@ public class MainUI : MonoBehaviour
         
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
+
+        // Initializes the SoundManager
+        soundManager = GetComponent<SoundManager>();
+        soundManager.Init(northDoor, northEastDoor, southEastDoor, southDoor, southWestDoor, northWestDoor);
     }
 
     void Start()
@@ -244,9 +251,6 @@ public class MainUI : MonoBehaviour
         // Initializes the roomText text.
         roomText.SetText($"Room: {RoomNum}");
         
-        // Initializes the SoundManager
-        soundManager = new SoundManager(wumpusClip);
-        
         // Initializes the RoomNum with the Player's location.
         RoomNum = (ushort) controller.GetPlayerLocation();
         
@@ -261,8 +265,9 @@ public class MainUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
-        soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
-        
+        // Get the sounds properly working
+        soundManager.UpdateSoundState();
+
         Debug.Log(controller.GetWumpusLocation());
     }
 
@@ -438,6 +443,7 @@ public class MainUI : MonoBehaviour
         // Move rooms.
         controller.MoveInADirection(moveDir);
         movingAnimator.SetBool(fadingID, false);
+        soundManager.UpdateSoundState();
         sceneController.GotoCorrectScene();
     }
 }
