@@ -80,6 +80,7 @@
         <Compile Include="Trivia\GameResult.cs" />
         <Compile Include="Trivia\Questions.cs" />
         <Compile Include="Trivia\Trivia.cs" />
+		<Compile Include="Wumpus\Wumpus.cs" />
         <Compile Include="HighScore\HighScore.cs" />
         <Compile Include="GameLocations\GameLocations.cs" />
 		<Compile Include="Wumpus\Wumpus.cs" />
@@ -88,8 +89,8 @@
     <ItemGroup>
       <None Include="packages.config" />
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">
     </Target>

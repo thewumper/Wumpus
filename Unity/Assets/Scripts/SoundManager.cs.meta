@@ -3,7 +3,13 @@ guid: f115dcbcbc1cf9444baf86d3361b29d0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - wumpusClip: {fileID: 8300000, guid: 392c00562f290224f8982f6972fd644d, type: 3}
+  - luckyCatClip: {fileID: 8300000, guid: 1e994b5a9b3415148aa788913f600aff, type: 3}
+  - batClip: {fileID: 8300000, guid: b43ae4e3f8a95b940bccaefe531c43e7, type: 3}
+  - ratClip: {fileID: 8300000, guid: 104a01a8959a52f4a8c41dab6f0232d0, type: 3}
+  - acrobatClip: {fileID: 8300000, guid: 1e79f474295bde94aa22cbf6d5bbf3c6, type: 3}
+  - vatClip: {fileID: 8300000, guid: 1e7083d2b087dfb46ad5bd363af4cac2, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
