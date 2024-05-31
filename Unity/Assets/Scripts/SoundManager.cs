@@ -25,27 +25,6 @@ public class SoundManager : MonoBehaviour
 
     private Controller controller;
 
-    /// <summary>
-    /// The internal reference to the global SoundManager.
-    /// </summary>
-    internal static SoundManager controllerReference;
-
-    /// <summary>
-    /// The global SceneController.
-    /// </summary>
-    public static SoundManager GlobalSoundManager
-    {
-        get
-        {
-            if (controllerReference == null)
-            {
-                throw new NullReferenceException("SoundManager does not exist");
-            }
-
-            return controllerReference;
-        }
-    }
-
     public void Init(GameObject northDoor, GameObject northEastDoor,
         GameObject southEastDoor, GameObject southDoor, GameObject southWestDoor, GameObject northWestDoor)
     {
@@ -104,7 +83,13 @@ public class SoundManager : MonoBehaviour
 
         // Set a few settings.
         doorAudioSource.loop = true;
-        doorAudioSource.spatialBlend = 1.0f;
+        doorAudioSource.spatialBlend = 0.7f;
+        doorAudioSource.volume = 1f;
+
+        if (type == RoomAnomaly.Acrobat)
+        {
+            doorAudioSource.pitch = 0.8f;
+        }
 
         // Play!
         doorAudioSource.Play();
