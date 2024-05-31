@@ -60,7 +60,7 @@ public class VatUI : MonoBehaviour
     {
         controller.SubmitTriviaAnswer(choice);
         Debug.Log(controller.GetState());
-        if (controller.GetState() != ControllerState.VatRoom) sceneController.GotoCorrectScene();
+        if (controller.GetState() != ControllerState.Trivia) sceneController.GotoCorrectScene();
         
         question = controller.GetTriviaQuestion();
         questionText.SetText(question.questionText);

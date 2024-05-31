@@ -126,11 +126,12 @@ public class HallUI : MonoBehaviour
         // Initializes the movingID.
         fadingID = Animator.StringToHash("fading");
 
+
         isCutscene = Controller.GlobalController.isNextRoomAWumpus();
+        Debug.Log($"Is it a cutscene: {isCutscene}");
         
         AnsweredQuestion q = controller.GetUnaskedQuestion();
         hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
-        isCutscene = true;
         if (isCutscene)
         {
             SetupCutscene();
