@@ -1,84 +1,19 @@
 using System;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
+using UnityEngine.UI;
 using WumpusUnity;
 
-public class MainUI : MonoBehaviour
+public class StoresUI : MonoBehaviour
+
 {
     /// <summary>
     /// Reference to the global Controller.
     /// </summary>
     private Controller controller;
 
-    /// <summary>
-    /// Reference to the global SceneController.
-    /// </summary>
-    private SceneController sceneController;
-    
-    private SoundManager soundManager;
-    
-    /// <summary>
-    /// The GameObject of the Camera.
-    /// </summary>
-    [SerializeField]
-    private GameObject cam;
-    /// <summary>
-    /// The Rotation for the Movement of the Player.
-    /// </summary>
-    [SerializeField]
-    private GameObject movementRotation;
-    
-    /// <summary>
-    /// The speed at which the camera rotates with the player's mouse.
-    /// </summary>
-    private const float camSens = 5f;
-    /// <summary>
-    /// The speed the camera moves.
-    /// </summary>
-    private const float camSpeed = 4f;
-    /// <summary>
-    /// Whether or not the player can move or look around.
-    /// </summary>
-    private bool pLock;
-    
-    /// <summary>
-    /// The room that the player is currently in.
-    /// </summary>
-    private ushort roomNum;
-
-    /// <summary>
-    /// The room that the player is currently in.
-    /// </summary>
-    private ushort RoomNum
-    {
-        get
-        {
-            return roomNum;
-        }
-        set
-        {
-            northDoor.SetActive(false);
-            northEastDoor.SetActive(false);
-            southEastDoor.SetActive(false);
-            southDoor.SetActive(false);
-            southWestDoor.SetActive(false);
-            northWestDoor.SetActive(false);
-            
-            mmNorth.SetActive(false);
-            mmNorthEast.SetActive(false);
-            mmSouthEast.SetActive(false);
-            mmSouth.SetActive(false);
-            mmSouthWest.SetActive(false);
-            mmNorthWest.SetActive(false);
-
-            roomNum = value;
-        }
-    }
-    
     /// <summary>
     /// Reference to the door that is north of the player.
     /// </summary>
@@ -109,13 +44,7 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private GameObject northWestDoor;
-    
-    /// <summary>
-    /// The wumpus GameObject in the room.
-    /// </summary>
-    [SerializeField]
-    private GameObject wumpus;
-    
+
     /// <summary>
     /// The GameObject that shows each interactable icon.
     /// </summary>
@@ -125,23 +54,30 @@ public class MainUI : MonoBehaviour
     /// <summary>
     /// The icon that represents being able to move through a door.
     /// </summary>
-    [SerializeField] 
+    [SerializeField]
     private Sprite doorIcon;
+
     /// <summary>
     /// The icon that represents not being able to interact with something.
     /// </summary>
-    [SerializeField] 
+    [SerializeField]
     private Sprite uninteractableIcon;
-    
+
+    /// <summary>
+    /// The icon that represents not being able to interact with something.
+    /// </summary>
+    [SerializeField]
+    private Sprite useIcon;
+
     /// <summary>
     /// The text that shows the amount of coins the player has.
     /// </summary>
-    [SerializeField] 
+    [SerializeField]
     private TMP_Text coinsText;
     /// <summary>
     /// The text that shows what room the player is currently in.
     /// </summary>
-    [SerializeField] 
+    [SerializeField]
     private TMP_Text roomText;
 
     /// <summary>
@@ -149,57 +85,125 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private TMP_Text roomHintText;
+
     /// <summary>
     /// Rext that displays your current room type
     /// </summary>
     [SerializeField]
     private TMP_Text roomTypeText;
+
     /// <summary>
     /// The text that shows which direction the player is looking in.
     /// </summary>
-    [SerializeField] 
+    [SerializeField]
     private TMP_Text directionText;
-    
+
     /// <summary>
     /// The Animator that handles the player moving.
     /// </summary>
-    [SerializeField] 
+    [SerializeField]
     private Animator movingAnimator;
     /// <summary>
     /// The ID of the moving variable in <see cref="movingAnimator"/>.
     /// </summary>
     private int fadingID;
-    
+
     /// <summary>
     /// The image used to fade in and out.
     /// </summary>
-    [SerializeField] 
-    private Image black;
-
     [SerializeField]
-    private AudioClip wumpusClip;
-    private AudioClip luckyCatClip;
+    private Image black;
 
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
     /// </summary>
     private Directions moveDir;
 
-    [SerializeField] 
+    [SerializeField]
     private GameObject mmNorth;
-    [SerializeField] 
+    [SerializeField]
     private GameObject mmNorthEast;
-    [SerializeField] 
+    [SerializeField]
     private GameObject mmSouthEast;
-    [SerializeField] 
+    [SerializeField]
     private GameObject mmSouth;
-    [SerializeField] 
+    [SerializeField]
     private GameObject mmSouthWest;
-    [SerializeField] 
+    [SerializeField]
     private GameObject mmNorthWest;
 
-    [SerializeField] 
+    [SerializeField]
     private GameObject mmDirection;
+    // Start is called before the first frame update
+
+    /// <summary>
+    /// The GameObject of the Camera.
+    /// </summary>
+    [SerializeField]
+    private GameObject cam;
+    /// <summary>
+    /// The Rotation for the Movement of the Player.
+    /// </summary>
+    [SerializeField]
+    private GameObject movementRotation;
+
+    [SerializeField]
+    public GameObject gun;
+
+    [SerializeField]
+    public GameObject ammo;
+
+    /// <summary>
+    /// The speed at which the camera rotates with the player's mouse.
+    /// </summary>
+    private const float camSens = 5f;
+    /// <summary>
+    /// The speed the camera moves.
+    /// </summary>
+    private const float camSpeed = 4f;
+    /// <summary>
+    /// Whether or not the player can move or look around.
+    /// </summary>
+    private bool pLock;
+
+    /// <summary>
+    /// The room that the player is currently in.
+    /// </summary>
+    private ushort roomNum;
+
+    /// <summary>
+    /// The room that the player is currently in.
+    /// </summary>
+    private ushort RoomNum
+    {
+        get
+        {
+            return roomNum;
+        }
+        set
+        {
+            northDoor.SetActive(false);
+            northEastDoor.SetActive(false);
+            southEastDoor.SetActive(false);
+            southDoor.SetActive(false);
+            southWestDoor.SetActive(false);
+            northWestDoor.SetActive(false);
+
+            mmNorth.SetActive(false);
+            mmNorthEast.SetActive(false);
+            mmSouthEast.SetActive(false);
+            mmSouth.SetActive(false);
+            mmSouthWest.SetActive(false);
+            mmNorthWest.SetActive(false);
+
+            roomNum = value;
+        }
+    }
+
+    /// <summary>
+    /// Reference to the global SceneController.
+    /// </summary>
+    private SceneController sceneController;
 
     private void Awake()
     {
@@ -213,7 +217,7 @@ public class MainUI : MonoBehaviour
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
-        
+
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
     }
@@ -221,37 +225,32 @@ public class MainUI : MonoBehaviour
     void Start()
     {
         // Locks the cursor and makes it invisible.
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
-        cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
-        Debug.Log(PersistentData.Instance.EulerAngle);
-        mmDirection.transform.eulerAngles = new Vector3(
-            mmDirection.transform.eulerAngles.x, 
-            mmDirection.transform.eulerAngles.y, 
-            PersistentData.Instance.EulerAngle.y);
-        
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
+        //
+        // cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
+        // Debug.Log(PersistentData.Instance.EulerAngle);
+        // mmDirection.transform.eulerAngles = new Vector3(
+        //     mmDirection.transform.eulerAngles.x,
+        //     mmDirection.transform.eulerAngles.y,
+        //     PersistentData.Instance.EulerAngle.y);
+        //
+
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
-        
-        // Makes it so you can't normally see the wumpus.
-        wumpus.SetActive(false);
-        
+
         // Initializes the movingID.
         fadingID = Animator.StringToHash("fading");
-        
+
         // Initializes the roomText text.
         roomText.SetText($"Room: {RoomNum}");
-        
-        // Initializes the SoundManager
-        soundManager = new SoundManager(wumpusClip);
-        
+
         // Initializes the RoomNum with the Player's location.
         RoomNum = (ushort) controller.GetPlayerLocation();
-        
+
         // Initializes the pLock.
         pLock = false;
-        
+
         // Adds the Door script to all doors.
         northDoor.AddComponent<Door>().Init(Directions.North);
         northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
@@ -260,88 +259,26 @@ public class MainUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
-        soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
-        
-        Debug.Log(controller.GetWumpusLocation());
+        if (controller.GetState()==ControllerState.GunRoom)
+        {
+            gun.SetActive(true);
+            ammo.SetActive(true);
+        }
+        else if (controller.GetState() == ControllerState.AmmoRoom)
+        {
+            ammo.SetActive(true);
+            gun.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("This room doesn't have anything stored. This shouldn't happen");
+        }
     }
 
-    void LateUpdate()
+    // Update is called once per frame
+    void Update()
     {
-        switch (controller.GetState())
-        {
-            case ControllerState.InBetweenRooms:
-                return;
-            case ControllerState.BatTransition:
-                pLock = true;
-                movingAnimator.SetBool(fadingID, true);
-                break;
-        }
-        // Makes an IRoom which is the room that the player is currently in.
-        IRoom room = controller.GetCurrentRoom();
-        // Makes the roomText show which room the player is actually in.
-        roomText.SetText($"Room: {RoomNum}");
-        // Makes only the doors that are in the room visible.
-        foreach (Directions dir in room.ExitDirections)
-        {
-            string name = DirectionHelper.GetShortNameFromDirection(dir);
-            switch (name)
-            {
-                case "N":
-                    northDoor.SetActive(true);
-                    mmNorth.SetActive(true);
-                    break;
-                case "NE":
-                    northEastDoor.SetActive(true);
-                    mmNorthEast.SetActive(true);
-                    break;
-                case "SE":
-                    southEastDoor.SetActive(true);
-                    mmSouthEast.SetActive(true);
-                    break;
-                case "S":
-                    southDoor.SetActive(true);
-                    mmSouth.SetActive(true);
-                    break;
-                case "SW":
-                    southWestDoor.SetActive(true);
-                    mmSouthWest.SetActive(true);
-                    break;
-                case "NW":
-                    northWestDoor.SetActive(true);
-                    mmNorthWest.SetActive(true);
-                    break;
-            }
-        }
         
-        // All hazards in the player's current room.
-        List<RoomAnomaly> hazards = controller.GetAnomaliesInRoom(RoomNum);
-        // For each hazard in the room.
-        foreach (RoomAnomaly hazard in hazards)
-        {
-            // Make the hazard visible.
-            switch (hazard)
-            {
-                case RoomAnomaly.Wumpus:
-                    wumpus.SetActive(true);
-                    break;
-            }
-        }
-        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
-        List<string> hintString = new List<string>();
-        foreach (Controller.DirectionalHint hint in hints)
-        {
-            foreach (RoomAnomaly anomaly in hint.Hazards)
-            {
-                hintString.Add("You hear " + anomaly);
-            }
-        }
-        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
-        else roomHintText.SetText("You hear nothing.");
-        roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
-    }
-
-    private void Update()
-    {
         // If the player isn't locked.
         if (!pLock)
         {
@@ -352,8 +289,8 @@ public class MainUI : MonoBehaviour
             PersistentData.Instance.EulerAngle = cam.transform.eulerAngles;
 
             mmDirection.transform.eulerAngles = new Vector3(
-                mmDirection.transform.eulerAngles.x, 
-                mmDirection.transform.eulerAngles.y, 
+                mmDirection.transform.eulerAngles.x,
+                mmDirection.transform.eulerAngles.y,
                 180 - PersistentData.Instance.EulerAngle.y);
         }
         // Used for checking what the player is currently looking at.
@@ -379,23 +316,25 @@ public class MainUI : MonoBehaviour
             {
                 ShowInteract(uninteractableIcon);
             }
+            // If the player is looking at the gun or ammo they can intereact
+
             // If the player is looking at something that is none of these.
             else
             {
                 HideInteract();
                 directionText.SetText("");
             }
-        } 
+        }
         // If the player isn't looking at anything.
         else
         {
             HideInteract();
             directionText.SetText("");
         }
-        
+
         // Makes the coinsText show the actual amount of coins that the player currently has.
         coinsText.SetText(controller.GetCoins().ToString());
-        
+
         // If we are fading.
         if (movingAnimator.GetBool(fadingID))
         {
@@ -413,7 +352,12 @@ public class MainUI : MonoBehaviour
             }
         }
     }
-    
+
+    private void HideInteract()
+    {
+        interactIcon.SetActive(false);
+    }
+
     /// <summary>
     /// Shows the <see cref="interactIcon"/> with the given sprite.
     /// </summary>
@@ -422,14 +366,6 @@ public class MainUI : MonoBehaviour
     {
         interactIcon.GetComponent<Image>().sprite = sprite;
         interactIcon.SetActive(true);
-    }
-
-    /// <summary>
-    /// Hides the <see cref="interactIcon"/>.
-    /// </summary>
-    private void HideInteract()
-    {
-        interactIcon.SetActive(false);
     }
 
     private void MoveRooms()

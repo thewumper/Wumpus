@@ -78,6 +78,11 @@ namespace WumpusUnity
                     return "Acrobat";
                 case ControllerState.GameOver:
                     return "GameOver";
+                case ControllerState.Trivia:
+                    return "Trivia";
+                case ControllerState.AmmoRoom:
+                case ControllerState.GunRoom:
+                    return "StoresRoom";
                 default:
                     return "Main";
             }
