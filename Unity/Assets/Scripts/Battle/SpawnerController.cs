@@ -1,26 +1,37 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WumpusUnity.Battle
 {
-    public class SpawnerController
+    public class SpawnerController : MonoBehaviour
     {
         [SerializeField] private GameObject Room;
         [SerializeField] private new Rigidbody2D Rigidbody;
-        [SerializeField] private GameObject Prefab;
+        [FormerlySerializedAs("Prefab")] [SerializeField] protected GameObject Bullet;
+        [SerializeField] protected GameObject HomingBullet;
+
+        protected Dictionary<String, GameObject> BulletTypes;
         
         /// <summary>
-        /// Pairs of spawner mode components and the time they remain when active
+        /// Points to each spawner mode component
         /// </summary>
-        [SerializeField] private (SpawnerMode, float)[] Modes;
+        [SerializeField] private SpawnerMode[] Modes;
 
         private float remainingTime;
 
         void Start()
         {
-            foreach ((SpawnerMode, float) mode in Modes)
+            BulletTypes = new Dictionary<string, GameObject>()
             {
-                mode.Item1.Initialize(Room, Rigidbody, Prefab);
+                { "Bullet", Bullet },
+                { "HomingBullet", HomingBullet }
+            };
+            
+            foreach (SpawnerMode mode in Modes)
+            {
+                mode.Initialize(Room, Rigidbody, BulletTypes);
             }
         }
         
