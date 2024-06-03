@@ -23,8 +23,8 @@ public class WumpusCutscene : MonoBehaviour
     {
         if (isDropping)
         {
-            tv.transform.position = Vector3.Lerp(tv.transform.position,targetPosition.position,0.1f);
-            if (Vector3.Distance(tv.transform.position, targetPosition.position) <= 0.01)
+            tv.transform.position = Vector3.MoveTowards(targetPosition.position, tv.transform.position,0.01f * Time.deltaTime);
+            if (Vector3.Distance(tv.transform.position, targetPosition.position) <= 0.1)
             {
                 isDropping = false;
                 SceneManager.LoadScene(battleScene, LoadSceneMode.Additive);
