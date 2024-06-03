@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using WumpusCore.Controller;
 using WumpusUnity;
@@ -31,14 +32,19 @@ public class MainMenuUI : MonoBehaviour
         sceneController = SceneController.GlobalSceneController;
     }
 
-    void Update()
+    public void PlayGame()
     {
-        // If the player is pressing the lmb.
-        if (Input.GetMouseButtonDown(0))
-        {
-            // Start the game.
-            controller.StartGame();
-            sceneController.GotoCorrectScene();
-        }
+        // Start the game.
+        controller.StartGame();
+        sceneController.GotoCorrectScene();    
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit(0);
+#endif
     }
 }
