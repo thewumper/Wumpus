@@ -149,5 +149,15 @@ public class PlayerController : MonoBehaviour
     private void OnDeath()
     {
         throw new NotImplementedException();
+        GameLost();
+    }
+
+    /// <summary>
+    /// Calls once the player loses
+    /// Unloads the scene
+    /// </summary>
+    public static void GameLost()
+    {
+        throw new NotImplementedException();
     }
 }
