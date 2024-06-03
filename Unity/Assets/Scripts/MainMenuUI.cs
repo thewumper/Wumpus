@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 using WumpusUnity;
 
@@ -14,29 +16,38 @@ public class MainMenuUI : MonoBehaviour
     /// </summary>
     private Controller controller;
 
-    [SerializeField] 
     private string triviaNormal;
+    private string triviaAdvanced;
     private string topologyDir;
-    
     
     void Awake()
     {
         // Gets the path to the trivia questions.
         triviaNormal = Application.dataPath + "/Trivia/Questions.json";
+        triviaAdvanced = Application.dataPath + "/Trivia/AdvancedQuestions.json";
+
         // Gets the path to the Map.
         topologyDir = Application.dataPath + "/Maps";
-        
-        // Initializes the Controller.
-        controller = new Controller(triviaNormal, topologyDir, 0);
-        // Initializes the SceneController.
-        sceneController = SceneController.GlobalSceneController;
     }
 
     public void PlayGame()
     {
-        // Start the game.
+        ushort randomMap = (ushort)Random.Range(0, 4);
+
+        Debug.Log("Loading map #" + randomMap);
+
+        // Initializes the Controller.
+        controller = new Controller(triviaNormal, topologyDir, randomMap);
+        // Initializes the SceneController.
+        sceneController = SceneController.GlobalSceneController;
+
         controller.StartGame();
         sceneController.GotoCorrectScene();    
+    }
+
+    private IEnumerator AllowControllerLoad()
+    {
+        yield return new WaitForSeconds(5.0f);
     }
 
     public void QuitGame()

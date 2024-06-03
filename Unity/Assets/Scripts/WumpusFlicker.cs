@@ -19,10 +19,12 @@ public class WumpusFlicker : MonoBehaviour
     private bool lightVisuallyOn;
     private float timer;
     private float delay;
+    private Quaternion startingRotation;
 
     void Awake()
     {
         model = GetComponent<MeshRenderer>();
+        startingRotation = transform.rotation;
     }
 
     void Update()
@@ -42,6 +44,8 @@ public class WumpusFlicker : MonoBehaviour
     {
         if (lightOn)
         {
+            transform.rotation = startingRotation;
+
             lightVisuallyOn = true;
             delay = Random.Range(0, maxInterval);
         }

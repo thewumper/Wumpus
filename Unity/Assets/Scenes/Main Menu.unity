@@ -998,6 +998,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f864ad2fe3c615d4092dab2f86313ab8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1392884976}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f864ad2fe3c615d4092dab2f86313ab8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1392884979}
   m_SourcePrefab: {fileID: 100100000, guid: f864ad2fe3c615d4092dab2f86313ab8, type: 3}
 --- !u!4 &1149930151 stripped
 Transform:
@@ -1471,11 +1474,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chanceForLongFlicker: 8
-  minLongFlicker: 1
+  minLongFlicker: 2
   maxLongFlicker: 4
-  maxInterval: 0.16
+  maxInterval: 1
   maxFlicker: 0.2
   minFlicker: 0.04
+--- !u!114 &1392884979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392884973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b8fb1b0a2e44343bd212a69b5908d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinSpeed: 2
+  spinVector: {x: 0, y: 0, z: 1}
 --- !u!1 &1430383969
 GameObject:
   m_ObjectHideFlags: 0
