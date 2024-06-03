@@ -2155,8 +2155,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 108.16, y: 0.6108}
-  m_SizeDelta: {x: 201.67, y: 312.6452}
+  m_AnchoredPosition: {x: 122.869354, y: 0.6108}
+  m_SizeDelta: {x: 231.0887, y: 312.6452}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1404257791
 MonoBehaviour:
@@ -2178,7 +2178,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hint
+  m_text: You hear Acrobat
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
   m_sharedMaterial: {fileID: -5568975997839417396, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}

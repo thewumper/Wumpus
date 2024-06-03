@@ -366,7 +366,7 @@ public class MainUI : MonoBehaviour
             if (hit.transform.CompareTag("door") && !pLock)
             {
                 moveDir = hit.transform.GetComponent<Door>().GetDir();
-                directionText.SetText(moveDir.ToString());
+                directionText.SetText(DirectionHelper.GetLongNameFromDirection(moveDir));
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
