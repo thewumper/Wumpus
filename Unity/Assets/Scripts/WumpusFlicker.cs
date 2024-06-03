@@ -2,15 +2,17 @@
 
 public class WumpusFlicker : MonoBehaviour
 {
-    [SerializeField]
-    private float maxInterval = 0.3f;
+    [SerializeField, Range(1,100)] private int chanceForLongFlicker = 8;
+ 
+    [SerializeField] private float minLongFlicker = 1.0f;
     
-    [SerializeField]
-    private float maxFlicker = 10.0f;
+    [SerializeField] private float maxLongFlicker = 4.0f;
     
-    [SerializeField]
-    private float minFlicker = 0.25f;
-
+    [SerializeField] private float maxInterval = 0.16f;
+    
+    [SerializeField] private float maxFlicker = 0.2f;
+    
+    [SerializeField] private float minFlicker = 0.04f;
     
     private MeshRenderer model;
     private bool lightState;
@@ -46,8 +48,11 @@ public class WumpusFlicker : MonoBehaviour
         else
         {
             lightVisuallyOn = false;
-            delay = Random.Range(minFlicker, maxFlicker);
+
+            // Random chance to have a really long flicker
+            delay = Random.Range(1, 100) <= chanceForLongFlicker ? Random.Range(minLongFlicker, maxLongFlicker) : Random.Range(minFlicker, maxFlicker);
         }
+        
         timer = 0;
     }
 }
