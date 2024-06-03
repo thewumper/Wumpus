@@ -42,12 +42,7 @@ public class MainMenuUI : MonoBehaviour
         sceneController = SceneController.GlobalSceneController;
 
         controller.StartGame();
-        sceneController.GotoCorrectScene();    
-    }
-
-    private IEnumerator AllowControllerLoad()
-    {
-        yield return new WaitForSeconds(5.0f);
+        sceneController.GotoCorrectScene();
     }
 
     public void QuitGame()
