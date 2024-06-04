@@ -90,13 +90,13 @@ namespace WumpusCore.Player
         /// <param name="directions">The <see cref="Directions"/> direction to move to.</param>
         public void MoveInDirection(Directions direction)
         {
-            MoveToRoom(GetRoomInDirection(direction));
             if (CoinRemainingInHallway(direction))
             {
                 GainCoins(1);
                 gameLocations.hallwayCoins[location][direction] = false;
-                gameLocations.hallwayCoins[thisRoom.ExitRooms[direction].Id][direction.GetInverse()] = false;
+                gameLocations.hallwayCoins[topologyLink.GetRoom(location).ExitRooms[direction].Id][direction.GetInverse()] = false;
             }
+            MoveToRoom(GetRoomInDirection(direction));
             TurnsTaken++;
         }
 
