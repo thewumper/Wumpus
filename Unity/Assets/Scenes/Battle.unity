@@ -2134,8 +2134,9 @@ GameObject:
   - component: {fileID: 1844008271}
   - component: {fileID: 1844008269}
   - component: {fileID: 1844008272}
-  - component: {fileID: 1844008273}
   - component: {fileID: 1844008274}
+  - component: {fileID: 1844008273}
+  - component: {fileID: 1844008275}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -2254,7 +2255,7 @@ MonoBehaviour:
   rigidbody: {fileID: 1844008269}
   center: {x: 3394, y: 2931}
   radius: 125
-  speed: 300
+  speed: 0.3
 --- !u!114 &1844008273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2285,7 +2286,25 @@ MonoBehaviour:
   room: {fileID: 911301553}
   rigidbody: {fileID: 1844008269}
   prefabBullet: {fileID: 6864899258456612908, guid: 3f437766824041370915961348f5366f, type: 3}
-  prefabHomingBullet: {fileID: 0}
+  prefabHomingBullet: {fileID: 6864899258456612908, guid: f7ffcb3162d9a5247af31ee47d24dc1c, type: 3}
+--- !u!114 &1844008275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844008267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e728cfca54471aa1db552f13b70561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 5
+  target: {fileID: 387599879}
+  outputSpeed: 100
+  outputDelay: 1
+  bulletCount: 1
+  bulletSpread: 40
 --- !u!1 &1878094339
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,9 +4,9 @@ namespace WumpusUnity.Battle
 {
     public class HomingController : MovementController
     {
-        [SerializeField] private Rigidbody2D target;
-        [SerializeField] private float speed;
-        [SerializeField] private float throttleDownRange;
+        [SerializeField] public Rigidbody2D target;
+        [SerializeField] public float speed;
+        [SerializeField] public float throttleDownRange;
         
         void Update()
         {

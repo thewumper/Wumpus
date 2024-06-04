@@ -28,7 +28,7 @@ namespace WumpusUnity.Battle
             HazardTypes = new Dictionary<string, GameObject>()
             {
                 {"Bullet", prefabBullet},
-                {"HomingBullet", prefabBullet}
+                {"HomingBullet", prefabHomingBullet}
             };
             
             Modes = GetComponents<SpawnerMode>();
