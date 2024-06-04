@@ -1,7 +1,9 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 using WumpusUnity;
+using Random = UnityEngine.Random;
 
 public class GameOverUI : MonoBehaviour
 {
@@ -10,25 +12,24 @@ public class GameOverUI : MonoBehaviour
     
     public void Awake()
     {
-        // Instantiates the Controller, if there isn't one already.
-        try
-        {
-            controller = Controller.GlobalController;
-        }
-        catch (NullReferenceException)
-        {
-            controller = new Controller
-                (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
-        }
+        ushort randomMap = (ushort)Random.Range(0, 4);
+
+        Debug.Log("Loading map #" + randomMap);
+        
+        controller = new Controller
+            (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", randomMap);
         sceneController = SceneController.GlobalSceneController;
     }
 
-    public void Update()
+    public void PlayAgain()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            controller.StartGame();
-            sceneController.GotoCorrectScene();
-        }
+
+        controller.StartGame();
+        sceneController.GotoCorrectScene();
+    }
+
+    public void QuitToMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
     }
 }

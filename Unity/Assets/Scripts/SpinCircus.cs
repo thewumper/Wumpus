@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpinCircus : MonoBehaviour
 {
     [SerializeField] private float spinSpeed = 1f;
-    [SerializeField] private Vector3 spinVector;
+    [SerializeField] private Vector3 spinVector = Vector3.forward;
     
     private void Update()
     {
