@@ -442,10 +442,6 @@ public class MainUI : MonoBehaviour
     private void MoveRooms()
     {
         // Move rooms.
-        Debug.Log(controller.GetPlayerLocation());
-        Debug.Log(RoomNum);
-        Array.ForEach(controller.GetCurrentRoom().ExitDirections, i => Debug.Log(i));
-
         Debug.Log($"Moving in a direction {moveDir}");
         controller.MoveInADirection(moveDir);
         movingAnimator.SetBool(fadingID, false);

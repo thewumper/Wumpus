@@ -143,7 +143,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      TentTexture_0: 7198479929607403955
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
