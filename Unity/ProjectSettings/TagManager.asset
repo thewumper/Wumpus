@@ -8,6 +8,8 @@ TagManager:
   - hallDoor
   - unmoveableDoor
   - Target
+  - Ammo
+  - Gun
   layers:
   - Default
   - TransparentFX

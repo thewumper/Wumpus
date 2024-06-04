@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using WumpusCore.Controller.Stopwatch;
 using WumpusCore.Entity;
@@ -113,7 +114,6 @@ namespace WumpusCore.Controller
             gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
-
             gameLocations.GetPlayer().GainCoins((uint) startingCoins);
         }
 
@@ -144,21 +144,18 @@ namespace WumpusCore.Controller
         /// <param name="direction">The direction to move the player in.</param>
         public void MoveInADirection(Directions direction)
         {
-            ValidateState(new [] {InRoom, Rats, CatDialouge});
+            ValidateState(new [] {InRoom, Rats, CatDialouge, AmmoRoom, GunRoom});
 
             // if (state == CatDialouge)
             // {
             //     gameLocations.GetCat().location = gameLocations.GetEmptyRoom();
             // }
 
+
             state = InBetweenRooms;
             currentRoomHandledAmomalies.Clear();
-
-            Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
-
-            nextRoom = topology.GetRoom(player.location).ExitRooms[direction];
-
             gameLocations.GetPlayer().MoveInDirection(direction);
+            nextRoom = GetCurrentRoom();
         }
 
         /// <summary>
@@ -307,6 +304,7 @@ namespace WumpusCore.Controller
             {
                 hints.Add(new DirectionalHint(
                     GetAudibleAnomaliesInRom(exitRooms[directions].Id),directions));
+
             }
 
             return hints;
@@ -397,20 +395,30 @@ namespace WumpusCore.Controller
 
             if (trivia.reportResult() == GameResult.Win)
             {
-                state = InRoom;
                 if (GetCurrentRoomType() != RoomType.Vats)
                 {
+                    if (GetCurrentRoomType() == RoomType.GunRoom)
+                    {
+                        state = GunRoom;
+                    } else if (GetCurrentRoomType() == RoomType.AmmoRoom)
+                    {
+                        state = AmmoRoom;
+                    }
                     CollectItemsInRoom();
+                }
+                else
+                {
+                    state = InRoom;
                 }
             }
             else if (trivia.reportResult() == GameResult.Loss)
             {
-                if (GetCurrentRoomType() != RoomType.Vats)
-                {
-                    state = InRoom;
+                if (GetCurrentRoomType() == RoomType.GunRoom) {
+                    state = GunRoom;
+                } else if (GetCurrentRoomType() == RoomType.AmmoRoom) {
+                    state = AmmoRoom;
                 }
-                else
-                {
+                else {
                     state = GameOver;
                 }
             }
@@ -420,7 +428,14 @@ namespace WumpusCore.Controller
 
         private void CollectItemsInRoom()
         {
-            ValidateState(new []{GunRoom, AmmoRoom, InRoom});
+            ValidateState(new []{GunRoom, AmmoRoom});
+
+            if (!CanRoomBeCollectedFrom())
+            {
+                throw new InvalidOperationException("The items in this room have already bee");
+            }
+
+            gameLocations.MarkRoomAsCollected((ushort) GetPlayerLocation());
 
             if (GetCurrentRoomType() == RoomType.AmmoRoom)
             {
@@ -440,21 +455,22 @@ namespace WumpusCore.Controller
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not.
             // being prepared to handle that controller state.
             ValidateState(new[] { StartScreen });
-            this.state = InRoom;
+            state = InRoom;
         }
 
         public void EndGame(bool success, WinLossConditions gameEndCause)
         {
             if (success)
             {
-                this.state = WonGame;
+                state = WonGame;
 
             }
             else
             {
-                this.state = GameOver;
+                state = GameOver;
             }
             GameEndCause = gameEndCause;
+
         }
 
 
@@ -607,6 +623,11 @@ namespace WumpusCore.Controller
         public bool DoesPlayerHaveGun()
         {
             return gameLocations.GetPlayer().HasGun;
+        }
+
+        public bool CanRoomBeCollectedFrom()
+        {
+            return !gameLocations.HasRoomBeenCollected((ushort) GetPlayerLocation());
         }
     }
 }

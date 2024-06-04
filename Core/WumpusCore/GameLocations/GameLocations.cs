@@ -71,6 +71,8 @@ namespace WumpusCore.GameLocations
             get { return rooms; }
         }
 
+        private List<ushort> roomsCollectedFrom = new List<ushort>() ;
+
         /// <summary>
         /// Contains most methods and data to do with rooms.
         /// </summary>
@@ -301,7 +303,21 @@ namespace WumpusCore.GameLocations
 
             return adjacentRooms;
         }
-        
-        
+
+
+        public void MarkRoomAsCollected(ushort roomNum)
+        {
+
+            if (roomsCollectedFrom.Contains(roomNum))
+            {
+                return;
+            }
+            roomsCollectedFrom.Add(roomNum);
+        }
+
+        public bool HasRoomBeenCollected(ushort roomNum)
+        {
+            return roomsCollectedFrom.Contains(roomNum);
+        }
     }
 }

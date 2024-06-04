@@ -69,7 +69,7 @@ namespace WumpusCore.HighScoreNS
             int calculatedScore = 
                 (100
                 - numTurns
-                + goldLeft
+                + Math.Max(0, goldLeft)
                 + (5 * arrowsLeft)
                 + (TranslateWumpusLife(isWumpusDead) * 50));
             return calculatedScore;
