@@ -9,10 +9,14 @@ public class WumpusCutscene : MonoBehaviour
     [SerializeField] GameObject tv;
     [SerializeField] private string battleScene;
     [SerializeField] private Transform targetPosition;
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform movePlayerTo;
     [SerializeField] private TMP_Text message;
     [SerializeField] private GameObject buttons;
     [SerializeField] private float speed;
     bool isDropping;
+
+    private bool isMoving;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,13 +28,25 @@ public class WumpusCutscene : MonoBehaviour
     {
         if (isDropping)
         {
-            tv.transform.position = Vector3.MoveTowards(targetPosition.position, tv.transform.position,speed * Time.deltaTime);
+            tv.transform.position = Vector3.Lerp(tv.transform.position,targetPosition.position,speed * Time.deltaTime);
             if (Vector3.Distance(tv.transform.position, targetPosition.position) <= 0.1)
             {
                 isDropping = false;
+                isMoving = true;
+            }
+        }
+
+        if (isMoving)
+        {
+            player.transform.position = Vector3.Lerp(player.transform.position,targetPosition.position,speed * Time.deltaTime);
+            if (Vector3.Distance(player.transform.position, targetPosition.position) <= 0.1)
+            {
+                isDropping = false;
+                isMoving = false;
                 SceneManager.LoadScene(battleScene, LoadSceneMode.Additive);
             }
         }
+
     }
 
     public void No()
