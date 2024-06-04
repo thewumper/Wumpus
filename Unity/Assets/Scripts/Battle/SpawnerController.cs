@@ -1,33 +1,70 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace WumpusUnity.Battle
 {
-    public class SpawnerController
+    public class SpawnerController : MonoBehaviour
     {
-        [SerializeField] private GameObject Room;
-        [SerializeField] private new Rigidbody2D Rigidbody;
-        [SerializeField] private GameObject Prefab;
+        [SerializeField] private GameObject room;
+        [SerializeField] private new Rigidbody2D rigidbody;
         
-        /// <summary>
-        /// Pairs of spawner mode components and the time they remain when active
-        /// </summary>
-        [SerializeField] private (SpawnerMode, float)[] Modes;
+        // Hazard types
+        [SerializeField] private GameObject prefabBullet;
+        [SerializeField] private GameObject prefabHomingBullet;
+
+        protected Dictionary<String, GameObject> HazardTypes;
+        
+        private SpawnerMode[] Modes;
+        private int currentMode = 0;
 
         private float remainingTime;
 
         void Start()
         {
-            foreach ((SpawnerMode, float) mode in Modes)
+            HazardTypes = new Dictionary<string, GameObject>()
             {
-                mode.Item1.Initialize(Room, Rigidbody, Prefab);
+                {"Bullet", prefabBullet},
+                {"HomingBullet", prefabBullet}
+            };
+            
+            Modes = GetComponents<SpawnerMode>();
+            foreach (SpawnerMode mode in Modes)
+            {
+                mode.Initialize(room, rigidbody, HazardTypes);
             }
+
+            // Mode decided in Update
+            remainingTime = 0f;
         }
         
         void Update()
         {
-            //
+            remainingTime -= Time.deltaTime;
+            if (remainingTime <= 0)
+            {
+                Modes[currentMode].enabled = false;
+                int nextMode = currentMode;
+                if (Modes.Length > 1)
+                {
+                    while (nextMode == currentMode)
+                    {
+                        nextMode = UnityEngine.Random.Range(0, Modes.Length);
+                    }
+                }
+                else
+                {
+                    nextMode = 0;
+                }
+
+                currentMode = nextMode;
+                Debug.Log("Switching to mode " + currentMode + ", " + Modes[currentMode].GetType());
+                Modes[currentMode].enabled = true;
+                remainingTime = Modes[currentMode].duration;
+            }
         }
-        
     }
 }

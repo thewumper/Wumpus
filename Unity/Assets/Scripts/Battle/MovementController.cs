@@ -15,7 +15,6 @@ public class MovementController : MonoBehaviour
     
     void Start()
     {
-        Debug.Log(rigidbody.position);
         rigidbody.position = startingPosition;
         rigidbody.velocity = startingVelocity;
         rigidbody.inertia = float.MaxValue;
@@ -25,6 +24,5 @@ public class MovementController : MonoBehaviour
     {
         rigidbody.velocity += acceleration * Time.deltaTime;
         rigidbody.velocity *= (float)Math.Pow(velocityFalloff, Time.deltaTime);
-        Debug.Log(rigidbody.position);
     }
 }
