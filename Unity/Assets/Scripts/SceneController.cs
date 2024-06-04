@@ -69,7 +69,7 @@ namespace WumpusUnity
                 case ControllerState.InBetweenRooms:
                     return "Hallway";
                 case ControllerState.VatRoom:
-                    return "Vat";
+                    return "Vats";
                 case ControllerState.Rats:
                     return "Rats";
                 case ControllerState.BatTransition:

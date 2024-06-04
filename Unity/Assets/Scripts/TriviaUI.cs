@@ -38,7 +38,6 @@ public class TriviaUI : MonoBehaviour
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
         sceneController = SceneController.GlobalSceneController;
-        controller.Debug = true;
     }
 
     private void Start()
@@ -59,7 +58,8 @@ public class TriviaUI : MonoBehaviour
 
     public void Choose(int choice)
     {
-        controller.SubmitTriviaAnswer(choice);
+        bool correctness = controller.SubmitTriviaAnswer(choice);
+        Debug.Log($"You got the trivia question correct: {correctness}");
         Debug.Log(controller.GetState());
         if (controller.GetState() != ControllerState.Trivia) sceneController.GotoCorrectScene();
         

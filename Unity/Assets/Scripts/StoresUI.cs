@@ -261,7 +261,6 @@ public class StoresUI : MonoBehaviour
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
         ControllerState state = controller.GetState();
-        state = ControllerState.GunRoom;
         if (state==ControllerState.GunRoom)
         {
             gun.SetActive(true);
