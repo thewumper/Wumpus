@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using WumpusCore.Controller.Stopwatch;
 using WumpusCore.Entity;
@@ -113,7 +114,6 @@ namespace WumpusCore.Controller
             gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
-
             gameLocations.GetPlayer().GainCoins((uint) startingCoins);
         }
 
@@ -304,6 +304,7 @@ namespace WumpusCore.Controller
             {
                 hints.Add(new DirectionalHint(
                     GetAudibleAnomaliesInRom(exitRooms[directions].Id),directions));
+
             }
 
             return hints;
@@ -469,6 +470,7 @@ namespace WumpusCore.Controller
                 state = GameOver;
             }
             GameEndCause = gameEndCause;
+
         }
 
 
