@@ -26,6 +26,7 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private GameObject cam;
+
     /// <summary>
     /// The Rotation for the Movement of the Player.
     /// </summary>
@@ -57,7 +58,7 @@ public class MainUI : MonoBehaviour
     {
         get
         {
-            return roomNum;
+            return (ushort) controller.GetPlayerLocation();
         }
         set
         {
@@ -402,7 +403,7 @@ public class MainUI : MonoBehaviour
             // If the screen has fully faded to black.
             if (black.color.a.Equals(1))
             {
-               MoveRooms();
+                MoveRooms();
             }
             // If the screen has not fully faded to black.
             else
@@ -435,6 +436,11 @@ public class MainUI : MonoBehaviour
     private void MoveRooms()
     {
         // Move rooms.
+        Debug.Log(controller.GetPlayerLocation());
+        Debug.Log(RoomNum);
+        Array.ForEach(controller.GetCurrentRoom().ExitDirections, i => Debug.Log(i));
+
+        Debug.Log($"Moving in a direction {moveDir}");
         controller.MoveInADirection(moveDir);
         movingAnimator.SetBool(fadingID, false);
         sceneController.GotoCorrectScene();

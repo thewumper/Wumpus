@@ -14,16 +14,6 @@ namespace WumpusTesting
     {
         public ControllerTest()
         {
-            // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter("./map0.wmp"))
-            {
-
-                for (int i = 0; i < 30; i++)
-                {
-                    outputFile.WriteLine("N,NE,SE,S,SW,NW");
-                }
-            }
-
             using (StreamWriter outputFile = new StreamWriter("./questions.json"))
             {
                 outputFile.WriteLine("[{\"question\": \"0\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 0},{\"question\": \"1\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 1},{\"question\": \"2\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 2},{\"question\": \"3\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 3}]");
@@ -198,6 +188,10 @@ namespace WumpusTesting
                 }
                 case ControllerState.GunRoom:
                 case ControllerState.AmmoRoom:
+                    if (!controller.CanRoomBeCollectedFrom())
+                    {
+                        break;
+                    }
                     controller.StartTrivia();
 
                     bool hasGun = controller.DoesPlayerHaveGun();

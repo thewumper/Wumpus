@@ -217,6 +217,7 @@ public class StoresUI : MonoBehaviour
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
+        controller.Debug = true;
 
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
@@ -225,16 +226,16 @@ public class StoresUI : MonoBehaviour
     void Start()
     {
         // Locks the cursor and makes it invisible.
-        // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.visible = false;
-        //
-        // cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
-        // Debug.Log(PersistentData.Instance.EulerAngle);
-        // mmDirection.transform.eulerAngles = new Vector3(
-        //     mmDirection.transform.eulerAngles.x,
-        //     mmDirection.transform.eulerAngles.y,
-        //     PersistentData.Instance.EulerAngle.y);
-        //
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
+        Debug.Log(PersistentData.Instance.EulerAngle);
+        mmDirection.transform.eulerAngles = new Vector3(
+            mmDirection.transform.eulerAngles.x,
+            mmDirection.transform.eulerAngles.y,
+            PersistentData.Instance.EulerAngle.y);
+
 
         // Makes it so you can't normally see the interactIcon.
         HideInteract();
@@ -259,15 +260,17 @@ public class StoresUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
-        if (controller.GetState()==ControllerState.GunRoom)
+        ControllerState state = controller.GetState();
+        state = ControllerState.GunRoom;
+        if (state==ControllerState.GunRoom)
         {
             gun.SetActive(true);
-            ammo.SetActive(true);
+            ammo.SetActive(false);
         }
-        else if (controller.GetState() == ControllerState.AmmoRoom)
+        else if (state == ControllerState.AmmoRoom)
         {
             ammo.SetActive(true);
-            gun.SetActive(true);
+            gun.SetActive(false);
         }
         else
         {
@@ -288,16 +291,54 @@ public class StoresUI : MonoBehaviour
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
             PersistentData.Instance.EulerAngle = cam.transform.eulerAngles;
 
+
             mmDirection.transform.eulerAngles = new Vector3(
                 mmDirection.transform.eulerAngles.x,
                 mmDirection.transform.eulerAngles.y,
                 180 - PersistentData.Instance.EulerAngle.y);
         }
+
+
+        IRoom room = controller.GetCurrentRoom();
+        // Makes only the doors that are in the room visible.
+        foreach (Directions dir in room.ExitDirections)
+        {
+            string name = DirectionHelper.GetShortNameFromDirection(dir);
+            switch (name)
+            {
+                case "N":
+                    northDoor.SetActive(true);
+                    mmNorth.SetActive(true);
+                    break;
+                case "NE":
+                    northEastDoor.SetActive(true);
+                    mmNorthEast.SetActive(true);
+                    break;
+                case "SE":
+                    southEastDoor.SetActive(true);
+                    mmSouthEast.SetActive(true);
+                    break;
+                case "S":
+                    southDoor.SetActive(true);
+                    mmSouth.SetActive(true);
+                    break;
+                case "SW":
+                    southWestDoor.SetActive(true);
+                    mmSouthWest.SetActive(true);
+                    break;
+                case "NW":
+                    northWestDoor.SetActive(true);
+                    mmNorthWest.SetActive(true);
+                    break;
+            }
+        }
+
         // Used for checking what the player is currently looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         // If the player is looking at something.
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+
             // If the player is looking at a door.
             if (hit.transform.CompareTag("door") && !pLock)
             {
@@ -317,7 +358,47 @@ public class StoresUI : MonoBehaviour
                 ShowInteract(uninteractableIcon);
             }
             // If the player is looking at the gun or ammo they can intereact
+            else if (hit.transform.CompareTag("Gun") && !pLock)
+            {
+                // TODO! Stinky code duplication
+                bool canCollect = controller.CanRoomBeCollectedFrom();
+                if (canCollect)
+                {
+                    ShowInteract(useIcon);
+                    directionText.SetText("Collect the gun");
+                }
+                else
+                {
+                    directionText.SetText("You have already collected the gun");
+                    ShowInteract(uninteractableIcon);
+                }
 
+                if (Input.GetMouseButtonDown(0) && canCollect)
+                {
+                    controller.StartTrivia();
+                    sceneController.GotoCorrectScene();
+                }
+            }
+            else if (hit.transform.CompareTag("Ammo") && !pLock)
+            {
+                bool canCollect = controller.CanRoomBeCollectedFrom();
+                if (canCollect)
+                {
+                    ShowInteract(useIcon);
+                    directionText.SetText("Collect the ammo");
+                }
+                else
+                {
+                    directionText.SetText("You have already collected this ammo");
+                    ShowInteract(uninteractableIcon);
+                }
+
+                if (Input.GetMouseButtonDown(0) && canCollect)
+                {
+                    controller.StartTrivia();
+                    sceneController.GotoCorrectScene();
+                }
+            }
             // If the player is looking at something that is none of these.
             else
             {
