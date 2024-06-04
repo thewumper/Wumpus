@@ -27,7 +27,7 @@ namespace WumpusTesting
             };
             nodes[0].Connect(nodes[1], Directions.North).Connect(nodes[2], Directions.North);
             
-            Graph graph = new Graph(new List<IRoom>(nodes));
+            Graph graph = new Graph(new List<IRoom>(nodes), new Random());
             Assert.IsTrue(graph.IsNodeRemovalValid(nodes[0]));
             Assert.IsFalse(graph.IsNodeRemovalValid(nodes[1]));
             Assert.IsTrue(graph.IsNodeRemovalValid(nodes[2]));
@@ -55,7 +55,7 @@ namespace WumpusTesting
             nodes[2].Connect(nodes[5], Directions.NorthEast).Connect(nodes[8], Directions.NorthEast);
 
             
-            Graph graph = new Graph(new List<IRoom>(nodes));
+            Graph graph = new Graph(new List<IRoom>(nodes), new Random());
             foreach (TestNode node in nodes)
             {
                 Assert.IsTrue(graph.IsNodeRemovalValid(node));
@@ -84,7 +84,7 @@ namespace WumpusTesting
             nodes[1].Connect(nodes[4], Directions.NorthEast).Connect(nodes[7], Directions.NorthEast);
             nodes[2].Connect(nodes[5], Directions.NorthEast).Connect(nodes[8], Directions.NorthEast);
             
-            Graph graph = new Graph(new List<IRoom>(nodes));
+            Graph graph = new Graph(new List<IRoom>(nodes), new Random());
             Assert.IsTrue(graph.IsNodeRemovalValid(new HashSet<IRoom>()
             {
                 nodes[0],
@@ -118,7 +118,7 @@ namespace WumpusTesting
             nodes[1].Connect(nodes[4], Directions.NorthEast).Connect(nodes[7], Directions.NorthEast);
             nodes[2].Connect(nodes[5], Directions.NorthEast).Connect(nodes[8], Directions.NorthEast);
             
-            Graph graph = new Graph(new List<IRoom>(nodes));
+            Graph graph = new Graph(new List<IRoom>(nodes), new Random());
             graph.GetRandomPossibleSolutions(1);
             graph.GetRandomPossibleSolutions(2);
             graph.GetRandomPossibleSolutions(3);

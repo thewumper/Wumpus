@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +29,9 @@ public class HallUI : MonoBehaviour
     /// </summary>
     [SerializeField] 
     private GameObject movementRotation;
+
+
+    
     /// <summary>
     /// The speed at which the camera rotates with the player's mouse.
     /// </summary>
@@ -93,6 +98,13 @@ public class HallUI : MonoBehaviour
     [SerializeField] 
     private TMP_Text hint;
 
+    private bool isCutscene;
+    
+    [SerializeField] private ShaderApplication shader;
+    [SerializeField] private TMP_Text[] wumpusMessages;
+    [SerializeField] private Light[] ceilingLights;
+    [SerializeField] private GameObject[] automove;
+    
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -114,11 +126,20 @@ public class HallUI : MonoBehaviour
         // Initializes the movingID.
         fadingID = Animator.StringToHash("fading");
 
+
+        isCutscene = Controller.GlobalController.isNextRoomAWumpus();
+        Debug.Log($"Is it a cutscene: {isCutscene}");
+        
         AnsweredQuestion q = controller.GetUnaskedQuestion();
         hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
-
+        if (isCutscene)
+        {
+            SetupCutscene();
+        }
         interactIcon.SetActive(false);
     }
+
+
 
     void Update()
     {
@@ -130,6 +151,14 @@ public class HallUI : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
         }
+
+        if (isCutscene)
+        {
+            DoCutscene();
+            return;
+        }
+        
+        
         // Used for checking what the player is looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         // If the player is looking at something.
@@ -192,6 +221,39 @@ public class HallUI : MonoBehaviour
             }
         }
     }
+    private void SetupCutscene()
+    {
+        shader.PosterzationBands1 = 20;
+        shader.OverallDistortionFreq = 10000.7f;
+        shader.OverallDistortionMag = 2;
+        shader.OverallDistortionSpeed = 0.002f;
+        foreach (TMP_Text message in wumpusMessages)
+        {
+            message.gameObject.SetActive(true);
+        }
+        hint.gameObject.SetActive(false);
+        for (int i = 0; i < automove.Length; i++)
+        {
+            StartCoroutine(LightGoesOut(i));
+        }
+        
+    }
+    private void DoCutscene()
+    {
+        cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
+        if (cam.transform.position.z >= automove[^1].transform.position.z)
+        {
+            isCutscene = false;
+        }
+    }
+
+    private IEnumerator LightGoesOut(int light)
+    {
+        yield return new WaitForSeconds(light * 7);
+        ceilingLights[light].gameObject.AddComponent<LightFlicker>();
+        yield return new WaitForSeconds(5);
+        ceilingLights[light].enabled = false;
+    }
 
     /// <summary>
     /// Shows the <see cref="interactIcon"/> with the given sprite.
@@ -210,4 +272,7 @@ public class HallUI : MonoBehaviour
     {
         interactIcon.SetActive(false);
     }
+    
+    
+    
 }

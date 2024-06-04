@@ -777,7 +777,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1265475351
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1218,6 +1218,7 @@ GameObject:
   - component: {fileID: 1495926872}
   - component: {fileID: 1495926875}
   - component: {fileID: 1495926876}
+  - component: {fileID: 1495926877}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1274,7 +1275,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 690dd88c268220243a22984eec90bbe9, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1345,6 +1346,30 @@ MonoBehaviour:
   camera: {fileID: 1495926873}
   wumpus: {fileID: 834527482}
   wumpusFiringSpeed: 10000
+--- !u!114 &1495926877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495926871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e2c511571fc7b34d9de1b3b8a1c8e1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 320
+  height: 280
+  magnitude: 0
+  speed: 0
+  minTime: 0
+  maxTime: 1
+  OverallDistortionSpeed: 0
+  OverallDistortionMag: 0
+  overallDistortionFreq: 0
+  doDistortionPrePixelazation: 1
+  posterzationBands: 100
+  shader: {fileID: 4800000, guid: 56e7faa0cbb6fd647a9f51324add74ed, type: 3}
 --- !u!1001 &1548692855
 PrefabInstance:
   m_ObjectHideFlags: 0

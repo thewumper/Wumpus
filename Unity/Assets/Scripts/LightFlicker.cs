@@ -10,10 +10,10 @@ public class LightFlicker : MonoBehaviour
     private float maxInterval = 0.2f;
 
     [SerializeField]
-    private float minLightIntensity = 0.1f;
+    private float minLightIntensity = 0.05f;
 
     [SerializeField]
-    private float maxFlicker = 0.2f;
+    private float maxFlicker = 0.5f;
 
     [SerializeField]
     private float flickerLerpSpeed = 100.0f;
