@@ -62,6 +62,10 @@
         <Compile Include="Controller\ControlllerStopwatch\FakeStopwatch.cs" />
         <Compile Include="Controller\ControlllerStopwatch\IStopwatch.cs" />
         <Compile Include="Controller\ControlllerStopwatch\RealStopwatch.cs" />
+<<<<<<< Gunroom
+        <Compile Include="Controller\WinLossConditions.cs" />
+=======
+>>>>>>> blazing-edge
         <Compile Include="HighScore\SaveFile.cs" />
         <Compile Include="Entity\Entity.cs" />
         <Compile Include="Entity\EntityType.cs" />

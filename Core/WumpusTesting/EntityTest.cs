@@ -49,7 +49,7 @@ namespace WumpusTesting
         {
             Topology topology = new Topology("entitytest1.map");
             Trivia trivia = makeTrivia();
-            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random(), trivia);
+            GameLocations game = new GameLocations(30,0,0,0,0,0,0,topology,new Random(), trivia);
             game.AddEntity(new DummyEntity(topology, game, EntityType.Player));
             game.AddEntity(new Entity(topology, game, 19, EntityType.Wumpus));
             return game;
@@ -59,7 +59,7 @@ namespace WumpusTesting
         {
             Topology topology = new Topology("entitytest2.map");
             Trivia trivia = makeTrivia();
-            GameLocations game = new GameLocations(30,0,0,0,0,topology,new Random(), trivia);
+            GameLocations game = new GameLocations(30,0,0,0,0,0,0,topology,new Random(), trivia);
             game.AddEntity(new DummyEntity(topology, game, EntityType.Player));
             game.AddEntity(new Entity(topology, game, 19, EntityType.Wumpus));
             return game;

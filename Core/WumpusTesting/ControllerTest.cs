@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WumpusCore.Controller;
+using WumpusCore.GameLocations;
 using WumpusCore.Topology;
 using WumpusCore.Trivia;
 
@@ -16,16 +14,6 @@ namespace WumpusTesting
     {
         public ControllerTest()
         {
-            // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter("./map0.wmp"))
-            {
-
-                for (int i = 0; i < 30; i++)
-                {
-                    outputFile.WriteLine("N,NE,SE,S,SW,NW");
-                }
-            }
-
             using (StreamWriter outputFile = new StreamWriter("./questions.json"))
             {
                 outputFile.WriteLine("[{\"question\": \"0\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 0},{\"question\": \"1\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 1},{\"question\": \"2\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 2},{\"question\": \"3\", choices : [\"0\",\"1\",\"2\",\"3\"],\"answer\": 3}]");
@@ -50,10 +38,11 @@ namespace WumpusTesting
         [TestMethod]
         public void SimulateGames()
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 // Setup
                 Controller controller = CreateNewController();
+                Controller.Random = new Random(i);
 
                 // Start the game
 
@@ -64,17 +53,19 @@ namespace WumpusTesting
                 Assert.AreEqual(controller.GetState(), ControllerState.InRoom);
                 Assert.AreEqual(controller.GetAnomaliesInRoom(controller.GetPlayerLocation()).Count, 0);
 
-                // while (Controller.GlobalController.GetState() != ControllerState.GameOver)
-                // {
-                HandleRoomInARandomDirection(controller);
-                // }
+                while (!(controller.GetState() == ControllerState.GameOver || controller.GetState() == ControllerState.WonGame))
+                {
+                    HandleRoomInARandomDirection(controller);
+                }
             }
         }
 
         private static void HandleRoomInARandomDirection(Controller controller)
         {
             // Go one room north
-            controller.MoveInADirection(Directions.North);
+            Directions[] dirs = controller.GetCurrentRoom().ExitDirections;
+            Directions dir = dirs[Controller.Random.Next(0, dirs.Length)];
+            controller.MoveInADirection(dir);
             controller.MoveFromHallway();
 
 
@@ -99,6 +90,7 @@ namespace WumpusTesting
                 case ControllerState.Rats:
                 {
                     int timeInRoom = Controller.Random.Next(0, 11);
+                    IStopwatch realStopwatch = controller.ratTimeStopwatch;
                     controller.ratTimeStopwatch = new FakeStopwatch(new TimeSpan(0, 0, timeInRoom));
 
                     RatRoomStats stats = controller.GetRatRoomStats();
@@ -109,17 +101,19 @@ namespace WumpusTesting
                         Assert.AreEqual(controller.GetState(),ControllerState.GameOver);
                     }
                     else
-                    {
-
                         Assert.IsTrue(controller.GetState() != ControllerState.GameOver && controller.GetState() != ControllerState.Rats);
                         Assert.IsTrue(controller.GetCoins() < stats.StartingCoins);
                     }
+
+                    controller.ratTimeStopwatch = realStopwatch;
 
                     break;
                 }
                 case ControllerState.BatTransition:
                 {
+                    int initialLoc = controller.GetPlayerLocation();
                     controller.ExitBat();
+                    Assert.AreNotEqual(initialLoc, controller.GetPlayerLocation());
                     break;
                 }
                 case ControllerState.InRoom:
@@ -128,13 +122,23 @@ namespace WumpusTesting
                 }
                 case ControllerState.CatDialouge:
                 {
-                    controller.ExitCat();
+                    int choice = Controller.Random.Next(0, 2);
+
+
+                    if (choice == 0)
+                    {
+                        int previousCoins = controller.GetCoins();
+                        controller.AttemptToTameCat(controller.GetCoins());
+
+                        Assert.IsTrue(controller.GetCoins() <= previousCoins);
+                    }
 
                     break;
                 }
                 case ControllerState.WumpusFight:
                 {
-                    controller.ExitWumpus();
+                    int result = Controller.Random.Next(0, 2);
+                    controller.ExitWumpusFight(result == 0);
 
                     break;
                 }
@@ -146,7 +150,7 @@ namespace WumpusTesting
 
                     int successCount = 0;
 
-                    while (controller.GetState() == ControllerState.VatRoom)
+                    while (controller.GetState() == ControllerState.Trivia)
                     {
                         AskableQuestion question = controller.GetTriviaQuestion();
                         Assert.IsFalse(previousQuestions.Contains(question));
@@ -155,7 +159,7 @@ namespace WumpusTesting
                         int questionNum = Int32.Parse(question.questionText);
 
                         int choice = Controller.Random.Next(0, 4);
-                        if (choice==questionNum)
+                        if (choice == questionNum)
                         {
                             // This should succeed
                             Assert.IsTrue(controller.SubmitTriviaAnswer(choice));
@@ -176,9 +180,69 @@ namespace WumpusTesting
                         Assert.IsTrue(controller.GetState()==ControllerState.GameOver);
                     }
 
-                    break;
+                    // This resets the trivia questions back to the original array
+                    controller.trivia.questions = new Questions("./questions.json");
 
+                    break;
                 }
+                case ControllerState.GunRoom:
+                case ControllerState.AmmoRoom:
+                    if (!controller.CanRoomBeCollectedFrom())
+                    {
+                        break;
+                    }
+                    controller.StartTrivia();
+
+                    bool hasGun = controller.DoesPlayerHaveGun();
+                    int ammoCount = controller.GetArrowCount();
+
+
+                    List<AskableQuestion> questions = new List<AskableQuestion>();
+
+                    int successfullyAnswered  = 0;
+
+                    while (controller.GetState() == ControllerState.Trivia)
+                    {
+                        AskableQuestion question = controller.GetTriviaQuestion();
+                        Assert.IsFalse(questions.Contains(question));
+                        questions.Add(question);
+
+                        int questionNum = Int32.Parse(question.questionText);
+
+                        int choice = Controller.Random.Next(0, 4);
+                        if (choice == questionNum)
+                        {
+                            // This should succeed
+                            Assert.IsTrue(controller.SubmitTriviaAnswer(choice));
+                            successfullyAnswered += 1;
+                        }
+                        else
+                        {
+                            Assert.IsFalse(controller.SubmitTriviaAnswer(choice));
+                        }
+                    }
+
+                    if (successfullyAnswered >= 2)
+                    {
+                        if (controller.GetCurrentRoomType() == RoomType.GunRoom)
+                        {
+                            Assert.IsTrue(controller.DoesPlayerHaveGun());
+                        }
+                        else if (controller.GetCurrentRoomType() == RoomType.AmmoRoom)
+                        {
+                            Assert.IsTrue(controller.GetArrowCount() > ammoCount);
+                        }
+                    }
+                    else
+                    {
+                        Assert.IsTrue(controller.GetArrowCount() == ammoCount);
+                        Assert.IsTrue(controller.DoesPlayerHaveGun() == hasGun);
+                    }
+
+                    // This resets the trivia questions back to the original array
+                    controller.trivia.questions = new Questions("./questions.json");
+
+                    break;
                 default:
                     throw new Exception($"{controller.GetState()} was not handled in the test (this is bad)");
             }
