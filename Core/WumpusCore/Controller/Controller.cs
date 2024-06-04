@@ -152,9 +152,9 @@ namespace WumpusCore.Controller
             // }
 
 
+            state = InBetweenRooms;
             currentRoomHandledAmomalies.Clear();
             gameLocations.GetPlayer().MoveInDirection(direction);
-            state = InBetweenRooms;
             nextRoom = GetCurrentRoom();
         }
 
