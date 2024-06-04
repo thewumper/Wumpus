@@ -28,6 +28,9 @@ public class MainMenuUI : MonoBehaviour
 
         // Gets the path to the Map.
         topologyDir = Application.dataPath + "/Maps";
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void PlayGame()
@@ -40,6 +43,10 @@ public class MainMenuUI : MonoBehaviour
         controller = new Controller(triviaNormal, topologyDir, randomMap);
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
+        sceneController.Reinitialize(controller);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         controller.StartGame();
         sceneController.GotoCorrectScene();

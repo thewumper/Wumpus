@@ -116,6 +116,9 @@ public class AcrobatGame : MonoBehaviour
             targets.ToList().ForEach(RemoveTarget);
             finished = true;
 
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
             // Success if score is greater than the minimum passing score
             Controller.GlobalController.ExitAcrobat(score > minPassingScore);
             SceneController.GlobalSceneController.GotoCorrectScene();

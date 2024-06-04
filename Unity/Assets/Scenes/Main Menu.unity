@@ -1766,6 +1766,7 @@ GameObject:
   - component: {fileID: 1718556619}
   - component: {fileID: 1718556621}
   - component: {fileID: 1718556620}
+  - component: {fileID: 1718556622}
   m_Layer: 5
   m_Name: Logo
   m_TagString: Untagged
@@ -1827,6 +1828,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718556618}
   m_CullTransparentMesh: 1
+--- !u!114 &1718556622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718556618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a3267504fd7fd140b7f45c628fb8b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  realLogo: {fileID: 2800000, guid: 6535452657fb40c40b4f672f0ea671ff, type: 3}
+  fakeLogo: {fileID: 2800000, guid: 8a2f8733eda9152428aad2cfdd5181b4, type: 3}
+  chanceOfWinning: 0.02
 --- !u!1001 &1758211092
 PrefabInstance:
   m_ObjectHideFlags: 0
