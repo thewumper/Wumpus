@@ -1,11 +1,11 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using WumpusUnity.Battle;
 
-public class RandomSpawner : SpawnerMode
+public class BurstSpawner : SpawnerMode
 {
     /// <summary>
     /// Objects' velocities
@@ -15,23 +15,31 @@ public class RandomSpawner : SpawnerMode
     /// Time (seconds) between each bullet output
     /// </summary>
     [SerializeField] private float outputDelay;
-
-    private float timeSinceLastOutput;
-
-    private void OnEnable()
-    {
-        timeSinceLastOutput = 0f;
-    }
+    [SerializeField] private 
 
     // Update is called once per frame
     void Update()
     {
+        if (Room == null || Rigidbody == null)
+        {
+            // Oops! Not ready yet
+            Debug.Log("Bypassed BurstSpawner Update method, mode is unprepared.");
+            return;
+        }
+        
         timeSinceLastOutput += Time.deltaTime;
         if (timeSinceLastOutput >= outputDelay)
         {
             timeSinceLastOutput = 0f;
             
-            GameObject obj = Instantiate(BulletTypes["Bullet"], Rigidbody.position, Quaternion.identity);
+            if (HazardTypes == null || !HazardTypes.ContainsKey("Bullet"))
+            {
+                throw new KeyNotFoundException(
+                    "This BurstSpawner mode cannot access the necessary bullet type. It may need a SpawnerController to function.");
+            }
+            GameObject prefab = this.HazardTypes["Bullet"];
+            
+            GameObject obj = Instantiate(prefab, Rigidbody.position, Quaternion.identity);
             obj.transform.SetParent(Room.transform);
             obj.transform.localScale = new Vector3(1f, 1f, 1f);
 
@@ -45,3 +53,4 @@ public class RandomSpawner : SpawnerMode
         }
     }
 }
+*/
