@@ -1800,7 +1800,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1447191396}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1447191398
 Camera:
   m_ObjectHideFlags: 0
@@ -2135,6 +2135,7 @@ GameObject:
   - component: {fileID: 1844008269}
   - component: {fileID: 1844008272}
   - component: {fileID: 1844008273}
+  - component: {fileID: 1844008274}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -2251,7 +2252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 1844008269}
-  center: {x: 462, y: 260}
+  center: {x: 3394, y: 2931}
   radius: 125
   speed: 300
 --- !u!114 &1844008273
@@ -2266,9 +2267,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3afced4cbef214fb6c0533c0e3966c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0
+  duration: 5
   outputSpeed: 400
   outputDelay: 0.01
+--- !u!114 &1844008274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844008267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec7df86610ba496d8410c56c2acc6d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  room: {fileID: 911301553}
+  rigidbody: {fileID: 1844008269}
+  prefabBullet: {fileID: 6864899258456612908, guid: 3f437766824041370915961348f5366f, type: 3}
+  prefabHomingBullet: {fileID: 0}
 --- !u!1 &1878094339
 GameObject:
   m_ObjectHideFlags: 0

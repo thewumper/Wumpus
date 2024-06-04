@@ -80,8 +80,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 58408c9e7f467e10183c36645e816ec3, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 2208703988740019828, guid: 1fd3cbe9fd4ccbd459df4bf0f12bc674, type: 3}
+  m_Color: {r: 1, g: 0.5615012, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 6121099187557548285}
   velocityFalloff: 1
-  startingPosition: {x: 462, y: 260}
+  startingPosition: {x: 3394, y: 2931}
   startingVelocity: {x: 0, y: 0}
   acceleration: {x: 0, y: 0}
 --- !u!114 &6666382070691799842
