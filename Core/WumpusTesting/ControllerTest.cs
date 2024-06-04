@@ -100,7 +100,7 @@ namespace WumpusTesting
                     {
                         Assert.AreEqual(controller.GetState(),ControllerState.GameOver);
                     }
-                    else
+                    else {
                         Assert.IsTrue(controller.GetState() != ControllerState.GameOver && controller.GetState() != ControllerState.Rats);
                         Assert.IsTrue(controller.GetCoins() < stats.StartingCoins);
                     }

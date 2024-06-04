@@ -392,34 +392,36 @@ namespace WumpusCore.Controller
         public bool SubmitTriviaAnswer(int choice)
         {
             bool correctness = trivia.SubmitAnswer(choice);
+            GameResult triviaState = trivia.reportResult();
+            RoomType currentRoomType = GetCurrentRoomType();
 
-            if (trivia.reportResult() == GameResult.Win)
+            if (triviaState == GameResult.Win)
             {
-                if (GetCurrentRoomType() != RoomType.Vats)
-                {
-                    if (GetCurrentRoomType() == RoomType.GunRoom)
-                    {
-                        state = GunRoom;
-                    } else if (GetCurrentRoomType() == RoomType.AmmoRoom)
-                    {
-                        state = AmmoRoom;
-                    }
-                    CollectItemsInRoom();
-                }
-                else
+                if (currentRoomType == RoomType.Vats)
                 {
                     state = InRoom;
                 }
+                else if (currentRoomType == RoomType.GunRoom)
+                {
+                    state = GunRoom;
+                    CollectItemsInRoom();
+                } else if (currentRoomType == RoomType.AmmoRoom)
+                {
+                    state = AmmoRoom;
+                    CollectItemsInRoom();
+                }
             }
-            else if (trivia.reportResult() == GameResult.Loss)
+            if (trivia.reportResult() == GameResult.Loss)
             {
                 if (GetCurrentRoomType() == RoomType.GunRoom) {
                     state = GunRoom;
+                    gameLocations.MarkRoomAsCollected((ushort) GetPlayerLocation());
                 } else if (GetCurrentRoomType() == RoomType.AmmoRoom) {
                     state = AmmoRoom;
+                    gameLocations.MarkRoomAsCollected((ushort) GetPlayerLocation());
                 }
                 else {
-                    state = GameOver;
+                    EndGame(false,WinLossConditions.Vat);
                 }
             }
 

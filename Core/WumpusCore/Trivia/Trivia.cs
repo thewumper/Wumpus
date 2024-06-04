@@ -140,7 +140,7 @@ namespace WumpusCore.Trivia
                 return GameResult.Win;
             }
 
-            if (totalRoundQuestions - questionsAnswered < winThreshold)
+            if (totalRoundQuestions - questionsAnswered + questionsWon < winThreshold)
             {
                 return GameResult.Loss;
             } 

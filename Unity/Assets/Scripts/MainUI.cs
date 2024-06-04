@@ -206,6 +206,10 @@ public class MainUI : MonoBehaviour
     [SerializeField] 
     private GameObject mmDirection;
 
+    [SerializeField] private TMP_Text ArrowText;
+    [SerializeField] private GameObject CrossBowNotFound;
+    [SerializeField] private GameObject CrossBowFound;
+
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -283,6 +287,20 @@ public class MainUI : MonoBehaviour
                 movingAnimator.SetBool(fadingID, true);
                 break;
         }
+
+        if (controller.DoesPlayerHaveGun())
+        {
+            CrossBowFound.SetActive(true);
+            CrossBowNotFound.SetActive(false);
+        }
+        else
+        {
+            CrossBowFound.SetActive(false);
+            CrossBowNotFound.SetActive(true);
+        }
+
+        ArrowText.SetText(controller.GetArrowCount().ToString());
+
         // Makes an IRoom which is the room that the player is currently in.
         IRoom room = controller.GetCurrentRoom();
         // Makes the roomText show which room the player is actually in.
