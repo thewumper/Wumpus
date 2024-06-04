@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    [SerializeField] private new Rigidbody2D rigidbody;
+    [SerializeField] protected new Rigidbody2D rigidbody;
     /// <summary>
     /// Higher values mean more slippery floors
     /// </summary>
@@ -11,7 +11,7 @@ public class MovementController : MonoBehaviour
 
     [SerializeField] public Vector2 startingPosition;
     [SerializeField] public Vector2 startingVelocity;
-    [SerializeField] public Vector2 acceleration;
+    [NonSerialized] public Vector2 acceleration;
     
     void Start()
     {
@@ -20,7 +20,7 @@ public class MovementController : MonoBehaviour
         rigidbody.inertia = float.MaxValue;
     }
 
-    void Update()
+    protected void Update()
     {
         rigidbody.velocity += acceleration * Time.deltaTime;
         rigidbody.velocity *= (float)Math.Pow(velocityFalloff, Time.deltaTime);
