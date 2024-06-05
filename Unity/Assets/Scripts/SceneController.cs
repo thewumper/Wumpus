@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 
@@ -93,6 +95,7 @@ namespace WumpusUnity
         /// </summary>
         public void GotoCorrectScene()
         {
+            UnityEngine.Debug.Log(GetCorrectScene());
             SetScene(GetCorrectScene());
         }
     }

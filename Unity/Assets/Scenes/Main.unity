@@ -420,6 +420,7 @@ GameObject:
   - component: {fileID: 212410748}
   - component: {fileID: 212410747}
   - component: {fileID: 212410749}
+  - component: {fileID: 212410750}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -439,8 +440,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 395916728873a46408116e3e1085f291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 173763335}
-  movementRotation: {fileID: 1347841563}
   northDoor: {fileID: 798882399}
   northEastDoor: {fileID: 513308440}
   southEastDoor: {fileID: 1218492701}
@@ -448,16 +447,10 @@ MonoBehaviour:
   southWestDoor: {fileID: 476424740}
   northWestDoor: {fileID: 1864841506}
   wumpus: {fileID: 1494568967}
-  interactIcon: {fileID: 763137745}
-  doorIcon: {fileID: 21300000, guid: dd8290f14cfa2b04fb3b22f02f94a956, type: 3}
-  uninteractableIcon: {fileID: 21300000, guid: 2cd2fa24be74bbf43a2aa38dd7a37dcd, type: 3}
   coinsText: {fileID: 1872784049}
   roomText: {fileID: 1799547984}
   roomHintText: {fileID: 1404257791}
   roomTypeText: {fileID: 1228532530}
-  directionText: {fileID: 495967430}
-  movingAnimator: {fileID: 210612756}
-  black: {fileID: 210612757}
   wumpusClip: {fileID: 0}
   mmNorth: {fileID: 1839832055}
   mmNorthEast: {fileID: 1150697136}
@@ -466,9 +459,6 @@ MonoBehaviour:
   mmSouthWest: {fileID: 1137531774}
   mmNorthWest: {fileID: 1011152679}
   mmDirection: {fileID: 1499060463}
-  ArrowText: {fileID: 1940571819}
-  CrossBowNotFound: {fileID: 2089034341}
-  CrossBowFound: {fileID: 165158375}
 --- !u!4 &212410748
 Transform:
   m_ObjectHideFlags: 0
@@ -502,6 +492,26 @@ MonoBehaviour:
   ratClip: {fileID: 8300000, guid: 104a01a8959a52f4a8c41dab6f0232d0, type: 3}
   acrobatClip: {fileID: 8300000, guid: 1e79f474295bde94aa22cbf6d5bbf3c6, type: 3}
   vatClip: {fileID: 8300000, guid: 1e7083d2b087dfb46ad5bd363af4cac2, type: 3}
+--- !u!114 &212410750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212410746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f2c82cb09d79c479e20b8fd4225cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 173763335}
+  movementRotation: {fileID: 1347841563}
+  movingAnimator: {fileID: 210612756}
+  black: {fileID: 210612757}
+  interactIcon: {fileID: 763137745}
+  doorIcon: {fileID: 21300000, guid: dd8290f14cfa2b04fb3b22f02f94a956, type: 3}
+  uninteractableIcon: {fileID: 21300000, guid: 2cd2fa24be74bbf43a2aa38dd7a37dcd, type: 3}
+  directionText: {fileID: 495967430}
 --- !u!1 &290805934
 GameObject:
   m_ObjectHideFlags: 0
