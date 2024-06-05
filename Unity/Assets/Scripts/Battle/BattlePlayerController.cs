@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
-public class PlayerController : MonoBehaviour
+public class BattlePlayerController : MonoBehaviour
 {
     [SerializeField] private new Rigidbody2D rigidbody;
     /// <summary>
@@ -54,15 +54,15 @@ public class PlayerController : MonoBehaviour
         rigidbody.inertia = float.MaxValue;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Normalize input and scale by dT
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         input.Normalize();
-        input *= speed / (accelerationFalloff * velocityFalloff) * 60f * Time.deltaTime;
+        input *= speed / (accelerationFalloff * velocityFalloff) * 60f * Time.fixedDeltaTime;
         
         // Acceleration slows over time
-        _acceleration *= (float)Math.Pow(accelerationFalloff, 60f * Time.deltaTime);
+        _acceleration *= (float)Math.Pow(accelerationFalloff, 60f * Time.fixedDeltaTime);
         
         // Take in input
         _acceleration += input;
@@ -86,8 +86,8 @@ public class PlayerController : MonoBehaviour
         }
         
         // Velocity follows acceleration, with simple drag
-        rigidbody.velocity += _acceleration * (60f * Time.deltaTime);
-        rigidbody.velocity *= (float)Math.Pow(velocityFalloff, 60f * Time.deltaTime);
+        rigidbody.velocity += _acceleration * (60f * Time.fixedDeltaTime);
+        rigidbody.velocity *= (float)Math.Pow(velocityFalloff, 60f * Time.fixedDeltaTime);
         
         // Update rotation
         Vector2 currentDirection = rigidbody.velocity.normalized;
@@ -95,8 +95,8 @@ public class PlayerController : MonoBehaviour
         {
             _orientation += UnityEngine.Random.insideUnitCircle.normalized * shake;
             _orientation.Normalize();
-            _orientation *= (float)Math.Pow(rotationFalloff, 60f * Time.deltaTime);
-            _orientation += currentDirection * ((1 - rotationFalloff) * 60f * Time.deltaTime);
+            _orientation *= (float)Math.Pow(rotationFalloff, 60f * Time.fixedDeltaTime);
+            _orientation += currentDirection * ((1 - rotationFalloff) * 60f * Time.fixedDeltaTime);
             _orientation.Normalize();
         }
 
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         rigidbody.rotation = (float)(180.0 * Math.Atan2(-_orientation.x, _orientation.y) / Math.PI);
         
         // Count down immunity
-        _remainingImmunityTime -= Time.deltaTime;
+        _remainingImmunityTime -= Time.fixedDeltaTime;
         if (_remainingImmunityTime <= 0)
         {
             _remainingImmunityTime = 0;

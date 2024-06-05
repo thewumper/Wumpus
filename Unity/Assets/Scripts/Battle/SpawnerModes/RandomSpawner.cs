@@ -17,7 +17,7 @@ public class RandomSpawner : SpawnerMode
     [SerializeField] private float outputDelay;
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Room == null || Rigidbody == null)
         {
@@ -26,7 +26,7 @@ public class RandomSpawner : SpawnerMode
             return;
         }
         
-        timeSinceLastOutput += Time.deltaTime;
+        timeSinceLastOutput += Time.fixedDeltaTime;
         if (timeSinceLastOutput >= outputDelay)
         {
             timeSinceLastOutput = 0f;
@@ -49,6 +49,7 @@ public class RandomSpawner : SpawnerMode
             controller.startingPosition = Rigidbody.position;
             controller.startingVelocity = Rigidbody.velocity + new Vector2(x, y).normalized * outputSpeed;
             controller.acceleration = Vector2.zero;
+            controller.Init();
         }
     }
 }

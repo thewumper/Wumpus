@@ -15,6 +15,17 @@ public class HomingCluster : SpawnerMode
     /// Objects' velocities
     /// </summary>
     [SerializeField] private float outputSpeed;
+    [SerializeField] private float speed;
+    [SerializeField] private float throttleDownRange;
+    [Range(0f, 1f)] [SerializeField] public float accelerationFalloff = .75f;
+    /// <summary>
+    /// Higher values mean more slippery floors
+    /// </summary>
+    [Range(0f, 1f)] [SerializeField] private float velocityFalloff = .85f;
+    /// <summary>
+    /// The amount of time (in seconds) that the bullets will persist in the playing field
+    /// </summary>
+    [SerializeField] public float timeout;
     /// <summary>
     /// Time (seconds) between each bullet output
     /// </summary>
@@ -26,9 +37,7 @@ public class HomingCluster : SpawnerMode
     /// <summary>
     /// Total spread of bullets (angle from leftmost to rightmost bullet)
     /// </summary>
-    [SerializeField] private float bulletSpread;
-
-    private float timeSinceLastOutput;
+    [Range(0f, 6.28319f)] [SerializeField] private float bulletSpread;
 
     private void OnEnable()
     {
@@ -36,9 +45,9 @@ public class HomingCluster : SpawnerMode
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        timeSinceLastOutput += Time.deltaTime;
+        timeSinceLastOutput += Time.fixedDeltaTime;
         if (timeSinceLastOutput >= outputDelay)
         {
             timeSinceLastOutput = 0f;
@@ -48,40 +57,53 @@ public class HomingCluster : SpawnerMode
             // If just one bullet, fire straight down the middle
             if (bulletCount == 1)
             {
-                GameObject obj = Instantiate(HazardTypes["HomingBullet"], Rigidbody.position, Quaternion.identity);
-                obj.transform.SetParent(Room.transform);
-                obj.transform.localScale = new Vector3(1f, 1f, 1f);
-                MovementController controller = obj.GetComponent<MovementController>();
-                controller.velocityFalloff = 1f;
-                controller.startingPosition = Rigidbody.position;
-                controller.startingVelocity = Rigidbody.velocity + direction.normalized * outputSpeed;
-                controller.acceleration = Vector2.zero;
-                obj.GetComponent<HomingController>().target = target;
+                HomingController controller = initBullet();
+                controller.startingVelocity = direction.normalized * outputSpeed;
+                controller.Init();
             }
-            
-            // If many bullets, fire in an even spread
-            double middleAngle = Math.Atan2(direction.y, direction.x) - (float)Math.PI / 2f;
-            double angleInterval = bulletSpread / (bulletCount - 1);
-            double minAngle = middleAngle - (bulletSpread / 2);
-
-            for (int i = 0; i < bulletCount; i++)
+            else
             {
-                double angle = minAngle + (i * angleInterval);
-                
-                GameObject obj = Instantiate(HazardTypes["HomingBullet"], Rigidbody.position, Quaternion.identity);
-                obj.transform.SetParent(Room.transform);
-                obj.transform.localScale = new Vector3(1f, 1f, 1f);
+                // If many bullets, fire in an even spread
+                double middleAngle = Math.Atan2(direction.x, direction.y);// - (float)Math.PI / 2f;
+                double angleInterval = bulletSpread / (bulletCount - 1);
+                double minAngle = middleAngle - (bulletSpread / 2);
 
-                float x = (float)Math.Sin(angle);
-                float y = (float)Math.Cos(angle);
+                for (int i = 0; i < bulletCount; i++)
+                {
+                    double angle = minAngle + (i * angleInterval);
 
-                MovementController controller = obj.GetComponent<MovementController>();
-                controller.velocityFalloff = 1f;
-                controller.startingPosition = Rigidbody.position;
-                controller.startingVelocity = Rigidbody.velocity + new Vector2(x, y).normalized * outputSpeed;
-                controller.acceleration = Vector2.zero;
-                obj.GetComponent<HomingController>().target = target;
+                    HomingController controller = initBullet();
+                    
+                    float x = (float)Math.Sin(angle);
+                    float y = (float)Math.Cos(angle);
+
+                    controller.startingVelocity = new Vector2(x, y).normalized * outputSpeed;
+                    controller.Init();
+                }
             }
         }
+    }
+
+    /// <summary>
+    /// Creates a new bullet based on the spawner's position and provided values
+    /// </summary>
+    /// <returns>A new HomingController representing a bullet</returns>
+    private HomingController initBullet()
+    {
+        GameObject obj = Instantiate(HazardTypes["HomingBullet"], Rigidbody.position, Quaternion.identity);
+        obj.transform.SetParent(Room.transform);
+        obj.transform.localScale = new Vector3(1f, 1f, 1f);
+        
+        HomingController controller = obj.GetComponent<HomingController>();
+        controller.accelerationFalloff = accelerationFalloff;
+        controller.velocityFalloff = velocityFalloff;
+        controller.startingPosition = Rigidbody.position;
+        controller.acceleration = Vector2.zero;
+        controller.timeout = timeout;
+        controller.speed = speed;
+        controller.throttleDownRange = throttleDownRange;
+        controller.target = target;
+
+        return controller;
     }
 }

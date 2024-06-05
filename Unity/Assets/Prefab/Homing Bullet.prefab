@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 9190281045607093922}
   - component: {fileID: 8887067799569784478}
   - component: {fileID: 6121099187557548285}
-  - component: {fileID: 7485975346368408358}
   - component: {fileID: 6666382070691799842}
+  - component: {fileID: 5870875670887509236}
   m_Layer: 3
   m_Name: Homing Bullet
   m_TagString: Untagged
@@ -167,22 +167,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &7485975346368408358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6864899258456612908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dc27aa87180c41baa112166465bcec2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidbody: {fileID: 6121099187557548285}
-  velocityFalloff: 1
-  startingPosition: {x: 3394, y: 2931}
-  startingVelocity: {x: 0, y: 0}
 --- !u!114 &6666382070691799842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,3 +179,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a6276ddbbbb9bc2827b0c257027351, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5870875670887509236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6864899258456612908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8200926be58c4ca7be601a62569cf2da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidbody: {fileID: 6121099187557548285}
+  velocityFalloff: 0.85
+  startingPosition: {x: 3394, y: 2931}
+  startingVelocity: {x: 0, y: 0}
+  target: {fileID: 0}
+  speed: 100
+  throttleDownRange: 10

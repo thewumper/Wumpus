@@ -62,7 +62,7 @@ public class WumpusCutscene : MonoBehaviour
         message.SetText("Goodbye :(");
         yield return new WaitForSeconds(1f);
         message.gameObject.SetActive(false);
-        PlayerController.GameLost();
+        BattlePlayerController.GameLost();
     }
 
     public void Yes()

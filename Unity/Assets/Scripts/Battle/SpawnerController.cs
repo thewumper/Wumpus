@@ -41,9 +41,9 @@ namespace WumpusUnity.Battle
             remainingTime = 0f;
         }
         
-        void Update()
+        void FixedUpdate()
         {
-            remainingTime -= Time.deltaTime;
+            remainingTime -= Time.fixedDeltaTime;
             if (remainingTime <= 0)
             {
                 Modes[currentMode].enabled = false;

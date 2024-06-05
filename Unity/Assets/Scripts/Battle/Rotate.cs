@@ -22,7 +22,7 @@ public class Rotate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        angle += (speed * Time.deltaTime) / radius;
+        angle += (speed * Time.fixedDeltaTime) / radius;
         if (angle > 2 * Math.PI)
         {
             angle -= 2 * (float)Math.PI;
