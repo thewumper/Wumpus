@@ -12,5 +12,9 @@ namespace WumpusCore.Controller
         VatRoom,
         WumpusFight,
         CatDialouge,
+        WonGame,
+        GunRoom,
+        AmmoRoom,
+        Trivia
     }
 }

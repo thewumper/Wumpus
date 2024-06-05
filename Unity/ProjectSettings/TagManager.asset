@@ -8,6 +8,7 @@ TagManager:
   - hallDoor
   - unmoveableDoor
   - Target
+  - CollectableTable
   layers:
   - Default
   - TransparentFX

@@ -23,14 +23,6 @@ namespace WumpusCore.Topology
         }
 
         /// <summary>
-        /// Creates a graph repersenation of a set of nodes
-        /// </summary>
-        /// <param name="nodes">The nodes in the graph</param>
-        public Graph(List<IRoom> nodes) : this(nodes, new Random())
-        {
-        }
-
-        /// <summary>
         /// Checks if removing a set of nodes disconnects the graph
         /// </summary>
         /// <param name="room">The node to try to remove</param>
@@ -111,7 +103,7 @@ namespace WumpusCore.Topology
                     IRoom node = nodesInSolution[index];
                     solution.Add(node);
                     nodesInSolution.RemoveAt(index);
-                    if (!IsNodeRemovalValid(solution))
+                    if (!IsNodeRemovalValid(solution)) // TODO: Check after
                     {
                         validSolution = false;
                         break;

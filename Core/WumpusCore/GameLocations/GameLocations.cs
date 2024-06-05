@@ -71,6 +71,8 @@ namespace WumpusCore.GameLocations
             get { return rooms; }
         }
 
+        private List<ushort> roomsCollectedFrom = new List<ushort>() ;
+
         /// <summary>
         /// Contains most methods and data to do with rooms.
         /// </summary>
@@ -79,13 +81,15 @@ namespace WumpusCore.GameLocations
         /// <param name="numBats">The number of bat rooms to generate</param>
         /// <param name="numRats">The number of rat rooms to generate</param>
         /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
+        /// <param name="numAmmoRooms">The number of ammo rooms to generate</param>
+        /// <param name="numGunRooms">The number of gun rooms to generate</param>
         /// <param name="topology">The topology structure</param>
         /// <param name="random">A random object</param>
-        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, ITopology topology, Random random, Trivia.Trivia trivia)
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, int numAmmoRooms, int numGunRooms,ITopology topology, Random random, Trivia.Trivia trivia)
 
         {
             this.topology = topology;
-            if (numVats + numRats + numAcrobats + numBats >= numRooms)
+            if (numVats + numRats + numAcrobats + numBats + numAmmoRooms + numGunRooms >= numRooms)
             {
                 throw new ArgumentException("Too many hazards!");
             }
@@ -100,7 +104,9 @@ namespace WumpusCore.GameLocations
             UseListPopulateHazards(solutions, RoomType.Bats, numBats);
             UseListPopulateHazards(validRooms, RoomType.Rats, numRats);
             UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats);
-            
+            UseListPopulateHazards(validRooms, RoomType.AmmoRoom, numAmmoRooms);
+            UseListPopulateHazards(validRooms, RoomType.GunRoom, numGunRooms);
+
             // Populate hallways with coins
             // Populate rooms with trivia options
             // Populate hallways with trivia answers
@@ -135,7 +141,7 @@ namespace WumpusCore.GameLocations
         private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
         {
             int listSize = list.Count;
-            for (int i = listSize - 1; i >= listSize - num; i--)            {
+            for (int i = listSize - 1; i >= listSize - num; i--) {
                 var location = list[i];
                 list.Remove(location);
                 rooms[location.Id] = type;
@@ -297,7 +303,21 @@ namespace WumpusCore.GameLocations
 
             return adjacentRooms;
         }
-        
-        
+
+
+        public void MarkRoomAsCollected(ushort roomNum)
+        {
+
+            if (roomsCollectedFrom.Contains(roomNum))
+            {
+                return;
+            }
+            roomsCollectedFrom.Add(roomNum);
+        }
+
+        public bool HasRoomBeenCollected(ushort roomNum)
+        {
+            return roomsCollectedFrom.Contains(roomNum);
+        }
     }
 }

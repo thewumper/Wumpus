@@ -108,15 +108,7 @@ namespace WumpusCore.Topology
         {
             return rooms[id];
         }
-        /// <summary>
-        /// Creates a graph object for this topology
-        /// </summary>
-        /// <returns>A graph</returns>
-        public Graph GetGraph()
-        {
-            return new Graph(new List<IRoom>(rooms));
-        }
-        
+
         /// <summary>
         /// Get the room adjacent to another room in a direction
         /// </summary>
@@ -268,7 +260,7 @@ namespace WumpusCore.Topology
             /// Setup the connnections in this room, please only call once
             /// </summary>
             /// <param name="topology"></param>
-            public void InitializeConnections(Topology topology)
+            internal void InitializeConnections(Topology topology)
             {
                 ExitRooms = new Dictionary<Directions, IRoom>();
                 foreach (var direction in ExitDirections)

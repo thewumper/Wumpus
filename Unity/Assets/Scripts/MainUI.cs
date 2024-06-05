@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
 
+[RequireComponent(typeof(SoundManager))]
 public class MainUI : MonoBehaviour
 {
     /// <summary>
@@ -20,6 +20,9 @@ public class MainUI : MonoBehaviour
     /// </summary>
     private SceneController sceneController;
     
+    /// <summary>
+    /// Reference to the SoundManager.
+    /// </summary>
     private SoundManager soundManager;
     
     /// <summary>
@@ -27,6 +30,7 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private GameObject cam;
+
     /// <summary>
     /// The Rotation for the Movement of the Player.
     /// </summary>
@@ -58,7 +62,7 @@ public class MainUI : MonoBehaviour
     {
         get
         {
-            return roomNum;
+            return (ushort) controller.GetPlayerLocation();
         }
         set
         {
@@ -166,6 +170,7 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField] 
     private Animator movingAnimator;
+
     /// <summary>
     /// The ID of the moving variable in <see cref="movingAnimator"/>.
     /// </summary>
@@ -202,6 +207,10 @@ public class MainUI : MonoBehaviour
     [SerializeField] 
     private GameObject mmDirection;
 
+    [SerializeField] private TMP_Text ArrowText;
+    [SerializeField] private GameObject CrossBowNotFound;
+    [SerializeField] private GameObject CrossBowFound;
+
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -217,6 +226,10 @@ public class MainUI : MonoBehaviour
         
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
+
+        // Initializes the SoundManager
+        soundManager = GetComponent<SoundManager>();
+        soundManager.Init(northDoor, northEastDoor, southEastDoor, southDoor, southWestDoor, northWestDoor);
     }
 
     void Start()
@@ -244,9 +257,6 @@ public class MainUI : MonoBehaviour
         // Initializes the roomText text.
         roomText.SetText($"Room: {RoomNum}");
         
-        // Initializes the SoundManager
-        soundManager = new SoundManager(wumpusClip);
-        
         // Initializes the RoomNum with the Player's location.
         RoomNum = (ushort) controller.GetPlayerLocation();
         
@@ -261,8 +271,9 @@ public class MainUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
-        soundManager.PlaySound(SoundManager.SoundType.Wumpus, northDoor);
-        
+        // Get the sounds properly working
+        soundManager.UpdateSoundState();
+
         Debug.Log(controller.GetWumpusLocation());
     }
 
@@ -277,6 +288,20 @@ public class MainUI : MonoBehaviour
                 movingAnimator.SetBool(fadingID, true);
                 break;
         }
+
+        if (controller.DoesPlayerHaveGun())
+        {
+            CrossBowFound.SetActive(true);
+            CrossBowNotFound.SetActive(false);
+        }
+        else
+        {
+            CrossBowFound.SetActive(false);
+            CrossBowNotFound.SetActive(true);
+        }
+
+        ArrowText.SetText(controller.GetArrowCount().ToString());
+
         // Makes an IRoom which is the room that the player is currently in.
         IRoom room = controller.GetCurrentRoom();
         // Makes the roomText show which room the player is actually in.
@@ -366,7 +391,7 @@ public class MainUI : MonoBehaviour
             if (hit.transform.CompareTag("door") && !pLock)
             {
                 moveDir = hit.transform.GetComponent<Door>().GetDir();
-                directionText.SetText(moveDir.ToString());
+                directionText.SetText(DirectionHelper.GetLongNameFromDirection(moveDir));
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -403,7 +428,7 @@ public class MainUI : MonoBehaviour
             // If the screen has fully faded to black.
             if (black.color.a.Equals(1))
             {
-               MoveRooms();
+                MoveRooms();
             }
             // If the screen has not fully faded to black.
             else
@@ -436,8 +461,14 @@ public class MainUI : MonoBehaviour
     private void MoveRooms()
     {
         // Move rooms.
+        Debug.Log(controller.GetPlayerLocation());
+        Debug.Log(RoomNum);
+        Array.ForEach(controller.GetCurrentRoom().ExitDirections, i => Debug.Log(i));
+
+        Debug.Log($"Moving in a direction {moveDir}");
         controller.MoveInADirection(moveDir);
         movingAnimator.SetBool(fadingID, false);
+        soundManager.UpdateSoundState();
         sceneController.GotoCorrectScene();
     }
 }

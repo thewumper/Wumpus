@@ -11,5 +11,7 @@ namespace WumpusCore.Controller
         Bats,
         Acrobat,
         Cat,
+        Ammo,
+        Gun
     }
 }
