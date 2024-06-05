@@ -8,13 +8,13 @@ using WumpusCore.Topology;
 
 namespace WumpusCore.LuckyCat
 {
-    public class Cat: Entity.Entity
+    public class Cat : Entity.Entity
     {
         /// <summary>
         /// Is the cat tamed
         /// </summary>
-        private bool tamed;
-        
+        public bool tamed { get; private set; }
+
         /// <summary>
         /// The amount of coins the player has
         /// Used to check for taming cat

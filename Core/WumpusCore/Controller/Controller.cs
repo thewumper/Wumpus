@@ -211,10 +211,6 @@ namespace WumpusCore.Controller
             } else
             if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
-                state = CatDialouge;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
-            {
                 state = GunRoom;
             } else
             if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
@@ -630,6 +626,16 @@ namespace WumpusCore.Controller
         public bool CanRoomBeCollectedFrom()
         {
             return !gameLocations.HasRoomBeenCollected((ushort) GetPlayerLocation());
+        }
+
+        public bool hasPlayerTamedCat()
+        {
+            return gameLocations.GetCat().tamed;
+        }
+
+        public int getCatPosition()
+        {
+            return gameLocations.GetCat().location;
         }
     }
 }

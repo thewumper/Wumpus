@@ -368,6 +368,7 @@ public class MainUI : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(controller.getCatPosition());
         // If the player isn't locked.
         if (!pLock)
         {

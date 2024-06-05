@@ -9,6 +9,7 @@ TagManager:
   - unmoveableDoor
   - Target
   - CollectableTable
+  - CatPost
   layers:
   - Default
   - TransparentFX
