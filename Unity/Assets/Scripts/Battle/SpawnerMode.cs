@@ -16,7 +16,7 @@ namespace WumpusUnity.Battle
 
         private void OnEnable()
         {
-            timeSinceLastOutput = 0f;
+            timeSinceLastOutput = float.MaxValue;
         }
         
         public void Initialize(GameObject room, Rigidbody2D rigidbody_, Dictionary<String, GameObject> hazardTypes)
