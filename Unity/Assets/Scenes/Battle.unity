@@ -2300,7 +2300,7 @@ MonoBehaviour:
   rigidbody: {fileID: 1844008269}
   center: {x: 3394, y: 2931}
   radius: 125
-  speed: 0.3
+  speed: 30
 --- !u!114 &1844008273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2347,9 +2347,14 @@ MonoBehaviour:
   duration: 5
   target: {fileID: 387599879}
   outputSpeed: 100
-  outputDelay: 1
-  bulletCount: 1
-  bulletSpread: 40
+  speed: 10
+  throttleDownRange: 1
+  accelerationFalloff: 0.94
+  velocityFalloff: 0.29
+  timeout: 0
+  outputDelay: 0.7
+  bulletCount: 5
+  bulletSpread: 2.17
 --- !u!1 &1878094339
 GameObject:
   m_ObjectHideFlags: 0
