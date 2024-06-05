@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 210612758}
   - component: {fileID: 210612757}
   - component: {fileID: 210612756}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: black
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Direction
+  m_text: NOOOOO
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
   m_sharedMaterial: {fileID: -5568975997839417396, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
@@ -1790,8 +1790,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 150.87573, y: 26.13028}
-  m_SizeDelta: {x: 300, y: 40}
+  m_AnchoredPosition: {x: 152.2, y: 23.446}
+  m_SizeDelta: {x: 299.3108, y: 46.8913}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228532530
 MonoBehaviour:
@@ -1813,7 +1813,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Room Type
+  m_text: FLAAAAAAAATS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
   m_sharedMaterial: {fileID: -5568975997839417396, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
@@ -2153,10 +2153,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1579286503}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 122.869354, y: 0.6108}
-  m_SizeDelta: {x: 231.0887, y: 312.6452}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -120.8, y: -0.00000029802}
+  m_SizeDelta: {x: 231.08875, y: 312.6452}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1404257791
 MonoBehaviour:
@@ -2178,7 +2178,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You hear Acrobat
+  m_text: You hear AAAAA
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
   m_sharedMaterial: {fileID: -5568975997839417396, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
@@ -2212,7 +2212,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2622,8 +2622,8 @@ RectTransform:
   - {fileID: 495967429}
   - {fileID: 1404257790}
   - {fileID: 1228532529}
-  - {fileID: 210612754}
   - {fileID: 1522950284}
+  - {fileID: 210612754}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2903,7 +2903,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Room: DNE'
+  m_text: 'Room: AAA'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
   m_sharedMaterial: {fileID: -5568975997839417396, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
@@ -3162,7 +3162,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Coins: DNE'
+  m_text: 'Coins: AAA'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
   m_sharedMaterial: {fileID: -5568975997839417396, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}

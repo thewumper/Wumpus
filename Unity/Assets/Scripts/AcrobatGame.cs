@@ -138,7 +138,7 @@ public class AcrobatGame : MonoBehaviour
                 pair.obj.transform.localScale = new Vector3(scale,scale,scale);
             }
         }
-        scoreText.SetText(score.ToString() + "/" + minPassingScore);
+        scoreText.SetText(score + "/" + minPassingScore);
         timeText.SetText(TimeSpan.FromSeconds(maxTime - totalDuration).ToString("g"));
     }
 
