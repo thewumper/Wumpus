@@ -47,6 +47,13 @@ public class HomingCluster : SpawnerMode
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (Room == null || Rigidbody == null)
+        {
+            // Oops! Not ready yet
+            Debug.Log("Bypassed HomingCluster Update method, mode is unprepared.");
+            return;
+        }
+        
         timeSinceLastOutput += Time.fixedDeltaTime;
         if (timeSinceLastOutput >= outputDelay)
         {
@@ -90,6 +97,12 @@ public class HomingCluster : SpawnerMode
     /// <returns>A new HomingController representing a bullet</returns>
     private HomingController initBullet()
     {
+        if (HazardTypes == null || !HazardTypes.ContainsKey("Bullet"))
+        {
+            throw new KeyNotFoundException(
+                "This HomingCluster mode cannot access the necessary bullet type. It may need a SpawnerController to function.");
+        }
+        
         GameObject obj = Instantiate(HazardTypes["HomingBullet"], Rigidbody.position, Quaternion.identity);
         obj.transform.SetParent(Room.transform);
         obj.transform.localScale = new Vector3(1f, 1f, 1f);
