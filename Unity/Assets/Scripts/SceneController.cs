@@ -69,15 +69,20 @@ namespace WumpusUnity
                 case ControllerState.InBetweenRooms:
                     return "Hallway";
                 case ControllerState.VatRoom:
-                    return "Vat";
+                    return "Vats";
                 case ControllerState.Rats:
-                    return "Rat";
+                    return "Rats";
                 case ControllerState.BatTransition:
                     return "Bat";
                 case ControllerState.Acrobat:
                     return "Acrobat";
                 case ControllerState.GameOver:
                     return "Game Over";
+                case ControllerState.Trivia:
+                    return "Trivia";
+                case ControllerState.AmmoRoom:
+                case ControllerState.GunRoom:
+                    return "StoresRoom";
                 default:
                     return "Main";
             }

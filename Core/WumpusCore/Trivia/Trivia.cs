@@ -10,7 +10,7 @@ namespace WumpusCore.Trivia
     /// </summary>
     public class Trivia: Minigame
     {
-        private Questions questions;
+        internal Questions questions;
         // The question we're waiting on the player to answer
         private AnsweredQuestion currentQuestion;
         private int totalRoundQuestions;
@@ -140,7 +140,7 @@ namespace WumpusCore.Trivia
                 return GameResult.Win;
             }
 
-            if (totalRoundQuestions - questionsAnswered < winThreshold)
+            if (totalRoundQuestions - questionsAnswered + questionsWon < winThreshold)
             {
                 return GameResult.Loss;
             } 

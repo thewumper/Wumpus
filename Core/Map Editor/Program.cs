@@ -22,7 +22,7 @@ namespace Map_Editor
             }
 
             ITopology topology = new Topology("navigation.map");
-            IRoom currentRoom = topology.GetRoom(1);
+            IRoom currentRoom = topology.GetRoom(0);
             HashSet<Directions>[] rooms = new HashSet<Directions>[30];
             for (int i = 0; i < rooms.Length; i++)
             {
@@ -86,7 +86,7 @@ namespace Map_Editor
                                 {
                                     var direction = directionsArray[i];
                                     data += DirectionHelper.GetShortNameFromDirection(direction);
-                                    if (i != room.Count - 1)
+                                    if (i != room.Count)
                                     {
                                         data += ",";
                                     }
@@ -125,11 +125,11 @@ namespace Map_Editor
                         try                                                                                             
                         {                                                                                               
                             Directions direction = DirectionHelper.GetDirectionFromShortName(command[1]);               
-                            rooms[currentRoom.Id - 1].Add(direction);
+                            rooms[currentRoom.Id].Add(direction);
                             
                             IRoom previousRoom = currentRoom;
                             currentRoom = currentRoom.ExitRooms[direction];
-                            rooms[currentRoom.Id - 1].Add(direction.GetInverse());
+                            rooms[currentRoom.Id].Add(direction.GetInverse());
                             Console.WriteLine($"Carved {direction} from {previousRoom.Id}, now in {currentRoom.Id}");     
                         }                                                                                               
                         catch (KeyNotFoundException e)                                                                  
@@ -148,7 +148,7 @@ namespace Map_Editor
                         try
                         {
                             ushort roomNum = ushort.Parse(command[1]);
-                            if (roomNum > 0 && roomNum <= 30)
+                            if (roomNum < 29)
                             {
                                 currentRoom = topology.GetRoom(roomNum);
                                 Console.WriteLine($"Teleported to {roomNum}");
