@@ -1842,7 +1842,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   realLogo: {fileID: 2800000, guid: 6535452657fb40c40b4f672f0ea671ff, type: 3}
   fakeLogo: {fileID: 2800000, guid: 8a2f8733eda9152428aad2cfdd5181b4, type: 3}
-  chanceOfWinning: 0.02
+  chanceOfWinning: 0.1
 --- !u!1001 &1758211092
 PrefabInstance:
   m_ObjectHideFlags: 0

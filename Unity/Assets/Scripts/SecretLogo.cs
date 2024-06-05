@@ -7,24 +7,20 @@ public class SecretLogo : MonoBehaviour
 {
     [SerializeField] private Texture realLogo;
     [SerializeField] private Texture fakeLogo;
-    [SerializeField] private float chanceOfWinning;
+    [SerializeField, Range(0, 100)] private float chanceOfWinning;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        RawImage rawImage = GetComponent<RawImage>();
+        
         if (Random.Range(0.0f, 100.0f) <= chanceOfWinning)
         {
-            GetComponent<RawImage>().texture = fakeLogo;
+            rawImage.texture = fakeLogo;
         }
         else
         {
-            GetComponent<RawImage>().texture = realLogo;
+            rawImage.texture = realLogo;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
