@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c833f28ad76d89c429fb5f5cddb9cc6b
+guid: 92d62b35be98d1347a57a6942c6a1731
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4147513795826269971
-    second: Crossbow - green_0
+      213: -6659447077290792336
+    second: bolt_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Crossbow - green_0
+      name: bolt_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 640
-        height: 640
+        width: 1024
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 31fb145a2ddee8930800000000000000
-      internalID: 4147513795826269971
+      spriteID: 07aa19d9a24e493a0800000000000000
+      internalID: -6659447077290792336
       vertices: []
       indices: 
       edges: []
@@ -131,7 +131,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Crossbow - green_0: 4147513795826269971
+      bolt_0: -6659447077290792336
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

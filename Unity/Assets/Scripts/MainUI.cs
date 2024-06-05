@@ -170,6 +170,7 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField] 
     private Animator movingAnimator;
+
     /// <summary>
     /// The ID of the moving variable in <see cref="movingAnimator"/>.
     /// </summary>

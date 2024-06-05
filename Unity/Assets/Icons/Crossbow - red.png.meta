@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Crossbow - red_0: -6048891226634085193
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
