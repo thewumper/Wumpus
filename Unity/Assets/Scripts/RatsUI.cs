@@ -6,6 +6,7 @@ using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
+using Random = System.Random;
 
 public class RatsUI : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class RatsUI : MonoBehaviour
     /// The global SceneController object.
     /// </summary>
     private SceneController sceneController;
+
+    [SerializeField] private GameObject cam;
 
     /// <summary>
     /// The stats of what is happening in the rat room.
@@ -59,6 +62,7 @@ public class RatsUI : MonoBehaviour
     private float dmgSpeed = 20f;
 
     [SerializeField] private GameObject rat;
+    [SerializeField] private List<GameObject> rats = new();
 
     /// <summary>
     /// Reference to the door that is north of the player.
@@ -108,7 +112,8 @@ public class RatsUI : MonoBehaviour
 
     [SerializeField]
     ShaderApplication camShaders;
-    
+
+    Random rand = new();
 
     private IEnumerator oneSec() 
     {
@@ -135,8 +140,22 @@ public class RatsUI : MonoBehaviour
             camShaders.OverallDistortionMag += .2f;
             camShaders.OverallDistortionSpeed += .1f;
 
-            Instantiate(rat);
-            //rat.transform.SetPositionAndRotation();
+            GameObject aRat = Instantiate(rat);
+            int randDir = rand.Next(0, 4);
+            if (randDir == 0)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-120, 121), 0, 120), aRat.transform.rotation);
+            } else if (randDir == 1)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-120, 121), 0, -120), aRat.transform.rotation);
+            } else if (randDir == 2)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(120, 0, rand.Next(-120, 121)), aRat.transform.rotation);
+            } else if (randDir == 3)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(-120, 0, rand.Next(-120, 121)), aRat.transform.rotation);
+            }
+            aRat.transform.LookAt(cam.transform);
         }
     }
 
