@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;

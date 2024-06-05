@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Serialization;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using UnityEngine.UI;
+using WumpusCore.GameLocations;
 using WumpusUnity;
 
 public class StoresUI : MonoBehaviour
@@ -148,10 +150,12 @@ public class StoresUI : MonoBehaviour
     private GameObject movementRotation;
 
     [SerializeField]
-    public GameObject gun;
+    public GameObject crossbowModel;
 
     [SerializeField]
-    public GameObject ammo;
+    public GameObject arrowsModel;
+
+    [SerializeField] private GameObject tableCollider;
 
     /// <summary>
     /// The speed at which the camera rotates with the player's mouse.
@@ -260,16 +264,28 @@ public class StoresUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
+        SetupItemVisibility();
+    }
+
+    private void SetupItemVisibility()
+    {
+        if (!controller.CanRoomBeCollectedFrom())
+        {
+            arrowsModel.SetActive(false);
+            crossbowModel.SetActive(false);
+            return;
+        }
+
         ControllerState state = controller.GetState();
         if (state==ControllerState.GunRoom)
         {
-            gun.SetActive(true);
-            ammo.SetActive(false);
+            crossbowModel.SetActive(true);
+            arrowsModel.SetActive(false);
         }
         else if (state == ControllerState.AmmoRoom)
         {
-            ammo.SetActive(true);
-            gun.SetActive(false);
+            arrowsModel.SetActive(true);
+            crossbowModel.SetActive(false);
         }
         else
         {
@@ -280,7 +296,7 @@ public class StoresUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         // If the player isn't locked.
         if (!pLock)
         {
@@ -357,19 +373,28 @@ public class StoresUI : MonoBehaviour
                 ShowInteract(uninteractableIcon);
             }
             // If the player is looking at the gun or ammo they can intereact
-            else if (hit.transform.CompareTag("Gun") && !pLock)
+            else if (hit.transform.CompareTag("CollectableTable") && !pLock)
             {
-                // TODO! Stinky code duplication
+                RoomType type = controller.GetCurrentRoomType();
                 bool canCollect = controller.CanRoomBeCollectedFrom();
+
                 if (canCollect)
                 {
                     ShowInteract(useIcon);
-                    directionText.SetText("Collect the gun");
+                    if (type == RoomType.GunRoom)
+                    {
+                        directionText.SetText("Click to pickup the crossbow");
+                    }
+                    else
+                    {
+                        directionText.SetText("Click to pickup the ammo");
+                    }
                 }
                 else
                 {
-                    directionText.SetText("You have already collected the gun");
+                    directionText.SetText("You've already collected the items in this room");
                     ShowInteract(uninteractableIcon);
+
                 }
 
                 if (Input.GetMouseButtonDown(0) && canCollect)
@@ -378,57 +403,31 @@ public class StoresUI : MonoBehaviour
                     sceneController.GotoCorrectScene();
                 }
             }
-            else if (hit.transform.CompareTag("Ammo") && !pLock)
-            {
-                bool canCollect = controller.CanRoomBeCollectedFrom();
-                if (canCollect)
-                {
-                    ShowInteract(useIcon);
-                    directionText.SetText("Collect the ammo");
-                }
-                else
-                {
-                    directionText.SetText("You have already collected this ammo");
-                    ShowInteract(uninteractableIcon);
-                }
-
-                if (Input.GetMouseButtonDown(0) && canCollect)
-                {
-                    controller.StartTrivia();
-                    sceneController.GotoCorrectScene();
-                }
-            }
-            // If the player is looking at something that is none of these.
+            // If the player isn't looking at anything.
             else
             {
                 HideInteract();
                 directionText.SetText("");
             }
-        }
-        // If the player isn't looking at anything.
-        else
-        {
-            HideInteract();
-            directionText.SetText("");
-        }
 
-        // Makes the coinsText show the actual amount of coins that the player currently has.
-        coinsText.SetText(controller.GetCoins().ToString());
+            // Makes the coinsText show the actual amount of coins that the player currently has.
+            coinsText.SetText(controller.GetCoins().ToString());
 
-        // If we are fading.
-        if (movingAnimator.GetBool(fadingID))
-        {
-            // If the screen has fully faded to black.
-            if (black.color.a.Equals(1))
+            // If we are fading.
+            if (movingAnimator.GetBool(fadingID))
             {
-               MoveRooms();
-            }
-            // If the screen has not fully faded to black.
-            else
-            {
-                if (controller.GetState() == ControllerState.BatTransition) return;
-                // Move the camera toward the doorway.
-                cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
+                // If the screen has fully faded to black.
+                if (black.color.a.Equals(1))
+                {
+                    MoveRooms();
+                }
+                // If the screen has not fully faded to black.
+                else
+                {
+                    if (controller.GetState() == ControllerState.BatTransition) return;
+                    // Move the camera toward the doorway.
+                    cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
+                }
             }
         }
     }

@@ -39,11 +39,11 @@ namespace WumpusUnity
         }
         
         /// <summary>
-        /// Controls everything to do with scenes.
+        /// Redefines the controller so it has the new controller
         /// </summary>
-        private SceneController()
+        public void Reinitialize(Controller newController)
         {
-            controller = Controller.GlobalController;
+            controller = newController;
         }
         
         /// <summary>
@@ -79,7 +79,7 @@ namespace WumpusUnity
                 case ControllerState.Acrobat:
                     return "Acrobat";
                 case ControllerState.GameOver:
-                    return "GameOver";
+                    return "Game Over";
                 case ControllerState.Trivia:
                     return "Trivia";
                 case ControllerState.AmmoRoom:
