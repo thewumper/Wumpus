@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using WumpusCore.Controller;
@@ -7,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class BatUIHandler : MonoBehaviour
 {
-    [SerializeField] private GameObject batModel;
+    [SerializeField] private GameObject batObject;
 
 
     [SerializeField] private float size = 0.05f;
@@ -44,13 +45,18 @@ public class BatUIHandler : MonoBehaviour
 
     [SerializeField] private int numBats;
 
+    private List<GameObject> bats;
+
     /// <summary>
     /// The speed at which the camera rotates with the player's mouse.
     /// </summary>
     private const float camSens = 5f;
 
+    private bool canActivateMoreBats = true;
+
     private void Start()
     {
+        bats = new List<GameObject>();
         // Initializes the movingID.
         fadingID = Animator.StringToHash("fading");
         movingAnimator.SetBool(fadingID, false);
@@ -67,6 +73,7 @@ public class BatUIHandler : MonoBehaviour
         }
 
         controller.Debug = true;
+        InstantiateBats(200);
     }
 
     // Update is called once per frame
@@ -84,7 +91,6 @@ public class BatUIHandler : MonoBehaviour
         }
 
 
-
         if (movingAnimator.GetBool(fadingID))
         {
             // If the screen has fully faded to black.
@@ -98,14 +104,38 @@ public class BatUIHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (numBats < 300)
-        {
+        ActivateABat();
+        // if (numBats < 300)
+        // {
+        //
+        // // This could use instanced rendering for performance if needed
+        // Vector3 randomSpawnPosition = new Vector3(Random.Range(-10, 11), 5, Random.Range(-10, 11));
+        // GameObject instance =  Instantiate(batModel, randomSpawnPosition, Quaternion.identity);
+        // instance.gameObject.transform.localScale = new Vector3(size,size,size);
+        // numBats++;
+        // }
+    }
 
-        // This could use instanced rendering for performance if needed
-        Vector3 randomSpawnPosition = new Vector3(Random.Range(-10, 11), 5, Random.Range(-10, 11));
-        GameObject instance =  Instantiate(batModel, randomSpawnPosition, Quaternion.identity);
-        instance.gameObject.transform.localScale = new Vector3(size,size,size);
-        numBats++;
+    private void InstantiateBats(int numBats)
+    {
+        for (int i = 0; i < numBats; i++)
+        {
+            GameObject newBat = Instantiate(batObject);
+            newBat.transform.position += new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f,10f));
+            bats.Add(newBat);
         }
+    }
+
+    private void ActivateABat()
+    {
+        if (bats.Count <= 0)
+        {
+            movingAnimator.SetBool(fadingID,true);
+            canActivateMoreBats = false;
+            return;
+        }
+        int selectedBat = Random.Range(0, bats.Count);
+        bats[selectedBat].GetComponent<BatMover>().enabled = true;
+        bats.RemoveAt(selectedBat);
     }
 }
