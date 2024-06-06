@@ -59,10 +59,11 @@ public class RatsUI : MonoBehaviour
     /// <summary>
     /// The speed at which the coin damage moves upwards.
     /// </summary>
-    private float dmgSpeed = 20f;
+    private const float dmgSpeed = 20f;
 
     [SerializeField] private GameObject rat;
-    [SerializeField] private List<GameObject> rats = new();
+    private List<GameObject> rats = new();
+    private float ratSpeed = 5f;
 
     /// <summary>
     /// Reference to the door that is north of the player.
@@ -139,23 +140,40 @@ public class RatsUI : MonoBehaviour
             camShaders.OverallDistortionFreq += .2f;
             camShaders.OverallDistortionMag += .2f;
             camShaders.OverallDistortionSpeed += .1f;
+        }
+    }
+
+    private IEnumerator twentiethSecond()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(.05f);
 
             GameObject aRat = Instantiate(rat);
             int randDir = rand.Next(0, 4);
             if (randDir == 0)
             {
-                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-120, 121), 0, 120), aRat.transform.rotation);
-            } else if (randDir == 1)
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-15, 16), .2f, 15), aRat.transform.rotation);
+            }
+            else if (randDir == 1)
             {
-                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-120, 121), 0, -120), aRat.transform.rotation);
-            } else if (randDir == 2)
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-15, 16), .2f, -15), aRat.transform.rotation);
+            }
+            else if (randDir == 2)
             {
-                aRat.transform.SetPositionAndRotation(new Vector3(120, 0, rand.Next(-120, 121)), aRat.transform.rotation);
-            } else if (randDir == 3)
+                aRat.transform.SetPositionAndRotation(new Vector3(15, .2f, rand.Next(-15, 16)), aRat.transform.rotation);
+            }
+            else if (randDir == 3)
             {
-                aRat.transform.SetPositionAndRotation(new Vector3(-120, 0, rand.Next(-120, 121)), aRat.transform.rotation);
+                aRat.transform.SetPositionAndRotation(new Vector3(-15, .2f, rand.Next(-15, 16)), aRat.transform.rotation);
             }
             aRat.transform.LookAt(cam.transform);
+            aRat.transform.eulerAngles = new Vector3(
+                -90,
+                aRat.transform.eulerAngles.y,
+                aRat.transform.eulerAngles.z);
+            rats.Add(aRat);
+            ratSpeed += .5f;
         }
     }
 
@@ -187,8 +205,17 @@ public class RatsUI : MonoBehaviour
 
         camShaders.OverallDistortionFreq = 1;
 
+        // Adds the Door script to all doors.
+        northDoor.AddComponent<Door>().Init(Directions.North);
+        northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
+        southEastDoor.AddComponent<Door>().Init(Directions.SouthEast);
+        southDoor.AddComponent<Door>().Init(Directions.South);
+        southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
+        northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
+
         StartCoroutine(oneSec());
         StartCoroutine(tenthSecond());
+        StartCoroutine(twentiethSecond());
     }
 
     private void Update()
@@ -211,6 +238,17 @@ public class RatsUI : MonoBehaviour
                 objTransform.position.y + dmgSpeed * Time.deltaTime,
                 objTransform.position.z);
             objTransform.SetPositionAndRotation(targetPos, objTransform.rotation);
+        }
+
+        for (int i = 0; i < rats.Count; i++)
+        {
+            rats[i].transform.position += -rats[i].transform.up * ratSpeed * Time.deltaTime;
+        }
+
+        if (stats.RemainingCoins <= 0)
+        {
+            controller.ExitRat();
+            sceneController.GotoCorrectScene();
         }
     }
 

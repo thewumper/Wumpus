@@ -144,9 +144,15 @@ public class PlayerController : MonoBehaviour
     }
     private void MoveRooms()
     {
+        if (controller.GetState() == ControllerState.Rats) controller.ExitRat();
         // Move rooms.
         controller.MoveInADirection(moveDir);
         movingAnimator.SetBool(fadingID, false);
         sceneController.GotoCorrectScene();
+    }
+
+    public void SetLock(bool value)
+    {
+        pLock = value;
     }
 }
