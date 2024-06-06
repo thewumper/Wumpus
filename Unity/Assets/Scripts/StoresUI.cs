@@ -229,6 +229,7 @@ public class StoresUI : MonoBehaviour
 
     void Start()
     {
+        roomNum = controller.GetCurrentRoom().Id;
         // Locks the cursor and makes it invisible.
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

@@ -210,6 +210,7 @@ public class MainUI : MonoBehaviour
     [SerializeField] private TMP_Text ArrowText;
     [SerializeField] private GameObject CrossBowNotFound;
     [SerializeField] private GameObject CrossBowFound;
+    [SerializeField] private GameObject UIhandler;
 
     private void Awake()
     {
@@ -220,6 +221,7 @@ public class MainUI : MonoBehaviour
         }
         catch (NullReferenceException)
         {
+            Debug.Log("Created the controller from mainUI");
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
@@ -274,7 +276,6 @@ public class MainUI : MonoBehaviour
         // Get the sounds properly working
         soundManager.UpdateSoundState();
 
-        Debug.Log(controller.GetWumpusLocation());
     }
 
     void LateUpdate()
@@ -368,7 +369,6 @@ public class MainUI : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(controller.getCatPosition());
         // If the player isn't locked.
         if (!pLock)
         {
@@ -392,7 +392,7 @@ public class MainUI : MonoBehaviour
             if (hit.transform.CompareTag("door") && !pLock)
             {
                 moveDir = hit.transform.GetComponent<Door>().GetDir();
-                directionText.SetText(moveDir.ToString());
+                directionText.SetText(DirectionHelper.GetLongNameFromDirection(moveDir));
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -405,6 +405,15 @@ public class MainUI : MonoBehaviour
             else if (hit.transform.CompareTag("unmoveableDoor") && !pLock)
             {
                 ShowInteract(uninteractableIcon);
+            }
+            else if (hit.transform.CompareTag("CatPost"))
+            {
+                directionText.SetText("Click to tame the cat");
+                if (Input.GetMouseButtonDown(0))
+                {
+                    UIhandler.SetActive(true);
+                    pLock = true;
+                }
             }
             // If the player is looking at something that is none of these.
             else

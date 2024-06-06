@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.LuckyCat;
@@ -8,7 +9,10 @@ public class Catpost : MonoBehaviour
 {
     private Controller controller;
 
+
     [SerializeField] private GameObject catModel;
+    [SerializeField] private Camera cam;
+    [SerializeField] private TMP_Text hintText;
 
     // Start is called before the first frame update
     void Start()

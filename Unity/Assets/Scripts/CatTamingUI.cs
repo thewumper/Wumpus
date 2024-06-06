@@ -21,9 +21,9 @@ public class CatTamingUI : MonoBehaviour
     private int coinsSubmit;
 
 
-    // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
+        Debug.Log("Initiated taming UI");
         // Instantiates the Controller, if there isn't one already.
         try
         {
@@ -35,8 +35,9 @@ public class CatTamingUI : MonoBehaviour
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
 
-        mainCanvas.enabled = true;
-        Cursor.lockState = CursorLockMode.Locked;
+        mainCanvas.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         coinText.SetText($"You have {controller.GetCoins()} coins");
 

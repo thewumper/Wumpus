@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Unity/Assets/Models/CatTree.fbx.meta
 guid: 8955e3c693d0c6346be3dd6d3a149c5c
+========
+guid: 2e5cc1a99d7502c4e8b4f9181cb4fa64
+>>>>>>>> refs/heads/blazing-edge:Unity/Assets/Models/bat.fbx.meta
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
