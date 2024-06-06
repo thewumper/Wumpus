@@ -56,6 +56,17 @@ public class BattlePlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Check for game end
+        if (playerHealth.value <= 0f)
+        {
+            OnDeath();
+        }
+
+        if (enemyHealth.value <= 0f)
+        {
+            OnVictory();
+        }
+        
         // Normalize input and scale by dT
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         input.Normalize();
@@ -138,25 +149,27 @@ public class BattlePlayerController : MonoBehaviour
             {
                 Destroy(collision.gameObject);
             }
-            if (playerHealth.value <= 0f)
-            {
-                OnDeath();
-            }
         }
     }
     
     // Calls on player death
-    private void OnDeath()
+    public void OnDeath()
     {
         throw new NotImplementedException();
-        GameLost();
+        GameOver();
+    }
+
+    public void OnVictory()
+    {
+        throw new NotImplementedException();
+        GameOver();
     }
 
     /// <summary>
     /// Calls once the player loses
     /// Unloads the scene
     /// </summary>
-    public static void GameLost()
+    public static void GameOver()
     {
         throw new NotImplementedException();
     }

@@ -518,7 +518,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -599,7 +600,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -765150924802650856, guid: 90298aa70fd18d4e39eabe4dd8f96e86, type: 3}
+  m_Sprite: {fileID: -765150924802650856, guid: 90298aa70fd18d4e39eabe4dd8f96e86,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -686,7 +688,6 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 387599875}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -713,6 +714,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
+  serializedVersion: 3
   m_Radius: 0.06
 --- !u!1 &389483739
 GameObject:
@@ -839,7 +841,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda, type: 3}
+  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -989,7 +992,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc, type: 3}
+  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1040,10 +1044,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 210, y: 210, z: 210}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 102234941}
-  - {fileID: 387599877}
-  - {fileID: 1844008268}
+  m_Children: [{fileID: 102234941}, {fileID: 387599877}, {fileID: 1844008268}]
   m_Father: {fileID: 90990873}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &911301555
@@ -1116,7 +1117,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8265070675962163934, guid: 0d958b39379e09506a4dbf652a9a9509, type: 3}
+  m_Sprite: {fileID: -8265070675962163934, guid: 0d958b39379e09506a4dbf652a9a9509,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1389,7 +1391,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda, type: 3}
+  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1567,7 +1570,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1712,7 +1716,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1802,7 +1807,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1969,7 +1975,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc, type: 3}
+  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2059,7 +2066,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b, type: 3}
+  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2135,7 +2143,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b, type: 3}
+  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2182,6 +2191,9 @@ GameObject:
   - component: {fileID: 1844008274}
   - component: {fileID: 1844008273}
   - component: {fileID: 1844008275}
+  - component: {fileID: 1844008276}
+  - component: {fileID: 1844008277}
+  - component: {fileID: 1844008278}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -2300,7 +2312,7 @@ MonoBehaviour:
   rigidbody: {fileID: 1844008269}
   center: {x: 3394, y: 2931}
   radius: 125
-  speed: 30
+  speed: 100
 --- !u!114 &1844008273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2313,9 +2325,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3afced4cbef214fb6c0533c0e3966c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
-  outputSpeed: 400
+  duration: 10
+  outputSpeed: 150
   outputDelay: 0.01
+  addSpawnerVelocity: 1
+  startingBuffer: 0.3
 --- !u!114 &1844008274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2330,8 +2344,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   room: {fileID: 911301553}
   rigidbody: {fileID: 1844008269}
-  prefabBullet: {fileID: 6864899258456612908, guid: 3f437766824041370915961348f5366f, type: 3}
-  prefabHomingBullet: {fileID: 6864899258456612908, guid: f7ffcb3162d9a5247af31ee47d24dc1c, type: 3}
+  prefabBullet: {fileID: 6864899258456612908, guid: 3f437766824041370915961348f5366f,
+    type: 3}
+  prefabHomingBullet: {fileID: 6864899258456612908, guid: f7ffcb3162d9a5247af31ee47d24dc1c,
+    type: 3}
 --- !u!114 &1844008275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2344,17 +2360,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87e728cfca54471aa1db552f13b70561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 7
   target: {fileID: 387599879}
   outputSpeed: 100
   speed: 10
   throttleDownRange: 1
-  accelerationFalloff: 0.94
-  velocityFalloff: 0.29
+  accelerationFalloff: 0.95
+  velocityFalloff: 0.15
   timeout: 0
-  outputDelay: 0.7
-  bulletCount: 5
-  bulletSpread: 2.17
+  outputDelay: 0.5
+  bulletCount: 7
+  bulletSpread: 2
+  addSpawnerVelocity: 1
+  startingBuffer: 0
+  velocityMatchRadius: 100
 --- !u!1 &1878094339
 GameObject:
   m_ObjectHideFlags: 0
@@ -2408,8 +2427,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1095136029}
-  value: 50
-  maxValue: 50
+  value: 100
+  maxValue: 100
+--- !u!114 &1844008276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844008267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2affbf7f7da34e2abd421cdb78c67b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 5
+  addSpawnerVelocity: 1
+  startingBuffer: 1.5
+  outputSpeed: 300
+  outputDelay: 0.01
+  bulletCount: 12
+  phaseShift: 1
+--- !u!114 &1844008277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844008267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2affbf7f7da34e2abd421cdb78c67b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 7
+  addSpawnerVelocity: 0
+  startingBuffer: 0
+  outputSpeed: 100
+  outputDelay: 0.1
+  bulletCount: 6
+  phaseShift: 15
+--- !u!114 &1844008278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844008267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e728cfca54471aa1db552f13b70561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0
+  addSpawnerVelocity: 0
+  startingBuffer: 0
+  target: {fileID: 387599879}
+  outputSpeed: 120
+  speed: 12
+  velocityMatchRadius: 100
+  accelerationFalloff: 0.875
+  velocityFalloff: 0.12
+  timeout: 0
+  outputDelay: 1
+  bulletCount: 20
+  bulletSpread: 2.35
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
