@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class WumpusCutscene : MonoBehaviour
 {
     [SerializeField] GameObject tv;
     [SerializeField] private string battleScene;
-    [SerializeField] private Transform targetPosition;
+    [SerializeField] private Transform TVTarget;
+    [SerializeField] private Transform PlayerTarget;
+    
     [SerializeField] private Transform player;
-    [SerializeField] private Transform movePlayerTo;
     [SerializeField] private TMP_Text message;
     [SerializeField] private GameObject buttons;
     [SerializeField] private float speed;
@@ -28,8 +30,8 @@ public class WumpusCutscene : MonoBehaviour
     {
         if (isDropping)
         {
-            tv.transform.position = Vector3.Lerp(tv.transform.position,targetPosition.position,speed * Time.deltaTime);
-            if (Vector3.Distance(tv.transform.position, targetPosition.position) <= 0.1)
+            tv.transform.position = Vector3.Lerp(tv.transform.position,TVTarget.position,speed * Time.deltaTime);
+            if (Vector3.Distance(tv.transform.position, TVTarget.position) <= 0.1)
             {
                 isDropping = false;
                 isMoving = true;
@@ -38,8 +40,8 @@ public class WumpusCutscene : MonoBehaviour
 
         if (isMoving)
         {
-            player.transform.position = Vector3.Lerp(player.transform.position,targetPosition.position,speed * Time.deltaTime);
-            if (Vector3.Distance(player.transform.position, targetPosition.position) <= 0.1)
+            player.transform.position = Vector3.Lerp(player.transform.position,PlayerTarget.position,speed * Time.deltaTime);
+            if (Vector3.Distance(player.transform.position, PlayerTarget.position) <= 1)
             {
                 isDropping = false;
                 isMoving = false;
