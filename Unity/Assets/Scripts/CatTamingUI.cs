@@ -17,10 +17,10 @@ public class CatTamingUI : MonoBehaviour
     [SerializeField] private TMP_Text selectorCoinsText;
     [SerializeField] private Canvas mainCanvas;
     [SerializeField] private GameObject mainUI;
+    [SerializeField] private Image catIcon;
 
     private Controller controller;
     private int coinsSubmit;
-
 
     void OnEnable()
     {
@@ -39,6 +39,7 @@ public class CatTamingUI : MonoBehaviour
         mainCanvas.enabled = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        coinsSubmit = 0;
 
         coinText.SetText($"You have {controller.GetCoins()} coins");
 
@@ -64,6 +65,7 @@ public class CatTamingUI : MonoBehaviour
         {
             PersistentData.Instance.IsCatMadAtPlayer = true;
         }
+        catIcon.enabled = controller.hasPlayerTamedCat();
 
         // Disable the taming UI again
         gameObject.SetActive(false);

@@ -406,15 +406,6 @@ public class MainUI : MonoBehaviour
             {
                 ShowInteract(uninteractableIcon);
             }
-            else if (hit.transform.CompareTag("CatPost"))
-            {
-                directionText.SetText("Click to tame the cat");
-                if (Input.GetMouseButtonDown(0))
-                {
-                    UIhandler.SetActive(true);
-                    pLock = true;
-                }
-            }
             // If the player is looking at something that is none of these.
             else
             {

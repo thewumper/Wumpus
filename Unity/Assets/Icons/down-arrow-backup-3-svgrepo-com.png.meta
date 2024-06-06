@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      down-arrow-backup-3-svgrepo-com_0: 4394820133332751490
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

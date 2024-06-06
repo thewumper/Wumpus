@@ -1,9 +1,11 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.LuckyCat;
 using WumpusUnity;
+using Image = UnityEngine.UIElements.Image;
 
 public class Catpost : MonoBehaviour
 {
@@ -14,7 +16,9 @@ public class Catpost : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private TMP_Text hintText;
     [SerializeField] private GameObject uiHandler;
-
+    [SerializeField] private GameObject catIcon;
+    [SerializeField] private AudioClip meowClip;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +32,8 @@ public class Catpost : MonoBehaviour
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
+
+            catIcon.SetActive(controller.hasPlayerTamedCat());
     }
 
     // Update is called once per frame
@@ -43,15 +49,30 @@ public class Catpost : MonoBehaviour
             gameObject.SetActive(controller.hasPlayerTamedCat());
         }
 
-
-        if (Physics.Raycast(new Ray(), out RaycastHit hit)){
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit)){
             if (hit.transform.CompareTag("CatPost"))
             {
-                hintText.SetText("Click to tame the cat");
-                if (Input.GetMouseButtonDown(0))
+                if (controller.hasPlayerTamedCat())
                 {
-                    uiHandler.SetActive(true);
+                    hintText.SetText("Click to pet the cat");
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        AudioSource soundSource = catModel.AddComponent<AudioSource>();
+                        soundSource.clip = meowClip;
+                        soundSource.loop = false;
+                        soundSource.Play();
+                    }
                 }
+                else
+                {
+                    hintText.SetText("Click to tame the cat");
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        uiHandler.SetActive(true);
+                    }
+                }
+
             }
         }
     }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a60371932d1231d4f8127b33b321afe9
+guid: b78b99ecac4aedd43b7a709ee726fc50
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7223261877561900972
-    second: CatTreeAlbedo_0
+      213: -725735965513602427
+    second: cat-svgrepo-com_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CatTreeAlbedo_0
+      name: cat-svgrepo-com_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 4096
-        height: 4096
+        x: 65
+        y: 172
+        width: 1150
+        height: 883
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cafb2bb386e2e3460800000000000000
-      internalID: 7223261877561900972
+      spriteID: 58a26d60cfaade5f0800000000000000
+      internalID: -725735965513602427
       vertices: []
       indices: 
       edges: []
@@ -131,7 +131,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      CatTreeAlbedo_0: 7223261877561900972
+      cat-svgrepo-com_0: -725735965513602427
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

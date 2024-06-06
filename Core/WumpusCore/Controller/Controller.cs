@@ -86,7 +86,7 @@ namespace WumpusCore.Controller
         /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
         /// <param name="topologyDirectory">The directory to load map files from.</param>
         /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
-        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,1,1,0)
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,1,1,50)
         {
         }
 
@@ -174,6 +174,12 @@ namespace WumpusCore.Controller
             Entity.Entity player = gameLocations.GetEntity(EntityType.Player);
 
             player.location = nextRoom.Id;
+
+            if (hasPlayerTamedCat())
+            {
+                // This protects the player from the effects of the rats
+                currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
+            }
 
             SetCorrectStateForRoom(nextRoom.Id);
 
@@ -566,32 +572,7 @@ namespace WumpusCore.Controller
 
         public bool AttemptToTameCat(int coinInput)
         {
-            if (coinInput>gameLocations.GetPlayer().Coins)
-            {
-                throw new InvalidOperationException("You can't tame a cat with more coins than you have");
-            }
-
-            // The cat cannot be guaranteed to be tamed, but instead it uses
-            // a modified sigmoid function to determine your chance of taming
-            // the cat as a function of the coins you put in
-
-            // The function is 1/(1+e^{-x/2+3})*100 (%)
-            // there isn't anything specific about that function
-            // other than it looks decent in Desmos
-            // 0 coins gives a ~4.7% chance to tame
-            // 10 coins gives a ~90% change to tame
-            // 18+ coins gives a 99% change to tame
-            // You just won't ever have a 100% chance of taming
-            gameLocations.GetPlayer().LoseCoins((uint) coinInput);
-
-            int threshold = Random.Next(0, 100);
-            int value = (int)(1 / (1 + Math.Pow(Math.E, -coinInput / 2.0 + 3)) * 100);
-
-            if (value >= threshold)
-            {
-                return true;
-            }
-            return false;
+            return gameLocations.GetCat().Tame(coinInput);
         }
 
         public bool ShootGun(Directions shootingDir)
