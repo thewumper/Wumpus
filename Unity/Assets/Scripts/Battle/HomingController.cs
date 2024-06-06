@@ -68,17 +68,14 @@ namespace WumpusUnity.Battle
                 {
                     // Within acceptable range, return as is
                     accelerationAngle = matchAngle;
-                    Debug.Log("WITHIN RANGE");
                 } 
                 else if (relativeMatchAngle < Math.PI)
                 {
                     accelerationAngle = AngleMod(TAU + angleRange + seekAngle);
-                    Debug.Log("BELOW RANGE");
                 }
                 else
                 {
                     accelerationAngle = AngleMod(TAU - angleRange + seekAngle);
-                    Debug.Log("ABOVE RANGE");
                 }
                 
                 float x = (float)Math.Sin(accelerationAngle);
