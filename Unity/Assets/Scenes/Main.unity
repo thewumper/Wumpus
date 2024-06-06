@@ -447,10 +447,10 @@ MonoBehaviour:
   minTime: 2
   maxTime: 3
   overallDistortionSpeed: 1.5
-  overallDistortionMag: 0.4
+  overallDistortionMag: 0.15
   overallDistortionFreq: 25
   doDistortionPrePixelazation: 0
-  posterzationBands: 75
+  posterzationBands: 220
   shader: {fileID: 4800000, guid: 56e7faa0cbb6fd647a9f51324add74ed, type: 3}
 --- !u!1 &189767435
 GameObject:
