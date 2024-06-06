@@ -16,8 +16,13 @@ public class RandomSpawner : SpawnerMode
     /// </summary>
     [SerializeField] private float outputDelay;
 
+    void Awake()
+    {
+        update = FixedUpdate;
+    }
+    
     // Update is called once per frame
-    void FixedUpdate()
+    new void FixedUpdate()
     {
         if (Room == null || Rigidbody == null)
         {
@@ -41,14 +46,20 @@ public class RandomSpawner : SpawnerMode
             GameObject obj = Instantiate(prefab, Rigidbody.position, Quaternion.identity);
             obj.transform.SetParent(Room.transform);
             obj.transform.localScale = new Vector3(1f, 1f, 1f);
-
-            float x = (float)UnityEngine.Random.value - 0.5f;
-            float y = (float)UnityEngine.Random.value - 0.5f;
+            
             MovementController controller = obj.GetComponent<MovementController>();
             controller.velocityFalloff = 1f;
             controller.startingPosition = Rigidbody.position;
-            controller.startingVelocity = Rigidbody.velocity + new Vector2(x, y).normalized * outputSpeed;
             controller.acceleration = Vector2.zero;
+            
+            float x = (float)UnityEngine.Random.value - 0.5f;
+            float y = (float)UnityEngine.Random.value - 0.5f;
+            controller.startingVelocity = new Vector2(x, y).normalized * outputSpeed;
+            if (addSpawnerVelocity)
+            {
+                controller.startingVelocity += Rigidbody.velocity;
+            }
+            
             controller.Init();
         }
     }
