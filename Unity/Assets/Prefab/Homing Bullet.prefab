@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 2208703988740019828, guid: 6bb52a1a1d1a4144d8474c56a8224faa, type: 3}
   m_Color: {r: 0, g: 0.538342, b: 1, a: 1}
   m_FlipX: 0
@@ -192,9 +192,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 6121099187557548285}
+  accelerationFalloff: 0.75
   velocityFalloff: 0.85
   startingPosition: {x: 3394, y: 2931}
   startingVelocity: {x: 0, y: 0}
+  acceleration: {x: 0, y: 0}
   target: {fileID: 0}
   speed: 100
-  throttleDownRange: 10
+  velocityMatchRadius: 50
+  timeout: 0
