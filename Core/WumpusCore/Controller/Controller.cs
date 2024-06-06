@@ -58,6 +58,9 @@ namespace WumpusCore.Controller
         /// </summary>
         public bool Debug = false;
 
+        private int turnCounter;
+        private int mapID;
+
         /// <summary>
         /// Gets the reference to the global controller
         /// uses the internal <c>_controllerReference</c> variable
@@ -107,6 +110,7 @@ namespace WumpusCore.Controller
         public Controller(string triviaFile, string topologyDirectory, ushort mapId, int numVats, int numBats, int numRats,
             int numAcrobats, int numAmmoRooms, int numGunRooms, int startingCoins)
         {
+            mapID = mapId;
             _controllerReference = this;
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
@@ -144,6 +148,8 @@ namespace WumpusCore.Controller
         /// <param name="direction">The direction to move the player in.</param>
         public void MoveInADirection(Directions direction)
         {
+            turnCounter++;
+
             ValidateState(new [] {InRoom, Rats, CatDialouge, AmmoRoom, GunRoom});
 
             // if (state == CatDialouge)
