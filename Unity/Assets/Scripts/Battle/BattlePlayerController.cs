@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vector2 = UnityEngine.Vector2;
 
 public class BattlePlayerController : MonoBehaviour
@@ -43,6 +44,7 @@ public class BattlePlayerController : MonoBehaviour
     [Range(0f, 1f)] [SerializeField] private float minOpacity;
     [SerializeField] private float totalImmunityTime;
     private float _remainingImmunityTime;
+    [Range(0f, 1f)] [SerializeField] private float lifesteal;
 
     [SerializeField] private new SpriteRenderer renderer;
 
@@ -144,6 +146,12 @@ public class BattlePlayerController : MonoBehaviour
         if (collision.gameObject.GetComponent<Damage>() != null)
         {
             playerHealth.value -= collision.gameObject.GetComponent<Damage>().damage;
+            
+            if (lifesteal > 0f && enemyHealth.value < enemyHealth.maxValue) 
+            {
+                enemyHealth.value += collision.gameObject.GetComponent<Damage>().damage * lifesteal;
+            }
+            
             _remainingImmunityTime = totalImmunityTime;
             if (destroyOnContact)
             {

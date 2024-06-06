@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    [SerializeField] protected new Rigidbody2D rigidbody;
+    [SerializeField] public new Rigidbody2D rigidbody;
     [Range(0f, 1f)] [SerializeField] public float accelerationFalloff = .75f;
     /// <summary>
     /// Higher values mean more slippery floors
