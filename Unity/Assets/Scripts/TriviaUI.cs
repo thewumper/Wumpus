@@ -68,6 +68,12 @@ public class TriviaUI : MonoBehaviour
         {
             wrongBuzzer.Play();
             lostTrivia = true;
+            
+            questionText.SetText("YOU LOSE");
+            b1Text.SetText("");
+            b2Text.SetText("");
+            b3Text.SetText("");
+            b4Text.SetText("");
         }
         else if (lostTrivia)
         {
@@ -87,6 +93,11 @@ public class TriviaUI : MonoBehaviour
         bool correctness = controller.SubmitTriviaAnswer(choice);
         Debug.Log($"You got the trivia question correct: {correctness}");
         Debug.Log(controller.GetState());
+
+        if (!correctness)
+        {
+            wrongBuzzer.Play();
+        }
         
         question = controller.GetTriviaQuestion();
         questionText.SetText(question.questionText);
