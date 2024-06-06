@@ -247,7 +247,6 @@ public class RatsUI : MonoBehaviour
 
         if (stats.RemainingCoins <= 0)
         {
-            controller.ExitRat();
             sceneController.GotoCorrectScene();
         }
     }
