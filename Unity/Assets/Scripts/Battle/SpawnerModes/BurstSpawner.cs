@@ -22,12 +22,17 @@ public class BurstSpawner : SpawnerMode
     /// <summary>
     /// The amount (in radians) the output rotates each second
     /// </summary>
-    [SerializeField] private double phaseShift;
+    [Range(0f, 360f)] [SerializeField] private double phaseShift;
 
     private double phase = 0;
 
+    void Awake()
+    {
+        update = FixedUpdate;
+    }
+    
     // Update is called once per frame
-    void FixedUpdate()
+    new void FixedUpdate()
     {
         if (Room == null || Rigidbody == null)
         {
@@ -36,15 +41,15 @@ public class BurstSpawner : SpawnerMode
             return;
         }
         
-        phase += phaseShift * Time.fixedDeltaTime;
-        if (phase > 2 * Math.PI)
-        {
-            phase -= 2 * Math.PI;
-        }
-        
         timeSinceLastOutput += Time.fixedDeltaTime;
         if (timeSinceLastOutput >= outputDelay)
         {
+            phase += phaseShift * Math.PI / 180.0;
+            if (phase > 2 * Math.PI)
+            {
+                phase -= 2 * Math.PI;
+            }
+            
             timeSinceLastOutput = 0f;
             
             double angleInterval = Math.PI * 2 / bulletCount;
@@ -74,6 +79,10 @@ public class BurstSpawner : SpawnerMode
                 float y = (float)Math.Cos(angle);
 
                 controller.startingVelocity = new Vector2(x, y).normalized * outputSpeed;
+                if (addSpawnerVelocity)
+                {
+                    controller.startingVelocity += Rigidbody.velocity;
+                }
                 controller.Init();
             }
         }

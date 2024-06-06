@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace WumpusUnity.Battle
 {
@@ -19,11 +16,12 @@ namespace WumpusUnity.Battle
         protected Dictionary<String, GameObject> HazardTypes;
         
         private SpawnerMode[] Modes;
-        private int currentMode = 0;
+        private int currentMode = -1;
 
         private float remainingTime;
+        private bool waitingForBuffer = false;
 
-        void Start()
+        void Awake()
         {
             HazardTypes = new Dictionary<string, GameObject>()
             {
@@ -31,11 +29,21 @@ namespace WumpusUnity.Battle
                 {"HomingBullet", prefabHomingBullet}
             };
             
-            Modes = GetComponents<SpawnerMode>();
-            foreach (SpawnerMode mode in Modes)
+            SpawnerMode[] availableModes = GetComponents<SpawnerMode>();
+            Debug.Log(availableModes.Length + " Modes found");
+            Stack<SpawnerMode> addedModes = new Stack<SpawnerMode>();
+            foreach (SpawnerMode mode in availableModes)
             {
-                mode.Initialize(room, rigidbody, HazardTypes);
+                if (mode.enabled)
+                {
+                    mode.Initialize(room, rigidbody, HazardTypes);
+                    addedModes.Push(mode);
+                    Debug.Log("Initialized mode " + mode.GetType());
+                }
             }
+            Debug.Log(addedModes.Count + " Modes initialized");
+
+            Modes = addedModes.ToArray();
 
             // Mode decided in Update
             remainingTime = 0f;
@@ -44,27 +52,51 @@ namespace WumpusUnity.Battle
         void FixedUpdate()
         {
             remainingTime -= Time.fixedDeltaTime;
-            if (remainingTime <= 0)
+            
+            // Break if still waiting
+            if (remainingTime > 0)
             {
-                Modes[currentMode].enabled = false;
-                int nextMode = currentMode;
-                if (Modes.Length > 1)
-                {
-                    while (nextMode == currentMode)
-                    {
-                        nextMode = UnityEngine.Random.Range(0, Modes.Length);
-                    }
-                }
-                else
-                {
-                    nextMode = 0;
-                }
-
-                currentMode = nextMode;
-                Debug.Log("Switching to mode " + currentMode + ", " + Modes[currentMode].GetType());
-                Modes[currentMode].enabled = true;
-                remainingTime = Modes[currentMode].duration;
+                return;
             }
+            
+            if (waitingForBuffer)
+            {
+                waitingForBuffer = false;
+                Modes[currentMode].Activate();
+                remainingTime = Modes[currentMode].duration;
+                return;
+            }
+            
+            if (Modes.Length <= 1)
+            {
+                Modes[0].Activate();
+                remainingTime = float.MaxValue;
+                return;
+            }
+            
+            int nextMode = currentMode;
+            while (nextMode == currentMode)
+            {
+                nextMode = UnityEngine.Random.Range(0, Modes.Length);
+            }
+
+            foreach (SpawnerMode mode in Modes)
+            {
+                mode.enabled = false;
+            }
+            
+            currentMode = nextMode;
+            Debug.Log("Switching to mode " + currentMode + ", " + Modes[currentMode].GetType());
+
+            if (Modes[currentMode].startingBuffer > 0.0)
+            {
+                waitingForBuffer = true;
+                remainingTime = Modes[currentMode].startingBuffer;
+                return;
+            }
+            
+            Modes[currentMode].Activate();
+            remainingTime = Modes[currentMode].duration;
         }
     }
 }

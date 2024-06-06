@@ -2183,6 +2183,8 @@ GameObject:
   - component: {fileID: 1844008273}
   - component: {fileID: 1844008275}
   - component: {fileID: 1844008276}
+  - component: {fileID: 1844008277}
+  - component: {fileID: 1844008278}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -2314,8 +2316,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3afced4cbef214fb6c0533c0e3966c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
-  outputSpeed: 400
+  duration: 10
+  addSpawnerVelocity: 0
+  startingBuffer: 0
+  outputSpeed: 100
   outputDelay: 0.01
 --- !u!114 &1844008274
 MonoBehaviour:
@@ -2346,16 +2350,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 5
+  addSpawnerVelocity: 1
+  startingBuffer: 0
   target: {fileID: 387599879}
   outputSpeed: 100
   speed: 10
-  throttleDownRange: 1
-  accelerationFalloff: 0.94
-  velocityFalloff: 0.29
+  velocityMatchRadius: 100
+  accelerationFalloff: 0.95
+  velocityFalloff: 0.15
   timeout: 0
   outputDelay: 0.7
-  bulletCount: 5
-  bulletSpread: 2.17
+  bulletCount: 7
+  bulletSpread: 2.5
 --- !u!114 &1844008276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2369,10 +2375,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 5
+  addSpawnerVelocity: 1
+  startingBuffer: 1.5
   outputSpeed: 300
   outputDelay: 0.01
-  bulletCount: 7
-  phaseShift: 1.3
+  bulletCount: 12
+  phaseShift: 1
+--- !u!114 &1844008277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844008267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2affbf7f7da34e2abd421cdb78c67b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 7
+  addSpawnerVelocity: 0
+  startingBuffer: 0
+  outputSpeed: 100
+  outputDelay: 0.1
+  bulletCount: 6
+  phaseShift: 15
+--- !u!114 &1844008278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844008267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e728cfca54471aa1db552f13b70561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0
+  addSpawnerVelocity: 0
+  startingBuffer: 0
+  target: {fileID: 387599879}
+  outputSpeed: 200
+  speed: 20
+  velocityMatchRadius: 100
+  accelerationFalloff: 0.875
+  velocityFalloff: 0.117
+  timeout: 0
+  outputDelay: 1
+  bulletCount: 20
+  bulletSpread: 2.35
 --- !u!1 &1878094339
 GameObject:
   m_ObjectHideFlags: 0

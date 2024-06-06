@@ -11,21 +11,30 @@ namespace WumpusUnity.Battle
         protected Rigidbody2D Rigidbody;
         protected Dictionary<String, GameObject> HazardTypes;
         [SerializeField] public float duration;
+        [SerializeField] public bool addSpawnerVelocity;
+        [SerializeField] public float startingBuffer;
 
         protected float timeSinceLastOutput;
 
-        private void OnEnable()
+        protected Action update;
+
+        public void Activate()
         {
             timeSinceLastOutput = float.MaxValue;
-        }
-        
-        public void Initialize(GameObject room, Rigidbody2D rigidbody_, Dictionary<String, GameObject> hazardTypes)
-        {
             if (duration == 0)
             {
-                Destroy(this.gameObject);
-                throw new ConstraintException("Mode duration cannot equal zero.");
+                timeSinceLastOutput = float.MaxValue;
+                update();
+                timeSinceLastOutput = float.MinValue;
+                enabled = false;
+                return;
             }
+
+            enabled = true;
+        }
+
+        public void Initialize(GameObject room, Rigidbody2D rigidbody_, Dictionary<String, GameObject> hazardTypes)
+        {
             this.Room = room;
             this.Rigidbody = rigidbody_;
             this.HazardTypes = hazardTypes;
