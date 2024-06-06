@@ -16,6 +16,7 @@ public class CatTamingUI : MonoBehaviour
     [SerializeField] private TMP_Text coinText;
     [SerializeField] private TMP_Text selectorCoinsText;
     [SerializeField] private Canvas mainCanvas;
+    [SerializeField] private GameObject mainUI;
 
     private Controller controller;
     private int coinsSubmit;
@@ -44,12 +45,15 @@ public class CatTamingUI : MonoBehaviour
         upArrow.onClick.AddListener(UpArrowClick);
         downArrow.onClick.AddListener(DownArrowClick);
         submitButton.onClick.AddListener(SubmitButtonClick);
+        mainUI.GetComponent<MainUI>().pLock = true;
+        selectorCoinsText.SetText(coinsSubmit.ToString());
     }
 
     private void OnDisable()
     {
         mainCanvas.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
+        mainUI.GetComponent<MainUI>().pLock = false;
 
     }
 
@@ -61,6 +65,7 @@ public class CatTamingUI : MonoBehaviour
             PersistentData.Instance.IsCatMadAtPlayer = true;
         }
 
+        // Disable the taming UI again
         gameObject.SetActive(false);
     }
 
@@ -81,6 +86,4 @@ public class CatTamingUI : MonoBehaviour
         }
         selectorCoinsText.SetText(coinsSubmit.ToString());
     }
-
-
 }

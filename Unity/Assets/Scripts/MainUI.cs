@@ -48,7 +48,7 @@ public class MainUI : MonoBehaviour
     /// <summary>
     /// Whether or not the player can move or look around.
     /// </summary>
-    private bool pLock;
+    public bool pLock;
     
     /// <summary>
     /// The room that the player is currently in.

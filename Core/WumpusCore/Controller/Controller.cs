@@ -111,7 +111,7 @@ namespace WumpusCore.Controller
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,numAmmoRooms,numGunRooms,topology,Controller.Random,trivia);
-            gameLocations.AddEntity(new Cat(topology, gameLocations, 25));
+            gameLocations.AddEntity(new Cat(topology, gameLocations, 0));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, 1));
             gameLocations.GetPlayer().GainCoins((uint) startingCoins);

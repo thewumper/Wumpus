@@ -13,6 +13,7 @@ public class Catpost : MonoBehaviour
     [SerializeField] private GameObject catModel;
     [SerializeField] private Camera cam;
     [SerializeField] private TMP_Text hintText;
+    [SerializeField] private GameObject uiHandler;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +42,17 @@ public class Catpost : MonoBehaviour
         {
             gameObject.SetActive(controller.hasPlayerTamedCat());
         }
-        // If we're in the cat room we can just let the catUI handle it
+
+
+        if (Physics.Raycast(new Ray(), out RaycastHit hit)){
+            if (hit.transform.CompareTag("CatPost"))
+            {
+                hintText.SetText("Click to tame the cat");
+                if (Input.GetMouseButtonDown(0))
+                {
+                    uiHandler.SetActive(true);
+                }
+            }
+        }
     }
 }
