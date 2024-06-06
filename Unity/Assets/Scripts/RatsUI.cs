@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
+using Random = System.Random;
 
 public class RatsUI : MonoBehaviour
 {
@@ -16,6 +18,8 @@ public class RatsUI : MonoBehaviour
     /// The global SceneController object.
     /// </summary>
     private SceneController sceneController;
+
+    [SerializeField] private GameObject cam;
 
     /// <summary>
     /// The stats of what is happening in the rat room.
@@ -34,17 +38,12 @@ public class RatsUI : MonoBehaviour
         get => coins.text;
         set => coins.text = "Coins: " + value;
     }
-    
+
     /// <summary>
     /// What the RoomType text shows.
     /// </summary>
     [SerializeField] private TMP_Text room;
 
-    /// <summary>
-    /// The interval at which the coin damage should appear at.
-    /// </summary>
-    private float interval;
-    
     /// <summary>
     /// The prefab for the coin damage text.
     /// </summary>
@@ -61,6 +60,9 @@ public class RatsUI : MonoBehaviour
     /// The speed at which the coin damage moves upwards.
     /// </summary>
     private float dmgSpeed = 20f;
+
+    [SerializeField] private GameObject rat;
+    [SerializeField] private List<GameObject> rats = new();
 
     /// <summary>
     /// Reference to the door that is north of the player.
@@ -105,9 +107,57 @@ public class RatsUI : MonoBehaviour
     private GameObject mmSouthWest;
     [SerializeField]
     private GameObject mmNorthWest;
+    [SerializeField]
+    private GameObject mmDirection;
 
     [SerializeField]
     ShaderApplication camShaders;
+
+    Random rand = new();
+
+    private IEnumerator oneSec() 
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+
+            GameObject dmg = Instantiate(damageText, canvas.transform);
+            dmg.GetComponent<TMP_Text>().text = $"-{stats.DamageDelt}";
+            damageObjects.Add(dmg);
+        }
+    }
+
+    private IEnumerator tenthSecond()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(.1f);
+
+            camShaders.PosterzationBands1 -= 1;
+            camShaders.PosterzationBands1 = Math.Clamp(camShaders.PosterzationBands1, 10, 75);
+
+            camShaders.OverallDistortionFreq += .2f;
+            camShaders.OverallDistortionMag += .2f;
+            camShaders.OverallDistortionSpeed += .1f;
+
+            GameObject aRat = Instantiate(rat);
+            int randDir = rand.Next(0, 4);
+            if (randDir == 0)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-120, 121), 0, 120), aRat.transform.rotation);
+            } else if (randDir == 1)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-120, 121), 0, -120), aRat.transform.rotation);
+            } else if (randDir == 2)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(120, 0, rand.Next(-120, 121)), aRat.transform.rotation);
+            } else if (randDir == 3)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(-120, 0, rand.Next(-120, 121)), aRat.transform.rotation);
+            }
+            aRat.transform.LookAt(cam.transform);
+        }
+    }
 
     private void Awake()
     {
@@ -121,7 +171,7 @@ public class RatsUI : MonoBehaviour
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
-        
+
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
     }
@@ -132,23 +182,20 @@ public class RatsUI : MonoBehaviour
         coinsV = stats.StartingCoins.ToString();
         room.text = "Rats";
         camShaders = Camera.main.GetComponent<ShaderApplication>();
-        camShaders.PosterzationBands1 = 100;
+        camShaders.PosterzationBands1 = 75;
+        camShaders.MaxTime = 1;
 
-        interval = Time.time;
+        camShaders.OverallDistortionFreq = 1;
+
+        StartCoroutine(oneSec());
+        StartCoroutine(tenthSecond());
     }
 
     private void Update()
     {
         stats = controller.GetRatRoomStats();
         coinsV = stats.RemainingCoins.ToString();
-        if (interval + 1 <= Time.time)
-        {
-            interval = Time.time;
-            GameObject dmg = Instantiate(damageText, canvas.transform);
-            dmg.GetComponent<TMP_Text>().text = stats.DamageDelt.ToString();
-            damageObjects.Add(dmg);
-        }
-        
+
         for (int i = 0; i < damageObjects.Count; i++)
         {
             GameObject obj = damageObjects[i];
@@ -161,7 +208,7 @@ public class RatsUI : MonoBehaviour
             }
             Vector3 targetPos = new Vector3(
                 objTransform.position.x,
-                objTransform.position.y + dmgSpeed * Time.deltaTime, 
+                objTransform.position.y + dmgSpeed * Time.deltaTime,
                 objTransform.position.z);
             objTransform.SetPositionAndRotation(targetPos, objTransform.rotation);
         }

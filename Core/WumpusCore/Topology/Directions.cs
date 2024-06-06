@@ -40,6 +40,27 @@ namespace WumpusCore.Topology
             { "SW" , Directions.SouthWest },
             { "NW" , Directions.NorthWest },
         };
+
+        private static readonly Dictionary<Directions, String> DirectionToLongName = new Dictionary<Directions, String>()
+        {
+            { Directions.North     , "North"      },
+            { Directions.NorthEast , "North East" },
+            { Directions.SouthEast , "South East" },
+            { Directions.South     , "South"      },
+            { Directions.SouthWest , "South West" },
+            { Directions.NorthWest , "North West" },
+        };
+        
+        private static readonly Dictionary<String, Directions> LongNameToDirection = new Dictionary<String, Directions>()
+        {
+            { "North"      , Directions.North     },
+            { "North East" , Directions.NorthEast },
+            { "South East" , Directions.SouthEast },
+            { "South"      , Directions.South     },
+            { "South West" , Directions.SouthWest },
+            { "North West" , Directions.NorthWest },
+        };
+        
         /// <summary>
         /// Gets the opposite direction to a direction (North goes to south, NorthEast goes to SouthWest)
         /// </summary>
@@ -68,7 +89,7 @@ namespace WumpusCore.Topology
             }
         }
         /// <summary>
-        /// Gets a direction from a short name string
+        /// Gets a direction from a short name string (e.g. NW)
         /// </summary>
         /// <param name="direction">name of the direction</param>
         /// <returns></returns>
@@ -84,6 +105,25 @@ namespace WumpusCore.Topology
         public static String GetShortNameFromDirection(Directions direction)
         {
             return DirectionToShortName[direction];
+        }
+
+        /// <summary>
+        /// Gets a direction from a long name string (e.g. North West)
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        public static Directions GetDirectionFromLongName(String direction)
+        {
+            return LongNameToDirection[direction];
+        }
+        /// <summary>
+        /// Gets a long string representation of a direction 
+        /// </summary>
+        /// <param name="direction">direction itself</param>
+        /// <returns></returns>
+        public static String GetLongNameFromDirection(Directions direction)
+        {
+            return DirectionToLongName[direction];
         }
     }
 }
