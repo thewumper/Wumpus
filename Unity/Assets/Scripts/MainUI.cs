@@ -182,10 +182,6 @@ public class MainUI : MonoBehaviour
     [SerializeField] 
     private Image black;
 
-    [SerializeField]
-    private AudioClip wumpusClip;
-    private AudioClip luckyCatClip;
-
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
     /// </summary>
