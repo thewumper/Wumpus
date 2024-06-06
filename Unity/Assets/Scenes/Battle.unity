@@ -709,7 +709,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -881,7 +882,6 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 387599875}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -908,6 +908,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
+  serializedVersion: 3
   m_Radius: 0.06
 --- !u!1 &389483739
 GameObject:
@@ -1034,7 +1035,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda, type: 3}
+  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1184,7 +1186,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc, type: 3}
+  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1586,7 +1589,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda, type: 3}
+  m_Sprite: {fileID: 8973336124164743851, guid: 73dd7d26c96c9998d9cb9a4bdcf48eda,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1764,7 +1768,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1909,7 +1914,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1999,7 +2005,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05, type: 3}
+  m_Sprite: {fileID: -6784348364648610233, guid: f4f481fc9dcbb6358806bea002f59a05,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2270,7 +2277,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc, type: 3}
+  m_Sprite: {fileID: -2037853476298935574, guid: 3bc89f31ae419b2338427db8e031f9bc,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2360,7 +2368,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b, type: 3}
+  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2436,7 +2445,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b, type: 3}
+  m_Sprite: {fileID: 8567903548375654590, guid: 29f8f185dd31ff9df99191179d6ee37b,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2622,6 +2632,8 @@ MonoBehaviour:
   startingBuffer: 0.3
   outputSpeed: 150
   outputDelay: 0.01
+  addSpawnerVelocity: 1
+  startingBuffer: 0.3
 --- !u!114 &1844008274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2636,8 +2648,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   room: {fileID: 911301553}
   rigidbody: {fileID: 1844008269}
-  prefabBullet: {fileID: 6864899258456612908, guid: 3f437766824041370915961348f5366f, type: 3}
-  prefabHomingBullet: {fileID: 6864899258456612908, guid: f7ffcb3162d9a5247af31ee47d24dc1c, type: 3}
+  prefabBullet: {fileID: 6864899258456612908, guid: 3f437766824041370915961348f5366f,
+    type: 3}
+  prefabHomingBullet: {fileID: 6864899258456612908, guid: f7ffcb3162d9a5247af31ee47d24dc1c,
+    type: 3}
 --- !u!114 &1844008275
 MonoBehaviour:
   m_ObjectHideFlags: 0
