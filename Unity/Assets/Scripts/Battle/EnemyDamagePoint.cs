@@ -16,11 +16,11 @@ public class EnemyDamagePoint : MonoBehaviour
     {
         if (other.gameObject.name == "Player")
         {
-            enemyHealth.value -= damage;
+            enemyHealth.Value -= damage;
             
-            if (lifesteal > 0f && playerHealth.value < playerHealth.maxValue) 
+            if (lifesteal > 0f && playerHealth.Value < playerHealth.MaxValue) 
             {
-                playerHealth.value += damage * lifesteal;
+                playerHealth.Value += damage * lifesteal;
             }
         }
     }
