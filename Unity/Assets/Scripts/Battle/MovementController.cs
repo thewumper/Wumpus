@@ -17,7 +17,7 @@ public class MovementController : MonoBehaviour
     /// <summary>
     /// The acceleration that you desire the movementController to undergo
     /// </summary>
-    [NonSerialized] public Vector2 acceleration;
+    [HideInInspector] public Vector2 acceleration;
     
     public void Init()
     {
