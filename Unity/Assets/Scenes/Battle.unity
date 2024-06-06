@@ -2317,9 +2317,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 10
-  addSpawnerVelocity: 0
-  startingBuffer: 0
-  outputSpeed: 100
+  addSpawnerVelocity: 1
+  startingBuffer: 0.3
+  outputSpeed: 150
   outputDelay: 0.01
 --- !u!114 &1844008274
 MonoBehaviour:
@@ -2349,7 +2349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87e728cfca54471aa1db552f13b70561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 7
   addSpawnerVelocity: 1
   startingBuffer: 0
   target: {fileID: 387599879}
@@ -2359,9 +2359,9 @@ MonoBehaviour:
   accelerationFalloff: 0.95
   velocityFalloff: 0.15
   timeout: 0
-  outputDelay: 0.7
+  outputDelay: 0.5
   bulletCount: 7
-  bulletSpread: 2.5
+  bulletSpread: 2
 --- !u!114 &1844008276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2416,11 +2416,11 @@ MonoBehaviour:
   addSpawnerVelocity: 0
   startingBuffer: 0
   target: {fileID: 387599879}
-  outputSpeed: 200
-  speed: 20
+  outputSpeed: 120
+  speed: 12
   velocityMatchRadius: 100
   accelerationFalloff: 0.875
-  velocityFalloff: 0.117
+  velocityFalloff: 0.12
   timeout: 0
   outputDelay: 1
   bulletCount: 20
