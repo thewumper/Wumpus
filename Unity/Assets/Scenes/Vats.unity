@@ -529,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4163ed70abb3b4db61d46c94d49287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triviaScene: Trivia
 --- !u!1001 &987692594
 PrefabInstance:
   m_ObjectHideFlags: 0
