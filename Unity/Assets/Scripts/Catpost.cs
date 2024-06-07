@@ -1,11 +1,11 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.LuckyCat;
 using WumpusUnity;
-using Image = UnityEngine.UIElements.Image;
 
 public class Catpost : MonoBehaviour
 {
@@ -18,6 +18,8 @@ public class Catpost : MonoBehaviour
     [SerializeField] private GameObject uiHandler;
     [SerializeField] private GameObject catIcon;
     [SerializeField] private AudioClip meowClip;
+    [FormerlySerializedAs("UIInteractIcon")] [SerializeField] private GameObject uiInteractIcon;
+    [SerializeField] private Sprite catInteractIcon;
     
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,8 @@ public class Catpost : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit)){
             if (hit.transform.CompareTag("CatPost"))
             {
+                uiInteractIcon.GetComponent<Image>().sprite = catInteractIcon;
+                uiInteractIcon.SetActive(true);
                 if (controller.hasPlayerTamedCat())
                 {
                     hintText.SetText("Click to pet the cat");
@@ -72,8 +76,11 @@ public class Catpost : MonoBehaviour
                         uiHandler.SetActive(true);
                     }
                 }
-
             }
+        }
+        else
+        {
+            uiInteractIcon.SetActive(false);
         }
     }
 }

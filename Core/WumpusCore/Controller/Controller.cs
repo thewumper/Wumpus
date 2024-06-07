@@ -344,8 +344,17 @@ namespace WumpusCore.Controller
         private List<RoomAnomaly> GetAudibleAnomaliesInRom(int roomnum)
         {
             List<RoomAnomaly> allAnomalies = GetAnomaliesInRoom(roomnum);
+            // We don't want the player to get a hint for the gun or ammo
+
             allAnomalies.Remove(RoomAnomaly.Gun);
             allAnomalies.Remove(RoomAnomaly.Ammo);
+            // Remove the cat if it's tamed and the rats
+            // since they don't matter anymore
+            if (hasPlayerTamedCat())
+            {
+                allAnomalies.Remove(RoomAnomaly.Cat);
+                allAnomalies.Remove(RoomAnomaly.Rat);
+            }
             return allAnomalies;
         }
         

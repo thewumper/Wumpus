@@ -620,6 +620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 173763335}
   movementRotation: {fileID: 1347841563}
+  pLock: 0
   northDoor: {fileID: 798882399}
   northEastDoor: {fileID: 513308440}
   southEastDoor: {fileID: 1218492701}
@@ -647,6 +648,7 @@ MonoBehaviour:
   ArrowText: {fileID: 722462782}
   CrossBowNotFound: {fileID: 327791908}
   CrossBowFound: {fileID: 1907599004}
+  UIhandler: {fileID: 0}
 --- !u!4 &212410748
 Transform:
   m_ObjectHideFlags: 0
@@ -3608,7 +3610,6 @@ MonoBehaviour:
   mainCanvas: {fileID: 1579286502}
   mainUI: {fileID: 212410746}
   catIcon: {fileID: 1994661013}
-  coinsSubmit: 0
 --- !u!4 &1278838498
 Transform:
   m_ObjectHideFlags: 0
@@ -4374,6 +4375,8 @@ MonoBehaviour:
   uiHandler: {fileID: 1278838496}
   catIcon: {fileID: 1994661013}
   meowClip: {fileID: 8300000, guid: 25cb2797fdd3cb94885d63641e7b7c8d, type: 3}
+  UIInteractIcon: {fileID: 189767435}
+  catInteractIcon: {fileID: 2767268345841367031, guid: 146f80bc37df89d44b1db150a9ac7a9c, type: 3}
 --- !u!4 &1734033079
 Transform:
   m_ObjectHideFlags: 0

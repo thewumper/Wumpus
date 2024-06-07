@@ -206,7 +206,6 @@ public class MainUI : MonoBehaviour
     [SerializeField] private TMP_Text ArrowText;
     [SerializeField] private GameObject CrossBowNotFound;
     [SerializeField] private GameObject CrossBowFound;
-    [SerializeField] private GameObject UIhandler;
 
     private void Awake()
     {
