@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -49,6 +50,18 @@ public class WumpusCutscene : MonoBehaviour
             }
         }
 
+        if (BattlePlayerController.GameEnded)
+        {
+            if (BattlePlayerController.Won == true)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (BattlePlayerController.Won == false)
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 
     public void No()
