@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
@@ -13,11 +14,22 @@ public class MainUI : MonoBehaviour
     /// Reference to the global Controller.
     /// </summary>
     private Controller controller;
+
+    /// <summary>
+    /// Reference to the global SceneController.
+    /// </summary>
+    private SceneController sceneController;
     
     /// <summary>
     /// Reference to the SoundManager.
     /// </summary>
     private SoundManager soundManager;
+    
+    /// <summary>
+    /// The GameObject of the Camera.
+    /// </summary>
+    [SerializeField]
+    private GameObject cam;
 
     /// <summary>
     /// The Rotation for the Movement of the Player.
@@ -67,6 +79,8 @@ public class MainUI : MonoBehaviour
             mmSouth.SetActive(false);
             mmSouthWest.SetActive(false);
             mmNorthWest.SetActive(false);
+
+            roomNum = value;
         }
     }
     
@@ -108,6 +122,23 @@ public class MainUI : MonoBehaviour
     private GameObject wumpus;
     
     /// <summary>
+    /// The GameObject that shows each interactable icon.
+    /// </summary>
+    [SerializeField]
+    private GameObject interactIcon;
+
+    /// <summary>
+    /// The icon that represents being able to move through a door.
+    /// </summary>
+    [SerializeField] 
+    private Sprite doorIcon;
+    /// <summary>
+    /// The icon that represents not being able to interact with something.
+    /// </summary>
+    [SerializeField] 
+    private Sprite uninteractableIcon;
+    
+    /// <summary>
     /// The text that shows the amount of coins the player has.
     /// </summary>
     [SerializeField] 
@@ -128,6 +159,28 @@ public class MainUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private TMP_Text roomTypeText;
+    /// <summary>
+    /// The text that shows which direction the player is looking in.
+    /// </summary>
+    [SerializeField] 
+    private TMP_Text directionText;
+    
+    /// <summary>
+    /// The Animator that handles the player moving.
+    /// </summary>
+    [SerializeField] 
+    private Animator movingAnimator;
+
+    /// <summary>
+    /// The ID of the moving variable in <see cref="movingAnimator"/>.
+    /// </summary>
+    private int fadingID;
+    
+    /// <summary>
+    /// The image used to fade in and out.
+    /// </summary>
+    [SerializeField] 
+    private Image black;
 
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
@@ -169,6 +222,10 @@ public class MainUI : MonoBehaviour
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
+        
+        // Initializes the SceneController.
+        sceneController = SceneController.GlobalSceneController;
+
         // Initializes the SoundManager
         soundManager = GetComponent<SoundManager>();
         soundManager.Init(northDoor, northEastDoor, southEastDoor, southDoor, southWestDoor, northWestDoor);
@@ -176,19 +233,34 @@ public class MainUI : MonoBehaviour
 
     void Start()
     {
+        // Locks the cursor and makes it invisible.
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        cam.transform.eulerAngles = PersistentData.Instance.EulerAngle;
+        Debug.Log(PersistentData.Instance.EulerAngle);
         mmDirection.transform.eulerAngles = new Vector3(
             mmDirection.transform.eulerAngles.x, 
             mmDirection.transform.eulerAngles.y, 
             PersistentData.Instance.EulerAngle.y);
         
+        // Makes it so you can't normally see the interactIcon.
+        HideInteract();
+        
         // Makes it so you can't normally see the wumpus.
         wumpus.SetActive(false);
+        
+        // Initializes the movingID.
+        fadingID = Animator.StringToHash("fading");
         
         // Initializes the roomText text.
         roomText.SetText($"Room: {RoomNum}");
         
         // Initializes the RoomNum with the Player's location.
         RoomNum = (ushort) controller.GetPlayerLocation();
+        
+        // Initializes the pLock.
+        pLock = false;
         
         // Adds the Door script to all doors.
         northDoor.AddComponent<Door>().Init(Directions.North);
@@ -205,6 +277,16 @@ public class MainUI : MonoBehaviour
 
     void LateUpdate()
     {
+        switch (controller.GetState())
+        {
+            case ControllerState.InBetweenRooms:
+                return;
+            case ControllerState.BatTransition:
+                pLock = true;
+                movingAnimator.SetBool(fadingID, true);
+                break;
+        }
+
         if (controller.DoesPlayerHaveGun())
         {
             CrossBowFound.SetActive(true);
@@ -284,9 +366,18 @@ public class MainUI : MonoBehaviour
 
     private void Update()
     {
-        mmDirection.transform.eulerAngles = new Vector3(
-            mmDirection.transform.eulerAngles.x, 
-            mmDirection.transform.eulerAngles.y, 
+        // If the player isn't locked.
+        if (!pLock)
+        {
+            // Look around using the mouse.
+            float mouseX = Input.GetAxis("Mouse X");
+
+            cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
+            PersistentData.Instance.EulerAngle = cam.transform.eulerAngles;
+
+            mmDirection.transform.eulerAngles = new Vector3(
+                mmDirection.transform.eulerAngles.x, 
+                mmDirection.transform.eulerAngles.y, 
                 180 - PersistentData.Instance.EulerAngle.y);
         }
         // Used for checking what the player is currently looking at.
@@ -351,5 +442,54 @@ public class MainUI : MonoBehaviour
         
         // Makes the coinsText show the actual amount of coins that the player currently has.
         coinsText.SetText(controller.GetCoins().ToString());
+        
+        // If we are fading.
+        if (movingAnimator.GetBool(fadingID))
+        {
+            // If the screen has fully faded to black.
+            if (black.color.a.Equals(1))
+            {
+                MoveRooms();
+            }
+            // If the screen has not fully faded to black.
+            else
+            {
+                if (controller.GetState() == ControllerState.BatTransition) return;
+                // Move the camera toward the doorway.
+                cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Shows the <see cref="interactIcon"/> with the given sprite.
+    /// </summary>
+    /// <param name="sprite">The sprite that the interactIcon shows.</param>
+    private void ShowInteract(Sprite sprite)
+    {
+        interactIcon.GetComponent<Image>().sprite = sprite;
+        interactIcon.SetActive(true);
+    }
+
+    /// <summary>
+    /// Hides the <see cref="interactIcon"/>.
+    /// </summary>
+    private void HideInteract()
+    {
+        interactIcon.SetActive(false);
+    }
+
+    private void MoveRooms()
+    {
+        // Move rooms.
+        Debug.Log(controller.GetPlayerLocation());
+        Debug.Log(RoomNum);
+        Array.ForEach(controller.GetCurrentRoom().ExitDirections, i => Debug.Log(i));
+
+        Debug.Log($"Moving in a direction {moveDir}");
+        controller.MoveInADirection(moveDir);
+        movingAnimator.SetBool(fadingID, false);
+        soundManager.UpdateSoundState();
+        sceneController.GotoCorrectScene();
     }
 }
