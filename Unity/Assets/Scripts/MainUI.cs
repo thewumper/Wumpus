@@ -206,6 +206,12 @@ public class MainUI : MonoBehaviour
     [SerializeField] private TMP_Text ArrowText;
     [SerializeField] private GameObject CrossBowNotFound;
     [SerializeField] private GameObject CrossBowFound;
+    
+    /// <summary>
+    /// The crossbow model to disable and re-enable for shooting
+    /// </summary>
+    [SerializeField]
+    private GameObject crossbowModel;
 
     private void Awake()
     {
