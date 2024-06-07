@@ -231,7 +231,7 @@ namespace WumpusCore.HighScoreNS
 
             if (this.savePath != null)
             {
-                SaveFile saveFile = new SaveFile(true, this.savePath);
+                SaveFile saveFile = new SaveFile(false, this.savePath);
                 saveFile.CreateFile(allTextToSave);
                 saveFile.ReadFile(false);
             }

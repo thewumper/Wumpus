@@ -9,6 +9,7 @@ using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
 using WumpusCore.LuckyCat;
 using WumpusCore.Trivia;
+using WumpusCore.HighScoreNS;
 
 
 namespace WumpusCore.Controller
@@ -468,6 +469,11 @@ namespace WumpusCore.Controller
 
         public void EndGame(bool success, WinLossConditions gameEndCause)
         {
+            // need to get player name somehow
+
+            HighScore gameEndScore = new HighScore(/*this.headFile.path,*/ "WumpusHunter", turnCounter, GetCoins(), GetArrowCount(), success, mapID);
+            gameEndScore.StoreTopTenToFile();
+
             if (success)
             {
                 state = WonGame;
