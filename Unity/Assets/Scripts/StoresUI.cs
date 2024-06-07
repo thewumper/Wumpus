@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -116,6 +117,9 @@ public class StoresUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private Image black;
+
+    [SerializeField]
+    private float triviaRotation;
 
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
@@ -445,7 +449,11 @@ public class StoresUI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0) && canCollect)
                 {
                     controller.StartTrivia();
-                    sceneController.GotoCorrectScene();
+                    sceneController.LoadTrivia();
+
+                    cam.transform.rotation = Quaternion.Euler(0, triviaRotation, 0);
+                    
+                    pLock = true;
                 }
             }
             // If the player isn't looking at anything.
