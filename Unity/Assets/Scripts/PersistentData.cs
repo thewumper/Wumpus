@@ -16,6 +16,13 @@ namespace WumpusUnity
         }
 
         [SerializeField] private Vector3 eulerAngle;
+        [SerializeField] private bool isCatMadAtPlayer;
+
+        public bool IsCatMadAtPlayer
+        {
+            get => isCatMadAtPlayer;
+            set => isCatMadAtPlayer = value;
+        }
 
         public Vector3 EulerAngle
         {

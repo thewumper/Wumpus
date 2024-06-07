@@ -9,11 +9,12 @@ TagManager:
   - unmoveableDoor
   - Target
   - CollectableTable
+  - CatPost
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Bullet Hell EdgeDestruct
+  - Bullet Hell
   - Water
   - UI
   - 

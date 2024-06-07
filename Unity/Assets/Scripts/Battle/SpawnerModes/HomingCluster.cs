@@ -16,7 +16,7 @@ public class HomingCluster : SpawnerMode
     /// </summary>
     [SerializeField] private float outputSpeed;
     [SerializeField] private float speed;
-    [SerializeField] private float throttleDownRange;
+    [SerializeField] private float velocityMatchRadius;
     [Range(0f, 1f)] [SerializeField] public float accelerationFalloff = .75f;
     /// <summary>
     /// Higher values mean more slippery floors
@@ -39,14 +39,21 @@ public class HomingCluster : SpawnerMode
     /// </summary>
     [Range(0f, 6.28319f)] [SerializeField] private float bulletSpread;
 
-    private void OnEnable()
+    void Awake()
     {
-        timeSinceLastOutput = 0f;
+        update = FixedUpdate;
     }
-
+    
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (Room == null || Rigidbody == null)
+        {
+            // Oops! Not ready yet
+            Debug.Log("Bypassed HomingCluster Update method, mode is unprepared.");
+            return;
+        }
+        
         timeSinceLastOutput += Time.fixedDeltaTime;
         if (timeSinceLastOutput >= outputDelay)
         {
@@ -59,12 +66,16 @@ public class HomingCluster : SpawnerMode
             {
                 HomingController controller = initBullet();
                 controller.startingVelocity = direction.normalized * outputSpeed;
+                if (addSpawnerVelocity)
+                {
+                    controller.startingVelocity += Rigidbody.velocity;
+                }
                 controller.Init();
             }
             else
             {
                 // If many bullets, fire in an even spread
-                double middleAngle = Math.Atan2(direction.x, direction.y);// - (float)Math.PI / 2f;
+                double middleAngle = Math.Atan2(direction.x, direction.y);
                 double angleInterval = bulletSpread / (bulletCount - 1);
                 double minAngle = middleAngle - (bulletSpread / 2);
 
@@ -78,6 +89,10 @@ public class HomingCluster : SpawnerMode
                     float y = (float)Math.Cos(angle);
 
                     controller.startingVelocity = new Vector2(x, y).normalized * outputSpeed;
+                    if (addSpawnerVelocity)
+                    {
+                        controller.startingVelocity += Rigidbody.velocity;
+                    }
                     controller.Init();
                 }
             }
@@ -90,6 +105,12 @@ public class HomingCluster : SpawnerMode
     /// <returns>A new HomingController representing a bullet</returns>
     private HomingController initBullet()
     {
+        if (HazardTypes == null || !HazardTypes.ContainsKey("Bullet"))
+        {
+            throw new KeyNotFoundException(
+                "This HomingCluster mode cannot access the necessary bullet type. It may need a SpawnerController to function.");
+        }
+        
         GameObject obj = Instantiate(HazardTypes["HomingBullet"], Rigidbody.position, Quaternion.identity);
         obj.transform.SetParent(Room.transform);
         obj.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -101,7 +122,7 @@ public class HomingCluster : SpawnerMode
         controller.acceleration = Vector2.zero;
         controller.timeout = timeout;
         controller.speed = speed;
-        controller.throttleDownRange = throttleDownRange;
+        controller.velocityMatchRadius = velocityMatchRadius;
         controller.target = target;
 
         return controller;

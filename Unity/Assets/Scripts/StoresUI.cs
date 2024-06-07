@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
@@ -89,7 +91,7 @@ public class StoresUI : MonoBehaviour
     private TMP_Text roomHintText;
 
     /// <summary>
-    /// Rext that displays your current room type
+    /// The hint for what sounds are near you
     /// </summary>
     [SerializeField]
     private TMP_Text roomTypeText;
@@ -115,6 +117,9 @@ public class StoresUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private Image black;
+
+    [SerializeField]
+    private float triviaRotation;
 
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
@@ -168,7 +173,7 @@ public class StoresUI : MonoBehaviour
     /// <summary>
     /// Whether or not the player can move or look around.
     /// </summary>
-    private bool pLock;
+    public bool pLock;
 
     /// <summary>
     /// The room that the player is currently in.
@@ -209,6 +214,11 @@ public class StoresUI : MonoBehaviour
     /// </summary>
     private SceneController sceneController;
 
+    [SerializeField] private TMP_Text ArrowText;
+    [SerializeField] private GameObject CrossBowNotFound;
+    [SerializeField] private GameObject CrossBowFound;
+    [SerializeField] private AudioClip wrongSound;
+
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -229,6 +239,7 @@ public class StoresUI : MonoBehaviour
 
     void Start()
     {
+        roomNum = controller.GetCurrentRoom().Id;
         // Locks the cursor and makes it invisible.
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -264,7 +275,24 @@ public class StoresUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
+
+
+        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
+        List<string> hintString = new List<string>();
+        foreach (Controller.DirectionalHint hint in hints)
+        {
+            foreach (RoomAnomaly anomaly in hint.Hazards)
+            {
+                hintString.Add("You hear " + anomaly);
+            }
+        }
+
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
+        else roomHintText.SetText("You hear nothing.");
+        roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
+
         SetupItemVisibility();
+
     }
 
     private void SetupItemVisibility()
@@ -353,12 +381,33 @@ public class StoresUI : MonoBehaviour
         // If the player is looking at something.
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-
-            // If the player is looking at a door.
             if (hit.transform.CompareTag("door") && !pLock)
             {
-                moveDir = hit.transform.GetComponent<Door>().GetDir();
-                directionText.SetText(moveDir.ToString());
+                Door door = hit.transform.GetComponent<Door>();
+                moveDir = door.GetDir();
+                String text = DirectionHelper.GetLongNameFromDirection(moveDir);
+                if (controller.DoesPlayerHaveGun() && controller.GetArrowCount() > 0)
+                {
+                    text += "\nRight click to shoot the wumpus";
+                }
+                directionText.SetText(text);
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    if (controller.ShootGun(moveDir))
+                    {
+                        // They shot the wumpus so take
+                        // them to gameover
+                        sceneController.GotoCorrectScene();
+                    }
+                    else
+                    {
+                        AudioSource wrong = hit.transform.gameObject.AddComponent<AudioSource>();
+                        wrong.clip = wrongSound;
+                        wrong.Play();
+                    }
+                }
+
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -400,36 +449,48 @@ public class StoresUI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0) && canCollect)
                 {
                     controller.StartTrivia();
-                    sceneController.GotoCorrectScene();
+                    sceneController.LoadTrivia();
+
+                    cam.transform.rotation = Quaternion.Euler(0, triviaRotation, 0);
+                    
+                    pLock = true;
                 }
             }
             // If the player isn't looking at anything.
-            else
-            {
-                HideInteract();
-                directionText.SetText("");
-            }
-
-            // Makes the coinsText show the actual amount of coins that the player currently has.
-            coinsText.SetText(controller.GetCoins().ToString());
-
-            // If we are fading.
-            if (movingAnimator.GetBool(fadingID))
-            {
-                // If the screen has fully faded to black.
-                if (black.color.a.Equals(1))
-                {
-                    MoveRooms();
-                }
-                // If the screen has not fully faded to black.
-                else
-                {
-                    if (controller.GetState() == ControllerState.BatTransition) return;
-                    // Move the camera toward the doorway.
-                    cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
-                }
-            }
         }
+        else
+        {
+            HideInteract();
+            directionText.SetText("");
+        }
+
+        // Makes the coinsText show the actual amount of coins that the player currently has.
+        coinsText.SetText(controller.GetCoins().ToString());
+
+        // If we are fading.
+        if (movingAnimator.GetBool(fadingID))
+        {
+            // If the screen has fully faded to black.
+            if (black.color.a.Equals(1))
+            {
+                MoveRooms();
+            }
+            // Move the camera toward the doorway.
+            cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
+        }
+
+        if (controller.DoesPlayerHaveGun())
+        {
+            CrossBowFound.SetActive(true);
+            CrossBowNotFound.SetActive(false);
+        }
+        else
+        {
+            CrossBowFound.SetActive(false);
+            CrossBowNotFound.SetActive(true);
+        }
+
+        ArrowText.SetText(controller.GetArrowCount().ToString());
     }
 
     private void HideInteract()

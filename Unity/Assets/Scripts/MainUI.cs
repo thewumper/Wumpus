@@ -20,6 +20,30 @@ public class MainUI : MonoBehaviour
     private SoundManager soundManager;
 
     /// <summary>
+    /// The Rotation for the Movement of the Player.
+    /// </summary>
+    [SerializeField]
+    private GameObject movementRotation;
+    
+    /// <summary>
+    /// The speed at which the camera rotates with the player's mouse.
+    /// </summary>
+    private const float camSens = 5f;
+    /// <summary>
+    /// The speed the camera moves.
+    /// </summary>
+    private const float camSpeed = 4f;
+    /// <summary>
+    /// Whether or not the player can move or look around.
+    /// </summary>
+    public bool pLock;
+    
+    /// <summary>
+    /// The room that the player is currently in.
+    /// </summary>
+    private ushort roomNum;
+
+    /// <summary>
     /// The room that the player is currently in.
     /// </summary>
     private ushort RoomNum
@@ -105,9 +129,10 @@ public class MainUI : MonoBehaviour
     [SerializeField]
     private TMP_Text roomTypeText;
 
-    [SerializeField]
-    private AudioClip wumpusClip;
-    private AudioClip luckyCatClip;
+    /// <summary>
+    /// The <see cref="Directions"/> direction the player is moving in.
+    /// </summary>
+    private Directions moveDir;
 
     [SerializeField] 
     private GameObject mmNorth;
@@ -129,6 +154,8 @@ public class MainUI : MonoBehaviour
     [SerializeField] private GameObject CrossBowNotFound;
     [SerializeField] private GameObject CrossBowFound;
 
+    [SerializeField] private AudioClip wrongSound;
+
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -138,6 +165,7 @@ public class MainUI : MonoBehaviour
         }
         catch (NullReferenceException)
         {
+            Debug.Log("Created the controller from mainUI");
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
@@ -173,7 +201,6 @@ public class MainUI : MonoBehaviour
         // Get the sounds properly working
         soundManager.UpdateSoundState();
 
-        Debug.Log(controller.GetWumpusLocation());
     }
 
     void LateUpdate()
@@ -261,6 +288,66 @@ public class MainUI : MonoBehaviour
             mmDirection.transform.eulerAngles.x, 
             mmDirection.transform.eulerAngles.y, 
                 180 - PersistentData.Instance.EulerAngle.y);
+        }
+        // Used for checking what the player is currently looking at.
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        // If the player is looking at something.
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            // If the player is looking at a door.
+            if (hit.transform.CompareTag("door") && !pLock)
+            {
+                Door door = hit.transform.GetComponent<Door>();
+                moveDir = door.GetDir();
+                String text = DirectionHelper.GetLongNameFromDirection(moveDir);
+                if (controller.DoesPlayerHaveGun() && controller.GetArrowCount() > 0)
+                {
+                    text += "\nRight click to shoot the wumpus";
+                }
+                directionText.SetText(text);
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    if (controller.ShootGun(moveDir))
+                    {
+                        // They shot the wumpus so take
+                        // them to gameover
+                        sceneController.GotoCorrectScene();
+                    }
+                    else
+                    {
+                        AudioSource wrong = hit.transform.gameObject.AddComponent<AudioSource>();
+                        wrong.clip = wrongSound;
+                        wrong.Play();
+                    }
+                }
+
+                ShowInteract(doorIcon);
+                if (Input.GetMouseButtonDown(0))
+                {
+                    movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
+                    movingAnimator.SetBool(fadingID, true);
+                    pLock = true;
+                }
+            }
+            // If the player is looking at a door that they can't move through.
+            else if (hit.transform.CompareTag("unmoveableDoor") && !pLock)
+            {
+                ShowInteract(uninteractableIcon);
+            }
+            // If the player is looking at something that is none of these.
+            else
+            {
+                HideInteract();
+                directionText.SetText("");
+            }
+        } 
+        // If the player isn't looking at anything.
+        else
+        {
+            HideInteract();
+            directionText.SetText("");
+        }
         
         // Makes the coinsText show the actual amount of coins that the player currently has.
         coinsText.SetText(controller.GetCoins().ToString());

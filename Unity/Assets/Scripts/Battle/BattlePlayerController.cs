@@ -1,5 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using WumpusUnity.Battle;
 using Vector2 = UnityEngine.Vector2;
 
 public class BattlePlayerController : MonoBehaviour
@@ -43,8 +46,18 @@ public class BattlePlayerController : MonoBehaviour
     [Range(0f, 1f)] [SerializeField] private float minOpacity;
     [SerializeField] private float totalImmunityTime;
     private float _remainingImmunityTime;
+    [Range(0f, 1f)] [SerializeField] private float lifesteal;
 
     [SerializeField] private new SpriteRenderer renderer;
+
+    [SerializeField] private GameObject spawner;
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private FadeIn cover;
+
+    public bool GameEnded { get; private set; }
+    public bool? Won { get; private set; }
+    
+    public bool ReadyToUnload { get; private set; }
 
     void Start()
     {
@@ -52,10 +65,36 @@ public class BattlePlayerController : MonoBehaviour
         _acceleration = Vector2.zero;
         _orientation = Vector2.up;
         rigidbody.inertia = float.MaxValue;
+        GameEnded = false;
+        Won = null;
+        endGame = VisualGameOver;
+        ReadyToUnload = false;
     }
 
     void FixedUpdate()
     {
+        if (GameEnded)
+        {
+            if (cover.FadeComplete)
+            {
+                Destroy(spawner);
+                Destroy(enemy);
+                ReadyToUnload = true;
+            }
+            return;
+        }
+        
+        // Check for game end
+        if (playerHealth.Value <= 0f)
+        {
+            OnDeath();
+        }
+
+        if (enemyHealth.Value <= 0f)
+        {
+            OnVictory();
+        }
+        
         // Normalize input and scale by dT
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         input.Normalize();
@@ -132,32 +171,52 @@ public class BattlePlayerController : MonoBehaviour
         
         if (collision.gameObject.GetComponent<Damage>() != null)
         {
-            playerHealth.value -= collision.gameObject.GetComponent<Damage>().damage;
+            playerHealth.Value -= collision.gameObject.GetComponent<Damage>().damage;
+            
+            if (lifesteal > 0f && enemyHealth.Value < enemyHealth.MaxValue) 
+            {
+                enemyHealth.Value += collision.gameObject.GetComponent<Damage>().damage * lifesteal;
+            }
+            
             _remainingImmunityTime = totalImmunityTime;
             if (destroyOnContact)
             {
                 Destroy(collision.gameObject);
             }
-            if (playerHealth.value <= 0f)
-            {
-                OnDeath();
-            }
         }
     }
     
     // Calls on player death
-    private void OnDeath()
+    public void OnDeath()
     {
-        throw new NotImplementedException();
-        GameLost();
+        Won = false;
+        GameOver();
     }
+
+    // Calls on player win
+    public void OnVictory()
+    {
+        Won = true;
+        GameOver();
+    }
+
+    private static Action endGame;
 
     /// <summary>
     /// Calls once the player loses
     /// Unloads the scene
     /// </summary>
-    public static void GameLost()
+    public static void GameOver()
     {
-        throw new NotImplementedException();
+        endGame();
+    }
+
+    private void VisualGameOver()
+    {
+        Debug.Log("Fading out");
+        GameEnded = true;
+        spawner.GetComponent<SpawnerController>().enabled = false;
+        playerHealth.writable = false;
+        enemyHealth.writable = false;
     }
 }

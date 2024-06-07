@@ -14,7 +14,8 @@ namespace WumpusTesting
         [TestMethod]
         public void TestHighScoreConstructor()
         {
-            HighScore testScore = new HighScore("player", 5, 300, 0, false, 2);
+            SaveFile file = new SaveFile("", false);
+            HighScore testScore = new HighScore(file.path, "player", 5, 300, 0, false, 2);
             Assert.IsNotNull(testScore);
           
             HighScore.StoredHighScore compScore = testScore.compactScore;
@@ -42,7 +43,8 @@ namespace WumpusTesting
         [TestMethod]
         public void ScoreCalculationTest()
         {
-            HighScore scoring = new HighScore("player", 27, 4, 3, true, 4);
+            SaveFile file = new SaveFile("", false);
+            HighScore scoring = new HighScore(file.path, "player", 27, 4, 3, true, 4);
             int score = scoring.compactScore.score;
             Assert.AreEqual(142, score);
         }
@@ -102,13 +104,13 @@ namespace WumpusTesting
             SaveFile testHeadFile = new SaveFile("¯\\_(ツ)_/¯", false);
             string pathToUse = testHeadFile.path;
             HighScore lastScore = null;
+            int testLength = 20;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < testLength; i++)
             {
                 HighScore randScore = RandomScore(i, pathToUse);
                 randScore.StoreTopTenToFile();
-                Console.WriteLine();
-                if (i == 9)
+                if (i == (testLength-1))
                 {
                     lastScore = randScore;
                 }
