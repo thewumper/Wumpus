@@ -196,6 +196,11 @@ public class RatsUI : MonoBehaviour
 
     private void Start()
     {
+        mmDirection.transform.eulerAngles = new Vector3(
+            mmDirection.transform.eulerAngles.x,
+            mmDirection.transform.eulerAngles.y,
+            PersistentData.Instance.EulerAngle.y);
+
         stats = controller.GetRatRoomStats();
         coinsV = stats.StartingCoins.ToString();
         room.text = "Rats";
@@ -222,6 +227,11 @@ public class RatsUI : MonoBehaviour
     {
         stats = controller.GetRatRoomStats();
         coinsV = stats.RemainingCoins.ToString();
+
+        mmDirection.transform.eulerAngles = new Vector3(
+            mmDirection.transform.eulerAngles.x,
+            mmDirection.transform.eulerAngles.y,
+                180 - PersistentData.Instance.EulerAngle.y);
 
         for (int i = 0; i < damageObjects.Count; i++)
         {
