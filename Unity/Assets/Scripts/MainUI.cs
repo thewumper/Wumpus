@@ -207,6 +207,8 @@ public class MainUI : MonoBehaviour
     [SerializeField] private GameObject CrossBowNotFound;
     [SerializeField] private GameObject CrossBowFound;
 
+    [SerializeField] private AudioClip wrongSound;
+
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -386,8 +388,31 @@ public class MainUI : MonoBehaviour
             // If the player is looking at a door.
             if (hit.transform.CompareTag("door") && !pLock)
             {
-                moveDir = hit.transform.GetComponent<Door>().GetDir();
-                directionText.SetText(DirectionHelper.GetLongNameFromDirection(moveDir));
+                Door door = hit.transform.GetComponent<Door>();
+                moveDir = door.GetDir();
+                String text = DirectionHelper.GetLongNameFromDirection(moveDir);
+                if (controller.DoesPlayerHaveGun() && controller.GetArrowCount() > 0)
+                {
+                    text += "\nRight click to shoot the wumpus";
+                }
+                directionText.SetText(text);
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    if (controller.ShootGun(moveDir))
+                    {
+                        // They shot the wumpus so take
+                        // them to gameover
+                        sceneController.GotoCorrectScene();
+                    }
+                    else
+                    {
+                        AudioSource wrong = hit.transform.gameObject.AddComponent<AudioSource>();
+                        wrong.clip = wrongSound;
+                        wrong.Play();
+                    }
+                }
+
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {

@@ -1518,8 +1518,8 @@ MonoBehaviour:
   speed: 0
   minTime: 0
   maxTime: 1
-  OverallDistortionSpeed: 0
-  OverallDistortionMag: 0
+  overallDistortionSpeed: 0
+  overallDistortionMag: 0
   overallDistortionFreq: 0
   doDistortionPrePixelazation: 1
   posterzationBands: 100
