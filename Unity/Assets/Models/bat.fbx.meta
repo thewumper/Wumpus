@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Unity/Assets/Models/bat.fbx.meta
 guid: 2e5cc1a99d7502c4e8b4f9181cb4fa64
+========
+guid: 9828ba125cf426841a5c0c841b1ad4c1
+>>>>>>>> refs/heads/blazing-edge:Unity/Assets/Models/bolt.fbx.meta
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
