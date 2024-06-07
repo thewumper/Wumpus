@@ -9,6 +9,7 @@ using WumpusCore.Topology;
 using static WumpusCore.Controller.ControllerState;
 using WumpusCore.LuckyCat;
 using WumpusCore.Trivia;
+using WumpusCore.HighScoreNS;
 
 
 namespace WumpusCore.Controller
@@ -27,6 +28,7 @@ namespace WumpusCore.Controller
         private GameLocations.GameLocations gameLocations;
         internal Trivia.Trivia trivia;
         internal WinLossConditions gameEndCause;
+        internal static SaveFile headFile = new SaveFile("", false);
 
         /// <summary>
         /// The <c>RoomAnomaly</c> that causes the game to end.
@@ -476,6 +478,11 @@ namespace WumpusCore.Controller
 
         public void EndGame(bool success, WinLossConditions gameEndCause)
         {
+            // need to get player name somehow
+
+            HighScore gameEndScore = new HighScore(headFile.path, "WumpusHunter", turnCounter, GetCoins(), GetArrowCount(), success, mapID);
+            gameEndScore.StoreTopTenToFile();
+
             if (success)
             {
                 state = WonGame;

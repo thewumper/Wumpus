@@ -31,7 +31,7 @@ namespace WumpusCore.HighScoreNS
             CreateFile(text);
 
             // Open the stream and read it back.
-            ReadFile(readText);
+            //ReadFile(readText);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace WumpusCore.HighScoreNS
             }
             this.path = path;
 
-            ReadFile(readText);
+            //ReadFile(readText);
         }
 
         /// <summary>
