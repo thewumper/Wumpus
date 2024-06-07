@@ -89,7 +89,7 @@ namespace WumpusCore.Controller
         /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
         /// <param name="topologyDirectory">The directory to load map files from.</param>
         /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
-        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,1,1,0)
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,1,1,50)
         {
         }
 
@@ -115,9 +115,9 @@ namespace WumpusCore.Controller
             trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
             gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,numAmmoRooms,numGunRooms,topology,Controller.Random,trivia);
-            gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
+            gameLocations.AddEntity(new Cat(topology, gameLocations, 0));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
-            gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
+            gameLocations.AddEntity(new Player.Player(topology, gameLocations, 1));
             gameLocations.GetPlayer().GainCoins((uint) startingCoins);
         }
 
@@ -181,6 +181,12 @@ namespace WumpusCore.Controller
 
             player.location = nextRoom.Id;
 
+            if (hasPlayerTamedCat())
+            {
+                // This protects the player from the effects of the rats
+                currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
+            }
+
             SetCorrectStateForRoom(nextRoom.Id);
 
             return player.location;
@@ -197,45 +203,28 @@ namespace WumpusCore.Controller
             if (anomaliesInRoom.Contains(RoomAnomaly.Wumpus) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Wumpus))
             {
                 state = WumpusFight;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Bats))
+            } else if (anomaliesInRoom.Contains(RoomAnomaly.Bats) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Bats))
             {
                 state = BatTransition;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Acrobat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
+            } else if (anomaliesInRoom.Contains(RoomAnomaly.Acrobat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
             {
                 state = Acrobat;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Vat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Vat))
+            } else if (anomaliesInRoom.Contains(RoomAnomaly.Vat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Vat))
             {
                 state = VatRoom;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Rat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Rat))
+            } else if (anomaliesInRoom.Contains(RoomAnomaly.Rat) &&
+                       !currentRoomHandledAmomalies.Contains(RoomAnomaly.Rat))
             {
                 state = Rats;
                 ratTimeStopwatch.Restart();
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
-            {
-                state = CatDialouge;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
-            {
-                state = GunRoom;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Cat) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Acrobat))
+            } else if (anomaliesInRoom.Contains(RoomAnomaly.Ammo) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Ammo))
             {
                 state = AmmoRoom;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Ammo) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Ammo))
-            {
-                state = AmmoRoom;
-            } else
-            if (anomaliesInRoom.Contains(RoomAnomaly.Gun) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Gun))
+            } else if (anomaliesInRoom.Contains(RoomAnomaly.Gun) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Gun))
             {
                 state = GunRoom;
-            } else
-            if ((anomaliesInRoom.Count == currentRoomHandledAmomalies.Count) || anomaliesInRoom.Count == 0)
+            } else if ((anomaliesInRoom.Count == currentRoomHandledAmomalies.Count) || anomaliesInRoom.Count == 0 || (anomaliesInRoom.Count + 1 == currentRoomHandledAmomalies.Count || anomaliesInRoom.Count == 1) && anomaliesInRoom.Contains(RoomAnomaly.Cat))
+
             {
                 state = InRoom;
             } else
@@ -355,8 +344,17 @@ namespace WumpusCore.Controller
         private List<RoomAnomaly> GetAudibleAnomaliesInRom(int roomnum)
         {
             List<RoomAnomaly> allAnomalies = GetAnomaliesInRoom(roomnum);
+            // We don't want the player to get a hint for the gun or ammo
+
             allAnomalies.Remove(RoomAnomaly.Gun);
             allAnomalies.Remove(RoomAnomaly.Ammo);
+            // Remove the cat if it's tamed and the rats
+            // since they don't matter anymore
+            if (hasPlayerTamedCat())
+            {
+                allAnomalies.Remove(RoomAnomaly.Cat);
+                allAnomalies.Remove(RoomAnomaly.Rat);
+            }
             return allAnomalies;
         }
         
@@ -416,6 +414,11 @@ namespace WumpusCore.Controller
                     state = AmmoRoom;
                     CollectItemsInRoom();
                 }
+                else
+                {
+                    throw new InvalidOperationException(
+                        "The room you are in doesn't have trivia despite you being in trivia");
+                }
             }
             if (trivia.reportResult() == GameResult.Loss)
             {
@@ -426,8 +429,13 @@ namespace WumpusCore.Controller
                     state = AmmoRoom;
                     gameLocations.MarkRoomAsCollected((ushort) GetPlayerLocation());
                 }
-                else {
+                else if (GetCurrentRoomType() == RoomType.Vats){
                     EndGame(false,WinLossConditions.Vat);
+                }
+                else
+                {
+                    throw new InvalidOperationException(
+                        "The room you are in doesn't have trivia despite you being in trivia");
                 }
             }
 
@@ -579,35 +587,7 @@ namespace WumpusCore.Controller
 
         public bool AttemptToTameCat(int coinInput)
         {
-            ValidateState(new []{ CatDialouge });
-            if (coinInput>gameLocations.GetPlayer().Coins)
-            {
-                throw new InvalidOperationException("You can't tame a cat with more coins than you have");
-            }
-
-            // The cat cannot be guaranteed to be tamed, but instead it uses
-            // a modified sigmoid function to determine your chance of taming
-            // the cat as a function of the coins you put in
-
-            // The function is 1/(1+e^{-x/2+3})*100 (%)
-            // there isn't anything specific about that function
-            // other than it looks decent in Desmos
-            // 0 coins gives a ~4.7% chance to tame
-            // 10 coins gives a ~90% change to tame
-            // 18+ coins gives a 99% change to tame
-            // You just won't ever have a 100% chance of taming
-            gameLocations.GetPlayer().LoseCoins((uint) coinInput);
-
-            int threshold = Random.Next(0, 100);
-            int value = (int)(1 / (1 + Math.Pow(Math.E, -coinInput / 2.0 + 3)) * 100);
-
-            gameLocations.GetCat().location = gameLocations.GetEmptyRoom();
-
-            if (value >= threshold)
-            {
-                return true;
-            }
-            return false;
+            return gameLocations.GetCat().Tame(coinInput);
         }
 
         public bool ShootGun(Directions shootingDir)
@@ -636,6 +616,16 @@ namespace WumpusCore.Controller
         public bool CanRoomBeCollectedFrom()
         {
             return !gameLocations.HasRoomBeenCollected((ushort) GetPlayerLocation());
+        }
+
+        public bool hasPlayerTamedCat()
+        {
+            return gameLocations.GetCat().tamed;
+        }
+
+        public int getCatPosition()
+        {
+            return gameLocations.GetCat().location;
         }
     }
 }

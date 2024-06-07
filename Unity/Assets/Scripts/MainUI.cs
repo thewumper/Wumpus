@@ -48,7 +48,7 @@ public class MainUI : MonoBehaviour
     /// <summary>
     /// Whether or not the player can move or look around.
     /// </summary>
-    private bool pLock;
+    public bool pLock;
     
     /// <summary>
     /// The room that the player is currently in.
@@ -216,6 +216,7 @@ public class MainUI : MonoBehaviour
         }
         catch (NullReferenceException)
         {
+            Debug.Log("Created the controller from mainUI");
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
@@ -270,7 +271,6 @@ public class MainUI : MonoBehaviour
         // Get the sounds properly working
         soundManager.UpdateSoundState();
 
-        Debug.Log(controller.GetWumpusLocation());
     }
 
     void LateUpdate()
