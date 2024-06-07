@@ -117,6 +117,9 @@ public class StoresUI : MonoBehaviour
     [SerializeField]
     private Image black;
 
+    [SerializeField]
+    private float triviaRotation;
+
     /// <summary>
     /// The <see cref="Directions"/> direction the player is moving in.
     /// </summary>
@@ -402,6 +405,9 @@ public class StoresUI : MonoBehaviour
                 {
                     controller.StartTrivia();
                     sceneController.LoadTrivia();
+
+                    cam.transform.rotation = Quaternion.Euler(0, triviaRotation, 0);
+                    
                     pLock = true;
                 }
             }
