@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -90,7 +91,7 @@ public class StoresUI : MonoBehaviour
     private TMP_Text roomHintText;
 
     /// <summary>
-    /// Rext that displays your current room type
+    /// The hint for what sounds are near you
     /// </summary>
     [SerializeField]
     private TMP_Text roomTypeText;
@@ -233,6 +234,7 @@ public class StoresUI : MonoBehaviour
 
     void Start()
     {
+        roomNum = controller.GetCurrentRoom().Id;
         // Locks the cursor and makes it invisible.
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -268,7 +270,24 @@ public class StoresUI : MonoBehaviour
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
 
+
+
+        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
+        List<string> hintString = new List<string>();
+        foreach (Controller.DirectionalHint hint in hints)
+        {
+            foreach (RoomAnomaly anomaly in hint.Hazards)
+            {
+                hintString.Add("You hear " + anomaly);
+            }
+        }
+
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
+        else roomHintText.SetText("You hear nothing.");
+        roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
+
         SetupItemVisibility();
+
     }
 
     private void SetupItemVisibility()
@@ -357,7 +376,6 @@ public class StoresUI : MonoBehaviour
         // If the player is looking at something.
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-
             // If the player is looking at a door.
             if (hit.transform.CompareTag("door") && !pLock)
             {
@@ -412,31 +430,26 @@ public class StoresUI : MonoBehaviour
                 }
             }
             // If the player isn't looking at anything.
-            else
-            {
-                HideInteract();
-                directionText.SetText("");
-            }
+        }
+        else
+        {
+            HideInteract();
+            directionText.SetText("");
+        }
 
-            // Makes the coinsText show the actual amount of coins that the player currently has.
-            coinsText.SetText(controller.GetCoins().ToString());
+        // Makes the coinsText show the actual amount of coins that the player currently has.
+        coinsText.SetText(controller.GetCoins().ToString());
 
-            // If we are fading.
-            if (movingAnimator.GetBool(fadingID))
+        // If we are fading.
+        if (movingAnimator.GetBool(fadingID))
+        {
+            // If the screen has fully faded to black.
+            if (black.color.a.Equals(1))
             {
-                // If the screen has fully faded to black.
-                if (black.color.a.Equals(1))
-                {
-                    MoveRooms();
-                }
-                // If the screen has not fully faded to black.
-                else
-                {
-                    if (controller.GetState() == ControllerState.BatTransition) return;
-                    // Move the camera toward the doorway.
-                    cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
-                }
+                MoveRooms();
             }
+            // Move the camera toward the doorway.
+            cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
         }
     }
 

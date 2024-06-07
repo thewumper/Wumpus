@@ -33,7 +33,7 @@ public class BatMover : MonoBehaviour
     private void FixedUpdate()
     {
         transform.LookAt(target,Vector3.down);
-        transform.Translate(Vector3.forward * (Time.deltaTime * travelSpeed));
+        transform.Translate(Vector3.forward * (Time.fixedDeltaTime * travelSpeed));
 
         if (Vector3.Distance(transform.position,target)<targetGoodEnoughDistance)
         {
