@@ -54,7 +54,14 @@ public class CatTamingUI : MonoBehaviour
     {
         mainCanvas.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
-        mainUI.GetComponent<MainUI>().pLock = false;
+        if (controller.GetState() == ControllerState.AmmoRoom || controller.GetState() == ControllerState.GunRoom)
+        {
+            mainUI.GetComponent<StoresUI>().pLock = false;
+        }
+        else
+        {
+            mainUI.GetComponent<MainUI>().pLock = false;
+        }
 
     }
 

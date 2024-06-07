@@ -169,7 +169,7 @@ public class StoresUI : MonoBehaviour
     /// <summary>
     /// Whether or not the player can move or look around.
     /// </summary>
-    private bool pLock;
+    public bool pLock;
 
     /// <summary>
     /// The room that the player is currently in.
@@ -209,6 +209,11 @@ public class StoresUI : MonoBehaviour
     /// Reference to the global SceneController.
     /// </summary>
     private SceneController sceneController;
+
+    [SerializeField] private TMP_Text ArrowText;
+    [SerializeField] private GameObject CrossBowNotFound;
+    [SerializeField] private GameObject CrossBowFound;
+    [SerializeField] private AudioClip wrongSound;
 
     private void Awake()
     {
@@ -372,11 +377,33 @@ public class StoresUI : MonoBehaviour
         // If the player is looking at something.
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            // If the player is looking at a door.
             if (hit.transform.CompareTag("door") && !pLock)
             {
-                moveDir = hit.transform.GetComponent<Door>().GetDir();
-                directionText.SetText(moveDir.ToString());
+                Door door = hit.transform.GetComponent<Door>();
+                moveDir = door.GetDir();
+                String text = DirectionHelper.GetLongNameFromDirection(moveDir);
+                if (controller.DoesPlayerHaveGun() && controller.GetArrowCount() > 0)
+                {
+                    text += "\nRight click to shoot the wumpus";
+                }
+                directionText.SetText(text);
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    if (controller.ShootGun(moveDir))
+                    {
+                        // They shot the wumpus so take
+                        // them to gameover
+                        sceneController.GotoCorrectScene();
+                    }
+                    else
+                    {
+                        AudioSource wrong = hit.transform.gameObject.AddComponent<AudioSource>();
+                        wrong.clip = wrongSound;
+                        wrong.Play();
+                    }
+                }
+
                 ShowInteract(doorIcon);
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -443,6 +470,19 @@ public class StoresUI : MonoBehaviour
             // Move the camera toward the doorway.
             cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
         }
+
+        if (controller.DoesPlayerHaveGun())
+        {
+            CrossBowFound.SetActive(true);
+            CrossBowNotFound.SetActive(false);
+        }
+        else
+        {
+            CrossBowFound.SetActive(false);
+            CrossBowNotFound.SetActive(true);
+        }
+
+        ArrowText.SetText(controller.GetArrowCount().ToString());
     }
 
     private void HideInteract()

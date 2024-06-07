@@ -89,7 +89,7 @@ namespace WumpusCore.Controller
         /// <param name="triviaFile">The path to the file you want to load trivia from. See Triva/Questions.json for format.</param>
         /// <param name="topologyDirectory">The directory to load map files from.</param>
         /// <param name="mapId">The mapid to load from the topologyDirectory. Format is map{n}.wmp where n is the mapId.</param>
-        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,1,1,50)
+        public Controller(string triviaFile, string topologyDirectory, ushort mapId):this(triviaFile,topologyDirectory,mapId,2,1,1,2,5,5,50)
         {
         }
 
@@ -592,6 +592,8 @@ namespace WumpusCore.Controller
 
         public bool ShootGun(Directions shootingDir)
         {
+            gameLocations.GetPlayer().LoseArrow();
+
             if (GetAnomaliesInRoom(topology.GetRoom(gameLocations.GetPlayer().location).AdjacentRooms[shootingDir].Id).Contains(RoomAnomaly.Wumpus) && topology.GetRoom(gameLocations.GetPlayer().location).ExitDirections.Contains(shootingDir))
             {
                 EndGame(true,WinLossConditions.ShotWumpus);
