@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 using WumpusCore.Trivia;
 using WumpusUnity;
@@ -80,6 +81,7 @@ public class TriviaUI : MonoBehaviour
             if (!wrongBuzzer.isPlaying)
             {
                 sceneController.GotoCorrectScene();
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Trivia").buildIndex);
             }
         }
         else if (currentControllerState != ControllerState.Trivia)

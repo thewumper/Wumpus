@@ -2,17 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 using WumpusUnity;
 
 public class VatUI : MonoBehaviour
 {
+    [SerializeField] private string triviaScene;
+    
+    private Controller controller;
+    private SceneController sceneController;
+    
     void Awake()
     {
-        // This is a mega placeholder file. Just switch scenes and let trivia deal with it.
-        // I guess we're gonna have it like this forever because I do not have time to fully implement a vat room
-        Controller.GlobalController.StartTrivia();
-        SceneController.GlobalSceneController.GotoCorrectScene();
+        controller = Controller.GlobalController;
+        sceneController = SceneController.GlobalSceneController;
+        
+        // Start trivia and load the scene
+        controller.StartTrivia();
+        sceneController.LoadTrivia();
     }
 }
 
