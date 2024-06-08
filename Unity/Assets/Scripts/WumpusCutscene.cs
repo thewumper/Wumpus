@@ -24,12 +24,14 @@ public class WumpusCutscene : MonoBehaviour
     [SerializeField] private TMP_Text message;
     [SerializeField] private GameObject buttons;
     [SerializeField] private Image cover;
+    [SerializeField] private Light screenLight;
     [SerializeField] private float dialogueWait;
     [SerializeField] private float gameEndWait;
     [FormerlySerializedAs("speed")] [SerializeField] private float startAnimationSpeed;
     [FormerlySerializedAs("wumpusLeaveSpeed")] [SerializeField] private float leaveSpeed;
     [FormerlySerializedAs("wumpusJumpscareSpeed")] [SerializeField] private float jumpscareSpeed;
     [FormerlySerializedAs("wumpusJumpscareCutoff")] [SerializeField] private float jumpscareCutoff;
+    [SerializeField] private float fadeInSpeed;
     private float wumpusJumpscareTime = 0;
     
     private bool isDropping;
@@ -40,18 +42,31 @@ public class WumpusCutscene : MonoBehaviour
     private bool gameRunning;
     private bool endSceneCalled;
     private bool sceneLoaded;
+    private bool isFading;
 
     private Controller controller;
+    private static readonly int Smoothness = Shader.PropertyToID("_Smoothness");
 
     private void Awake()
     {
+        isDropping = false;
+        isMoving = false;
+        wumpusIsLeaving = false;
+        wumpusIsJumpscaring = false;
+        isRaising = false;
+        gameRunning = false;
+        endSceneCalled = false;
+        sceneLoaded = false;
+        isFading = true;
         try
         {
             controller = Controller.GlobalController;
         }
         catch (NullReferenceException)
         {
-            throw new Exception("Controller not instantiated");
+            Debug.LogError("Controller not found. Assuming to be run directly from Wumpus Fight Scene, instantiating temporary controller");
+            controller = new Controller
+                (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
     }
 
@@ -59,20 +74,18 @@ public class WumpusCutscene : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-        isDropping = false;
-        isMoving = false;
-        wumpusIsLeaving = false;
-        wumpusIsJumpscaring = false;
-        isRaising = false;
         wumpusStart = Wumpus.transform.position;
-        gameRunning = false;
-        endSceneCalled = false;
-        sceneLoaded = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isFading)
+        {
+            UpdateFade();
+            return;
+        }
+        
         if (isDropping)
         {
             UpdateDrop();
@@ -108,6 +121,7 @@ public class WumpusCutscene : MonoBehaviour
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(battleScene));
             sceneLoaded = false;
+            StartCoroutine(WaitThenExecute(gameEndWait / 2f, () => screenLight.enabled = false));
             StartCoroutine(WaitThenExecute(gameEndWait, () => isRaising = true));
             return;
         }
@@ -140,6 +154,18 @@ public class WumpusCutscene : MonoBehaviour
         method();
     }
 
+    private void UpdateFade()
+    {
+        float newAlpha = cover.color.a - fadeInSpeed * Time.deltaTime;
+        cover.color = new Color(0, 0, 0, newAlpha);
+        if (newAlpha <= 0)
+        {
+            isFading = false;
+            cover.enabled = false;
+            cover.color = new Color(0, 0, 0, 1);
+        }
+    }
+    
     private void UpdateDrop()
     {
         tv.transform.position = Vector3.Lerp(tv.transform.position,TVTarget.position,startAnimationSpeed * Time.deltaTime);
@@ -147,6 +173,7 @@ public class WumpusCutscene : MonoBehaviour
         {
             isDropping = false;
             isMoving = true;
+            screenLight.enabled = true;
         }
     }
     
