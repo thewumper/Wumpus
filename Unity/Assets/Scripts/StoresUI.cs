@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using WumpusCore.GameLocations;
 using WumpusUnity;
 
+[RequireComponent(typeof(SoundManager))]
 public class StoresUI : MonoBehaviour
 
 {
@@ -17,6 +18,11 @@ public class StoresUI : MonoBehaviour
     /// Reference to the global Controller.
     /// </summary>
     private Controller controller;
+    
+    /// <summary>
+    /// Reference to the SoundManager.
+    /// </summary>
+    private SoundManager soundManager;
 
     /// <summary>
     /// Reference to the door that is north of the player.
@@ -235,6 +241,13 @@ public class StoresUI : MonoBehaviour
 
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
+        
+        // Initializes the SoundManager
+        soundManager = GetComponent<SoundManager>();
+        soundManager.Init(northDoor, northEastDoor, southEastDoor, southDoor, southWestDoor, northWestDoor);
+        
+        // Get the sounds properly working
+        soundManager.UpdateSoundState();
     }
 
     void Start()
@@ -514,5 +527,6 @@ public class StoresUI : MonoBehaviour
         controller.MoveInADirection(moveDir);
         movingAnimator.SetBool(fadingID, false);
         sceneController.GotoCorrectScene();
+        soundManager.UpdateSoundState();
     }
 }
