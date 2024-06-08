@@ -83,6 +83,8 @@ public class RatsUI : MonoBehaviour
     private List<GameObject> rats = new();
     private float ratSpeed = 5f;
 
+    [SerializeField] private GameObject cat;
+
     /// <summary>
     /// Reference to the door that is north of the player.
     /// </summary>
@@ -140,6 +142,7 @@ public class RatsUI : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
 
+            if (controller.hasPlayerTamedCat()) yield break;
             GameObject dmg = Instantiate(damageText, canvas.transform);
             dmg.GetComponent<TMP_Text>().text = $"-{stats.DamageDelt}";
             damageObjects.Add(dmg);
@@ -158,6 +161,15 @@ public class RatsUI : MonoBehaviour
             camShaders.OverallDistortionFreq += .2f;
             camShaders.OverallDistortionMag += .2f;
             camShaders.OverallDistortionSpeed += .1f;
+            
+            
+            if (controller.hasPlayerTamedCat() && rats.Count >= 10)
+            {
+                int r = rand.Next(0, rats.Count);
+                cat.transform.position = rats[r].transform.position;
+                Destroy(rats[r]);
+                rats.RemoveAt(r);
+            }
         }
     }
 
@@ -291,6 +303,12 @@ public class RatsUI : MonoBehaviour
 
         for (int i = 0; i < rats.Count; i++)
         {
+            if ((rats[i].transform.position.x > 20 || rats[i].transform.position.x < -20) || (rats[i].transform.position.z > 20 || rats[i].transform.position.z < -20))
+            {
+                Destroy(rats[i]);
+                rats.Remove(rats[i]);
+                continue;
+            }
             rats[i].transform.position += -rats[i].transform.up * ratSpeed * Time.deltaTime;
         }
 
