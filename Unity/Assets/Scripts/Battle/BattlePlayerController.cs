@@ -54,10 +54,10 @@ public class BattlePlayerController : MonoBehaviour
     [SerializeField] private GameObject enemy;
     [SerializeField] private FadeIn cover;
 
-    public bool GameEnded { get; private set; }
-    public bool? Won { get; private set; }
+    public static bool GameEnded { get; private set; }
+    public static bool? Won { get; private set; }
     
-    public bool ReadyToUnload { get; private set; }
+    public static bool ReadyToUnload { get; private set; }
 
     void Start()
     {
