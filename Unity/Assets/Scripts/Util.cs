@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using WumpusCore.Controller;
 
 namespace WumpusUnity
 {

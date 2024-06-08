@@ -82,6 +82,8 @@ namespace WumpusUnity
                 case ControllerState.AmmoRoom:
                 case ControllerState.GunRoom:
                     return "StoresRoom";
+                case ControllerState.WonGame:
+                    return "You Win";
                 case ControllerState.WumpusFight:
                     return "Wumpus Fight";
                 default:
