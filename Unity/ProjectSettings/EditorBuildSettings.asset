@@ -44,5 +44,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: 97b82ee7c692bb64f85afc26c104e396
+  - enabled: 1
+    path: Assets/Scenes/You Win.unity
+    guid: dc94724f91a6ff74eae0c27d7386358f
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

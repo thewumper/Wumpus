@@ -1835,7 +1835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 389483743}
-  maxValue: 80
+  maxValue: 100
   writable: 0
 --- !u!1 &1235504953
 GameObject:
@@ -2778,7 +2778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1095136029}
-  maxValue: 100
+  maxValue: 80
   writable: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
