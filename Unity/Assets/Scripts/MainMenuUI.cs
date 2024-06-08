@@ -28,6 +28,16 @@ public class MainMenuUI : MonoBehaviour
 
         // Gets the path to the Map.
         topologyDir = Application.dataPath + "/Maps";
+        
+        ushort randomMap = (ushort)Random.Range(0, 4);
+
+        Debug.Log("Loading map #" + randomMap);
+
+        // Initializes the Controller.
+        controller = new Controller(triviaNormal, topologyDir, randomMap);
+        // Initializes the SceneController.
+        sceneController = SceneController.GlobalSceneController;
+        sceneController.Reinitialize(controller);
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -35,16 +45,6 @@ public class MainMenuUI : MonoBehaviour
 
     public void PlayGame()
     {
-        ushort randomMap = (ushort)Random.Range(0, 4);
-
-        Debug.Log("Loading map #" + randomMap);
-
-        // Initializes the Controller.
-        controller = new Controller(triviaNormal, topologyDir, randomMap,0,0,0,0,10,10,50);
-        // Initializes the SceneController.
-        sceneController = SceneController.GlobalSceneController;
-        sceneController.Reinitialize(controller);
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -59,5 +59,10 @@ public class MainMenuUI : MonoBehaviour
 #else
         Application.Quit(0);
 #endif
+    }
+
+    public void Credits()
+    {
+        sceneController.SetScene("Credits");
     }
 }
