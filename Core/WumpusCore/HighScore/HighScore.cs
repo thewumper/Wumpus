@@ -21,25 +21,6 @@ namespace WumpusCore.HighScoreNS
         public readonly string savePath;
 
         /// <summary>
-        /// HighScore object is how the score of the game is calculated and stored to files
-        /// </summary>
-        /// <param name="playerName"> Name of player who owns the score </param>
-        /// <param name="numTurns"> How long it took for game to end in turns </param>
-        /// <param name="goldLeft"> Number of gold remaining when game ends </param>
-        /// <param name="arrowsLeft"> Number of arrows remaining when game ends </param>
-        /// <param name="isWumpusDead"> Was the wumpus killed when the game ended </param>
-        /// <param name="mapUsed"> Number code of the map generation from the game </param>
-        public HighScore(string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed)
-        {
-            StoredHighScore compactScore = new StoredHighScore(
-                this.CalculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
-                playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
-            this.compactScore = compactScore;
-
-            CheckTopTen();
-        }
-
-        /// <summary>
         /// Alternate constructor to have the save path given
         /// without needing to normally pass it in
         /// </summary>
@@ -51,9 +32,27 @@ namespace WumpusCore.HighScoreNS
         /// <param name="isWumpusDead"> Was the wumpus killed when the game ended </param>
         /// <param name="mapUsed"> Number code of the map generation from the game </param>
         public HighScore(string savePath, string playerName, int numTurns, int goldLeft, int arrowsLeft, bool isWumpusDead, int mapUsed) 
-            : this(playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed)
         {
             this.savePath = savePath;
+
+            StoredHighScore compactScore = new StoredHighScore(
+                this.CalculateScore(numTurns, goldLeft, arrowsLeft, isWumpusDead),
+                playerName, numTurns, goldLeft, arrowsLeft, isWumpusDead, mapUsed);
+            this.compactScore = compactScore;
+
+            if (topTenHighScores == null)
+            {
+                topTenHighScores = new List<StoredHighScore>();
+            }
+
+            SaveFile headFile = new SaveFile(false, this.savePath);
+            string saveData = headFile.ReadFile(false);
+            if (saveData.StartsWith("Top Ten Scores:"))
+            {
+                SeperateFile(saveData);
+            }
+
+            CheckTopTen();
         }
 
         /// <summary>
@@ -98,25 +97,22 @@ namespace WumpusCore.HighScoreNS
         /// </summary>
         private void CheckTopTen()
         {
-            if (topTenHighScores == null)
-            {
-                topTenHighScores = new List<StoredHighScore>();
-            }
-
             int scoreLength = topTenHighScores.Count;
             if (scoreLength < 10)
             {
                 topTenHighScores.Insert(scoreLength, compactScore);
                 return;
             }
-            
-            for (int i = 0; i < scoreLength; i++)
+            else
             {
-                if (topTenHighScores[i].score < compactScore.score)
+                for (int i = 0; i < scoreLength; i++)
                 {
-                    topTenHighScores.Insert(i, compactScore);
-                    topTenHighScores.RemoveAt(10);
-                    break;
+                    if (topTenHighScores[i].score < compactScore.score)
+                    {
+                        topTenHighScores.Insert(i, compactScore);
+                        topTenHighScores.RemoveAt(10);
+                        break;
+                    }
                 }
             }
         }
@@ -212,12 +208,7 @@ namespace WumpusCore.HighScoreNS
 
             string allTextToSave = "Top Ten Scores: \n";
             
-            SaveFile headFile = new SaveFile(false, this.savePath);
-            string saveData = headFile.ReadFile(false);
-            if (saveData.StartsWith("Top Ten Scores:"))
-            {
-                SeperateFile(saveData);
-            }
+            
 
             for (int i = 0; i < topTenHighScores.Count; i++)
             {
@@ -231,7 +222,7 @@ namespace WumpusCore.HighScoreNS
 
             if (this.savePath != null)
             {
-                SaveFile saveFile = new SaveFile(true, this.savePath);
+                SaveFile saveFile = new SaveFile(false, this.savePath);
                 saveFile.CreateFile(allTextToSave);
                 saveFile.ReadFile(false);
             }
