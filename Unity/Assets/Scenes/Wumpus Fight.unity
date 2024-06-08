@@ -596,8 +596,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tv: {fileID: 506989857}
   battleScene: Battle
-  winScene: 
-  loseScene: Game Over
   TVTarget: {fileID: 12563362}
   TVRaiseTarget: {fileID: 1685662498}
   PlayerTarget: {fileID: 745847250}
@@ -611,7 +609,7 @@ MonoBehaviour:
   startAnimationSpeed: 0.7
   leaveSpeed: 0.5
   jumpscareSpeed: 5
-  jumpscareCutoff: 0.7
+  jumpscareCutoff: 0.8
 --- !u!4 &247010359
 Transform:
   m_ObjectHideFlags: 0
