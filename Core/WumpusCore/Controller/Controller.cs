@@ -577,6 +577,11 @@ namespace WumpusCore.Controller
 
             int ratDamage = CalculateRatDamage(timeDiff);
 
+            if (hasPlayerTamedCat())
+            {
+                return new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins, gameLocations.GetPlayer().Coins, 0);
+            }
+            
             RatRoomStats stats = new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins,
                 gameLocations.GetPlayer().Coins - ratDamage, ratDamage);
 

@@ -155,20 +155,14 @@ public class RatsUI : MonoBehaviour
         {
             yield return new WaitForSeconds(.1f);
 
-            camShaders.PosterzationBands1 -= 1;
-            camShaders.PosterzationBands1 = Math.Clamp(camShaders.PosterzationBands1, 10, 75);
-
-            camShaders.OverallDistortionFreq += .2f;
-            camShaders.OverallDistortionMag += .2f;
-            camShaders.OverallDistortionSpeed += .1f;
-            
-            
-            if (controller.hasPlayerTamedCat() && rats.Count >= 10)
+            if (!controller.hasPlayerTamedCat())
             {
-                int r = rand.Next(0, rats.Count);
-                cat.transform.position = rats[r].transform.position;
-                Destroy(rats[r]);
-                rats.RemoveAt(r);
+                camShaders.PosterzationBands1 -= 1;
+                camShaders.PosterzationBands1 = Math.Clamp(camShaders.PosterzationBands1, 10, 75);
+
+                camShaders.OverallDistortionFreq += .2f;
+                camShaders.OverallDistortionMag += .2f;
+                camShaders.OverallDistortionSpeed += .1f;   
             }
         }
     }
@@ -203,7 +197,17 @@ public class RatsUI : MonoBehaviour
                 aRat.transform.eulerAngles.y,
                 aRat.transform.eulerAngles.z);
             rats.Add(aRat);
-            ratSpeed += .5f;
+            if (controller.hasPlayerTamedCat() && rats.Count >= 10)
+            {
+                int r = rand.Next(0, rats.Count);
+                cat.transform.position = rats[r].transform.position;
+                Destroy(rats[r]);
+                rats.RemoveAt(r);
+            }
+            else
+            {
+                ratSpeed += .5f;
+            }
         }
     }
 
