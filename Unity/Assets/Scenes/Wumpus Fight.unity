@@ -610,7 +610,7 @@ MonoBehaviour:
   startAnimationSpeed: 0.7
   leaveSpeed: 0.5
   jumpscareSpeed: 5
-  jumpscareCutoff: 0.7
+  jumpscareCutoff: 0.8
 --- !u!4 &247010359
 Transform:
   m_ObjectHideFlags: 0

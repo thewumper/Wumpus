@@ -90,7 +90,7 @@ namespace WumpusTesting
                 case ControllerState.Rats:
                 {
                     int timeInRoom = Controller.Random.Next(0, 11);
-                    IStopwatch realStopwatch = controller.ratTimeStopwatch;
+                    IStopwatch ogTimer = controller.ratTimeStopwatch;
                     controller.ratTimeStopwatch = new FakeStopwatch(new TimeSpan(0, 0, timeInRoom));
 
                     RatRoomStats stats = controller.GetRatRoomStats();
@@ -105,7 +105,7 @@ namespace WumpusTesting
                         Assert.IsTrue(controller.GetCoins() < stats.StartingCoins);
                     }
 
-                    controller.ratTimeStopwatch = realStopwatch;
+                    controller.ratTimeStopwatch = ogTimer;
 
                     break;
                 }
