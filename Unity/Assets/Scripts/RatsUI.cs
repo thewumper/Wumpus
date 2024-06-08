@@ -8,6 +8,7 @@ using WumpusCore.Topology;
 using WumpusUnity;
 using Random = System.Random;
 
+[RequireComponent(typeof(SoundManager))]
 public class RatsUI : MonoBehaviour
 {
     /// <summary>
@@ -18,6 +19,10 @@ public class RatsUI : MonoBehaviour
     /// The global SceneController object.
     /// </summary>
     private SceneController sceneController;
+    /// <summary>
+    /// Reference to the SoundManager.
+    /// </summary>
+    private SoundManager soundManager;
 
     [SerializeField] private GameObject cam;
 
@@ -30,6 +35,19 @@ public class RatsUI : MonoBehaviour
     /// The TMP text that contains how many coins you have left.
     /// </summary>
     [SerializeField] private TMP_Text coins;
+    
+    /// <summary>
+    /// The hint for what sounds are near you
+    /// </summary>
+    [SerializeField]
+    private TMP_Text roomHintText;
+    
+    /// <summary>
+    /// Rext that displays your current room type
+    /// </summary>
+    [SerializeField]
+    private TMP_Text roomTypeText;
+    
     /// <summary>
     /// Returns the actual text of <see cref="coins"/>.
     /// </summary>
@@ -192,6 +210,10 @@ public class RatsUI : MonoBehaviour
 
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
+        
+        // Initializes the SoundManager
+        soundManager = GetComponent<SoundManager>();
+        soundManager.Init(northDoor, northEastDoor, southEastDoor, southDoor, southWestDoor, northWestDoor);
     }
 
     private void Start()
@@ -203,7 +225,7 @@ public class RatsUI : MonoBehaviour
 
         stats = controller.GetRatRoomStats();
         coinsV = stats.StartingCoins.ToString();
-        room.text = "Rats";
+        roomTypeText.text = "Rats";
         camShaders = Camera.main.GetComponent<ShaderApplication>();
         camShaders.PosterzationBands1 = 75;
         camShaders.MaxTime = 1;
@@ -217,6 +239,23 @@ public class RatsUI : MonoBehaviour
         southDoor.AddComponent<Door>().Init(Directions.South);
         southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
         northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
+        
+        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
+        List<string> hintString = new List<string>();
+        foreach (Controller.DirectionalHint hint in hints)
+        {
+            foreach (RoomAnomaly anomaly in hint.Hazards)
+            {
+                hintString.Add("You hear " + anomaly);
+            }
+        }
+
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
+        else roomHintText.SetText("You hear nothing.");
+        room.SetText("Room: " + controller.GetPlayerLocation().ToString());
+        
+        // Get the sounds properly working
+        soundManager.UpdateSoundState();
 
         StartCoroutine(oneSec());
         StartCoroutine(tenthSecond());
