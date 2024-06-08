@@ -478,11 +478,6 @@ namespace WumpusCore.Controller
 
         public void EndGame(bool success, WinLossConditions gameEndCause)
         {
-            // need to get player name somehow
-
-            HighScore gameEndScore = new HighScore(headFile.path, "WumpusHunter", turnCounter, GetCoins(), GetArrowCount(), success, mapID);
-            gameEndScore.StoreTopTenToFile();
-
             if (success)
             {
                 state = WonGame;
@@ -493,8 +488,17 @@ namespace WumpusCore.Controller
                 state = GameOver;
             }
             GameEndCause = gameEndCause;
-
         }
+
+        public HighScore SaveHighScore(String name)
+        {
+            ValidateState(new []{WonGame,GameOver});
+
+            bool success = state == WonGame;
+
+            return new HighScore(headFile.path, name, turnCounter, GetCoins(), GetArrowCount(), success, mapID);
+        }
+
 
 
         /// <summary>

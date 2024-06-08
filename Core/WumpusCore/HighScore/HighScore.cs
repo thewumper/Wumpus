@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WumpusCore.HighScoreNS
 {
-    internal class HighScore
+    public class HighScore
     {
         /// <summary>
         /// The list of storedHighScore structs for the 10 highest scores
