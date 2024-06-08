@@ -291,8 +291,9 @@ public class StoresUI : MonoBehaviour
 
 
         List<Controller.DirectionalHint> hints = controller.GetHazardHints();
-
-        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', Util.GetRoomHintString(hints)));
+        List<string> hintString = Util.GetRoomHintString(hints);
+        
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
         else roomHintText.SetText("You hear nothing.");
         roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
 
