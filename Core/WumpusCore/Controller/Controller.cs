@@ -183,11 +183,11 @@ namespace WumpusCore.Controller
 
             player.location = nextRoom.Id;
 
-            if (hasPlayerTamedCat())
-            {
-                // This protects the player from the effects of the rats
-                currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
-            }
+            //if (hasPlayerTamedCat())
+            //{
+            //    // This protects the player from the effects of the rats
+            //    currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
+            //}
 
             SetCorrectStateForRoom(nextRoom.Id);
 
@@ -577,8 +577,16 @@ namespace WumpusCore.Controller
 
             int ratDamage = CalculateRatDamage(timeDiff);
 
-            return new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins,
+            RatRoomStats stats = new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins,
                 gameLocations.GetPlayer().Coins - ratDamage, ratDamage);
+
+            if (stats.RemainingCoins < 0)
+            {
+                EndGame(false, WinLossConditions.Rats);
+            }
+
+            return stats;
+
         }
 
         /// <summary>

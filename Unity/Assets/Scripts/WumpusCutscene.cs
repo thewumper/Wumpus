@@ -26,6 +26,7 @@ public class WumpusCutscene : MonoBehaviour
     [SerializeField] private Image cover;
     [SerializeField] private float dialogueWait;
     [SerializeField] private float gameEndWait;
+    [SerializeField] private AudioSource wumpusJumpscareSound;
     [FormerlySerializedAs("speed")] [SerializeField] private float startAnimationSpeed;
     [FormerlySerializedAs("wumpusLeaveSpeed")] [SerializeField] private float leaveSpeed;
     [FormerlySerializedAs("wumpusJumpscareSpeed")] [SerializeField] private float jumpscareSpeed;
@@ -237,6 +238,7 @@ public class WumpusCutscene : MonoBehaviour
         message.SetText("Goodbye :(");
         yield return new WaitForSeconds(dialogueWait);
         message.gameObject.SetActive(false);
+        wumpusJumpscareSound.Play();
         wumpusIsJumpscaring = true;
         controller.ExitWumpusFight(false);
     }
