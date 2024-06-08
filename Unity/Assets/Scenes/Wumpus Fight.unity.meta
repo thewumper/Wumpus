@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Unity/Assets/Materials/CatPost.meta
+guid: 9cee184fef9a1c247be205d5ad809419
+folderAsset: yes
+========
 guid: ae562ea96e6811a49b5822c97100ea7c
+>>>>>>>> refs/heads/blazing-edge:Unity/Assets/Scenes/Wumpus Fight.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

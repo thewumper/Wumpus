@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 using WumpusCore.Trivia;
 using WumpusUnity;
@@ -22,7 +23,11 @@ public class TriviaUI : MonoBehaviour
     [SerializeField]
     private TMP_Text b4Text;
 
+    [SerializeField]
+    private AudioSource wrongBuzzer;
+
     private AskableQuestion question;
+    private bool lostTrivia = false;
     
 
     private void Awake()
@@ -56,12 +61,45 @@ public class TriviaUI : MonoBehaviour
         b4Text.SetText(question.choices[3]);
     }
 
+    private void Update()
+    {
+        ControllerState currentControllerState = controller.GetState();
+
+        if (currentControllerState == ControllerState.GameOver && lostTrivia == false)
+        {
+            wrongBuzzer.Play();
+            lostTrivia = true;
+            
+            questionText.SetText("YOU LOSE");
+            b1Text.SetText("");
+            b2Text.SetText("");
+            b3Text.SetText("");
+            b4Text.SetText("");
+        }
+        else if (lostTrivia)
+        {
+            if (!wrongBuzzer.isPlaying)
+            {
+                sceneController.GotoCorrectScene();
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Trivia").buildIndex);
+            }
+        }
+        else if (currentControllerState != ControllerState.Trivia)
+        {
+            sceneController.GotoCorrectScene();
+        }
+    }
+
     public void Choose(int choice)
     {
         bool correctness = controller.SubmitTriviaAnswer(choice);
         Debug.Log($"You got the trivia question correct: {correctness}");
         Debug.Log(controller.GetState());
-        if (controller.GetState() != ControllerState.Trivia) sceneController.GotoCorrectScene();
+
+        if (!correctness)
+        {
+            wrongBuzzer.Play();
+        }
         
         question = controller.GetTriviaQuestion();
         questionText.SetText(question.questionText);

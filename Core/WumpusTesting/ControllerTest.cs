@@ -26,7 +26,7 @@ namespace WumpusTesting
         {
             // This will just create it at global controller which is what we want. Resharper doesn't like this, but it's fine
             // ReSharper disable once ObjectCreationAsStatement
-            return new Controller("./questions.json", "./",0);
+            return new Controller("./questions.json", "./", 0);
         }
 
         [TestMethod]

@@ -163,5 +163,10 @@ namespace WumpusCore.Player
         {
             HasGun = true;
         }
+
+        public void LoseArrow()
+        {
+            Bullets--;
+        }
     }
 }

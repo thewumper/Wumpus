@@ -8,18 +8,12 @@ using WumpusCore.Topology;
 
 namespace WumpusCore.LuckyCat
 {
-    public class Cat: Entity.Entity
+    public class Cat : Entity.Entity
     {
         /// <summary>
         /// Is the cat tamed
         /// </summary>
-        private bool tamed;
-        
-        /// <summary>
-        /// The amount of coins the player has
-        /// Used to check for taming cat
-        /// </summary>
-        public ushort coins;
+        public bool tamed { get; private set; }
 
         /// <summary>
         /// The radius that the cat should be heard from
@@ -34,29 +28,40 @@ namespace WumpusCore.LuckyCat
         /// Attempts to Tame the Lucky Cat
         /// </summary>
         /// <returns>The state of cat tame, successful or not</returns>
-        public bool Tame()
+        public bool Tame(int coinInput)
         {
-            if (!tamed && coins >= 20)
+            if (coinInput>gameLocations.GetPlayer().Coins)
             {
-                coins = 0;
-                // (Taming success message)
+                throw new InvalidOperationException("You can't tame a cat with more coins than you have");
+            }
+
+            if (tamed)
+            {
+                throw new InvalidOperationException("You have already tamed the cat");
+            }
+
+            // The cat cannot be guaranteed to be tamed, but instead it uses
+            // a modified sigmoid function to determine your chance of taming
+            // the cat as a function of the coins you put in
+
+            // The function is 1/(1+e^{-x/2+3})*100 (%)
+            // there isn't anything specific about that function
+            // other than it looks decent in Desmos
+            // 0 coins gives a ~4.7% chance to tame
+            // 10 coins gives a ~90% change to tame
+            // 18+ coins gives a 99% change to tame
+            // You just won't ever have a 100% chance of taming
+            gameLocations.GetPlayer().LoseCoins((uint) coinInput);
+
+            int threshold = Controller.Controller.Random.Next(0, 100);
+            int value = (int)(1 / (1 + Math.Pow(Math.E, -coinInput / 2.0 + 3)) * 100);
+
+            if (value >= threshold)
+            {
+                tamed = true;
                 return true;
             }
-            else if (!tamed && coins < 20 )
-            {
-                coins = 0;
-                // (Taming failure message)
-                return false;
-            }
-            else if ( tamed )
-            {
-                // (Cat already tamed)
-                return true;
-            }
-            else 
-            { 
-                return false; 
-            }
+            return false;
 
         }
 

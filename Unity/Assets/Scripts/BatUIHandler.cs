@@ -73,7 +73,7 @@ public class BatUIHandler : MonoBehaviour
         }
 
         controller.Debug = true;
-        InstantiateBats(200);
+        InstantiateBats(numBats);
     }
 
     // Update is called once per frame
@@ -105,15 +105,6 @@ public class BatUIHandler : MonoBehaviour
     private void FixedUpdate()
     {
         ActivateABat();
-        // if (numBats < 300)
-        // {
-        //
-        // // This could use instanced rendering for performance if needed
-        // Vector3 randomSpawnPosition = new Vector3(Random.Range(-10, 11), 5, Random.Range(-10, 11));
-        // GameObject instance =  Instantiate(batModel, randomSpawnPosition, Quaternion.identity);
-        // instance.gameObject.transform.localScale = new Vector3(size,size,size);
-        // numBats++;
-        // }
     }
 
     private void InstantiateBats(int numBats)

@@ -59,9 +59,8 @@ namespace WumpusUnity
         /// Gets the correct scene based off of the global Controller's state.
         /// </summary>
         /// <returns>The correct scene based off of the global Controller's state.</returns>
-        private string GetCorrectScene()
+        private string GetCorrectScene(ControllerState state)
         {
-            ControllerState state = controller.GetState();
             switch (state)
             {
                 case ControllerState.StartScreen:
@@ -95,7 +94,15 @@ namespace WumpusUnity
         /// </summary>
         public void GotoCorrectScene()
         {
-            SetScene(GetCorrectScene());
+            SetScene(GetCorrectScene(controller.GetState()));
+        }
+
+        /// <summary>
+        /// Loads trivia on top of the current scene
+        /// </summary>
+        public void LoadTrivia()
+        {
+            SceneManager.LoadScene(GetCorrectScene(ControllerState.Trivia), LoadSceneMode.Additive);
         }
     }
 }
