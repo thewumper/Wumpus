@@ -6,7 +6,7 @@ using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(SoundManager))]
 public class RatsUI : MonoBehaviour
@@ -35,12 +35,6 @@ public class RatsUI : MonoBehaviour
     /// The TMP text that contains how many coins you have left.
     /// </summary>
     [SerializeField] private TMP_Text coins;
-    
-    /// <summary>
-    /// The hint for what sounds are near you
-    /// </summary>
-    [SerializeField]
-    private TMP_Text roomHintText;
     
     /// <summary>
     /// Rext that displays your current room type
@@ -134,7 +128,7 @@ public class RatsUI : MonoBehaviour
     [SerializeField]
     ShaderApplication camShaders;
 
-    Random rand = new();
+    System.Random rand = new();
 
     private IEnumerator oneSec() 
     {
@@ -155,20 +149,14 @@ public class RatsUI : MonoBehaviour
         {
             yield return new WaitForSeconds(.1f);
 
-            camShaders.PosterzationBands1 -= 1;
-            camShaders.PosterzationBands1 = Math.Clamp(camShaders.PosterzationBands1, 10, 75);
-
-            camShaders.OverallDistortionFreq += .2f;
-            camShaders.OverallDistortionMag += .2f;
-            camShaders.OverallDistortionSpeed += .1f;
-            
-            
-            if (controller.hasPlayerTamedCat() && rats.Count >= 10)
+            if (!controller.hasPlayerTamedCat())
             {
-                int r = rand.Next(0, rats.Count);
-                cat.transform.position = rats[r].transform.position;
-                Destroy(rats[r]);
-                rats.RemoveAt(r);
+                camShaders.PosterzationBands1 -= 1;
+                camShaders.PosterzationBands1 = Math.Clamp(camShaders.PosterzationBands1, 10, 75);
+
+                camShaders.OverallDistortionFreq += .2f;
+                camShaders.OverallDistortionMag += .2f;
+                camShaders.OverallDistortionSpeed += .1f;   
             }
         }
     }
@@ -203,7 +191,17 @@ public class RatsUI : MonoBehaviour
                 aRat.transform.eulerAngles.y,
                 aRat.transform.eulerAngles.z);
             rats.Add(aRat);
-            ratSpeed += .5f;
+            if (controller.hasPlayerTamedCat() && rats.Count >= 10)
+            {
+                int r = rand.Next(0, rats.Count);
+                cat.transform.position = rats[r].transform.position;
+                Destroy(rats[r]);
+                rats.RemoveAt(r);
+            }
+            else
+            {
+                ratSpeed += .5f;
+            }
         }
     }
 
@@ -261,10 +259,10 @@ public class RatsUI : MonoBehaviour
                 hintString.Add("You hear " + anomaly);
             }
         }
-
-        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
-        else roomHintText.SetText("You hear nothing.");
+        
         room.SetText("Room: " + controller.GetPlayerLocation().ToString());
+        
+        cam.transform.rotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
         
         // Get the sounds properly working
         soundManager.UpdateSoundState();

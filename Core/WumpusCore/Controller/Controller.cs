@@ -183,11 +183,11 @@ namespace WumpusCore.Controller
 
             player.location = nextRoom.Id;
 
-            if (hasPlayerTamedCat())
-            {
-                // This protects the player from the effects of the rats
-                currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
-            }
+            //if (hasPlayerTamedCat())
+            //{
+            //    // This protects the player from the effects of the rats
+            //    currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
+            //}
 
             SetCorrectStateForRoom(nextRoom.Id);
 
@@ -478,11 +478,6 @@ namespace WumpusCore.Controller
 
         public void EndGame(bool success, WinLossConditions gameEndCause)
         {
-            // need to get player name somehow
-
-            HighScore gameEndScore = new HighScore(headFile.path, "WumpusHunter", turnCounter, GetCoins(), GetArrowCount(), success, mapID);
-            gameEndScore.StoreTopTenToFile();
-
             if (success)
             {
                 state = WonGame;
@@ -493,8 +488,17 @@ namespace WumpusCore.Controller
                 state = GameOver;
             }
             GameEndCause = gameEndCause;
-
         }
+
+        public HighScore SaveHighScore(String name)
+        {
+            ValidateState(new []{WonGame,GameOver});
+
+            bool success = state == WonGame;
+
+            return new HighScore(headFile.path, name, turnCounter, GetCoins(), GetArrowCount(), success, mapID);
+        }
+
 
 
         /// <summary>
@@ -577,6 +581,11 @@ namespace WumpusCore.Controller
 
             int ratDamage = CalculateRatDamage(timeDiff);
 
+            if (hasPlayerTamedCat())
+            {
+                return new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins, gameLocations.GetPlayer().Coins, 0);
+            }
+            
             RatRoomStats stats = new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins,
                 gameLocations.GetPlayer().Coins - ratDamage, ratDamage);
 
