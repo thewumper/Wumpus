@@ -385,10 +385,7 @@ public class MainUI : MonoBehaviour
                 Door door = hit.transform.GetComponent<Door>();
                 moveDir = door.GetDir();
                 String text = DirectionHelper.GetLongNameFromDirection(moveDir);
-                if (controller.DoesPlayerHaveGun() && controller.GetArrowCount() > 0)
-                {
-                    text += "\nRight click to shoot the wumpus";
-                }
+                
                 directionText.SetText(text);
 
                 if (Input.GetMouseButtonDown(1))

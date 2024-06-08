@@ -9,7 +9,7 @@ public class CrossBowOnScreen : MonoBehaviour
 {
     [SerializeField] private GameObject crossbow;
     [SerializeField] private GameObject arrow;
-
+    [SerializeField] private GameObject shootReminder;
     private Controller controller;
 
     private void Start()
@@ -31,6 +31,7 @@ public class CrossBowOnScreen : MonoBehaviour
     {
         if (controller.DoesPlayerHaveGun())
         {
+            shootReminder.SetActive(true);
             crossbow.SetActive(true);
             if (controller.GetArrowCount() > 0)
             {
@@ -43,6 +44,7 @@ public class CrossBowOnScreen : MonoBehaviour
         }
         else
         {
+            shootReminder.SetActive(false);
             crossbow.SetActive(false);
             arrow.SetActive(false);
         }
