@@ -235,7 +235,6 @@ public class WumpusCutscene : MonoBehaviour
         message.SetText("That's too bad.");
         yield return new WaitForSeconds(dialogueWait);
         message.SetText("Goodbye :(");
-        yield return new WaitForSeconds(dialogueWait);
         message.gameObject.SetActive(false);
         wumpusIsJumpscaring = true;
         controller.ExitWumpusFight(false);
