@@ -14,8 +14,6 @@ public class WumpusCutscene : MonoBehaviour
 {
     [SerializeField] GameObject tv;
     [SerializeField] private string battleScene;
-    [SerializeField] private string winScene;
-    [SerializeField] private string loseScene;
     [SerializeField] private Transform TVTarget;
     [SerializeField] private Transform TVRaiseTarget;
     [SerializeField] private Transform PlayerTarget;
