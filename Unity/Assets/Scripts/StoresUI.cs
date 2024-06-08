@@ -291,16 +291,8 @@ public class StoresUI : MonoBehaviour
 
 
         List<Controller.DirectionalHint> hints = controller.GetHazardHints();
-        List<string> hintString = new List<string>();
-        foreach (Controller.DirectionalHint hint in hints)
-        {
-            foreach (RoomAnomaly anomaly in hint.Hazards)
-            {
-                hintString.Add("You hear " + anomaly);
-            }
-        }
 
-        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', Util.GetRoomHintString(hints)));
         else roomHintText.SetText("You hear nothing.");
         roomTypeText.SetText(controller.GetCurrentRoomType().ToString());
 
