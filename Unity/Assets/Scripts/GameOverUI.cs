@@ -11,7 +11,6 @@ using Random = UnityEngine.Random;
 
 public class GameOverUI : MonoBehaviour
 {
-    private Controller controller;
     private SceneController sceneController;
     private HighScore highScore;
 
@@ -47,7 +46,7 @@ public class GameOverUI : MonoBehaviour
     public void PlayAgain()
     {
         SetupNewController();
-        controller.StartGame();
+        Controller.GlobalController.StartGame();
         sceneController.GotoCorrectScene();
     }
 
@@ -62,7 +61,7 @@ public class GameOverUI : MonoBehaviour
         mainUICanvas.SetActive(true);
         submitNameCanvas.SetActive(false);
         Debug.Log(nameInputField.text);
-        highScore = controller.SaveHighScore(nameInputField.text);
+        highScore = Controller.GlobalController.SaveHighScore(nameInputField.text);
     }
 
     public void ShowLeaderBoard()
@@ -94,7 +93,7 @@ public class GameOverUI : MonoBehaviour
 
         Debug.Log("Loading map #" + randomMap);
 
-        controller = new Controller
+        Controller controller = new Controller
             (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", randomMap);
         sceneController = SceneController.GlobalSceneController;
         sceneController.Reinitialize(controller);
