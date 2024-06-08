@@ -31,15 +31,23 @@ public class CrossBowOnScreen : MonoBehaviour
     {
         if (controller.DoesPlayerHaveGun())
         {
-            shootReminder.SetActive(true);
             crossbow.SetActive(true);
             if (controller.GetArrowCount() > 0)
             {
+                if (PersistentData.Instance.IsLookingAtDoor)
+                {
+                    shootReminder.SetActive(true);
+                }
+                else
+                {
+                    shootReminder.SetActive(false);
+                }
                 arrow.SetActive(true);
             }
             else
             {
                 arrow.SetActive(false);
+                shootReminder.SetActive(false);
             }
         }
         else

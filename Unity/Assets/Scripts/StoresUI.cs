@@ -390,6 +390,7 @@ public class StoresUI : MonoBehaviour
             if (hit.transform.CompareTag("door") && !pLock)
             {
                 Door door = hit.transform.GetComponent<Door>();
+                PersistentData.Instance.IsLookingAtDoor = true;
                 moveDir = door.GetDir();
                 String text = DirectionHelper.GetLongNameFromDirection(moveDir);
                
@@ -397,17 +398,20 @@ public class StoresUI : MonoBehaviour
 
                 if (Input.GetMouseButtonDown(1))
                 {
-                    if (controller.ShootGun(moveDir))
+                    if (controller.GetArrowCount() > 0)
                     {
-                        // They shot the wumpus so take
-                        // them to gameover
-                        sceneController.GotoCorrectScene();
-                    }
-                    else
-                    {
-                        AudioSource wrong = hit.transform.gameObject.AddComponent<AudioSource>();
-                        wrong.clip = wrongSound;
-                        wrong.Play();
+                        if (controller.ShootGun(moveDir))
+                        {
+                            // They shot the wumpus so take
+                            // them to gameover
+                            sceneController.GotoCorrectScene();
+                        }
+                        else
+                        {
+                            AudioSource wrong = hit.transform.gameObject.AddComponent<AudioSource>();
+                            wrong.clip = wrongSound;
+                            wrong.Play();
+                        }
                     }
                 }
 
@@ -422,11 +426,13 @@ public class StoresUI : MonoBehaviour
             // If the player is looking at a door that they can't move through.
             else if (hit.transform.CompareTag("unmoveableDoor") && !pLock)
             {
+                PersistentData.Instance.IsLookingAtDoor = false;
                 ShowInteract(uninteractableIcon);
             }
             // If the player is looking at the gun or ammo they can intereact
             else if (hit.transform.CompareTag("CollectableTable") && !pLock)
             {
+                PersistentData.Instance.IsLookingAtDoor = false;
                 RoomType type = controller.GetCurrentRoomType();
                 bool canCollect = controller.CanRoomBeCollectedFrom();
 
@@ -446,7 +452,6 @@ public class StoresUI : MonoBehaviour
                 {
                     directionText.SetText("You've already collected the items in this room");
                     ShowInteract(uninteractableIcon);
-
                 }
 
                 if (Input.GetMouseButtonDown(0) && canCollect)
@@ -465,6 +470,7 @@ public class StoresUI : MonoBehaviour
         {
             HideInteract();
             directionText.SetText("");
+            PersistentData.Instance.IsLookingAtDoor = false;
         }
 
         // Makes the coinsText show the actual amount of coins that the player currently has.
