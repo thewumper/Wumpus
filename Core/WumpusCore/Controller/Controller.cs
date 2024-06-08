@@ -496,7 +496,10 @@ namespace WumpusCore.Controller
 
             bool success = state == WonGame;
 
-            return new HighScore(headFile.path, name, turnCounter, GetCoins(), GetArrowCount(), success, mapID);
+            HighScore highScore = new HighScore(headFile.path, name, turnCounter, GetCoins(), GetArrowCount(), success,
+                mapID);
+            highScore.StoreTopTenToFile();
+            return highScore;
         }
 
 
