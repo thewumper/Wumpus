@@ -494,7 +494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &222957150
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2290,12 +2290,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'YOU HEAR RATS
-
-    CRAZY I WAS CRAZY ONCE THEY LOCKED ME IN A ROOM A RUBBER
-    ROOM A RUBBER ROOM WITH RATS RATS MAKE ME CRAZY CRAZY I WAS CRAZY ONCE THEY LOCKED
-    ME IN A ROOM A RUBBER ROOM A RUBBER ROOM WITH RATS RATS MAKE ME CRAZY CRAZY I
-    WAS CRAZY ONCE THEY LOCK'
+  m_text: You're going crazy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}
   m_sharedMaterial: {fileID: -5568975997839417396, guid: 2cf78f033ddb3ca42997a726a533aca8, type: 2}

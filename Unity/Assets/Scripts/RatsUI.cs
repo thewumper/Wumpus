@@ -6,7 +6,7 @@ using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(SoundManager))]
 public class RatsUI : MonoBehaviour
@@ -35,12 +35,6 @@ public class RatsUI : MonoBehaviour
     /// The TMP text that contains how many coins you have left.
     /// </summary>
     [SerializeField] private TMP_Text coins;
-    
-    /// <summary>
-    /// The hint for what sounds are near you
-    /// </summary>
-    [SerializeField]
-    private TMP_Text roomHintText;
     
     /// <summary>
     /// Rext that displays your current room type
@@ -134,7 +128,7 @@ public class RatsUI : MonoBehaviour
     [SerializeField]
     ShaderApplication camShaders;
 
-    Random rand = new();
+    System.Random rand = new();
 
     private IEnumerator oneSec() 
     {
@@ -265,10 +259,10 @@ public class RatsUI : MonoBehaviour
                 hintString.Add("You hear " + anomaly);
             }
         }
-
-        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
-        else roomHintText.SetText("You hear nothing.");
+        
         room.SetText("Room: " + controller.GetPlayerLocation().ToString());
+        
+        cam.transform.rotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
         
         // Get the sounds properly working
         soundManager.UpdateSoundState();
