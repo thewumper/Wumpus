@@ -48,9 +48,8 @@ namespace WumpusUnity
         /// Sets the current Scene in Unity.
         /// </summary>
         /// <param name="scene">The new Scene.</param>
-        private void SetScene(string scene)
+        public void SetScene(string scene)
         {
-            if (currentScene == scene) SceneManager.LoadScene("Main Menu");
             currentScene = scene;
             SceneManager.LoadScene(scene);
         }
@@ -82,6 +81,8 @@ namespace WumpusUnity
                 case ControllerState.AmmoRoom:
                 case ControllerState.GunRoom:
                     return "StoresRoom";
+                case ControllerState.WonGame:
+                    return "You Win";
                 case ControllerState.WumpusFight:
                     return "Wumpus Fight";
                 default:
