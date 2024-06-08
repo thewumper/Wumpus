@@ -5,7 +5,6 @@ namespace WumpusUnity.Battle
 {
     public class FadeIn : MonoBehaviour
     {
-        [SerializeField] private BattlePlayerController player;
         [SerializeField] private SpriteRenderer renderer;
         [SerializeField] private Color lossColor;
         [SerializeField] private Color winColor;
@@ -23,17 +22,17 @@ namespace WumpusUnity.Battle
 
         private void Update()
         {
-            if (player.GameEnded)
+            if (BattlePlayerController.GameEnded)
             {
                 fadePoint += Time.deltaTime;
                 float alpha = fadePoint / fadeTime;
 
-                if (player.Won == false)
+                if (BattlePlayerController.Won == false)
                 {
                     // Loss
                     renderer.color = new Color(lossColor.r, lossColor.g, lossColor.b, alpha);
                 }
-                if (player.Won == true)
+                if (BattlePlayerController.Won == true)
                 {
                     // Win
                     renderer.color = new Color(winColor.r, winColor.g, winColor.b, alpha);
