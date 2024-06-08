@@ -28,13 +28,7 @@ public class MainMenuUI : MonoBehaviour
 
         // Gets the path to the Map.
         topologyDir = Application.dataPath + "/Maps";
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
-
-    public void PlayGame()
-    {
+        
         ushort randomMap = (ushort)Random.Range(0, 4);
 
         Debug.Log("Loading map #" + randomMap);
@@ -45,6 +39,12 @@ public class MainMenuUI : MonoBehaviour
         sceneController = SceneController.GlobalSceneController;
         sceneController.Reinitialize(controller);
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void PlayGame()
+    {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -59,5 +59,10 @@ public class MainMenuUI : MonoBehaviour
 #else
         Application.Quit(0);
 #endif
+    }
+
+    public void Credits()
+    {
+        sceneController.SetScene("Credits");
     }
 }
