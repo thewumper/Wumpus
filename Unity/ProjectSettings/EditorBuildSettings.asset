@@ -32,9 +32,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Rats.unity
     guid: 6abab9ff714ba0b41aab24337575622d
-  - enabled: 0
-    path: Assets/Scenes/CatRoom.unity
-    guid: ace45110dac53c0419cfb9055986e9f5
   - enabled: 1
     path: Assets/Scenes/Vats.unity
     guid: bf81152a9d208c246942e3db66c90ca3
