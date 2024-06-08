@@ -27,24 +27,20 @@ namespace WumpusCore.Topology
         }
 
         /// <summary>
-        /// Creates topology from filepath to map data
+        /// Consturct a topology based on a Filestream object
         /// </summary>
-        /// <param name="filePath">path</param>
-        public Topology(string filePath)
+        /// <param name="stream">The filestream to load from</param>
+        /// <exception cref="NullReferenceException">The number of rooms is not 30</exception>
+        public Topology(FileStream stream)
         {
-            // Check if the file exists
-            if (!File.Exists(filePath))
-                throw new FileNotFoundException($"Could not find map data @{filePath}");
-            // Open the file
-            FileStream stream = File.Open(filePath, FileMode.Open);
-            
+
             // Initialize the arrays to be size 30
             List<Directions>[] roomExits = new List<Directions>[30];
             rooms = new Room[30];
-            
+
             // Read the map data until there is no more lines, It will throw if the map has to many directions
             using (StreamReader mapData = new StreamReader(stream))
-            {                                                                                                
+            {
                 string line;
                 ushort room = 0;
                 // Keep reading until the file is done
@@ -75,6 +71,25 @@ namespace WumpusCore.Topology
                 room.InitializeConnections(this);
             }
         }
+
+        /// <summary>
+        /// Creates topology from filepath to map data
+        /// </summary>
+        /// <param name="filePath">path</param>
+        public Topology(string filePath): this(LoadFilepath(filePath))
+        {
+        }
+
+        private static FileStream LoadFilepath(string filePath)
+        {
+
+            // Check if the file exists
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException($"Could not find map data @{filePath}");
+            // Open the file
+            return File.Open(filePath, FileMode.Open);
+        }
+
         /// <summary>
         /// Creates topology from a folder containing maps and the id of the map
         /// </summary>
@@ -93,15 +108,7 @@ namespace WumpusCore.Topology
         {
             return rooms[id];
         }
-        /// <summary>
-        /// Creates a graph object for this topology
-        /// </summary>
-        /// <returns>A graph</returns>
-        public Graph GetGraph()
-        {
-            return new Graph(new List<IRoom>(rooms));
-        }
-        
+
         /// <summary>
         /// Get the room adjacent to another room in a direction
         /// </summary>
@@ -253,7 +260,7 @@ namespace WumpusCore.Topology
             /// Setup the connnections in this room, please only call once
             /// </summary>
             /// <param name="topology"></param>
-            public void InitializeConnections(Topology topology)
+            internal void InitializeConnections(Topology topology)
             {
                 ExitRooms = new Dictionary<Directions, IRoom>();
                 foreach (var direction in ExitDirections)

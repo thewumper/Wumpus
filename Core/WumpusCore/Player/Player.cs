@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using WumpusCore.Controller;
 using WumpusCore.Entity;
 using WumpusCore.Topology;
 using WumpusCore.GameLocations;
@@ -20,15 +15,18 @@ namespace WumpusCore.Player
         /// <summary>
         /// The amount of arrows the player currently has.
         /// </summary>
-        public int Arrows { get; private set; }
+        public int Bullets { get; private set; }
         
         /// <summary>
         /// Number of moves made so far
         /// </summary>
         public int TurnsTaken { get; private set; }
-        
-        
-        
+
+        /// <summary>
+        /// If the player has collected the gun yet
+        /// </summary>
+        public bool HasGun { get; private set; }
+
         /// <summary>
         /// Stores everything to do with the player.
         /// </summary>
@@ -36,7 +34,8 @@ namespace WumpusCore.Player
             : base(topology, parent, location, EntityType.Player)
         {   
             Coins = 0;
-            Arrows = 3;
+            Bullets = 0;
+            HasGun = false;
         }
         
         /// <summary>
@@ -61,7 +60,7 @@ namespace WumpusCore.Player
         /// Gets the type of the room the player is currently in
         /// </summary>
         /// <returns>The type of the room the player is currently in</returns>
-        public GameLocations.GameLocations.RoomType GetRoomType()
+        public RoomType GetRoomType()
         {
             return gameLocations.GetRoomAt((ushort)(location - 1));
         }
@@ -86,13 +85,13 @@ namespace WumpusCore.Player
         /// <param name="directions">The <see cref="Directions"/> direction to move to.</param>
         public void MoveInDirection(Directions direction)
         {
-            MoveToRoom(GetRoomInDirection(direction));
             if (CoinRemainingInHallway(direction))
             {
                 GainCoins(1);
                 gameLocations.hallwayCoins[location][direction] = false;
-                gameLocations.hallwayCoins[thisRoom.ExitRooms[direction].Id][direction.GetInverse()] = false;
+                gameLocations.hallwayCoins[topologyLink.GetRoom(location).ExitRooms[direction].Id][direction.GetInverse()] = false;
             }
+            MoveToRoom(GetRoomInDirection(direction));
             TurnsTaken++;
         }
 
@@ -126,51 +125,43 @@ namespace WumpusCore.Player
             return gameLocations.hallwayTrivia[location][direction];
         }
 
-        /// <summary>
-        /// Earn arrows by answering trivia questions (3, 2)
-        /// Run after trivia is complete
-        /// </summary>
-        /// <param name="triviaOutcome">The outcome of the preceding trivia game</param>
-        public void EarnArrows(GameResult triviaOutcome)
+        // /// <summary>
+        // /// Earn arrows by answering trivia questions (3, 2)
+        // /// Run after trivia is complete
+        // /// </summary>
+        // /// <param name="triviaOutcome">The outcome of the preceding trivia game</param>
+        // public void EarnArrows(GameResult triviaOutcome)
+        // {
+        //     if (triviaOutcome == GameResult.Win)
+        //     {
+        //         Bullets += 2;
+        //         gameLocations.SetTriviaRemaining(location, false);
+        //     }
+        //     else if (triviaOutcome == GameResult.Loss)
+        //     {
+        //         LoseCoins(1);
+        //         gameLocations.SetRoom(location, RoomType.Acrobat);
+        //         gameLocations.SetTriviaRemaining(location, false);
+        //     }
+        //     else
+        //     {
+        //         throw new ArgumentException("Game still in progress!");
+        //     }
+        // }
+
+        public void GainArrows(int numArrows)
         {
-            if (triviaOutcome == GameResult.Win)
-            {
-                Arrows += 2;
-                gameLocations.SetTriviaRemaining(location, false);
-            }
-            else if (triviaOutcome == GameResult.Loss)
-            {
-                LoseCoins(1);
-                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
-                gameLocations.SetTriviaRemaining(location, false);
-            }
-            else
-            {
-                throw new ArgumentException("Game still in progress!");
-            }
+            Bullets += numArrows;
         }
 
-        /// <summary>
-        /// Earn knowledge by answering trivia questions (3, 2)
-        /// Run after trivia is complete
-        /// </summary>
-        /// <param name="triviaOutcome">The outcome of the preceding trivia game</param>
-        public void EarnSecret(GameResult triviaOutcome)
+        public void GainGun()
         {
-            if (triviaOutcome == GameResult.Win)
-            {
-                Controller.Controller.GlobalController.GenerateSecret();
-            } 
-            else if (triviaOutcome == GameResult.Loss)
-            {
-                LoseCoins(1);
-                gameLocations.SetRoom(location, GameLocations.GameLocations.RoomType.Acrobat);
-                gameLocations.SetTriviaRemaining(location, false);
-            }
-            else
-            {
-                throw new ArgumentException("Game still in progress!");
-            }
+            HasGun = true;
+        }
+
+        public void LoseArrow()
+        {
+            Bullets--;
         }
     }
 }

@@ -41,6 +41,15 @@ namespace WumpusCore.Trivia
             initQuestions(questionsArray);
         }
 
+        public Questions(FileStream file)
+        {
+            remainingQuestions = new Stack<AnsweredQuestion>();
+
+            JArray questionsArray = JArray.Parse(new StreamReader(file).ReadToEnd());
+
+            initQuestions(questionsArray);
+        }
+
         /// <summary>
         /// Pulls all questions from specified files and overwrites the question list with the new questions, randomly ordered.
         /// Questions should be stored in JSON format.
@@ -63,19 +72,25 @@ namespace WumpusCore.Trivia
 
         private void initQuestions(JArray questionsArray)
         {
-            for (int i = questionsArray.Count - 1; i >= 0; i--)
+
+            List<AnsweredQuestion> questions = new List<AnsweredQuestion>();
+            foreach (JToken token in questionsArray)
             {
-                int index = Controller.Controller.Random.Next(i);
-                
-                JToken question = questionsArray[index];
+                questionClass tempQuestion = JsonConvert.DeserializeObject<questionClass>(token.ToString());
+                questions.Add(new AnsweredQuestion(tempQuestion.question, tempQuestion.choices, tempQuestion.answer));
+            }
 
-                questionClass tempQuestion = JsonConvert.DeserializeObject<questionClass>(question.ToString());
+            // https://stackoverflow.com/questions/273313/randomize-a-listt
+            int n = questions.Count;
+            while (n > 1) {
+                n--;
+                int k = Controller.Controller.Random.Next(n + 1);
+                (questions[k], questions[n]) = (questions[n], questions[k]);
+            }
 
-                AnsweredQuestion appendQuestion =
-                    new AnsweredQuestion(tempQuestion.question, tempQuestion.choices, tempQuestion.answer);
-                
-                remainingQuestions.Push(appendQuestion);
-                questionsArray.RemoveAt(index);
+            foreach (AnsweredQuestion question in questions)
+            {
+                remainingQuestions.Push(question);
             }
         }
         

@@ -1,5 +1,7 @@
 using System;
 using System.Data;
+using System.IO;
+using System.Net;
 
 namespace WumpusCore.Trivia
 {
@@ -8,7 +10,7 @@ namespace WumpusCore.Trivia
     /// </summary>
     public class Trivia: Minigame
     {
-        private Questions questions;
+        internal Questions questions;
         // The question we're waiting on the player to answer
         private AnsweredQuestion currentQuestion;
         private int totalRoundQuestions;
@@ -30,7 +32,12 @@ namespace WumpusCore.Trivia
         {
             questions = new Questions(filePath);
         }
-        
+
+        public Trivia(FileStream file)
+        {
+            questions = new Questions(file);
+        }
+
         /// <summary>
         /// Initialize a Trivia object from multiple question files
         /// </summary>
@@ -133,7 +140,7 @@ namespace WumpusCore.Trivia
                 return GameResult.Win;
             }
 
-            if (totalRoundQuestions - questionsAnswered < winThreshold)
+            if (totalRoundQuestions - questionsAnswered + questionsWon < winThreshold)
             {
                 return GameResult.Loss;
             } 

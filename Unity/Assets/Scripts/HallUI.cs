@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +29,9 @@ public class HallUI : MonoBehaviour
     /// </summary>
     [SerializeField] 
     private GameObject movementRotation;
+
+
+    
     /// <summary>
     /// The speed at which the camera rotates with the player's mouse.
     /// </summary>
@@ -35,6 +40,10 @@ public class HallUI : MonoBehaviour
     /// The speed the camera moves.
     /// </summary>
     private const float camSpeed = 4f;
+    /// <summary>
+    /// The position the camera is supposed to stop moving at in the scene.
+    /// </summary>
+    private const int camStartPos = 0;
     /// <summary>
     /// Whether or not the player can move or look around.
     /// </summary>
@@ -75,7 +84,7 @@ public class HallUI : MonoBehaviour
     /// <summary>
     /// The ID of the moving variable in <see cref="movingAnimator"/>.
     /// </summary>
-    private int movingID;
+    private int fadingID;
 
     /// <summary>
     /// The image used to fade in and out.
@@ -89,6 +98,13 @@ public class HallUI : MonoBehaviour
     [SerializeField] 
     private TMP_Text hint;
 
+    private bool isCutscene;
+    
+    [SerializeField] private ShaderApplication shader;
+    [SerializeField] private TMP_Text[] wumpusMessages;
+    [SerializeField] private Light[] ceilingLights;
+    [SerializeField] private GameObject[] automove;
+    
     private void Awake()
     {
         // Instantiates the Controller, if there isn't one already.
@@ -108,16 +124,26 @@ public class HallUI : MonoBehaviour
     void Start()
     {
         // Initializes the movingID.
-        movingID = Animator.StringToHash("moving");
+        fadingID = Animator.StringToHash("fading");
 
+
+        isCutscene = Controller.GlobalController.isNextRoomAWumpus();
+        Debug.Log($"Is it a cutscene: {isCutscene}");
+        
         AnsweredQuestion q = controller.GetUnaskedQuestion();
         hint.text = $"The answer to the question \"{q.QuestionText}\" is {q.choices[q.answer]}.";
-
+        if (isCutscene)
+        {
+            SetupCutscene();
+        }
         interactIcon.SetActive(false);
     }
 
+
+
     void Update()
     {
+        
         // If the player isn't locked.
         if (!pLock)
         {
@@ -125,6 +151,14 @@ public class HallUI : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");
             cam.transform.eulerAngles += new Vector3(0, mouseX * camSens, 0);
         }
+
+        if (isCutscene)
+        {
+            DoCutscene();
+            return;
+        }
+        
+        
         // Used for checking what the player is looking at.
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         // If the player is looking at something.
@@ -137,7 +171,7 @@ public class HallUI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     movementRotation.transform.eulerAngles = cam.transform.eulerAngles;
-                    movingAnimator.SetBool(movingID, true);
+                    movingAnimator.SetBool(fadingID, true);
                     pLock = true;
                 }
             }
@@ -158,15 +192,21 @@ public class HallUI : MonoBehaviour
             HideInteract();
         }
         
+        // move forward when just starting in hallway.
+        if (cam.transform.position.z < camStartPos)
+        {
+            cam.transform.position += Vector3.forward * (Time.deltaTime * camSpeed);
+        }
+
         // If the player is moving.
-        if (movingAnimator.GetBool(movingID))
+        if (movingAnimator.GetBool(fadingID) && cam.transform.position.z >= camStartPos)
         {
             // If the screen has fully faded to black.
             if (black.color.a.Equals(1))
             {
                 // Move from the Hallway.
                 controller.MoveFromHallway();
-                movingAnimator.SetBool(movingID, false);
+                movingAnimator.SetBool(fadingID, false);
                 // Unlock the player.
                 pLock = false;
                 // Reset camera position.
@@ -180,6 +220,39 @@ public class HallUI : MonoBehaviour
                 cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
             }
         }
+    }
+    private void SetupCutscene()
+    {
+        shader.PosterzationBands1 = 20;
+        shader.OverallDistortionFreq = 10000.7f;
+        shader.OverallDistortionMag = 2;
+        shader.OverallDistortionSpeed = 0.002f;
+        foreach (TMP_Text message in wumpusMessages)
+        {
+            message.gameObject.SetActive(true);
+        }
+        hint.gameObject.SetActive(false);
+        for (int i = 0; i < automove.Length; i++)
+        {
+            StartCoroutine(LightGoesOut(i));
+        }
+        
+    }
+    private void DoCutscene()
+    {
+        cam.transform.position += movementRotation.transform.forward * (Time.deltaTime * camSpeed);
+        if (cam.transform.position.z >= automove[^1].transform.position.z)
+        {
+            isCutscene = false;
+        }
+    }
+
+    private IEnumerator LightGoesOut(int light)
+    {
+        yield return new WaitForSeconds(light * 7);
+        ceilingLights[light].gameObject.AddComponent<LightFlicker>();
+        yield return new WaitForSeconds(5);
+        ceilingLights[light].enabled = false;
     }
 
     /// <summary>
@@ -199,4 +272,7 @@ public class HallUI : MonoBehaviour
     {
         interactIcon.SetActive(false);
     }
+    
+    
+    
 }

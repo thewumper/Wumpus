@@ -21,22 +21,10 @@ namespace WumpusCore.GameLocations
         private ITopology topology;
         
         /// <summary>
-        /// All possible types of rooms.
-        /// </summary>
-        public enum RoomType
-        {
-            Flats,
-            Vats,
-            Bats,
-            Rats,
-            Acrobat
-        }
-        
-        /// <summary>
         /// Whether there is a coin in the hallway out from a given room
         /// </summary>
         public Dictionary<Directions, bool>[] hallwayCoins;
-        
+
         /// <summary>
         /// The trivia question engraved onto the wall in a given hallway
         /// </summary>
@@ -83,6 +71,8 @@ namespace WumpusCore.GameLocations
             get { return rooms; }
         }
 
+        private List<ushort> roomsCollectedFrom = new List<ushort>() ;
+
         /// <summary>
         /// Contains most methods and data to do with rooms.
         /// </summary>
@@ -91,20 +81,22 @@ namespace WumpusCore.GameLocations
         /// <param name="numBats">The number of bat rooms to generate</param>
         /// <param name="numRats">The number of rat rooms to generate</param>
         /// <param name="numAcrobats">The number of acrobat rooms to generate</param>
+        /// <param name="numAmmoRooms">The number of ammo rooms to generate</param>
+        /// <param name="numGunRooms">The number of gun rooms to generate</param>
         /// <param name="topology">The topology structure</param>
         /// <param name="random">A random object</param>
-        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, ITopology topology, Random random, Trivia.Trivia trivia)
+        public GameLocations(int numRooms,int numVats, int numBats, int numRats, int numAcrobats, int numAmmoRooms, int numGunRooms,ITopology topology, Random random, Trivia.Trivia trivia)
 
         {
             this.topology = topology;
-            if (numVats + numRats + numAcrobats + numBats >= numRooms)
+            if (numVats + numRats + numAcrobats + numBats + numAmmoRooms + numGunRooms >= numRooms)
             {
                 throw new ArgumentException("Too many hazards!");
             }
             
             rooms = new RoomType[numRooms];
             int hardHazards = (numVats + numBats);
-            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()));
+            Graph graph = new Graph(new List<IRoom>(topology.GetRooms()),random);
             List<IRoom> solutions = new List<IRoom>(graph.GetRandomPossibleSolutions(hardHazards)).OrderBy( (_) => random.Next()).ToList();
             List<IRoom> validRooms = new List<IRoom>(topology.GetRooms()).Except(solutions).OrderBy( (_) => random.Next()).ToList();
 
@@ -112,7 +104,9 @@ namespace WumpusCore.GameLocations
             UseListPopulateHazards(solutions, RoomType.Bats, numBats);
             UseListPopulateHazards(validRooms, RoomType.Rats, numRats);
             UseListPopulateHazards(validRooms, RoomType.Acrobat, numAcrobats);
-            
+            UseListPopulateHazards(validRooms, RoomType.AmmoRoom, numAmmoRooms);
+            UseListPopulateHazards(validRooms, RoomType.GunRoom, numGunRooms);
+
             // Populate hallways with coins
             // Populate rooms with trivia options
             // Populate hallways with trivia answers
@@ -129,7 +123,7 @@ namespace WumpusCore.GameLocations
                 for (int j = 0; j < 3; j++)
                 {
                     Directions direction = (Directions)j;
-                    
+
                     hallwayCoins[i][direction] = true;
                     hallwayCoins[i][direction.GetInverse()] = true;
 
@@ -147,7 +141,7 @@ namespace WumpusCore.GameLocations
         private void UseListPopulateHazards(List<IRoom> list, RoomType type, int num)
         {
             int listSize = list.Count;
-            for (int i = listSize - 1; i >= listSize - num; i--)            {
+            for (int i = listSize - 1; i >= listSize - num; i--) {
                 var location = list[i];
                 list.Remove(location);
                 rooms[location.Id] = type;
@@ -217,11 +211,43 @@ namespace WumpusCore.GameLocations
         /// <summary>
         /// Gets a random empty room from the <see cref="rooms">rooms</see> array.
         /// </summary>
-        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array.</returns>
+        /// <returns>A random room of <see cref="RoomType">RoomType</see> type <c>Flats</c> from the <see cref="rooms">rooms</see> array where the are no <see cref="Entity">entities</see></returns>
         /// <exception cref="InvalidOperationException">When there are no empty rooms.</exception>
         public ushort GetEmptyRoom()
         {
-            return GetRoomOfType(RoomType.Flats);
+            List<ushort> positions = new List<ushort>();
+            for (ushort i = 0; i < rooms.Length; i++)
+            {
+
+                if (rooms[i] == RoomType.Flats && GetEntityInRoom(i).Count == 0)
+                {
+                    positions.Add(i);
+                }
+            }
+            if (positions.Count <= 0)
+            {
+                throw new InvalidOperationException("There are no empty rooms.");
+            }
+            return positions[Controller.Controller.Random.Next(0, positions.Count)];
+        }
+
+        /// <summary>
+        /// Gets the entity(s) in a room if there are any
+        /// </summary>
+        /// <param name="roomunm">The room number that you want to check</param>
+        /// <returns>A List of <see cref="Entity">entity(s)</see> or any empty list if there are no entities</returns>
+        public List<Entity.Entity> GetEntityInRoom(ushort roomunm)
+        {
+            List<Entity.Entity> list = new List<Entity.Entity>();
+            foreach (EntityType entity in entities.Keys)
+            {
+                if (entities[entity].location == roomunm)
+                {
+                    list.Add(entities[entity]);
+                }
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -277,7 +303,21 @@ namespace WumpusCore.GameLocations
 
             return adjacentRooms;
         }
-        
-        
+
+
+        public void MarkRoomAsCollected(ushort roomNum)
+        {
+
+            if (roomsCollectedFrom.Contains(roomNum))
+            {
+                return;
+            }
+            roomsCollectedFrom.Add(roomNum);
+        }
+
+        public bool HasRoomBeenCollected(ushort roomNum)
+        {
+            return roomsCollectedFrom.Contains(roomNum);
+        }
     }
 }

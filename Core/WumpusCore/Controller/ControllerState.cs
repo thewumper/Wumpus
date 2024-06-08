@@ -3,12 +3,18 @@ namespace WumpusCore.Controller
     public enum ControllerState
     {
         GameOver,
-        Terminate,
         StartScreen,
         InRoom,
         Rats,
         InBetweenRooms,
-        Inventory,
-        Trivia,
+        Acrobat,
+        BatTransition,
+        VatRoom,
+        WumpusFight,
+        CatDialouge,
+        WonGame,
+        GunRoom,
+        AmmoRoom,
+        Trivia
     }
 }

@@ -7,14 +7,17 @@ TagManager:
   - door
   - hallDoor
   - unmoveableDoor
+  - Target
+  - CollectableTable
+  - CatPost
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bullet Hell
   - Water
   - UI
-  - 
+  - Screen
   - 
   - 
   - 

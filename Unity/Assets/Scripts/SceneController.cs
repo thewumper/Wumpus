@@ -27,7 +27,7 @@ namespace WumpusUnity
         {
             get
             {
-                if (controllerReference==null)
+                if (controllerReference == null)
                 {
                     controllerReference = new SceneController();
                 }
@@ -37,18 +37,18 @@ namespace WumpusUnity
         }
         
         /// <summary>
-        /// Controls everything to do with scenes.
+        /// Redefines the controller so it has the new controller
         /// </summary>
-        private SceneController()
+        public void Reinitialize(Controller newController)
         {
-            controller = Controller.GlobalController;
+            controller = newController;
         }
         
         /// <summary>
         /// Sets the current Scene in Unity.
         /// </summary>
         /// <param name="scene">The new Scene.</param>
-        private void SetScene(string scene)
+        public void SetScene(string scene)
         {
             currentScene = scene;
             SceneManager.LoadScene(scene);
@@ -58,15 +58,33 @@ namespace WumpusUnity
         /// Gets the correct scene based off of the global Controller's state.
         /// </summary>
         /// <returns>The correct scene based off of the global Controller's state.</returns>
-        private string GetCorrectScene()
+        private string GetCorrectScene(ControllerState state)
         {
-            ControllerState state = controller.GetState();
             switch (state)
             {
                 case ControllerState.StartScreen:
                     return "Main Menu";
                 case ControllerState.InBetweenRooms:
                     return "Hallway";
+                case ControllerState.VatRoom:
+                    return "Vats";
+                case ControllerState.Rats:
+                    return "Rats";
+                case ControllerState.BatTransition:
+                    return "Bat";
+                case ControllerState.Acrobat:
+                    return "Acrobat";
+                case ControllerState.GameOver:
+                    return "Game Over";
+                case ControllerState.Trivia:
+                    return "Trivia";
+                case ControllerState.AmmoRoom:
+                case ControllerState.GunRoom:
+                    return "StoresRoom";
+                case ControllerState.WonGame:
+                    return "You Win";
+                case ControllerState.WumpusFight:
+                    return "Wumpus Fight";
                 default:
                     return "Main";
             }
@@ -77,7 +95,15 @@ namespace WumpusUnity
         /// </summary>
         public void GotoCorrectScene()
         {
-            SetScene(GetCorrectScene());
+            SetScene(GetCorrectScene(controller.GetState()));
+        }
+
+        /// <summary>
+        /// Loads trivia on top of the current scene
+        /// </summary>
+        public void LoadTrivia()
+        {
+            SceneManager.LoadScene(GetCorrectScene(ControllerState.Trivia), LoadSceneMode.Additive);
         }
     }
 }
