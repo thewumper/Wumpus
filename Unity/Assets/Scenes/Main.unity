@@ -654,6 +654,7 @@ MonoBehaviour:
   ArrowText: {fileID: 722462782}
   CrossBowNotFound: {fileID: 327791908}
   CrossBowFound: {fileID: 1907599004}
+  wrongSound: {fileID: 0}
 --- !u!4 &212410748
 Transform:
   m_ObjectHideFlags: 0
@@ -3024,8 +3025,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -120.80005, y: 0}
-  m_SizeDelta: {x: 231.08875, y: 312.6452}
+  m_AnchoredPosition: {x: -148.9267, y: 0.5984}
+  m_SizeDelta: {x: 287.342, y: 311.4483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1078934617
 MonoBehaviour:
@@ -5297,7 +5298,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1999722675}
-  m_Mesh: {fileID: -2432090755550338912, guid: 46674e4f83c17f2469ddc57c420adc71, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 8698614b39a06d64b9bd0169d01b623e, type: 3}
 --- !u!1 &2093005571
 GameObject:
   m_ObjectHideFlags: 0

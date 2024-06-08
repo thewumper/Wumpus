@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 506eb2d2800f57e4ab35cd1b8e47d821
+guid: 557cb6ceacfe1894b8fe2e341f40c691
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3651822854589190674
-    second: crossbow-1_0
+      213: -3578019587575532720
+    second: Rat_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,7 +97,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: crossbow-1_0
+      name: Rat_0
       rect:
         serializedVersion: 2
         x: 0
@@ -127,8 +127,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eedee81467e125dc0800000000000000
-      internalID: -3651822854589190674
+      spriteID: 053bb2b6422585ec0800000000000000
+      internalID: -3578019587575532720
       vertices: []
       indices: 
       edges: []
@@ -144,7 +144,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      crossbow-1_0: -3651822854589190674
+      Rat_0: -3578019587575532720
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
