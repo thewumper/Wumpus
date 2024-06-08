@@ -40,7 +40,7 @@ public class MainMenuUI : MonoBehaviour
         Debug.Log("Loading map #" + randomMap);
 
         // Initializes the Controller.
-        controller = new Controller(triviaNormal, topologyDir, randomMap,0,0,20,0,0,0,50);
+        controller = new Controller(triviaNormal, topologyDir, randomMap);
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
         sceneController.Reinitialize(controller);
