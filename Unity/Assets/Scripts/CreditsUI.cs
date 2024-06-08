@@ -7,7 +7,7 @@ public class CreditsUI : MonoBehaviour
     SceneController sceneController;
 
     [SerializeField] private TMP_Text credits;
-    private const float creditsSpeed = 5f;
+    private const float creditsSpeed = 30f;
 
     private void Awake()
     {
@@ -17,7 +17,7 @@ public class CreditsUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (credits.transform.position.y >= 360)
+        if (credits.transform.position.y >= 1025)
         {
             sceneController.GotoCorrectScene();
         }
