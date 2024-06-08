@@ -1,11 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using WumpusCore.Controller;
 using WumpusCore.Topology;
 using WumpusUnity;
+using Random = System.Random;
 
+[RequireComponent(typeof(SoundManager))]
 public class RatsUI : MonoBehaviour
 {
     /// <summary>
@@ -16,6 +19,12 @@ public class RatsUI : MonoBehaviour
     /// The global SceneController object.
     /// </summary>
     private SceneController sceneController;
+    /// <summary>
+    /// Reference to the SoundManager.
+    /// </summary>
+    private SoundManager soundManager;
+
+    [SerializeField] private GameObject cam;
 
     /// <summary>
     /// The stats of what is happening in the rat room.
@@ -26,6 +35,19 @@ public class RatsUI : MonoBehaviour
     /// The TMP text that contains how many coins you have left.
     /// </summary>
     [SerializeField] private TMP_Text coins;
+    
+    /// <summary>
+    /// The hint for what sounds are near you
+    /// </summary>
+    [SerializeField]
+    private TMP_Text roomHintText;
+    
+    /// <summary>
+    /// Rext that displays your current room type
+    /// </summary>
+    [SerializeField]
+    private TMP_Text roomTypeText;
+    
     /// <summary>
     /// Returns the actual text of <see cref="coins"/>.
     /// </summary>
@@ -34,17 +56,12 @@ public class RatsUI : MonoBehaviour
         get => coins.text;
         set => coins.text = "Coins: " + value;
     }
-    
+
     /// <summary>
     /// What the RoomType text shows.
     /// </summary>
     [SerializeField] private TMP_Text room;
 
-    /// <summary>
-    /// The interval at which the coin damage should appear at.
-    /// </summary>
-    private float interval;
-    
     /// <summary>
     /// The prefab for the coin damage text.
     /// </summary>
@@ -60,7 +77,13 @@ public class RatsUI : MonoBehaviour
     /// <summary>
     /// The speed at which the coin damage moves upwards.
     /// </summary>
-    private float dmgSpeed = 20f;
+    private const float dmgSpeed = 20f;
+
+    [SerializeField] private GameObject rat;
+    private List<GameObject> rats = new();
+    private float ratSpeed = 5f;
+
+    [SerializeField] private GameObject cat;
 
     /// <summary>
     /// Reference to the door that is north of the player.
@@ -105,9 +128,84 @@ public class RatsUI : MonoBehaviour
     private GameObject mmSouthWest;
     [SerializeField]
     private GameObject mmNorthWest;
+    [SerializeField]
+    private GameObject mmDirection;
 
     [SerializeField]
     ShaderApplication camShaders;
+
+    Random rand = new();
+
+    private IEnumerator oneSec() 
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+
+            if (controller.hasPlayerTamedCat()) yield break;
+            GameObject dmg = Instantiate(damageText, canvas.transform);
+            dmg.GetComponent<TMP_Text>().text = $"-{stats.DamageDelt}";
+            damageObjects.Add(dmg);
+        }
+    }
+
+    private IEnumerator tenthSecond()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(.1f);
+
+            camShaders.PosterzationBands1 -= 1;
+            camShaders.PosterzationBands1 = Math.Clamp(camShaders.PosterzationBands1, 10, 75);
+
+            camShaders.OverallDistortionFreq += .2f;
+            camShaders.OverallDistortionMag += .2f;
+            camShaders.OverallDistortionSpeed += .1f;
+            
+            
+            if (controller.hasPlayerTamedCat() && rats.Count >= 10)
+            {
+                int r = rand.Next(0, rats.Count);
+                cat.transform.position = rats[r].transform.position;
+                Destroy(rats[r]);
+                rats.RemoveAt(r);
+            }
+        }
+    }
+
+    private IEnumerator twentiethSecond()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(.05f);
+
+            GameObject aRat = Instantiate(rat);
+            int randDir = rand.Next(0, 4);
+            if (randDir == 0)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-15, 16), .2f, 15), aRat.transform.rotation);
+            }
+            else if (randDir == 1)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(rand.Next(-15, 16), .2f, -15), aRat.transform.rotation);
+            }
+            else if (randDir == 2)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(15, .2f, rand.Next(-15, 16)), aRat.transform.rotation);
+            }
+            else if (randDir == 3)
+            {
+                aRat.transform.SetPositionAndRotation(new Vector3(-15, .2f, rand.Next(-15, 16)), aRat.transform.rotation);
+            }
+            aRat.transform.LookAt(cam.transform);
+            aRat.transform.eulerAngles = new Vector3(
+                -90,
+                aRat.transform.eulerAngles.y,
+                aRat.transform.eulerAngles.z);
+            rats.Add(aRat);
+            ratSpeed += .5f;
+        }
+    }
 
     private void Awake()
     {
@@ -121,34 +219,71 @@ public class RatsUI : MonoBehaviour
             controller = new Controller
                 (Application.dataPath + "/Trivia/Questions.json", Application.dataPath + "/Maps", 0);
         }
-        
+
         // Initializes the SceneController.
         sceneController = SceneController.GlobalSceneController;
+        
+        // Initializes the SoundManager
+        soundManager = GetComponent<SoundManager>();
+        soundManager.Init(northDoor, northEastDoor, southEastDoor, southDoor, southWestDoor, northWestDoor);
     }
 
     private void Start()
     {
+        mmDirection.transform.eulerAngles = new Vector3(
+            mmDirection.transform.eulerAngles.x,
+            mmDirection.transform.eulerAngles.y,
+            PersistentData.Instance.EulerAngle.y);
+
         stats = controller.GetRatRoomStats();
         coinsV = stats.StartingCoins.ToString();
-        room.text = "Rats";
+        roomTypeText.text = "Rats";
         camShaders = Camera.main.GetComponent<ShaderApplication>();
-        camShaders.PosterzationBands1 = 100;
+        camShaders.PosterzationBands1 = 75;
+        camShaders.MaxTime = 1;
 
-        interval = Time.time;
+        camShaders.OverallDistortionFreq = 1;
+
+        // Adds the Door script to all doors.
+        northDoor.AddComponent<Door>().Init(Directions.North);
+        northEastDoor.AddComponent<Door>().Init(Directions.NorthEast);
+        southEastDoor.AddComponent<Door>().Init(Directions.SouthEast);
+        southDoor.AddComponent<Door>().Init(Directions.South);
+        southWestDoor.AddComponent<Door>().Init(Directions.SouthWest);
+        northWestDoor.AddComponent<Door>().Init(Directions.NorthWest);
+        
+        List<Controller.DirectionalHint> hints = controller.GetHazardHints();
+        List<string> hintString = new List<string>();
+        foreach (Controller.DirectionalHint hint in hints)
+        {
+            foreach (RoomAnomaly anomaly in hint.Hazards)
+            {
+                hintString.Add("You hear " + anomaly);
+            }
+        }
+
+        if (!(hintString.Count <= 0)) roomHintText.SetText(string.Join('\n', hintString));
+        else roomHintText.SetText("You hear nothing.");
+        room.SetText("Room: " + controller.GetPlayerLocation().ToString());
+        
+        // Get the sounds properly working
+        soundManager.UpdateSoundState();
+
+        StartCoroutine(oneSec());
+        StartCoroutine(tenthSecond());
+        StartCoroutine(twentiethSecond());
     }
 
     private void Update()
     {
         stats = controller.GetRatRoomStats();
         coinsV = stats.RemainingCoins.ToString();
-        if (interval + 1 <= Time.time)
-        {
-            interval = Time.time;
-            GameObject dmg = Instantiate(damageText, canvas.transform);
-            dmg.GetComponent<TMP_Text>().text = stats.DamageDelt.ToString();
-            damageObjects.Add(dmg);
-        }
-        
+
+        mmDirection.transform.eulerAngles = new Vector3(
+            mmDirection.transform.eulerAngles.x,
+            mmDirection.transform.eulerAngles.y,
+                180 - PersistentData.Instance.EulerAngle.y);
+
         for (int i = 0; i < damageObjects.Count; i++)
         {
             GameObject obj = damageObjects[i];
@@ -161,9 +296,25 @@ public class RatsUI : MonoBehaviour
             }
             Vector3 targetPos = new Vector3(
                 objTransform.position.x,
-                objTransform.position.y + dmgSpeed * Time.deltaTime, 
+                objTransform.position.y + dmgSpeed * Time.deltaTime,
                 objTransform.position.z);
             objTransform.SetPositionAndRotation(targetPos, objTransform.rotation);
+        }
+
+        for (int i = 0; i < rats.Count; i++)
+        {
+            if ((rats[i].transform.position.x > 20 || rats[i].transform.position.x < -20) || (rats[i].transform.position.z > 20 || rats[i].transform.position.z < -20))
+            {
+                Destroy(rats[i]);
+                rats.Remove(rats[i]);
+                continue;
+            }
+            rats[i].transform.position += -rats[i].transform.up * ratSpeed * Time.deltaTime;
+        }
+
+        if (stats.RemainingCoins <= 0)
+        {
+            sceneController.GotoCorrectScene();
         }
     }
 
