@@ -29,5 +29,7 @@ namespace WumpusUnity
             get => eulerAngle;
             set => eulerAngle = value;
         }
+
+        public bool IsLookingAtDoor { get; set; }
     }
 }
