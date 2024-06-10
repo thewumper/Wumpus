@@ -69,6 +69,9 @@ public class BattlePlayerController : MonoBehaviour
         Won = null;
         endGame = VisualGameOver;
         ReadyToUnload = false;
+		
+		playerHealth.Value = playerHealth.MaxValue;
+		enemyHealth.Value = enemyHealth.MaxValue;
     }
 
     void FixedUpdate()
