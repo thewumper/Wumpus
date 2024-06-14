@@ -1,7 +1,10 @@
-using System.Collections;
+// Chief -
+// Contributors:
+// Davin
+
+
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 using WumpusUnity;
 

@@ -1,8 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+// Chief - 
+// Contributors:
+// Davin
+
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using WumpusCore.Controller;
 using WumpusUnity;
 
