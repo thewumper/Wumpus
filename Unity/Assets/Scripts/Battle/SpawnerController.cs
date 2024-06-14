@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace WumpusUnity.Battle
 {
+    /// <summary>
+    /// Manages all modes associated with a spawner
+    /// </summary>
     public class SpawnerController : MonoBehaviour
     {
         [SerializeField] private GameObject room;
@@ -15,7 +18,13 @@ namespace WumpusUnity.Battle
 
         protected Dictionary<String, GameObject> HazardTypes;
         
+        /// <summary>
+        /// All activated spawner modes
+        /// </summary>
         private SpawnerMode[] Modes;
+        /// <summary>
+        /// The index of the currently active spawner mode
+        /// </summary>
         private int currentMode = -1;
 
         private float remainingTime;

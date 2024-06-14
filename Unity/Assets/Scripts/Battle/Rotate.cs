@@ -3,11 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Rotates an object at a configurable speed around an origin
+/// Controls objects' velocities and positions to match
+/// </summary>
 public class Rotate : MonoBehaviour
 {
+    /// <summary>
+    /// The rigidbody that will be rotated
+    /// </summary>
     [SerializeField] private Rigidbody2D rigidbody;
+    /// <summary>
+    /// The center point that the object should rotate around
+    /// </summary>
     [SerializeField] private Vector2 center;
+    /// <summary>
+    /// The radius that the object should keep from the center
+    /// </summary>
     [SerializeField] private float radius;
+    /// <summary>
+    /// The speed at which the object should move around the circumference
+    /// </summary>
     [SerializeField] private float speed;
     private float angle;
     

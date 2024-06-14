@@ -3,10 +3,16 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+/// <summary>
+/// Represents a ui element that displays a (positive) value up to some maximum
+/// </summary>
 public class ValueBar : MonoBehaviour
 {
     [SerializeField] private Slider slider;
     private float value;
+    /// <summary>
+    /// The current stored value
+    /// </summary>
     public float Value
     {
         get
@@ -31,6 +37,9 @@ public class ValueBar : MonoBehaviour
     }
 
     [SerializeField] private float maxValue;
+    /// <summary>
+    /// The maximum value this can hold
+    /// </summary>
     public float MaxValue
     {
         get => maxValue;
