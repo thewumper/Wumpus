@@ -90,12 +90,14 @@ namespace WumpusTesting
                 case ControllerState.Rats:
                 {
                     int timeInRoom = Controller.Random.Next(0, 11);
-                    IStopwatch ogTimer = controller.ratTimeStopwatch;
-                    controller.ratTimeStopwatch = new FakeStopwatch(new TimeSpan(0, 0, timeInRoom));
+                    IStopwatch ogTimer = controller.RatTimeStopwatch;
+                    controller.RatTimeStopwatch = new FakeStopwatch(new TimeSpan(0, 0, timeInRoom));
 
                     RatRoomStats stats = controller.GetRatRoomStats();
 
-                    controller.ExitRat();
+                    dirs = controller.GetCurrentRoom().ExitDirections;
+                    dir = dirs[Controller.Random.Next(0, dirs.Length)];
+                    controller.MoveInADirection(dir);
                     if (stats.RemainingCoins <0)
                     {
                         Assert.AreEqual(controller.GetState(),ControllerState.GameOver);
@@ -105,7 +107,7 @@ namespace WumpusTesting
                         Assert.IsTrue(controller.GetCoins() < stats.StartingCoins);
                     }
 
-                    controller.ratTimeStopwatch = ogTimer;
+                    controller.RatTimeStopwatch = ogTimer;
 
                     break;
                 }
@@ -181,7 +183,7 @@ namespace WumpusTesting
                     }
 
                     // This resets the trivia questions back to the original array
-                    controller.trivia.questions = new Questions("./questions.json");
+                    controller.Trivia.questions = new Questions("./questions.json");
 
                     break;
                 }
@@ -240,7 +242,7 @@ namespace WumpusTesting
                     }
 
                     // This resets the trivia questions back to the original array
-                    controller.trivia.questions = new Questions("./questions.json");
+                    controller.Trivia.questions = new Questions("./questions.json");
 
                     break;
                 default:

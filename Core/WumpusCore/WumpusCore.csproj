@@ -55,6 +55,7 @@
     <Compile Include="Battle\BulletHell\BulletHellController.cs" />
     <Compile Include="Battle\InputZone.cs" />
     <Compile Include="Controller\Controller.cs" />
+    <Compile Include="Controller\DirectionalHint.cs" />
     <Compile Include="Controller\ControllerState.cs" />
     <Compile Include="Controller\RatRoomStats.cs" />
     <Compile Include="Controller\RoomAnomaly.cs" />

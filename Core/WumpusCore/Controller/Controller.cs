@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using WumpusCore.Controller.Stopwatch;
 using WumpusCore.Entity;
@@ -16,34 +15,36 @@ namespace WumpusCore.Controller
 {
     /// <summary>
     /// The overall controller for the Wumpus game. This should be your main interaction point for any UI implementation
+    /// Main author: Max
+    ///
     /// </summary>
     public class Controller
     {
         private static Controller _controllerReference;
         private IRoom nextRoom;
-        internal IStopwatch ratTimeStopwatch = new RealStopwatch();
+        internal IStopwatch RatTimeStopwatch = new RealStopwatch();
         private ControllerState state = StartScreen;
         private ITopology topology;
         private List<RoomAnomaly> currentRoomHandledAmomalies = new List<RoomAnomaly>();
         private GameLocations.GameLocations gameLocations;
-        internal Trivia.Trivia trivia;
-        internal WinLossConditions gameEndCause;
-        internal static SaveFile headFile = new SaveFile("", false);
+        internal Trivia.Trivia Trivia;
+        private WinLossConditions endCause;
+        private static SaveFile _headFile = new SaveFile("", false);
 
         /// <summary>
         /// The <c>RoomAnomaly</c> that causes the game to end.
         /// The property is only valid in the <c>GameOver</c> state.
         /// </summary>
-        public WinLossConditions GameEndCause
+        public WinLossConditions EndCause
         {
             get
             {
                 ValidateState(new [] {GameOver});
-                return gameEndCause;
+                return endCause;
             }
             private set
             {
-                gameEndCause = value;
+                endCause = value;
             }
         }
 
@@ -61,7 +62,7 @@ namespace WumpusCore.Controller
         public bool Debug = false;
 
         private int turnCounter;
-        private int mapID;
+        private int mapId;
 
         /// <summary>
         /// Gets the reference to the global controller
@@ -112,11 +113,11 @@ namespace WumpusCore.Controller
         public Controller(string triviaFile, string topologyDirectory, ushort mapId, int numVats, int numBats, int numRats,
             int numAcrobats, int numAmmoRooms, int numGunRooms, int startingCoins)
         {
-            mapID = mapId;
+            this.mapId = mapId;
             _controllerReference = this;
-            trivia = new Trivia.Trivia(triviaFile);
+            Trivia = new Trivia.Trivia(triviaFile);
             topology = new Topology.Topology(topologyDirectory, mapId);
-            gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,numAmmoRooms,numGunRooms,topology,Controller.Random,trivia);
+            gameLocations = new GameLocations.GameLocations(topology.RoomCount,numVats,numBats,numRats,numAcrobats,numAmmoRooms,numGunRooms,topology,Controller.Random,Trivia);
             gameLocations.AddEntity(new Cat(topology, gameLocations, gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Wumpus.Wumpus(topology, gameLocations,gameLocations.GetEmptyRoom()));
             gameLocations.AddEntity(new Player.Player(topology, gameLocations, gameLocations.GetEmptyRoom()));
@@ -218,7 +219,7 @@ namespace WumpusCore.Controller
                        !currentRoomHandledAmomalies.Contains(RoomAnomaly.Rat))
             {
                 state = Rats;
-                ratTimeStopwatch.Restart();
+                RatTimeStopwatch.Restart();
             } else if (anomaliesInRoom.Contains(RoomAnomaly.Ammo) && !currentRoomHandledAmomalies.Contains(RoomAnomaly.Ammo))
             {
                 state = AmmoRoom;
@@ -260,30 +261,27 @@ namespace WumpusCore.Controller
         /// <returns>A question that hasn't been used by trivia yet.</returns>
         public AnsweredQuestion GetUnaskedQuestion()
         {
-            return trivia.PeekRandomQuestion();
+            return Trivia.PeekRandomQuestion();
         }
 
+        /// <summary>
+        /// Gets the number of coins that the player has
+        /// </summary>
+        /// <returns>The number of coins the player currently has</returns>
         public int GetCoins()
         {
             return gameLocations.GetPlayer().Coins;
         }
 
+        /// <summary>
+        /// Gets the number of arrows that the player has
+        /// </summary>
+        /// <returns>The number of arrows the player currently has</returns>
         public int GetArrowCount()
         {
             return gameLocations.GetPlayer().Bullets;
         }
 
-
-        public struct DirectionalHint
-        {
-            public Directions Direction;
-            public List<RoomAnomaly> Hazards;
-            public DirectionalHint(List<RoomAnomaly> hazards, Directions direction)
-            {
-                Hazards = hazards;
-                Direction = direction;
-            }
-        }
 
         /// <summary>
         /// Returns the audible/hinted hazards currently around the player.
@@ -308,6 +306,12 @@ namespace WumpusCore.Controller
         }
 
 
+        /// <summary>
+        /// Gets the list of anomialies in a room including
+        /// includes all room types and entities
+        /// </summary>
+        /// <param name="roomnum">The room number to get the anomalies from</param>
+        /// <returns>The list of anomalies in the room</returns>
         public List<RoomAnomaly> GetAnomaliesInRoom(int roomnum)
         {
             List<RoomAnomaly> anomaliesList = new List<RoomAnomaly>();
@@ -343,6 +347,11 @@ namespace WumpusCore.Controller
             return anomaliesList;
         }
 
+        /// <summary>
+        /// Returns the list if anomalies in a room that the player should have hints about. This means that the gun and ammo rooms are not inclueded
+        /// </summary>
+        /// <param name="roomnum">The room number to get the anomalies from</param>
+        /// <returns>The list of anomalies</returns>
         private List<RoomAnomaly> GetAudibleAnomaliesInRom(int roomnum)
         {
             List<RoomAnomaly> allAnomalies = GetAnomaliesInRoom(roomnum);
@@ -352,7 +361,7 @@ namespace WumpusCore.Controller
             allAnomalies.Remove(RoomAnomaly.Ammo);
             // Remove the cat if it's tamed and the rats
             // since they don't matter anymore
-            if (hasPlayerTamedCat())
+            if (HasPlayerTamedCat())
             {
                 allAnomalies.Remove(RoomAnomaly.Cat);
                 allAnomalies.Remove(RoomAnomaly.Rat);
@@ -370,18 +379,26 @@ namespace WumpusCore.Controller
             return gameLocations.GetWumpus().location;
         }
 
+        /// <summary>
+        /// Starts a trivia round. Use the GetTriviaQuestion and SubmitTriviaAnswer methods to interact with the trivia game
+        /// Is only valid from the vat, gun, and ammo rooms
+        /// </summary>
         public void StartTrivia()
         {
             ValidateState(new []{ VatRoom, GunRoom, AmmoRoom });
 
             state = ControllerState.Trivia;
 
-            trivia.StartRound(3,2);
+            Trivia.StartRound(3,2);
         }
 
-        public bool hasNextTriviaQuestion()
+        /// <summary>
+        /// Checks if the trivia game has another question avaliable
+        /// </summary>
+        /// <returns>True if tere is another trivia question</returns>
+        public bool HasNextTriviaQuestion()
         {
-            if (trivia.reportResult() == GameResult.InProgress)
+            if (Trivia.reportResult() == GameResult.InProgress)
             {
                 return true;
             }
@@ -390,15 +407,25 @@ namespace WumpusCore.Controller
         }
 
 
-        public Trivia.AskableQuestion GetTriviaQuestion()
+        /// <summary>
+        /// Gets the current trivia question. Also moves onto the next question
+        /// </summary>
+        /// <returns>The askable question associated with getQuestion</returns>
+        public AskableQuestion GetTriviaQuestion()
         {
-            return trivia.GetQuestion();
+            return Trivia.GetQuestion();
         }
 
+        /// <summary>
+        /// Submit a trivia answer to be evaluated by the trivia system
+        /// </summary>
+        /// <param name="choice">The 0 indexed trivia choice that the player made</param>
+        /// <returns>True if the answer was correct</returns>
+        /// <exception cref="InvalidOperationException">If the room your in doesn't have trivia for some reason</exception>
         public bool SubmitTriviaAnswer(int choice)
         {
-            bool correctness = trivia.SubmitAnswer(choice);
-            GameResult triviaState = trivia.reportResult();
+            bool correctness = Trivia.SubmitAnswer(choice);
+            GameResult triviaState = Trivia.reportResult();
             RoomType currentRoomType = GetCurrentRoomType();
 
             if (triviaState == GameResult.Win)
@@ -422,7 +449,7 @@ namespace WumpusCore.Controller
                         "The room you are in doesn't have trivia despite you being in trivia");
                 }
             }
-            if (trivia.reportResult() == GameResult.Loss)
+            if (Trivia.reportResult() == GameResult.Loss)
             {
                 if (GetCurrentRoomType() == RoomType.GunRoom) {
                     state = GunRoom;
@@ -468,6 +495,9 @@ namespace WumpusCore.Controller
             }
         }
 
+        /// <summary>
+        /// Starts a game of wumpus
+        /// </summary>
         public void StartGame()
         {
             // Make sure you're on the start screen so that we don't run into weird issues with the internal state not.
@@ -476,6 +506,11 @@ namespace WumpusCore.Controller
             state = InRoom;
         }
 
+        /// <summary>
+        /// Ends your game of wumpus
+        /// </summary>
+        /// <param name="success">Whether or not you won</param>
+        /// <param name="gameEndCause">The cause of the end of your game</param>
         public void EndGame(bool success, WinLossConditions gameEndCause)
         {
             if (success)
@@ -487,17 +522,22 @@ namespace WumpusCore.Controller
             {
                 state = GameOver;
             }
-            GameEndCause = gameEndCause;
+            EndCause = gameEndCause;
         }
 
+        /// <summary>
+        /// Saves your high score
+        /// </summary>
+        /// <param name="name">The name you want to asssociate with your score</param>
+        /// <returns>The highscore object that you can use to get most properties you'd need from</returns>
         public HighScore SaveHighScore(String name)
         {
             ValidateState(new []{WonGame,GameOver});
 
             bool success = state == WonGame;
 
-            HighScore highScore = new HighScore(headFile.path, name, turnCounter, GetCoins(), GetArrowCount(), success,
-                mapID);
+            HighScore highScore = new HighScore(_headFile.path, name, turnCounter, GetCoins(), GetArrowCount(), success,
+                mapId);
             highScore.StoreTopTenToFile();
             return highScore;
         }
@@ -535,6 +575,10 @@ namespace WumpusCore.Controller
             SetCorrectStateForRoom(gameLocations.GetPlayer().location);
         }
 
+        /// <summary>
+        /// Leave the acrobat room
+        /// </summary>
+        /// <param name="success">If you won the game</param>
         public void ExitAcrobat(bool success)
         {
             if (success)
@@ -547,26 +591,10 @@ namespace WumpusCore.Controller
             }
         }
 
-        public void ExitRat()
-        {
-            RatRoomStats stats = GetRatRoomStats();
-            if (stats.RemainingCoins < 0)
-            {
-                EndGame(false, WinLossConditions.Rats);
-                return;
-            }
-            gameLocations.GetPlayer().LoseCoins((uint) stats.DamageDelt);
-
-            currentRoomHandledAmomalies.Add(RoomAnomaly.Rat);
-            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
-        }
-
-        public void ExitCat()
-        {
-            currentRoomHandledAmomalies.Add(RoomAnomaly.Cat);
-            SetCorrectStateForRoom(gameLocations.GetPlayer().location);
-        }
-
+        /// <summary>
+        /// Exit the wumpus fight. Ends the game either way, and counts if you won or not based on the input
+        /// </summary>
+        /// <param name="won">Whether you won the game</param>
         public void ExitWumpusFight(bool won)
         {
             EndGame(won,WinLossConditions.WumpusFight);
@@ -580,11 +608,11 @@ namespace WumpusCore.Controller
         /// <returns>A <c>RatRoomStats</c> object containing the correct info</returns>
         public RatRoomStats GetRatRoomStats()
         {
-            int timeDiff = ratTimeStopwatch.GetElapsed().Seconds;
+            int timeDiff = RatTimeStopwatch.GetElapsed().Seconds;
 
             int ratDamage = CalculateRatDamage(timeDiff);
 
-            if (hasPlayerTamedCat())
+            if (HasPlayerTamedCat())
             {
                 return new RatRoomStats(timeDiff, gameLocations.GetPlayer().Coins, gameLocations.GetPlayer().Coins, 0);
             }
@@ -612,11 +640,21 @@ namespace WumpusCore.Controller
             return (int) Math.Pow(2,timeDiffSeconds);
         }
 
+        /// <summary>
+        /// Attempt to tame the cat
+        /// </summary>
+        /// <param name="coinInput">The number of coints you want to try and use</param>
+        /// <returns>True if the cat was tamed</returns>
         public bool AttemptToTameCat(int coinInput)
         {
             return gameLocations.GetCat().Tame(coinInput);
         }
 
+        /// <summary>
+        /// Shoots the gun in a directio
+        /// </summary>
+        /// <param name="shootingDir">The direction that you wish to shoot the gun</param>
+        /// <returns>true if you successfully shot the wumpus</returns>
         public bool ShootGun(Directions shootingDir)
         {
             gameLocations.GetPlayer().LoseArrow();
@@ -631,30 +669,41 @@ namespace WumpusCore.Controller
             return false;
         }
 
-        public bool isNextRoomAWumpus()
+        /// <summary>
+        /// Used in the hallways to see if the next room has a wumpus in it
+        /// </summary>
+        /// <returns>True if the next room from the hallway contains a wumpus</returns>
+        public bool IsNextRoomAWumpus()
         {
             ValidateState(new []{InBetweenRooms});
             return gameLocations.GetWumpus().location==nextRoom.Id;
         }
 
+        /// <summary>
+        /// Has the player gotten a gun yet
+        /// </summary>
+        /// <returns>true if the player has a gun</returns>
         public bool DoesPlayerHaveGun()
         {
             return gameLocations.GetPlayer().HasGun;
         }
 
+        /// <summary>
+        /// Check if a room has already had the item collect from it
+        /// </summary>
+        /// <returns>True if the room has stuff that can be collected from</returns>
         public bool CanRoomBeCollectedFrom()
         {
             return !gameLocations.HasRoomBeenCollected((ushort) GetPlayerLocation());
         }
 
-        public bool hasPlayerTamedCat()
+        /// <summary>
+        /// Check if the player has tamed the cat
+        /// </summary>
+        /// <returns>True if the player has tamed the cat</returns>
+        public bool HasPlayerTamedCat()
         {
             return gameLocations.GetCat().tamed;
-        }
-
-        public int getCatPosition()
-        {
-            return gameLocations.GetCat().location;
         }
     }
 }
